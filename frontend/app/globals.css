@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  --color-gold: #c9b37e;
+  --color-gold-dim: #8b7640;
+  --color-bronze: #a67c52;
+  --color-stone: #1a1a2e;
+  --color-abyss: #0a0a0f;
+  --color-alpha: #7eb8da;
+  --color-beta: #c9b37e;
+  --color-gamma: #b57ed8;
+}
+
+body {
+  background: var(--color-abyss);
+  color: var(--color-gold);
+  font-family: 'EB Garamond', serif;
+}
+
+.font-greek {
+  font-family: 'Cinzel', serif;
+}
+
+.glow-gold {
+  text-shadow: 0 0 20px rgba(201, 179, 126, 0.3);
+}
+
+.glow-alpha {
+  color: var(--color-alpha);
+  text-shadow: 0 0 10px rgba(126, 184, 218, 0.5);
+}
+
+.glow-beta {
+  color: var(--color-beta);
+  text-shadow: 0 0 10px rgba(201, 179, 126, 0.5);
+}
+
+.glow-gamma {
+  color: var(--color-gamma);
+  text-shadow: 0 0 10px rgba(181, 126, 216, 0.5);
+}

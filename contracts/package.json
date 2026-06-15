@@ -1,0 +1,16 @@
+{
+  "name": "argus-contracts",
+  "version": "0.1.0",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy:arc": "hardhat run scripts/deploy.ts --network arcTestnet",
+    "deploy:arbitrum": "hardhat run scripts/deploy.ts --network arbitrumSepolia"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0"
+  }
+}
