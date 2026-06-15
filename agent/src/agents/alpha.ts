@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import { QueryRequest, Verdict } from '../orchestrator';
 
 const SYSTEM_PROMPT = `You are Agent-α (Alpha) of Argus — a security consensus oracle on Arc.
@@ -20,30 +20,34 @@ Rules:
 - Be conservative — flag anything that could harm users.`;
 
 /**
- * Agent-α (Alpha) — Contract logic analysis via Gemini 2.0 Flash
+ * Agent-α (Alpha) — Contract logic analysis via Llama 3.1 (Groq)
  */
 export const alphaAgent = {
   name: 'Agent-α',
-  model: 'Gemini 2.0 Flash',
+  model: 'Llama 3.1 8B (Groq)',
 
   async analyze(req: QueryRequest): Promise<Verdict> {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey || process.env.DEMO_MODE === 'true') {
       return this.fallbackAnalyze(req);
     }
 
     try {
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ 
-        model: 'gemini-2.0-flash',
-        systemInstruction: SYSTEM_PROMPT,
+      const groq = new Groq({ apiKey });
+      const result = await groq.chat.completions.create({
+        model: 'llama-3.1-8b-instant',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: `Analyze this token contract for security vulnerabilities:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Proxy patterns — can the implementation be upgraded maliciously?\n2. Ownership — is the contract renounced? Who controls it?\n3. Mint/burn functions — can tokens be minted arbitrarily?\n4. External calls — are there unchecked external calls?\n5. Honeypot signatures — can buyers sell? Are there transfer restrictions?\n6. Access control — are admin functions properly gated?` },
+        ],
+        temperature: 0.3,
+        max_tokens: 256,
       });
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text();
+      const text = result.choices[0]?.message?.content || '';
       const jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const parsed = JSON.parse(jsonStr);
-      
+
       return {
         agent: 'Agent-α',
         verdict: parsed.verdict || 'SAFE',
@@ -52,23 +56,19 @@ export const alphaAgent = {
         stake: '50000',
       };
     } catch (err: any) {
-      console.warn(`Agent-α Gemini error (${err.status || err.code}): falling back to rules`);
+      console.warn(`Agent-α error (${err.status || err.code}): falling back to rules`);
       return this.fallbackAnalyze(req);
     }
   },
 
-  /** Deterministic fallback when Gemini is unavailable */
+  /** Deterministic fallback when API is unavailable */
   fallbackAnalyze(req: QueryRequest): Verdict {
     const address = req.contractAddress.toLowerCase();
     let riskScore = 0;
     const flags: string[] = [];
 
-    // Heuristic: very short addresses = likely honeypot tokens
-    // Heuristic: known patterns in address bytes
-    const lastChar = address.slice(-1);
     const checksum = address.slice(2, 10).split('').reduce((s, c) => s + parseInt(c, 16), 0);
     
-    // Simulate meaningful analysis from address structure
     if (checksum % 4 === 0) { flags.push('Proxy detection inconclusive'); riskScore += 15; }
     if (checksum % 7 === 0) { flags.push('Ownership appears centralized'); riskScore += 20; }
     if (checksum % 3 === 0) { flags.push('External calls detected — needs audit'); riskScore += 25; }
@@ -84,8 +84,8 @@ export const alphaAgent = {
       verdict,
       confidence: Math.min(95, 50 + riskScore),
       reasoning: flags.length > 0 
-        ? `[DEMO MODE] ${flags.join('; ')}. Full Gemini analysis pending.`
-        : `[DEMO MODE] No obvious code-level red flags. Full Gemini analysis pending.`,
+        ? `[DEMO] ${flags.join('; ')}. Full analysis pending.`
+        : `[DEMO] No obvious code-level red flags. Full analysis pending.`,
       stake: '50000',
     };
   },

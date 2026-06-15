@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import { QueryRequest, Verdict } from '../orchestrator';
 
 const SYSTEM_PROMPT = `You are Agent-β (Beta) of Argus — a security consensus oracle on Arc.
@@ -20,30 +20,34 @@ Rules:
 - Prioritize protecting retail users from economic exploits.`;
 
 /**
- * Agent-β (Beta) — Tokenomics analysis via Gemini 2.0 Flash
+ * Agent-β (Beta) — Tokenomics analysis via Mixtral 8x7B (Groq)
  */
 export const betaAgent = {
   name: 'Agent-β',
-  model: 'Gemini 2.0 Flash',
+  model: 'Mixtral 8x7B (Groq)',
 
   async analyze(req: QueryRequest): Promise<Verdict> {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey || process.env.DEMO_MODE === 'true') {
       return this.fallbackAnalyze(req);
     }
 
     try {
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({
-        model: 'gemini-2.0-flash',
-        systemInstruction: SYSTEM_PROMPT,
+      const groq = new Groq({ apiKey });
+      const result = await groq.chat.completions.create({
+        model: 'mixtral-8x7b-32768',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: `Analyze the tokenomics of this contract:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?` },
+        ],
+        temperature: 0.3,
+        max_tokens: 256,
       });
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text();
+      const text = result.choices[0]?.message?.content || '';
       const jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const parsed = JSON.parse(jsonStr);
-      
+
       return {
         agent: 'Agent-β',
         verdict: parsed.verdict || 'SAFE',
@@ -52,12 +56,12 @@ export const betaAgent = {
         stake: '50000',
       };
     } catch (err: any) {
-      console.warn(`Agent-β Gemini error (${err.status || err.code}): falling back to rules`);
+      console.warn(`Agent-β error (${err.status || err.code}): falling back to rules`);
       return this.fallbackAnalyze(req);
     }
   },
 
-  /** Deterministic fallback when Gemini is unavailable */
+  /** Deterministic fallback when API is unavailable */
   fallbackAnalyze(req: QueryRequest): Verdict {
     const address = req.contractAddress.toLowerCase();
     let riskScore = 0;
@@ -80,8 +84,8 @@ export const betaAgent = {
       verdict,
       confidence: Math.min(95, 45 + riskScore),
       reasoning: flags.length > 0
-        ? `[DEMO MODE] ${flags.join('; ')}. Full Gemini analysis pending.`
-        : `[DEMO MODE] No obvious tokenomic red flags. Full Gemini analysis pending.`,
+        ? `[DEMO] ${flags.join('; ')}. Full analysis pending.`
+        : `[DEMO] No obvious tokenomic red flags. Full analysis pending.`,
       stake: '50000',
     };
   },
