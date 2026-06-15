@@ -14,7 +14,7 @@
     "ethers": "^6.13.0",
     "express": "^4.21.0",
     "cors": "^2.8.5",
-    "@circle-fin/gateway": "^0.2.0"
+    "viem": "^2.22.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

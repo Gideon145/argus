@@ -16,9 +16,7 @@ async function main() {
 
   // --- Config ---
   const config = {
-    arcRpc: process.env.ARC_RPC_URL || 'https://testnet-rpc.arc.io',
-    arbitrumRpc: process.env.ARBITRUM_RPC_URL || 'https://sepolia-rollup.arbitrum.io/rpc',
-    oracleAddress: process.env.ARGUS_ORACLE_ADDRESS || '',
+    arcRpc: process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com',
     treasuryAddress: process.env.TREASURY_ADDRESS || '',
     loopIntervalMs: LOOP_INTERVAL_MS,
   };

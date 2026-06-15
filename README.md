@@ -49,15 +49,28 @@ User pays $0.01 USDC
 
 | Layer | Tech |
 |-------|------|
-| Consensus | Arc Testnet (ArgusOracle.sol) |
-| Settlement | Arbitrum (Treasury.sol) |
-| Payments | Circle Gateway nanopayments |
-| Agent-α | Claude Sonnet 4 |
-| Agent-β | GPT-4o-mini |
-| Agent-γ | Rule engine (local) |
+| Consensus | Arc Testnet (ArgusOracle.sol, chain ID 5042002) |
+| Payments | arc-agent-pay (signed payment intents, receipt hashing, settlement batches) |
+| Gateway | Circle Gateway nanopayments (planned: live testnet settlement) |
+| Agent-α | Gemini 2.0 Flash (contract logic) |
+| Agent-β | Gemini 2.0 Flash (tokenomics analysis) |
+| Agent-γ | Rule engine (local, deterministic checks) |
 | Orchestrator | Node.js + TypeScript |
+| Wallet layer | viem + arc-agent-pay account primitives |
 | Frontend | Next.js + Tailwind v4 |
 | Deploy | Railway (agent) + Vercel (frontend) |
+
+## Payment Flow (arc-agent-pay)
+
+```
+1. User pays $0.01 → createPaymentIntent() signed by user wallet
+2. Merchant (treasury) verifies via verifyMerchantRequest()
+3. 3 agents analyze → each signs a createReasoningReceipt()
+4. Consensus reached → stakes settled via createSettlementBatch()
+5. Dashboard updates → createDashboardSnapshot() shows revenue
+```
+
+**Adapted from [rick-best/arc-agent-pay](https://github.com/rick-best/arc-agent-pay) — Canteen-endorsed payment intent toolkit for AI agents on Arc.**
 
 ## Quick Start
 

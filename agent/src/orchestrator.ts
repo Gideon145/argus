@@ -4,12 +4,11 @@ import { gammaAgent } from './agents/gamma';
 import { runConsensus, ConsensusResult } from './consensus';
 import { settleStakes } from './treasury';
 import { updateReputation } from './reputation';
+import { processPayment } from './gateway';
 import { Logger } from './logger';
 
 export interface AgentConfig {
   arcRpc: string;
-  arbitrumRpc: string;
-  oracleAddress: string;
   treasuryAddress: string;
   loopIntervalMs: number;
 }
@@ -17,7 +16,7 @@ export interface AgentConfig {
 export interface QueryRequest {
   contractAddress: string;
   chain: string;
-  user: string;
+  user: `0x${string}`;
 }
 
 export interface Verdict {
@@ -25,7 +24,7 @@ export interface Verdict {
   verdict: 'SAFE' | 'RISKY' | 'SCAM';
   confidence: number;
   reasoning: string;
-  stake: string; // USDC in wei
+  stake: string; // USDC in microusd
 }
 
 export class Orchestrator {
@@ -40,8 +39,6 @@ export class Orchestrator {
   }
 
   async tick() {
-    // In full implementation: pull pending queries from oracle contract
-    // For now: skeleton — returns current state
     return {
       status: 'monitoring',
       queries: this.queryCount,
@@ -54,8 +51,13 @@ export class Orchestrator {
 
   async processQuery(req: QueryRequest): Promise<ConsensusResult> {
     this.logger.info(`Processing query for ${req.contractAddress} from ${req.user}`);
+    const queryId = `query-${Date.now()}-${this.queryCount}`;
 
-    // Fan out to 3 agents in parallel
+    // Step 1: Process payment ($0.01 USDC)
+    const payment = await processPayment(req.user, queryId);
+    this.logger.info(`Payment intent created: ${queryId}`);
+
+    // Step 2: Fan out to 3 agents in parallel
     const [verdictA, verdictB, verdictC] = await Promise.all([
       alphaAgent.analyze(req),
       betaAgent.analyze(req),
@@ -64,19 +66,23 @@ export class Orchestrator {
 
     const verdicts: Verdict[] = [verdictA, verdictB, verdictC];
 
-    // Run consensus
+    // Step 3: Run consensus
     const result = runConsensus(verdicts);
 
-    // Settle stakes on-chain
+    // Step 4: Settle stakes using arc-agent-pay
     if (result.consensusReached) {
-      await settleStakes(verdicts, result, this.config);
+      const settlement = await settleStakes(verdicts, result, this.config);
+      result.settlementBatchId = settlement.batchId;
       this.consensusWins++;
     }
 
-    // Update ELO reputation
+    // Step 5: Update ELO reputation
     await updateReputation(verdicts, result);
 
     this.queryCount++;
+    this.logger.info(
+      `Query ${queryId} complete — ${result.finalVerdict} (${result.agreementCount}/${result.totalAgents})`
+    );
 
     return result;
   }

@@ -8,6 +8,10 @@ export interface ConsensusResult {
   winningAgents: string[];
   losingAgents: string[];
   details: string;
+  /** Signed reasoning receipts for each agent's verdict */
+  receipts?: any[];
+  /** Settlement batch ID if stakes were settled */
+  settlementBatchId?: string;
 }
 
 /**
