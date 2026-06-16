@@ -47,6 +47,50 @@ async function main() {
     res.json({ status: 'ok', uptime: process.uptime(), agent: 'Argus' });
   });
 
+  // Debug endpoint — bypasses Gateway for testing
+  app.post('/debug/scan', async (req, res) => {
+    try {
+      const { contractAddress, chain } = req.body || {};
+      if (!contractAddress) {
+        return res.status(400).json({ error: 'contractAddress required' });
+      }
+
+      logger.info(`Debug scan: ${contractAddress} (no payment)`);
+
+      const queryReq: QueryRequest = {
+        contractAddress,
+        chain: chain || 'arc',
+        user: '0xDebugTester00000000000000000000000000000000',
+      };
+
+      const result = await orchestrator.processQuery(queryReq);
+
+      res.json({
+        query: { contractAddress, chain: chain || 'arc' },
+        result: {
+          verdict: result.finalVerdict,
+          confidence: result.agreementCount === 3 ? 'high' : result.agreementCount === 2 ? 'medium' : 'none',
+          consensus: result.details,
+          agreementCount: result.agreementCount,
+          totalAgents: result.totalAgents,
+          winningAgents: result.winningAgents,
+          losingAgents: result.losingAgents,
+          settlementBatchId: result.settlementBatchId,
+          agents: result.agentVerdicts.map(v => ({
+            name: v.agent,
+            verdict: v.verdict,
+            confidence: v.confidence,
+            reasoning: v.reasoning,
+          })),
+        },
+        payment: { note: 'debug — no payment collected' },
+      });
+    } catch (err: any) {
+      logger.error('Debug scan error:', err.message);
+      res.status(500).json({ error: 'Scan failed', detail: err.message });
+    }
+  });
+
   // Paywalled scan endpoint — $0.01 USDC per query
   app.post('/scan', gateway.require('$0.01'), async (req: any, res) => {
     try {
@@ -73,6 +117,12 @@ async function main() {
           confidence: result.agreementCount === 3 ? 'high' : result.agreementCount === 2 ? 'medium' : 'none',
           consensus: result.details,
           settlementBatchId: result.settlementBatchId,
+          agents: result.agentVerdicts.map(v => ({
+            name: v.agent,
+            verdict: v.verdict,
+            confidence: v.confidence,
+            reasoning: v.reasoning,
+          })),
         },
         payment: {
           paid: payment?.amount || '0',
@@ -95,7 +145,7 @@ async function main() {
       queries: (orchestrator as any).queryCount || 0,
       consensusRate: '0',
       treasury: '0.00',
-      model: 'Llama 3.1 + Mixtral 8x7B + Rule Engine',
+      model: 'DeepSeek-V3 + Claude Sonnet 4 + Rule Engine',
     };
   }, 2000);
 
