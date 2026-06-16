@@ -8,6 +8,8 @@ export interface ConsensusResult {
   winningAgents: string[];
   losingAgents: string[];
   details: string;
+  /** Per-agent verdicts with full reasoning */
+  agentVerdicts: Verdict[];
   /** Signed reasoning receipts for each agent's verdict */
   receipts?: any[];
   /** Settlement batch ID if stakes were settled */
@@ -55,6 +57,7 @@ export function runConsensus(verdicts: Verdict[]): ConsensusResult {
     totalAgents: verdicts.length,
     winningAgents,
     losingAgents,
+    agentVerdicts: verdicts,
     details: consensusReached
       ? `${maxCount}/${verdicts.length} agents agreed: ${maxVerdict}`
       : `No consensus reached (best: ${maxCount}/${verdicts.length})`,
