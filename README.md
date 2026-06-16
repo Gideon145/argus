@@ -1,8 +1,17 @@
 # Argus
 
+<p align="center">
+  <a href="https://x.com/Argus_arc">
+    <img src="https://img.shields.io/badge/X-@Argus__arc-1DA1F2?style=for-the-badge&logo=x&logoColor=white" alt="X">
+  </a>
+  <a href="https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8">
+    <img src="https://img.shields.io/badge/ArcScan-ArgusOracle-6C5CE7?style=for-the-badge" alt="ArcScan">
+  </a>
+</p>
+
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
-Multi-agent security consensus oracle on Arc. Three autonomous AI agents stake USDC on security verdicts. 2/3 consensus required. $0.01 per query via Gateway nanopayments.
+Multi-agent security consensus oracle on Arc. Three independent AI agents stake USDC on security verdicts. 2/3 consensus required. $0.01 per query via Gateway nanopayments.
 
 > Built for the Lepton Agents Hackathon (Jun 15–29, 2026) — Canteen × Circle × Arc
 
@@ -15,29 +24,27 @@ User pays $0.01 USDC
   │
   ▼
 ┌─────────────────────────────────┐
-│  Gateway Nanopayment (Circle)   │  ← Real USDC, gasless batch
+│  Gateway Nanopayment (Circle)    │  ← Real USDC, gasless batch
 └────────────┬────────────────────┘
              │
              ▼
 ┌─────────────────────────────────┐
-│       Orchestrator (Node.js)    │  ← Railway, 15s loop
-│  Fan-out → 3 agents → collect   │
-│  Consensus → settle stakes       │
+│       Orchestrator (Node.js)     │  ← Fan-out → 3 agents → consensus
 └────┬──────────┬──────────┬──────┘
      │          │          │
      ▼          ▼          ▼
 ┌─────────┐ ┌─────────┐ ┌──────────┐
 │Agent-α  │ │Agent-β  │ │Agent-γ   │
-│Claude   │ │GPT-4o   │ │Rule      │
-│Sonnet 4 │ │mini     │ │Engine    │
-│contract │ │tokenom. │ │determin.  │
+│DeepSeek │ │Claude   │ │Rule      │
+│V3       │ │Sonnet 4 │ │Engine    │
+│contract │ │tokenom. │ │instant    │
 └────┬────┘ └────┬────┘ └────┬─────┘
      │          │          │
      └──────────┼──────────┘
                 ▼
 ┌─────────────────────────────────┐
-│     ArgusOracle (Arc testnet)   │  ← Immutable verdict log
-│     Treasury (Arbitrum)         │  ← Real USDC settlement
+│  ArgusOracle (Arc testnet)       │  ← Immutable verdict log
+│  0x563b2DA572...C153Cb46C8       │
 └─────────────────────────────────┘
      │                    │
      ▼                    ▼
@@ -49,28 +56,17 @@ User pays $0.01 USDC
 
 | Layer | Tech |
 |-------|------|
-| Consensus | Arc Testnet (ArgusOracle.sol, chain ID 5042002) |
-| Payments | arc-agent-pay (signed payment intents, receipt hashing, settlement batches) |
-| Gateway | Circle Gateway nanopayments (planned: live testnet settlement) |
-| Agent-α | Gemini 2.0 Flash (contract logic) |
-| Agent-β | Gemini 2.0 Flash (tokenomics analysis) |
-| Agent-γ | Rule engine (local, deterministic checks) |
-| Orchestrator | Node.js + TypeScript |
-| Wallet layer | viem + arc-agent-pay account primitives |
-| Frontend | Next.js + Tailwind v4 |
+| Agent-α | DeepSeek-V3 (contract logic, via OpenAI SDK) |
+| Agent-β | Claude Sonnet 4 (tokenomics, via Anthropic SDK) |
+| Agent-γ | Deterministic rule engine (local, zero cost) |
+| Consensus | 2/3 threshold with per-agent reasoning |
+| Blockchain | ArgusOracle.sol on Arc testnet (chain 5042002) |
+| Payments | Circle Gateway x402 nanopayments ($0.01/scan) |
+| Staking | arc-agent-pay primitives (signed intents, settlement batches) |
+| Reputation | ELO engine (K=32) — self-correcting |
+| Orchestrator | Node.js + TypeScript + Express |
+| Frontend | Next.js 15 + Tailwind v4 |
 | Deploy | Railway (agent) + Vercel (frontend) |
-
-## Payment Flow (arc-agent-pay)
-
-```
-1. User pays $0.01 → createPaymentIntent() signed by user wallet
-2. Merchant (treasury) verifies via verifyMerchantRequest()
-3. 3 agents analyze → each signs a createReasoningReceipt()
-4. Consensus reached → stakes settled via createSettlementBatch()
-5. Dashboard updates → createDashboardSnapshot() shows revenue
-```
-
-**Adapted from [rick-best/arc-agent-pay](https://github.com/rick-best/arc-agent-pay) — Canteen-endorsed payment intent toolkit for AI agents on Arc.**
 
 ## Quick Start
 
@@ -84,3 +80,18 @@ cd frontend && npm install && npm run dev
 # Contracts
 cd contracts && npm install && npx hardhat compile
 ```
+
+## Daily Log
+
+| Day | Date | Shipped |
+|-----|------|---------|
+| 1 | Jun 15 | Scaffold: agent, contracts, frontend. ARC CLI setup. |
+| 2 | Jun 16 | 3-agent pipeline live (DeepSeek + Claude + rules). Consensus + ELO working. ArgusOracle deployed on Arc testnet. Gateway x402 wired. Per-agent reasoning in responses. v0.1 submitted. |
+| 3 | Jun 17 | — |
+
+---
+
+<p align="center">
+  <b>Building in public — follow along</b><br>
+  <a href="https://x.com/Argus_arc">x.com/Argus_arc</a>
+</p>
