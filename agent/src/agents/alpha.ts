@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { QueryRequest, Verdict } from '../orchestrator';
 
 const SYSTEM_PROMPT = `You are Agent-α (Alpha) of Argus — a security consensus oracle on Arc.
@@ -20,32 +20,36 @@ Rules:
 - Be conservative — flag anything that could harm users.`;
 
 /**
- * Agent-α (Alpha) — Contract logic analysis via Claude Sonnet 4
+ * Agent-α (Alpha) — Contract logic analysis via DeepSeek-V3
+ * DeepSeek is the heavy lifter: best-in-class code analysis, $0.14/M tokens.
  */
 export const alphaAgent = {
   name: 'Agent-α',
-  model: 'Claude Sonnet 4',
+  model: 'DeepSeek-V3',
 
   async analyze(req: QueryRequest): Promise<Verdict> {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.DEEPSEEK_API_KEY;
     if (!apiKey || process.env.DEMO_MODE === 'true') {
       return this.fallbackAnalyze(req);
     }
 
     try {
-      const anthropic = new Anthropic({ apiKey });
-      const result = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 256,
-        temperature: 0.3,
-        system: SYSTEM_PROMPT,
-        messages: [{
-          role: 'user',
-          content: `Analyze this token contract for security vulnerabilities:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Proxy patterns — can the implementation be upgraded maliciously?\n2. Ownership — is the contract renounced? Who controls it?\n3. Mint/burn functions — can tokens be minted arbitrarily?\n4. External calls — are there unchecked external calls?\n5. Honeypot signatures — can buyers sell? Are there transfer restrictions?\n6. Access control — are admin functions properly gated?`,
-        }],
+      const deepseek = new OpenAI({
+        apiKey,
+        baseURL: 'https://api.deepseek.com',
       });
 
-      const text = (result.content[0] as any).text || '';
+      const result = await deepseek.chat.completions.create({
+        model: 'deepseek-chat',
+        temperature: 0.3,
+        max_tokens: 512,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: `Analyze this token contract for security vulnerabilities:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Proxy patterns — can the implementation be upgraded maliciously?\n2. Ownership — is the contract renounced? Who controls it?\n3. Mint/burn functions — can tokens be minted arbitrarily?\n4. External calls — are there unchecked external calls?\n5. Honeypot signatures — can buyers sell? Are there transfer restrictions?\n6. Access control — are admin functions properly gated?` },
+        ],
+      });
+
+      const text = result.choices[0]?.message?.content || '';
       const jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const parsed = JSON.parse(jsonStr);
 
@@ -57,12 +61,12 @@ export const alphaAgent = {
         stake: '50000',
       };
     } catch (err: any) {
-      console.warn(`Agent-α Claude error (${err.status || err.code}): falling back to rules`);
+      console.warn(`Agent-α DeepSeek error (${err.status || err.code}): falling back to rules`);
       return this.fallbackAnalyze(req);
     }
   },
 
-  /** Deterministic fallback when Claude is unavailable */
+  /** Deterministic fallback when DeepSeek is unavailable */
   fallbackAnalyze(req: QueryRequest): Verdict {
     const address = req.contractAddress.toLowerCase();
     let riskScore = 0;
@@ -85,8 +89,8 @@ export const alphaAgent = {
       verdict,
       confidence: Math.min(95, 50 + riskScore),
       reasoning: flags.length > 0 
-        ? `[DEMO] ${flags.join('; ')}. Full Claude analysis pending.`
-        : `[DEMO] No obvious code-level red flags. Full Claude analysis pending.`,
+        ? `[DEMO] ${flags.join('; ')}. Full DeepSeek analysis pending.`
+        : `[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending.`,
       stake: '50000',
     };
   },

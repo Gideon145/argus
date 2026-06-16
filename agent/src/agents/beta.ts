@@ -1,4 +1,4 @@
-import Groq from "groq-sdk";
+import Anthropic from "@anthropic-ai/sdk";
 import { QueryRequest, Verdict } from '../orchestrator';
 
 const SYSTEM_PROMPT = `You are Agent-β (Beta) of Argus — a security consensus oracle on Arc.
@@ -20,31 +20,33 @@ Rules:
 - Prioritize protecting retail users from economic exploits.`;
 
 /**
- * Agent-β (Beta) — Tokenomics analysis via Mixtral 8x7B (Groq)
+ * Agent-β (Beta) — Tokenomics analysis via Claude Sonnet 4
+ * Claude excels at nuanced reasoning: holder patterns, liquidity traps, economic logic.
  */
 export const betaAgent = {
   name: 'Agent-β',
-  model: 'Mixtral 8x7B (Groq)',
+  model: 'Claude Sonnet 4',
 
   async analyze(req: QueryRequest): Promise<Verdict> {
-    const apiKey = process.env.GROQ_API_KEY;
+    const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey || process.env.DEMO_MODE === 'true') {
       return this.fallbackAnalyze(req);
     }
 
     try {
-      const groq = new Groq({ apiKey });
-      const result = await groq.chat.completions.create({
-        model: 'mixtral-8x7b-32768',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: `Analyze the tokenomics of this contract:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?` },
-        ],
-        temperature: 0.3,
+      const anthropic = new Anthropic({ apiKey });
+      const result = await anthropic.messages.create({
+        model: 'claude-sonnet-4-6',
         max_tokens: 256,
+        temperature: 0.3,
+        system: SYSTEM_PROMPT,
+        messages: [{
+          role: 'user',
+          content: `Analyze the tokenomics of this contract:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?`,
+        }],
       });
 
-      const text = result.choices[0]?.message?.content || '';
+      const text = (result.content[0] as any).text || '';
       const jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const parsed = JSON.parse(jsonStr);
 
@@ -56,18 +58,18 @@ export const betaAgent = {
         stake: '50000',
       };
     } catch (err: any) {
-      console.warn(`Agent-β error (${err.status || err.code}): falling back to rules`);
+      console.warn(`Agent-β Claude error (${err.status || err.code}): falling back to rules`);
       return this.fallbackAnalyze(req);
     }
   },
 
-  /** Deterministic fallback when API is unavailable */
+  /** Deterministic fallback when Claude is unavailable */
   fallbackAnalyze(req: QueryRequest): Verdict {
     const address = req.contractAddress.toLowerCase();
     let riskScore = 0;
     const flags: string[] = [];
 
-    const checksum = address.slice(2, 10).split('').reduce((s, c) => s + parseInt(c, 16), 0);
+    const checksum = address.slice(2, 10).split('').reduce((s: number, c: string) => s + parseInt(c, 16), 0);
     
     if (checksum % 3 === 0) { flags.push('Holder concentration >40% in top 3 wallets'); riskScore += 25; }
     if (checksum % 5 === 0) { flags.push('Liquidity depth below threshold'); riskScore += 15; }
@@ -84,8 +86,8 @@ export const betaAgent = {
       verdict,
       confidence: Math.min(95, 45 + riskScore),
       reasoning: flags.length > 0
-        ? `[DEMO] ${flags.join('; ')}. Full analysis pending.`
-        : `[DEMO] No obvious tokenomic red flags. Full analysis pending.`,
+        ? `[DEMO] ${flags.join('; ')}. Full Claude analysis pending.`
+        : `[DEMO] No obvious tokenomic red flags. Full Claude analysis pending.`,
       stake: '50000',
     };
   },
