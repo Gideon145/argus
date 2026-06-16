@@ -16,9 +16,9 @@ contract ArgusOracle {
     }
 
     struct Query {
-        address indexed contractAddress;
+        address contractAddress;
         string chain;
-        address indexed user;
+        address user;
         Verdict[3] verdicts; // Exactly 3 agents
         string finalVerdict; // Consensus result
         bool consensusReached;
@@ -105,6 +105,6 @@ contract ArgusOracle {
      */
     function getElo(string calldata agentId) external view returns (int256) {
         AgentReputation storage agent = agents[agentId];
-        return agent.eloScore > 0 ? agent.eloScore : 1500;
+        return agent.eloScore > 0 ? agent.eloScore : int256(1500);
     }
 }
