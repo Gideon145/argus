@@ -87,7 +87,7 @@ cd contracts && npm install && npx hardhat compile
 |-----|------|---------|
 | 1 | Jun 15 | Scaffold: agent, contracts, frontend. ARC CLI setup. |
 | 2 | Jun 16 | 3-agent pipeline live (DeepSeek + Claude + rules). Consensus + ELO working. ArgusOracle deployed on Arc testnet. Gateway x402 wired. Per-agent reasoning in responses. v0.1 submitted. |
-| 3 | Jun 17 | — |
+| 3 | Jun 17 | Circle Agent Wallets created for all 3 agents (0x284e...a320, 0x3f75...a34f, 0x1fa7...46de). Circle CLI authenticated. Stack now 2/5 Circle primitives. |
 
 ---
 
