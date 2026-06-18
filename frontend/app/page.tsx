@@ -48,26 +48,11 @@ const INTEL_FEED = [
 
 const SCAN_STEPS = ['Contract validated','Argus Eye activated','Ownership scan complete','Proxy analysis complete','Holder distribution analyzed','Liquidity structure analyzed','Deterministic checks complete','Consensus forming','Verdict finalized'];
 
-const RECENT_VERDICTS = [
-  { name:'PEPE',verdict:'SAFE' as const,consensus:'3/3',time:'2m ago',confidence:94 },
-  { name:'DOGEAI',verdict:'RISKY' as const,consensus:'2/3',time:'8m ago',confidence:78 },
-  { name:'MOONCAT',verdict:'SCAM' as const,consensus:'3/3',time:'14m ago',confidence:96 },
-  { name:'SHIBAI',verdict:'SAFE' as const,consensus:'3/3',time:'21m ago',confidence:88 },
-];
+const RECENT_VERDICTS: any[] = [];
 
-const HISTORY = [
-  { addr:'0xA0b8...6eB48',verdict:'SAFE' as const,consensus:'3/3',confidence:91,time:'2026-06-18 09:41' },
-  { addr:'0x8723...2b125',verdict:'RISKY' as const,consensus:'2/3',confidence:74,time:'2026-06-18 09:42' },
-  { addr:'0xC02a...56Cc2',verdict:'SAFE' as const,consensus:'3/3',confidence:89,time:'2026-06-18 09:40' },
-  { addr:'0x1f98...3Dd2',verdict:'RISKY' as const,consensus:'2/3',confidence:68,time:'2026-06-18 09:38' },
-  { addr:'0x6B17...4d48',verdict:'SCAM' as const,consensus:'3/3',confidence:97,time:'2026-06-18 09:35' },
-];
+const HISTORY: any[] = [];
 
-const AGENT_PERF = [
-  { label:'Agent α',model:'DeepSeek-V3',accuracy:93.2,total:1247,avgConf:87,trend:'+2.3%',color:'#7eb8da' },
-  { label:'Agent β',model:'Claude Sonnet 4',accuracy:91.8,total:1247,avgConf:84,trend:'+1.7%',color:'#D4AF37' },
-  { label:'Agent γ',model:'Rule Engine',accuracy:96.4,total:1247,avgConf:99,trend:'+0.5%',color:'#b57ed8' },
-];
+const AGENT_PERF: any[] = [];
 
 export default function Home() {
   const [address, setAddress] = useState('');
@@ -77,12 +62,26 @@ export default function Home() {
   const [scanStep, setScanStep] = useState(-1);
   const [completedChecks, setCompletedChecks] = useState<Record<string, number>>({});
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [stats, setStats] = useState({ queries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0 });
   const scanTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => setMousePos({ x: (e.clientX / window.innerWidth - 0.5) * 20, y: (e.clientY / window.innerHeight - 0.5) * 20 });
     window.addEventListener('mousemove', onMove);
     return () => window.removeEventListener('mousemove', onMove);
+  }, []);
+
+  // Poll real stats from agent backend
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const r = await fetch(`${AGENT_URL}/stats`);
+        if (r.ok) setStats(await r.json());
+      } catch {}
+    };
+    poll();
+    const interval = setInterval(poll, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const isValidAddress = (addr: string) => /^0x[a-fA-F0-9]{40}$/.test(addr);
@@ -362,13 +361,32 @@ export default function Home() {
                 </div>
 
                 {/* Recent Verdicts */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{RECENT_VERDICTS.map((v,i)=>(<motion.div key={v.name} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-lg tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
+                {RECENT_VERDICTS.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{RECENT_VERDICTS.map((v,i)=>(<motion.div key={v.name} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-2xl tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
+                ) : (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-5 text-center">
+                  <p className="font-mono text-sm text-[#8A92A6]/40">No completed analyses yet.</p>
+                  <p className="font-mono text-xs text-[#8A92A6]/20 mt-1">Awaiting first contract scan.</p>
+                </div>
+                )}
 
                 {/* Agent Performance */}
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6"><p className="font-cinzel text-xs text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-6">{AGENT_PERF.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-sm tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono mb-3">{a.model}</p><p className="font-mono text-3xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><div className="w-24 h-1.5 mx-auto rounded-full bg-[#F8F8F5]/5 mb-2"><motion.div className="h-1.5 rounded-full" style={{background:a.color}} initial={{width:0}} animate={{width:`${a.accuracy}%`}} transition={{delay:1+i*0.1,duration:1}}/></div><p className="text-[#8A92A6]/40 text-[10px] font-mono">{a.total.toLocaleString()} analyses · {a.avgConf}% avg</p><p className="text-[#3CB878] text-[10px] font-mono mt-1">↑ {a.trend} this week</p></motion.div>))}</div></div>
+                {AGENT_PERF.length > 0 ? (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-6">{AGENT_PERF.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-base tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-xs font-mono mb-3">{a.model}</p><p className="font-mono text-4xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><div className="w-28 h-1.5 mx-auto rounded-full bg-[#F8F8F5]/5 mb-2"><motion.div className="h-1.5 rounded-full" style={{background:a.color}} initial={{width:0}} animate={{width:`${a.accuracy}%`}} transition={{delay:1+i*0.1,duration:1}}/></div><p className="text-[#8A92A6]/40 text-xs font-mono">{a.total.toLocaleString()} analyses · {a.avgConf}% avg</p><p className="text-[#3CB878] text-xs font-mono mt-1">↑ {a.trend} this week</p></motion.div>))}</div></div>
+                ) : (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6 text-center">
+                  <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p>
+                  <p className="font-mono text-sm text-[#8A92A6]/40">No performance data yet.</p>
+                  <p className="font-mono text-xs text-[#8A92A6]/20 mt-1">ELO scores populate after agent staking rounds complete.</p>
+                </div>
+                )}
 
                 {/* Analysis History */}
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-xs text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-xs font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-5 py-3 font-normal">Contract</th><th className="px-5 py-3 font-normal">Verdict</th><th className="px-5 py-3 font-normal">Consensus</th><th className="px-5 py-3 font-normal">Confidence</th><th className="px-5 py-3 font-normal">Timestamp</th></tr></thead><tbody>{HISTORY.map((row,i)=>(<motion.tr key={i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-5 py-3 text-[#7eb8da] font-medium">{row.addr}</td><td className="px-5 py-3"><span className="inline-flex items-center gap-1.5 font-cinzel text-xs tracking-wider" style={{color:verdictColor(row.verdict)}}><span className="w-1.5 h-1.5 rounded-full" style={{background:verdictColor(row.verdict),boxShadow:`0 0 6px ${verdictColor(row.verdict)}`}}/>{row.verdict}</span></td><td className="px-5 py-3 text-[#8A92A6]/60">{row.consensus}</td><td className="px-5 py-3 text-[#F8F8F5]/80 font-medium">{row.confidence}%</td><td className="px-5 py-3 text-[#8A92A6]/40">{row.time}</td></motion.tr>))}</tbody></table></div></div>
+                {HISTORY.length > 0 ? (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-sm font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-5 py-3 font-normal">Contract</th><th className="px-5 py-3 font-normal">Verdict</th><th className="px-5 py-3 font-normal">Consensus</th><th className="px-5 py-3 font-normal">Confidence</th><th className="px-5 py-3 font-normal">Timestamp</th></tr></thead><tbody>{HISTORY.map((row,i)=>(<motion.tr key={i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-5 py-3 text-[#7eb8da] font-medium">{row.addr}</td><td className="px-5 py-3"><span className="inline-flex items-center gap-1.5 font-cinzel text-sm tracking-wider" style={{color:verdictColor(row.verdict)}}><span className="w-1.5 h-1.5 rounded-full" style={{background:verdictColor(row.verdict),boxShadow:`0 0 6px ${verdictColor(row.verdict)}`}}/>{row.verdict}</span></td><td className="px-5 py-3 text-[#8A92A6]/60">{row.consensus}</td><td className="px-5 py-3 text-[#F8F8F5]/80 font-medium">{row.confidence}%</td><td className="px-5 py-3 text-[#8A92A6]/40">{row.time}</td></motion.tr>))}</tbody></table></div></div>
+                ) : (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="p-6 text-center"><p className="font-mono text-sm text-[#8A92A6]/40">No scan history yet.</p><p className="font-mono text-xs text-[#8A92A6]/20 mt-1">Run a token scan to populate this table.</p></div></div>
+                )}
 
                 {/* ArcScan link */}
                 {consensus.settlementBatchId && (
@@ -468,16 +486,18 @@ export default function Home() {
 
               <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:3}}>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  {[{title:'3 Independent Agents',desc:'Three separate systems analyze every contract independently.',icon:'◇'},{title:'Consensus Verdicts',desc:'No single model determines the final outcome.',icon:'◎'},{title:'Real USDC Stakes',desc:'Agents commit real economic weight to their conclusions.',icon:'◈'},{title:'Recorded On-Chain',desc:'Every final verdict is stored immutably on Arc.',icon:'⬡'}].map((c,i)=>(<motion.div key={c.title} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5 text-center group hover:border-[#D4AF37]/15 transition-all duration-300" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:3+i*0.1}}>
-                    <span className="text-2xl text-[#D4AF37]/30 mb-3 block">{c.icon}</span><p className="font-cinzel text-xs tracking-wider text-[#D4AF37]/80 mb-2">{c.title}</p><p className="text-[#8A92A6]/50 text-xs leading-relaxed">{c.desc}</p>
+                  {[{agent:'Agent α',model:'DeepSeek-V3',desc:'Contract logic analysis — ownership, proxies, honeypots, access control',color:'#7eb8da'},{agent:'Agent β',model:'Claude Sonnet 4',desc:'Tokenomics analysis — holders, liquidity, whales, trading patterns',color:'#D4AF37'},{agent:'Agent γ',model:'Rule Engine',desc:'Deterministic security checks — patterns, exploits, signatures',color:'#b57ed8'},{agent:'Consensus Engine',model:'2/3 Threshold',desc:'Verdict aggregation with real USDC stakes — final outcome recorded on-chain',color:'#3CB878'}].map((c,i)=>(<motion.div key={c.agent} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5 text-center group hover:border-[#D4AF37]/15 transition-all duration-300" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:3+i*0.1}}>
+                    <span className="font-cinzel text-lg tracking-wider mb-2 block" style={{color:c.color}}>{c.agent}</span>
+                    <p className="text-[#8A92A6]/50 text-[10px] font-mono mb-2">{c.model}</p>
+                    <p className="text-[#8A92A6]/60 text-xs leading-relaxed">{c.desc}</p>
                   </motion.div>))}
                 </div>
               </motion.div>
 
               <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:3.3}}>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {[{value:'52,341',label:'Contracts Analyzed'},{value:'18,901',label:'Consensus Decisions'},{value:'11,882',label:'On-Chain Records'},{value:'92.4%',label:'Avg Confidence'}].map((s,i)=>(<motion.div key={s.label} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5 text-center" initial={{opacity:0,scale:0.9}} animate={{opacity:1,scale:1}} transition={{delay:3.3+i*0.1}}>
-                    <p className="font-mono text-2xl font-bold text-[#F8F8F5] mb-1">{s.value}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono uppercase tracking-wider">{s.label}</p>
+                  {[{value:stats.queries.toLocaleString(),label:'Contracts Analyzed',sub:`Live on Arc Testnet`},{value:stats.consensusReached.toLocaleString(),label:'Consensus Decisions',sub:stats.queries>0?`${Math.round(stats.consensusReached/stats.queries*100)}% rate`:'Awaiting data'},{value:stats.onChainRecords.toLocaleString(),label:'On-Chain Records',sub:'Immutable on Arc'},{value:stats.avgConfidence+'%',label:'Avg Confidence',sub:stats.queries>0?'From real scans':'No data yet'}].map((s,i)=>(<motion.div key={s.label} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5 text-center" initial={{opacity:0,scale:0.9}} animate={{opacity:1,scale:1}} transition={{delay:3.3+i*0.1}}>
+                    <p className="font-mono text-2xl font-bold text-[#F8F8F5] mb-1">{s.value}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono uppercase tracking-wider">{s.label}</p><p className="text-[#8A92A6]/20 text-[9px] font-mono mt-1">{s.sub}</p>
                   </motion.div>))}
                 </div>
               </motion.div>

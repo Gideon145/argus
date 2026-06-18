@@ -131,3 +131,30 @@ body {
 ::-webkit-scrollbar-track { background: var(--bg-abyss); }
 ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
 
+/* Typography uplift — larger text throughout */
+@media (min-width: 768px) {
+  .section-title { font-size: 1rem; letter-spacing: 0.18em; }            /* +30% from xs */
+  .card-title { font-size: 1.05rem; }                                      /* +25% */
+  .stat-number { font-size: 2.25rem; }                                     /* +50% from 1.5rem */
+  .body-text { font-size: 0.92rem; }                                       /* +15% */
+}
+
+/* Verdict badges — +40% size */
+.badge-safe {
+  background: rgba(45,138,110,0.15); color: #3CB878; border: 1px solid rgba(45,138,110,0.3);
+  font-size: 0.8rem; padding: 0.25rem 0.75rem;
+}
+.badge-risky {
+  background: rgba(194,130,26,0.15); color: #E8A838; border: 1px solid rgba(194,130,26,0.3);
+  font-size: 0.8rem; padding: 0.25rem 0.75rem;
+}
+.badge-scam {
+  background: rgba(184,53,53,0.15); color: #E85555; border: 1px solid rgba(184,53,53,0.3);
+  font-size: 0.8rem; padding: 0.25rem 0.75rem;
+}
+
+/* Verdict text glow — stronger */
+.glow-verdict-safe { text-shadow: 0 0 20px rgba(60,184,120,0.45), 0 0 40px rgba(60,184,120,0.15); }
+.glow-verdict-risky { text-shadow: 0 0 20px rgba(232,168,56,0.45), 0 0 40px rgba(232,168,56,0.15); }
+.glow-verdict-scam { text-shadow: 0 0 20px rgba(232,85,85,0.45), 0 0 40px rgba(232,85,85,0.15); }
+

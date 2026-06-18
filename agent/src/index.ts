@@ -43,6 +43,18 @@ async function main() {
     res.json(lastState);
   });
 
+  app.get('/stats', (_req, res) => {
+    const q = (orchestrator as any).queryCount || 0;
+    const cw = (orchestrator as any).consensusWins || 0;
+    res.json({
+      queries: q,
+      consensusReached: cw,
+      onChainRecords: cw, // each consensus = one on-chain record
+      avgConfidence: q > 0 ? Math.round((cw / q) * 100) : 0,
+      status: 'live',
+    });
+  });
+
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok', uptime: process.uptime(), agent: 'Argus' });
   });
