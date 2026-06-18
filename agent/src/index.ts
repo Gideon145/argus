@@ -7,7 +7,7 @@ import { createGatewayMiddleware } from '@circle-fin/x402-batching/server';
 import { Orchestrator, QueryRequest } from './orchestrator';
 import { createLogger, Logger } from './logger';
 
-const STATUS_PORT = parseInt(process.env.STATUS_PORT || '3001');
+const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
 const SELLER_ADDRESS = process.env.TREASURY_ADDRESS || '0x933a2405f84c224be1ef373ba16e992e1f459682';
 
