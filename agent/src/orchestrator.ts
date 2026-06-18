@@ -5,7 +5,7 @@ import { runConsensus, ConsensusResult } from './consensus';
 import { settleStakes } from './treasury';
 import { updateReputation } from './reputation';
 import { processPayment } from './gateway';
-import { Logger } from './logger';
+import { store } from './store';
 
 export interface AgentConfig {
   arcRpc: string;
@@ -94,6 +94,15 @@ export class Orchestrator {
 
     // Cache result to avoid repeat API costs
     this.scanCache.set(cacheKey, result);
+
+    // Persist to file store (survives deploys, visible to all users)
+    store.recordScan({
+      address: req.contractAddress,
+      verdict: result.finalVerdict,
+      consensus: `${result.agreementCount}/${result.totalAgents}`,
+      confidence: Math.round(result.agentVerdicts.reduce((sum, v) => sum + v.confidence, 0) / result.agentVerdicts.length),
+      time: new Date().toISOString().replace('T', ' ').slice(0, 19),
+    }, result.consensusReached);
 
     return result;
   }

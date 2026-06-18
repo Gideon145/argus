@@ -106,6 +106,43 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // Poll global scan history from agent backend (shared across all users)
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const r = await fetch(`${AGENT_URL}/history`);
+        if (r.ok) {
+          const history = await r.json();
+          if (Array.isArray(history) && history.length > 0) {
+            setAnalysisHistory(history.map((h: any) => ({
+              addr: h.address.slice(0, 6) + '...' + h.address.slice(-4),
+              verdict: h.verdict,
+              consensus: h.consensus,
+              confidence: h.confidence,
+              time: h.time,
+            })));
+            setRecentVerdicts(history.slice(0, 8).map((h: any) => ({
+              name: h.address.slice(0, 6) + '...' + h.address.slice(-4),
+              verdict: h.verdict,
+              consensus: h.consensus,
+              time: 'recent',
+              confidence: h.confidence,
+            })));
+            setLiveFeed(history.slice(0, 10).map((h: any) => ({
+              time: 'recent',
+              addr: h.address.slice(0, 6) + '...' + h.address.slice(-4),
+              verdict: h.verdict,
+              consensus: h.consensus,
+            })));
+          }
+        }
+      } catch {}
+    };
+    poll();
+    const interval = setInterval(poll, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Sync scan history to localStorage (persists across sessions)
   useEffect(() => { try { localStorage.setItem('argus_verdicts', JSON.stringify(recentVerdicts)); } catch {} }, [recentVerdicts]);
   useEffect(() => { try { localStorage.setItem('argus_history', JSON.stringify(analysisHistory)); } catch {} }, [analysisHistory]);
