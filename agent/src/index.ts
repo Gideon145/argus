@@ -6,6 +6,7 @@ import cors from 'cors';
 import { createGatewayMiddleware } from '@circle-fin/x402-batching/server';
 import { Orchestrator, QueryRequest } from './orchestrator';
 import { createLogger, Logger } from './logger';
+import { store } from './store';
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -39,20 +40,16 @@ async function main() {
   app.use(express.json());
 
   // Public endpoints
-  app.get('/status', (_req, res) => {
-    res.json(lastState);
+  app.get('/stats', (_req, res) => {
+    res.json(store.getStats());
   });
 
-  app.get('/stats', (_req, res) => {
-    const q = (orchestrator as any).queryCount || 0;
-    const cw = (orchestrator as any).consensusWins || 0;
-    res.json({
-      queries: q,
-      consensusReached: cw,
-      onChainRecords: cw, // each consensus = one on-chain record
-      avgConfidence: q > 0 ? Math.round((cw / q) * 100) : 0,
-      status: 'live',
-    });
+  app.get('/history', (_req, res) => {
+    res.json(store.getHistory());
+  });
+
+  app.get('/status', (_req, res) => {
+    res.json({ ...store.getStats(), uptime: process.uptime() });
   });
 
   app.get('/health', (_req, res) => {
