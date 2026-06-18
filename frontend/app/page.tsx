@@ -85,8 +85,6 @@ export default function Home() {
       { label: 'Agent γ', model: 'Rule Engine', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#b57ed8' },
     ];
   });
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [treasuryBalance, setTreasuryBalance] = useState('0.00');
   const scanTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -115,7 +113,6 @@ export default function Home() {
   useEffect(() => { try { localStorage.setItem('argus_agent_perf', JSON.stringify(agentPerf)); } catch {} }, [agentPerf]);
 
   const isValidAddress = (addr: string) => /^0x[a-fA-F0-9]{40}$/.test(addr);
-  const handleConnectWallet = () => { setWalletConnected(!walletConnected); };
 
   const handleScan = async () => {
     if (!isValidAddress(address)) { setError('Invalid address'); return; }
@@ -243,8 +240,6 @@ export default function Home() {
           <div className="flex items-center gap-6 text-xs font-mono text-[#8A92A6]/60">
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />Arc Testnet</span>
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />3 Agents Active</span>
-            <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />Treasury: {treasuryBalance} USDC</span>
-            <button onClick={handleConnectWallet} className={walletConnected ? 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>{walletConnected ? '✓ Connected' : 'Connect Wallet'}</button>
           </div>
         </header>
 
