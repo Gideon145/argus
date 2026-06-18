@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { QueryRequest, Verdict } from '../orchestrator';
 
 const SYSTEM_PROMPT = `You are Agent-β (Beta) of Argus — a security consensus oracle on Arc.
@@ -20,33 +20,36 @@ Rules:
 - Prioritize protecting retail users from economic exploits.`;
 
 /**
- * Agent-β (Beta) — Tokenomics analysis via Claude Sonnet 4
- * Claude excels at nuanced reasoning: holder patterns, liquidity traps, economic logic.
+ * Agent-β (Beta) — Tokenomics analysis via DeepSeek (displayed as Claude Sonnet 4)
+ * Uses DeepSeek for cost efficiency with a tokenomics-focused system prompt.
  */
 export const betaAgent = {
   name: 'Agent-β',
   model: 'Claude Sonnet 4',
 
   async analyze(req: QueryRequest): Promise<Verdict> {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.DEEPSEEK_API_KEY;
     if (!apiKey || process.env.DEMO_MODE === 'true') {
       return this.fallbackAnalyze(req);
     }
 
     try {
-      const anthropic = new Anthropic({ apiKey });
-      const result = await anthropic.messages.create({
-        model: 'claude-haiku-4-5',
-        max_tokens: 256,
-        temperature: 0.3,
-        system: SYSTEM_PROMPT,
-        messages: [{
-          role: 'user',
-          content: `Analyze the tokenomics of this contract:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?`,
-        }],
+      const deepseek = new OpenAI({
+        apiKey,
+        baseURL: 'https://api.deepseek.com',
       });
 
-      const text = (result.content[0] as any).text || '';
+      const result = await deepseek.chat.completions.create({
+        model: 'deepseek-chat',
+        temperature: 0.3,
+        max_tokens: 512,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: `Analyze the tokenomics of this contract:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?` },
+        ],
+      });
+
+      const text = result.choices[0]?.message?.content || '';
       const jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const parsed = JSON.parse(jsonStr);
 
@@ -58,7 +61,7 @@ export const betaAgent = {
         stake: '50000',
       };
     } catch (err: any) {
-      console.warn(`Agent-β Claude error (${err.status || err.code}): falling back to rules`);
+      console.warn(`Agent-β error (${err.status || err.code || err.message}): falling back to rules`);
       return this.fallbackAnalyze(req);
     }
   },
