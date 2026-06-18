@@ -57,14 +57,36 @@ export default function Home() {
   const [completedChecks, setCompletedChecks] = useState<Record<string, number>>({});
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [stats, setStats] = useState({ queries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0 });
-  const [recentVerdicts, setRecentVerdicts] = useState<{name:string;verdict:string;consensus:string;time:string;confidence:number}[]>([]);
-  const [analysisHistory, setAnalysisHistory] = useState<{addr:string;verdict:string;consensus:string;confidence:number;time:string}[]>([]);
-  const [liveFeed, setLiveFeed] = useState<{time:string;addr:string;verdict:string;consensus:string}[]>([]);
-  const [agentPerf, setAgentPerf] = useState<{label:string;model:string;accuracy:number;total:number;avgConf:number;trend:string;color:string}[]>([
-    { label: 'Agent α', model: 'DeepSeek-V3', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#7eb8da' },
-    { label: 'Agent β', model: 'Claude Sonnet 4', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#D4AF37' },
-    { label: 'Agent γ', model: 'Rule Engine', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#b57ed8' },
-  ]);
+  const [recentVerdicts, setRecentVerdicts] = useState<{name:string;verdict:string;consensus:string;time:string;confidence:number}[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try { const v = localStorage.getItem('argus_verdicts'); return v ? JSON.parse(v) : []; } catch { return []; }
+  });
+  const [analysisHistory, setAnalysisHistory] = useState<{addr:string;verdict:string;consensus:string;confidence:number;time:string}[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try { const v = localStorage.getItem('argus_history'); return v ? JSON.parse(v) : []; } catch { return []; }
+  });
+  const [liveFeed, setLiveFeed] = useState<{time:string;addr:string;verdict:string;consensus:string}[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try { const v = localStorage.getItem('argus_feed'); return v ? JSON.parse(v) : []; } catch { return []; }
+  });
+  const [agentPerf, setAgentPerf] = useState<{label:string;model:string;accuracy:number;total:number;avgConf:number;trend:string;color:string}[]>(() => {
+    if (typeof window === 'undefined') return [
+      { label: 'Agent α', model: 'DeepSeek-V3', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#7eb8da' },
+      { label: 'Agent β', model: 'Claude Sonnet 4', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#D4AF37' },
+      { label: 'Agent γ', model: 'Rule Engine', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#b57ed8' },
+    ];
+    try {
+      const stored = localStorage.getItem('argus_agent_perf');
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return [
+      { label: 'Agent α', model: 'DeepSeek-V3', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#7eb8da' },
+      { label: 'Agent β', model: 'Claude Sonnet 4', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#D4AF37' },
+      { label: 'Agent γ', model: 'Rule Engine', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#b57ed8' },
+    ];
+  });
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [treasuryBalance, setTreasuryBalance] = useState('0.00');
   const scanTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -86,7 +108,14 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // Sync scan history to localStorage (persists across sessions)
+  useEffect(() => { try { localStorage.setItem('argus_verdicts', JSON.stringify(recentVerdicts)); } catch {} }, [recentVerdicts]);
+  useEffect(() => { try { localStorage.setItem('argus_history', JSON.stringify(analysisHistory)); } catch {} }, [analysisHistory]);
+  useEffect(() => { try { localStorage.setItem('argus_feed', JSON.stringify(liveFeed)); } catch {} }, [liveFeed]);
+  useEffect(() => { try { localStorage.setItem('argus_agent_perf', JSON.stringify(agentPerf)); } catch {} }, [agentPerf]);
+
   const isValidAddress = (addr: string) => /^0x[a-fA-F0-9]{40}$/.test(addr);
+  const handleConnectWallet = () => { setWalletConnected(!walletConnected); };
 
   const handleScan = async () => {
     if (!isValidAddress(address)) { setError('Invalid address'); return; }
@@ -214,6 +243,8 @@ export default function Home() {
           <div className="flex items-center gap-6 text-xs font-mono text-[#8A92A6]/60">
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />Arc Testnet</span>
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />3 Agents Active</span>
+            <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />Treasury: {treasuryBalance} USDC</span>
+            <button onClick={handleConnectWallet} className={walletConnected ? 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>{walletConnected ? '✓ Connected' : 'Connect Wallet'}</button>
           </div>
         </header>
 
