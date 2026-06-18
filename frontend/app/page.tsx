@@ -48,12 +48,6 @@ const INTEL_FEED = [
 
 const SCAN_STEPS = ['Contract validated','Argus Eye activated','Ownership scan complete','Proxy analysis complete','Holder distribution analyzed','Liquidity structure analyzed','Deterministic checks complete','Consensus forming','Verdict finalized'];
 
-const RECENT_VERDICTS: any[] = [];
-
-const HISTORY: any[] = [];
-
-const AGENT_PERF: any[] = [];
-
 export default function Home() {
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
@@ -63,6 +57,14 @@ export default function Home() {
   const [completedChecks, setCompletedChecks] = useState<Record<string, number>>({});
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [stats, setStats] = useState({ queries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0 });
+  const [recentVerdicts, setRecentVerdicts] = useState<{name:string;verdict:string;consensus:string;time:string;confidence:number}[]>([]);
+  const [analysisHistory, setAnalysisHistory] = useState<{addr:string;verdict:string;consensus:string;confidence:number;time:string}[]>([]);
+  const [liveFeed, setLiveFeed] = useState<{time:string;addr:string;verdict:string;consensus:string}[]>([]);
+  const [agentPerf, setAgentPerf] = useState<{label:string;model:string;accuracy:number;total:number;avgConf:number;trend:string;color:string}[]>([
+    { label: 'Agent α', model: 'DeepSeek-V3', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#7eb8da' },
+    { label: 'Agent β', model: 'Claude Sonnet 4', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#D4AF37' },
+    { label: 'Agent γ', model: 'Rule Engine', accuracy: 0, total: 0, avgConf: 0, trend: '—', color: '#b57ed8' },
+  ]);
   const scanTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -120,6 +122,37 @@ export default function Home() {
       const data: ScanResult = await res.json();
       setResult(data);
       setScanStep(9);
+
+      // Populate state from real scan result
+      if (data.result) {
+        const now = new Date().toISOString().replace('T',' ').slice(0,19);
+        const shortAddr = address.slice(0,6)+'...'+address.slice(-4);
+        const verdict = data.result.verdict;
+        const consensusStr = `${data.result.agreementCount}/${data.result.totalAgents}`;
+        setRecentVerdicts(prev => {
+          const next = [{ name: shortAddr, verdict, consensus: consensusStr, time: 'just now', confidence: data.result!.agreementCount === 3 ? 96 : data.result!.agreementCount === 2 ? 78 : 50 }, ...prev];
+          return next.slice(0, 8);
+        });
+        setAnalysisHistory(prev => {
+          const next = [{ addr: shortAddr, verdict, consensus: consensusStr, confidence: data.result!.agreementCount === 3 ? 96 : data.result!.agreementCount === 2 ? 78 : 50, time: now }, ...prev];
+          return next.slice(0, 20);
+        });
+        setLiveFeed(prev => {
+          const next = [{ time: 'just now', addr: shortAddr, verdict, consensus: consensusStr }, ...prev];
+          return next.slice(0, 10);
+        });
+        // Update per-agent performance
+        setAgentPerf(prev => prev.map(a => {
+          const agentKey = a.label.replace(' ','-');
+          const agentVerdict = data.result!.agents.find(ag => ag.name === agentKey);
+          if (!agentVerdict) return a;
+          const won = agentVerdict.verdict === verdict;
+          const newTotal = a.total + 1;
+          const newWins = (a.accuracy * a.total / 100) + (won ? 1 : 0);
+          const newAcc = Math.round((newWins / newTotal) * 100);
+          return { ...a, total: newTotal, accuracy: newAcc, avgConf: Math.round((a.avgConf * (newTotal-1) + agentVerdict.confidence) / newTotal), trend: newAcc >= a.accuracy ? '+'+(newAcc - a.accuracy)+'%' : (newAcc - a.accuracy)+'%' };
+        }));
+      }
     } catch { setError('Agent offline'); setScanStep(-1); }
     finally {
       if (scanTimerRef.current) clearInterval(scanTimerRef.current);
@@ -360,9 +393,53 @@ export default function Home() {
                   })}
                 </div>
 
+                {/* Live Scan Activity + Intelligence Feed */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <motion.div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />
+                      <p className="font-mono text-xs text-[#8A92A6]/60 tracking-wider uppercase">Live Scan Activity</p>
+                    </div>
+                    {liveFeed.length > 0 ? (
+                    <div className="space-y-1.5">
+                      {liveFeed.map((item, i) => (
+                        <motion.div key={i} className="flex items-center gap-3 text-xs font-mono py-1.5 border-b border-[#D4AF37]/3 last:border-0"
+                          initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.0 + i * 0.1 }}>
+                          <span className="text-[#8A92A6]/30 w-14 flex-shrink-0">{item.time}</span>
+                          <span className="text-[#8A92A6]/50">{item.addr}</span>
+                          <span className="text-[#8A92A6]/50">{item.consensus}</span>
+                          <span className="uppercase tracking-wider font-cinzel text-[10px] ml-auto" style={{ color: feedVerdictColor(item.verdict) }}>{item.verdict}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                    ) : (
+                      <p className="font-mono text-xs text-[#8A92A6]/25 py-4 text-center">No scans yet.</p>
+                    )}
+                  </motion.div>
+                  <motion.div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }}>
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
+                      <p className="font-mono text-xs text-[#8A92A6]/60 tracking-wider uppercase">Intelligence Feed</p>
+                    </div>
+                    {liveFeed.length > 0 ? (
+                    <div className="space-y-1.5">
+                      {liveFeed.slice(0, 6).map((item, i) => (
+                        <motion.div key={i} className="flex items-center gap-3 text-xs font-mono py-1.5 border-b border-[#D4AF37]/3 last:border-0"
+                          initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.1 + i * 0.1 }}>
+                          <span className="text-[#8A92A6]/30 w-14 flex-shrink-0">{item.time}</span>
+                          <span className="text-[#8A92A6]/50">Consensus: {item.verdict} ({item.consensus})</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                    ) : (
+                      <p className="font-mono text-xs text-[#8A92A6]/25 py-4 text-center">Intelligence events appear during scans.</p>
+                    )}
+                  </motion.div>
+                </div>
+
                 {/* Recent Verdicts */}
-                {RECENT_VERDICTS.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{RECENT_VERDICTS.map((v,i)=>(<motion.div key={v.name} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-2xl tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
+                {recentVerdicts.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{recentVerdicts.map((v,i)=>(<motion.div key={v.name+'-'+i} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-2xl tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
                 ) : (
                 <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-5 text-center">
                   <p className="font-mono text-sm text-[#8A92A6]/40">No completed analyses yet.</p>
@@ -371,8 +448,8 @@ export default function Home() {
                 )}
 
                 {/* Agent Performance */}
-                {AGENT_PERF.length > 0 ? (
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-6">{AGENT_PERF.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-base tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-xs font-mono mb-3">{a.model}</p><p className="font-mono text-4xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><div className="w-28 h-1.5 mx-auto rounded-full bg-[#F8F8F5]/5 mb-2"><motion.div className="h-1.5 rounded-full" style={{background:a.color}} initial={{width:0}} animate={{width:`${a.accuracy}%`}} transition={{delay:1+i*0.1,duration:1}}/></div><p className="text-[#8A92A6]/40 text-xs font-mono">{a.total.toLocaleString()} analyses · {a.avgConf}% avg</p><p className="text-[#3CB878] text-xs font-mono mt-1">↑ {a.trend} this week</p></motion.div>))}</div></div>
+                {agentPerf.length > 0 ? (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-6">{agentPerf.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-base tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-xs font-mono mb-3">{a.model}</p><p className="font-mono text-4xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><div className="w-28 h-1.5 mx-auto rounded-full bg-[#F8F8F5]/5 mb-2"><motion.div className="h-1.5 rounded-full" style={{background:a.color}} initial={{width:0}} animate={{width:`${a.accuracy}%`}} transition={{delay:1+i*0.1,duration:1}}/></div><p className="text-[#8A92A6]/40 text-xs font-mono">{a.total.toLocaleString()} analyses · {a.avgConf}% avg</p><p className="text-[#3CB878] text-xs font-mono mt-1">↑ {a.trend} this week</p></motion.div>))}</div></div>
                 ) : (
                 <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6 text-center">
                   <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p>
@@ -382,8 +459,8 @@ export default function Home() {
                 )}
 
                 {/* Analysis History */}
-                {HISTORY.length > 0 ? (
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-sm font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-5 py-3 font-normal">Contract</th><th className="px-5 py-3 font-normal">Verdict</th><th className="px-5 py-3 font-normal">Consensus</th><th className="px-5 py-3 font-normal">Confidence</th><th className="px-5 py-3 font-normal">Timestamp</th></tr></thead><tbody>{HISTORY.map((row,i)=>(<motion.tr key={i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-5 py-3 text-[#7eb8da] font-medium">{row.addr}</td><td className="px-5 py-3"><span className="inline-flex items-center gap-1.5 font-cinzel text-sm tracking-wider" style={{color:verdictColor(row.verdict)}}><span className="w-1.5 h-1.5 rounded-full" style={{background:verdictColor(row.verdict),boxShadow:`0 0 6px ${verdictColor(row.verdict)}`}}/>{row.verdict}</span></td><td className="px-5 py-3 text-[#8A92A6]/60">{row.consensus}</td><td className="px-5 py-3 text-[#F8F8F5]/80 font-medium">{row.confidence}%</td><td className="px-5 py-3 text-[#8A92A6]/40">{row.time}</td></motion.tr>))}</tbody></table></div></div>
+                {analysisHistory.length > 0 ? (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-sm font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-5 py-3 font-normal">Contract</th><th className="px-5 py-3 font-normal">Verdict</th><th className="px-5 py-3 font-normal">Consensus</th><th className="px-5 py-3 font-normal">Confidence</th><th className="px-5 py-3 font-normal">Timestamp</th></tr></thead><tbody>{analysisHistory.map((row,i)=>(<motion.tr key={row.addr+'-'+i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-5 py-3 text-[#7eb8da] font-medium">{row.addr}</td><td className="px-5 py-3"><span className="inline-flex items-center gap-1.5 font-cinzel text-sm tracking-wider" style={{color:verdictColor(row.verdict)}}><span className="w-1.5 h-1.5 rounded-full" style={{background:verdictColor(row.verdict),boxShadow:`0 0 6px ${verdictColor(row.verdict)}`}}/>{row.verdict}</span></td><td className="px-5 py-3 text-[#8A92A6]/60">{row.consensus}</td><td className="px-5 py-3 text-[#F8F8F5]/80 font-medium">{row.confidence}%</td><td className="px-5 py-3 text-[#8A92A6]/40">{row.time}</td></motion.tr>))}</tbody></table></div></div>
                 ) : (
                 <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="p-6 text-center"><p className="font-mono text-sm text-[#8A92A6]/40">No scan history yet.</p><p className="font-mono text-xs text-[#8A92A6]/20 mt-1">Run a token scan to populate this table.</p></div></div>
                 )}
@@ -400,47 +477,6 @@ export default function Home() {
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* Empty state */}
-          {!loading && !scanProgress && !consensus && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
-              {/* Live scan feed */}
-              <motion.div className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }}>
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />
-                  <p className="font-mono text-[10px] text-[#8A92A6]/60 tracking-wider uppercase">Live Scan Activity</p>
-                </div>
-                <div className="space-y-1.5">
-                  {LIVE_FEED.map((item, i) => (
-                    <motion.div key={i} className="flex items-center gap-3 text-xs font-mono py-1.5 border-b border-[#D4AF37]/3 last:border-0"
-                      initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.6 + i * 0.1 }}>
-                      <span className="text-[#8A92A6]/30 w-14 flex-shrink-0">{item.time}</span>
-                      <span className="text-[#8A92A6]/50">{item.addr}</span>
-                      <span className="text-[#8A92A6]/50">{item.consensus}</span>
-                      <span className="uppercase tracking-wider font-cinzel text-[10px] ml-auto" style={{ color: feedVerdictColor(item.verdict) }}>{item.verdict}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Intelligence feed */}
-              <motion.div className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.7 }}>
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
-                  <p className="font-mono text-[10px] text-[#8A92A6]/60 tracking-wider uppercase">Intelligence Feed</p>
-                </div>
-                <div className="space-y-1.5">
-                  {INTEL_FEED.map((item, i) => (
-                    <motion.div key={i} className="flex items-center gap-3 text-xs font-mono py-1.5 border-b border-[#D4AF37]/3 last:border-0"
-                      initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.8 + i * 0.1 }}>
-                      <span className="text-[#8A92A6]/30 w-14 flex-shrink-0">{item.time}</span>
-                      <span className="text-[#8A92A6]/50">{item.text}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-          )}
 
           {!loading && !consensus && (
             <div className="max-w-6xl mx-auto w-full space-y-16 pb-12">
