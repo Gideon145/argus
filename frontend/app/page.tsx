@@ -423,10 +423,79 @@ export default function Home() {
               </motion.div>
             </div>
           )}
+
+          {!loading && !consensus && (
+            <div className="max-w-6xl mx-auto w-full space-y-16 pb-12">
+
+              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:2}}>
+                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-6 text-center">How Argus Works</p>
+                <div className="flex flex-col items-center gap-2">
+                  {[
+                    {step:'01',label:'Contract Address',desc:'User submits a token contract for analysis',color:'#D4AF37'},
+                    {step:'02',label:'Agent α · DeepSeek-V3',desc:'Contract logic analysis — ownership, proxies, honeypots',color:'#7eb8da'},
+                    {step:'03',label:'Agent β · Claude Sonnet 4',desc:'Tokenomics analysis — holders, liquidity, whales',color:'#D4AF37'},
+                    {step:'04',label:'Agent γ · Rule Engine',desc:'Deterministic checks — patterns, exploits, signatures',color:'#b57ed8'},
+                    {step:'05',label:'Consensus Formation',desc:'2/3 threshold — agents stake real USDC on verdicts',color:'#D4AF37'},
+                    {step:'06',label:'On-Chain Verdict',desc:'Final result recorded immutably on Arc testnet',color:'#3CB878'},
+                  ].map((s,i)=>(<motion.div key={s.step} className="flex items-center gap-4 w-full max-w-md" initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}} transition={{delay:2.2+i*0.12}}>
+                    <span className="font-mono text-xs w-8 h-8 rounded-full flex items-center justify-center border flex-shrink-0" style={{color:s.color,borderColor:s.color+'30'}}>{s.step}</span>
+                    <div><p className="text-sm text-[#F8F8F5]/90">{s.label}</p><p className="text-[10px] text-[#8A92A6]/50 font-mono">{s.desc}</p></div>
+                    {i<5&&<span className="text-[#D4AF37]/20 ml-auto">↓</span>}
+                  </motion.div>))}
+                </div>
+              </motion.div>
+
+              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:2.5}}>
+                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-6 text-center">Meet the Agents</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {Object.entries(AGENT_META).map(([key,meta])=>(<motion.div key={key} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6 group hover:border-[#D4AF37]/20 transition-all duration-300" whileHover={{y:-2}}>
+                    <div className="w-10 h-10 rounded-full mb-4 flex items-center justify-center text-lg font-cinzel" style={{background:meta.color+'15',color:meta.color}}>{['α','β','γ'][['Agent-α','Agent-β','Agent-γ'].indexOf(key)]}</div>
+                    <p className="font-cinzel text-base tracking-wider mb-1" style={{color:meta.color}}>{meta.label}</p>
+                    <p className="text-[#8A92A6]/50 text-xs font-mono mb-4">{meta.model}</p>
+                    <div className="space-y-1.5">{meta.checks.map(c=>(<p key={c} className="text-[#8A92A6]/60 text-xs font-mono flex items-center gap-2"><span className="w-1 h-1 rounded-full" style={{background:meta.color}}/>{c}</p>))}</div>
+                  </motion.div>))}
+                </div>
+              </motion.div>
+
+              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:2.8}}>
+                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-6 text-center">Example Analysis</p>
+                <div className="bg-[#0E1423] border border-[#3CB878]/20 rounded-2xl p-6 max-w-lg mx-auto" style={{boxShadow:'0 0 40px rgba(60,184,120,0.05)'}}>
+                  <div className="flex items-center justify-between mb-4"><p className="font-mono text-sm text-[#7eb8da]">USDC</p><span className="font-cinzel text-xs px-3 py-1 rounded-full badge-safe">SAFE</span></div>
+                  <div className="flex items-center gap-4 mb-4"><span className="font-cinzel text-2xl text-[#3CB878]">3/3</span><span className="text-xs font-mono text-[#8A92A6]">Consensus · 96% confidence</span></div>
+                  <div className="space-y-1.5 text-xs font-mono text-[#3CB878]/80"><p>✓ Ownership verified</p><p>✓ No honeypot detected</p><p>✓ Deep liquidity confirmed</p><p>✓ Holder distribution healthy</p><p>✓ No deterministic risks</p></div>
+                </div>
+              </motion.div>
+
+              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:3}}>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  {[{title:'3 Independent Agents',desc:'Three separate systems analyze every contract independently.',icon:'◇'},{title:'Consensus Verdicts',desc:'No single model determines the final outcome.',icon:'◎'},{title:'Real USDC Stakes',desc:'Agents commit real economic weight to their conclusions.',icon:'◈'},{title:'Recorded On-Chain',desc:'Every final verdict is stored immutably on Arc.',icon:'⬡'}].map((c,i)=>(<motion.div key={c.title} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5 text-center group hover:border-[#D4AF37]/15 transition-all duration-300" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:3+i*0.1}}>
+                    <span className="text-2xl text-[#D4AF37]/30 mb-3 block">{c.icon}</span><p className="font-cinzel text-xs tracking-wider text-[#D4AF37]/80 mb-2">{c.title}</p><p className="text-[#8A92A6]/50 text-xs leading-relaxed">{c.desc}</p>
+                  </motion.div>))}
+                </div>
+              </motion.div>
+
+              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:3.3}}>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[{value:'52,341',label:'Contracts Analyzed'},{value:'18,901',label:'Consensus Decisions'},{value:'11,882',label:'On-Chain Records'},{value:'92.4%',label:'Avg Confidence'}].map((s,i)=>(<motion.div key={s.label} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5 text-center" initial={{opacity:0,scale:0.9}} animate={{opacity:1,scale:1}} transition={{delay:3.3+i*0.1}}>
+                    <p className="font-mono text-2xl font-bold text-[#F8F8F5] mb-1">{s.value}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono uppercase tracking-wider">{s.label}</p>
+                  </motion.div>))}
+                </div>
+              </motion.div>
+
+            </div>
+          )}
         </main>
 
-        <footer className="border-t border-[#D4AF37]/5 px-8 py-5 text-center">
-          <p className="font-mono text-[10px] text-[#8A92A6]/20">ArgusOracle · 0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8 · Arc Testnet</p>
+        <footer className="border-t border-[#D4AF37]/10 mt-16 px-8 py-8">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left"><p className="font-cinzel text-lg tracking-[0.2em] text-[#D4AF37]">ARGUS</p><p className="text-[#8A92A6]/30 text-[10px] font-cinzel tracking-wider mt-1">Τρεις οφθαλμοί. Μια κρίσις.</p></div>
+            <div className="flex items-center gap-6 text-[10px] font-mono text-[#8A92A6]/30">
+              <a href="https://github.com/Gideon145/argus" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37]/60 transition-colors">GitHub</a>
+              <a href="https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37]/60 transition-colors">ArcScan</a>
+              <a href="https://x.com/Argus_arc" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37]/60 transition-colors">X</a>
+              <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#3CB878]"/>Arc Testnet · Live</span>
+            </div>
+          </div>
         </footer>
       </div>
     </div>
