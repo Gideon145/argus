@@ -46,14 +46,27 @@ const INTEL_FEED = [
   { text: 'Proxy upgrade risk identified', time: '1m ago' },
 ];
 
-const SCAN_STEPS = [
-  'Contract validated',
-  'Argus Eye activated',
-  'Agent α analyzing contract logic',
-  'Agent β analyzing tokenomics',
-  'Agent γ running deterministic checks',
-  'Consensus forming',
-  'Verdict ready',
+const SCAN_STEPS = ['Contract validated','Argus Eye activated','Ownership scan complete','Proxy analysis complete','Holder distribution analyzed','Liquidity structure analyzed','Deterministic checks complete','Consensus forming','Verdict finalized'];
+
+const RECENT_VERDICTS = [
+  { name:'PEPE',verdict:'SAFE' as const,consensus:'3/3',time:'2m ago',confidence:94 },
+  { name:'DOGEAI',verdict:'RISKY' as const,consensus:'2/3',time:'8m ago',confidence:78 },
+  { name:'MOONCAT',verdict:'SCAM' as const,consensus:'3/3',time:'14m ago',confidence:96 },
+  { name:'SHIBAI',verdict:'SAFE' as const,consensus:'3/3',time:'21m ago',confidence:88 },
+];
+
+const HISTORY = [
+  { addr:'0xA0b8...6eB48',verdict:'SAFE' as const,consensus:'3/3',confidence:91,time:'2026-06-18 09:41' },
+  { addr:'0x8723...2b125',verdict:'RISKY' as const,consensus:'2/3',confidence:74,time:'2026-06-18 09:42' },
+  { addr:'0xC02a...56Cc2',verdict:'SAFE' as const,consensus:'3/3',confidence:89,time:'2026-06-18 09:40' },
+  { addr:'0x1f98...3Dd2',verdict:'RISKY' as const,consensus:'2/3',confidence:68,time:'2026-06-18 09:38' },
+  { addr:'0x6B17...4d48',verdict:'SCAM' as const,consensus:'3/3',confidence:97,time:'2026-06-18 09:35' },
+];
+
+const AGENT_PERF = [
+  { label:'Agent α',model:'DeepSeek-V3',accuracy:93.2,total:1247,avgConf:87,color:'#7eb8da' },
+  { label:'Agent β',model:'Claude Sonnet 4',accuracy:91.8,total:1247,avgConf:84,color:'#D4AF37' },
+  { label:'Agent γ',model:'Rule Engine',accuracy:96.4,total:1247,avgConf:99,color:'#b57ed8' },
 ];
 
 export default function Home() {
@@ -119,9 +132,10 @@ export default function Home() {
   const verdictBadge = (v: string) => v === 'SAFE' ? 'badge-safe' : v === 'RISKY' ? 'badge-risky' : 'badge-scam';
   const verdictColor = (v: string) => v === 'SAFE' ? '#3CB878' : v === 'RISKY' ? '#E8A838' : '#E85555';
   const feedVerdictColor = (v: string) => v === 'SAFE' ? '#3CB878' : v === 'RISKY' ? '#E8A838' : '#E85555';
+  const verdictGlow = (v: string) => v === 'SAFE' ? 'shadow-[0_0_30px_rgba(60,184,120,0.25)]' : v === 'RISKY' ? 'shadow-[0_0_30px_rgba(232,168,56,0.25)]' : 'shadow-[0_0_30px_rgba(232,85,85,0.25)]';
   const agents = result?.result?.agents || [];
   const consensus = result?.result;
-  const scanProgress = scanStep >= 0 && scanStep < 7;
+  const scanProgress = scanStep >= 0 && scanStep < 9;
 
   return (
     <div className="min-h-screen bg-[#050816] text-[#F8F8F5] overflow-x-hidden">
@@ -346,6 +360,15 @@ export default function Home() {
                     );
                   })}
                 </div>
+
+                {/* Recent Verdicts */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{RECENT_VERDICTS.map((v,i)=>(<motion.div key={v.name} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-lg tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
+
+                {/* Agent Performance */}
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6"><p className="font-cinzel text-xs text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-4">{AGENT_PERF.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-sm tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono mb-2">{a.model}</p><p className="font-mono text-2xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><p className="text-[#8A92A6]/40 text-[10px]">Accuracy · {a.total} analyses</p></motion.div>))}</div></div>
+
+                {/* Analysis History */}
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-xs text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-xs font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-5 py-3 font-normal">Contract</th><th className="px-5 py-3 font-normal">Verdict</th><th className="px-5 py-3 font-normal">Consensus</th><th className="px-5 py-3 font-normal">Confidence</th><th className="px-5 py-3 font-normal">Timestamp</th></tr></thead><tbody>{HISTORY.map((row,i)=>(<motion.tr key={i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-5 py-3 text-[#7eb8da]">{row.addr}</td><td className="px-5 py-3"><span className="font-cinzel text-xs tracking-wider" style={{color:verdictColor(row.verdict)}}>{row.verdict}</span></td><td className="px-5 py-3 text-[#8A92A6]/60">{row.consensus}</td><td className="px-5 py-3 text-[#F8F8F5]/80">{row.confidence}%</td><td className="px-5 py-3 text-[#8A92A6]/40">{row.time}</td></motion.tr>))}</tbody></table></div></div>
 
                 {/* ArcScan link */}
                 {consensus.settlementBatchId && (
