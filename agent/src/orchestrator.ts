@@ -32,6 +32,7 @@ export class Orchestrator {
   private logger: Logger;
   private queryCount = 0;
   private consensusWins = 0;
+  private scanCache = new Map<string, ConsensusResult>(); // free cache — avoids repeat API costs
 
   constructor(config: AgentConfig, logger: Logger) {
     this.config = config;
@@ -52,6 +53,13 @@ export class Orchestrator {
   async processQuery(req: QueryRequest): Promise<ConsensusResult> {
     this.logger.info(`Processing query for ${req.contractAddress} from ${req.user}`);
     const queryId = `query-${Date.now()}-${this.queryCount}`;
+
+    // Cache check — same address, instant return, zero API cost
+    const cacheKey = req.contractAddress.toLowerCase();
+    if (this.scanCache.has(cacheKey)) {
+      this.logger.info(`Cache hit for ${cacheKey} — returning cached result`);
+      return this.scanCache.get(cacheKey)!;
+    }
 
     // Step 1: Process payment ($0.01 USDC)
     const payment = await processPayment(req.user, queryId);
@@ -83,6 +91,9 @@ export class Orchestrator {
     this.logger.info(
       `Query ${queryId} complete — ${result.finalVerdict} (${result.agreementCount}/${result.totalAgents})`
     );
+
+    // Cache result to avoid repeat API costs
+    this.scanCache.set(cacheKey, result);
 
     return result;
   }

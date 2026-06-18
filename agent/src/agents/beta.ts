@@ -36,7 +36,7 @@ export const betaAgent = {
     try {
       const anthropic = new Anthropic({ apiKey });
       const result = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
+        model: 'claude-3-5-haiku-latest',
         max_tokens: 256,
         temperature: 0.3,
         system: SYSTEM_PROMPT,
