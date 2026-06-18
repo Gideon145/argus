@@ -107,10 +107,10 @@ export default function Home() {
           if (check >= totalChecks) clearInterval(checkTimer);
         }, 200);
       }
-      if (step >= 7) {
+      if (step >= 9) {
         if (scanTimerRef.current) clearInterval(scanTimerRef.current);
       }
-    }, 600);
+    }, 500);
 
     try {
       const start = performance.now();
@@ -120,7 +120,7 @@ export default function Home() {
       });
       const data: ScanResult = await res.json();
       setResult(data);
-      setScanStep(7);
+      setScanStep(9);
     } catch { setError('Agent offline'); setScanStep(-1); }
     finally {
       if (scanTimerRef.current) clearInterval(scanTimerRef.current);
@@ -277,7 +277,7 @@ export default function Home() {
 
           {/* Results */}
           <AnimatePresence>
-            {!loading && !scanProgress && consensus && (
+            {!loading && consensus && (
               <motion.div className="space-y-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
                 {/* Consensus header */}
                 <motion.div className="bg-[#0E1423] border rounded-2xl p-6 relative overflow-hidden"
