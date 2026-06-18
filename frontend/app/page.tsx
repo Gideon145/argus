@@ -64,9 +64,9 @@ const HISTORY = [
 ];
 
 const AGENT_PERF = [
-  { label:'Agent α',model:'DeepSeek-V3',accuracy:93.2,total:1247,avgConf:87,color:'#7eb8da' },
-  { label:'Agent β',model:'Claude Sonnet 4',accuracy:91.8,total:1247,avgConf:84,color:'#D4AF37' },
-  { label:'Agent γ',model:'Rule Engine',accuracy:96.4,total:1247,avgConf:99,color:'#b57ed8' },
+  { label:'Agent α',model:'DeepSeek-V3',accuracy:93.2,total:1247,avgConf:87,trend:'+2.3%',color:'#7eb8da' },
+  { label:'Agent β',model:'Claude Sonnet 4',accuracy:91.8,total:1247,avgConf:84,trend:'+1.7%',color:'#D4AF37' },
+  { label:'Agent γ',model:'Rule Engine',accuracy:96.4,total:1247,avgConf:99,trend:'+0.5%',color:'#b57ed8' },
 ];
 
 export default function Home() {
@@ -185,10 +185,10 @@ export default function Home() {
           </div>
         </header>
 
-        <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-10 pb-8">
+        <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-6 pb-8">
 
           {/* Hero + Search */}
-          <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
+          <motion.div className="text-center mb-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
             <div className="relative inline-block mb-4">
               <motion.h1 className="font-cinzel text-8xl md:text-9xl font-bold tracking-[0.2em] text-[#D4AF37] select-none"
                 initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2, ease: 'easeOut' }}>
@@ -365,10 +365,10 @@ export default function Home() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{RECENT_VERDICTS.map((v,i)=>(<motion.div key={v.name} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-lg tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
 
                 {/* Agent Performance */}
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6"><p className="font-cinzel text-xs text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-4">{AGENT_PERF.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-sm tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono mb-2">{a.model}</p><p className="font-mono text-2xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><p className="text-[#8A92A6]/40 text-[10px]">Accuracy · {a.total} analyses</p></motion.div>))}</div></div>
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6"><p className="font-cinzel text-xs text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-6">{AGENT_PERF.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-sm tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono mb-3">{a.model}</p><p className="font-mono text-3xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><div className="w-24 h-1.5 mx-auto rounded-full bg-[#F8F8F5]/5 mb-2"><motion.div className="h-1.5 rounded-full" style={{background:a.color}} initial={{width:0}} animate={{width:`${a.accuracy}%`}} transition={{delay:1+i*0.1,duration:1}}/></div><p className="text-[#8A92A6]/40 text-[10px] font-mono">{a.total.toLocaleString()} analyses · {a.avgConf}% avg</p><p className="text-[#3CB878] text-[10px] font-mono mt-1">↑ {a.trend} this week</p></motion.div>))}</div></div>
 
                 {/* Analysis History */}
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-xs text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-xs font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-5 py-3 font-normal">Contract</th><th className="px-5 py-3 font-normal">Verdict</th><th className="px-5 py-3 font-normal">Consensus</th><th className="px-5 py-3 font-normal">Confidence</th><th className="px-5 py-3 font-normal">Timestamp</th></tr></thead><tbody>{HISTORY.map((row,i)=>(<motion.tr key={i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-5 py-3 text-[#7eb8da]">{row.addr}</td><td className="px-5 py-3"><span className="font-cinzel text-xs tracking-wider" style={{color:verdictColor(row.verdict)}}>{row.verdict}</span></td><td className="px-5 py-3 text-[#8A92A6]/60">{row.consensus}</td><td className="px-5 py-3 text-[#F8F8F5]/80">{row.confidence}%</td><td className="px-5 py-3 text-[#8A92A6]/40">{row.time}</td></motion.tr>))}</tbody></table></div></div>
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-xs text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-xs font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-5 py-3 font-normal">Contract</th><th className="px-5 py-3 font-normal">Verdict</th><th className="px-5 py-3 font-normal">Consensus</th><th className="px-5 py-3 font-normal">Confidence</th><th className="px-5 py-3 font-normal">Timestamp</th></tr></thead><tbody>{HISTORY.map((row,i)=>(<motion.tr key={i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-5 py-3 text-[#7eb8da] font-medium">{row.addr}</td><td className="px-5 py-3"><span className="inline-flex items-center gap-1.5 font-cinzel text-xs tracking-wider" style={{color:verdictColor(row.verdict)}}><span className="w-1.5 h-1.5 rounded-full" style={{background:verdictColor(row.verdict),boxShadow:`0 0 6px ${verdictColor(row.verdict)}`}}/>{row.verdict}</span></td><td className="px-5 py-3 text-[#8A92A6]/60">{row.consensus}</td><td className="px-5 py-3 text-[#F8F8F5]/80 font-medium">{row.confidence}%</td><td className="px-5 py-3 text-[#8A92A6]/40">{row.time}</td></motion.tr>))}</tbody></table></div></div>
 
                 {/* ArcScan link */}
                 {consensus.settlementBatchId && (
