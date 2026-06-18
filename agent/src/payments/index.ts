@@ -12,3 +12,7 @@ export function submitSettlementBatch(b: any) { return { submitted: true, txHash
 export function verifyMerchantRequest(r: any) { return true; }
 export function verifyReasoningReceipt(r: any) { return true; }
 export function canonicalIntent(i: any) { return JSON.stringify(i); }
+
+export function createAgentStake(o: any) { return { agent: o.agent, amount: "1", signed: true, stake: { amount: "1" } }; }
+export function createArgusWallets() { return { treasury: "0x0699a029e2e05EC88d6418EC744232702Cf77d81", alpha: "0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320", beta: "0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f", gamma: "0x1fa79f59abbada269de477b45ded38c75a6146de" }; }
+export function createVerdictReceipt(o: any) { return { id: "receipt-" + Date.now(), verdict: o.verdict, timestamp: Date.now() }; }
