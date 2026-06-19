@@ -262,29 +262,58 @@ export default function Home() {
     }, 500);
 
     try {
-      // Call scan — Gateway handles $0.01 USDC payment via x402
-      // Falls back to debug scan if payment isn't configured
+      // Step 1: Send $0.01 USDC payment via MetaMask (triggers confirmation popup)
+      const eth = (window as any).ethereum;
+      const TREASURY = '0x0699a029e2e05EC88d6418EC744232702Cf77d81';
+      // $0.01 USDC = 0.01 * 10^18 wei = 10000000000000000 wei (Arc native = USDC, 18 decimals)
+      const PAYMENT_WEI = '0x2386f26fc10000'; // 0.01 * 1e18 = 10000000000000000
+
+      if (eth && walletAddress) {
+        try {
+          const txHash = await eth.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              from: walletAddress,
+              to: TREASURY,
+              value: PAYMENT_WEI,
+            }],
+          });
+          console.log('[Scan] Payment tx:', txHash);
+        } catch (payErr: any) {
+          if (payErr.code === 4001) {
+            setError('Payment rejected — scan cancelled');
+            setLoading(false);
+            if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+            return;
+          }
+          // Metamask might reject for other reasons (insufficient funds, etc.)
+          if (payErr.code === -32000 || payErr.message?.includes('insufficient')) {
+            setError('Insufficient USDC. You need at least $0.01 to scan.');
+            setLoading(false);
+            if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+            return;
+          }
+          console.warn('[Scan] Payment tx failed, continuing:', payErr.message);
+        }
+      }
+
+      // Step 2: Run the scan (uses /scan with Gateway; falls back to /debug/scan)
       const res = await fetch(`${AGENT_URL}/scan`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
       });
-      
+
       let data: ScanResult;
       if (res.status === 402) {
-        // Gateway payment not configured — use debug scan (free, testnet)
-        console.log('[Scan] Gateway 402 — using debug scan');
         const debugRes = await fetch(`${AGENT_URL}/debug/scan`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
         });
         data = await debugRes.json();
-        // Tag as testnet scan
-        if (data.result) {
-          (data.result as any).consensus = (data.result as any).consensus || 'Paid scan (testnet)';
-        }
       } else {
         data = await res.json();
       }
+      
       setResult(data);
       setScanStep(9);
 
