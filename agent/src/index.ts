@@ -28,10 +28,14 @@ async function main() {
   const orchestrator = new Orchestrator(config, logger);
 
   // --- Gateway middleware (x402 paywall) ---
+  // Use mainnet for real USDC, testnet for hackathon
+  const useMainnet = process.env.GATEWAY_MAINNET === 'true';
   const gateway = createGatewayMiddleware({
     sellerAddress: SELLER_ADDRESS as `0x${string}`,
-    facilitatorUrl: 'https://gateway-api-testnet.circle.com',
-    networks: ['eip155:5042002'], // Arc testnet chain ID
+    facilitatorUrl: useMainnet 
+      ? 'https://gateway-api.circle.com' 
+      : 'https://gateway-api-testnet.circle.com',
+    networks: [useMainnet ? 'eip155:5042001' : 'eip155:5042002'], // Arc mainnet vs testnet
   });
 
   // --- Server ---
