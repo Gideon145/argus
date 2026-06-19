@@ -93,10 +93,9 @@ export default function Home() {
       const accounts = await eth.request({ method: 'eth_requestAccounts' });
       if (accounts[0]) {
         setWalletAddress(accounts[0]);
-        const { ethers } = await import('ethers');
-        const provider = new ethers.BrowserProvider(eth);
-        const balance = await provider.getBalance(accounts[0]);
-        setWalletBalance(ethers.formatEther(balance).slice(0, 6));
+        const bal = await eth.request({ method: 'eth_getBalance', params: [accounts[0], 'latest'] });
+        const ethBal = parseInt(bal, 16) / 1e18;
+        setWalletBalance(ethBal.toFixed(4));
       }
     } catch (e: any) {
       if (e.code !== 4001) console.warn('Wallet error:', e.message);
