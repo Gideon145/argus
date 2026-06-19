@@ -5,10 +5,8 @@
 import fs from 'fs';
 import path from 'path';
 
-// Use Railway volume if available, otherwise local data dir
-const DATA_DIR = process.env.RAILWAY_VOLUME_PATH 
-  ? path.join(process.env.RAILWAY_VOLUME_PATH, 'argus-data')
-  : path.join(process.cwd(), 'data');
+// Railway volumes are mounted at /argus-data; fall back to local data dir
+const DATA_DIR = fs.existsSync('/argus-data') ? '/argus-data' : path.join(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'store.json');
 
 interface ScanRecord {
