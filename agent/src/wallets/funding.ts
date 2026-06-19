@@ -16,7 +16,10 @@ import { privateKeyToAccount } from 'viem/accounts';
 
 // ── Config ──────────────────────────────────────────────────────────────────
 const ARC_TESTNET_CHAIN_ID = 5042002;
-const ARC_RPC = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
+
+function getRpcUrl(): string {
+  return process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
+}
 
 const FUNDING_KEY = process.env.FUNDING_WALLET_PRIVATE_KEY || '';
 const FUNDING_AMOUNT = '5'; // $5 test USDC per new user (native, 18 decimals)
@@ -26,7 +29,7 @@ const chain = {
   id: ARC_TESTNET_CHAIN_ID,
   name: 'Arc Testnet',
   nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
-  rpcUrls: { default: { http: [ARC_RPC] } },
+  rpcUrls: { default: { http: [getRpcUrl()] } },
 } as const;
 
 /**
@@ -34,7 +37,7 @@ const chain = {
  */
 export async function getUSDCBalance(address: `0x${string}`): Promise<string> {
   try {
-    const client = createWalletClient({ chain, transport: http(ARC_RPC) });
+    const client = createWalletClient({ chain, transport: http(getRpcUrl()) });
     const hexBalance = await client.request({ method: 'eth_getBalance', params: [address, 'latest'] }) as string;
     return formatEther(BigInt(hexBalance)); // 18 decimals
   } catch (e: any) {
@@ -77,7 +80,7 @@ export async function fundUserIfNeeded(
     const walletClient = createWalletClient({
       account: fundingAccount,
       chain,
-      transport: http(ARC_RPC),
+      transport: http(getRpcUrl()),
     });
 
     const txHash = await walletClient.sendTransaction({
