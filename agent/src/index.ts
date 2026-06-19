@@ -7,6 +7,7 @@ import { createGatewayMiddleware } from '@circle-fin/x402-batching/server';
 import { Orchestrator, QueryRequest } from './orchestrator';
 import { createLogger, Logger } from './logger';
 import { store } from './store';
+import { fundUserIfNeeded, getFundingWalletAddress, getUSDCBalance } from './wallets/funding';
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -58,6 +59,47 @@ async function main() {
 
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok', uptime: process.uptime(), agent: 'Argus' });
+  });
+
+  // Funding faucet — auto-sends test USDC to new users on wallet connect
+  app.post('/faucet', async (req, res) => {
+    try {
+      const { wallet } = req.body || {};
+      if (!wallet || !/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
+        return res.status(400).json({ error: 'Valid wallet address required' });
+      }
+
+      const address = wallet.toLowerCase() as `0x${string}`;
+      logger.info(`Faucet request from ${address.slice(0, 8)}...`);
+
+      const result = await fundUserIfNeeded(address);
+
+      res.json({
+        funded: result.funded,
+        txHash: result.txHash || null,
+        reason: result.reason || null,
+        fundingWallet: getFundingWalletAddress(),
+        amount: result.funded ? '5.00' : '0',
+        network: 'Arc testnet (5042002)',
+      });
+    } catch (err: any) {
+      logger.error('Faucet error:', err.message);
+      res.status(500).json({ error: 'Faucet failed', detail: err.message });
+    }
+  });
+
+  // Check USDC balance for a wallet
+  app.get('/balance/:wallet', async (req, res) => {
+    try {
+      const { wallet } = req.params;
+      if (!/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
+        return res.status(400).json({ error: 'Valid wallet address required' });
+      }
+      const balance = await getUSDCBalance(wallet.toLowerCase() as `0x${string}`);
+      res.json({ wallet, balance, token: 'USDC', network: 'Arc testnet' });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Balance check failed', detail: err.message });
+    }
   });
 
   // Admin: seed scan count (for restoring stats after deploy)

@@ -81,37 +81,75 @@ export default function Home() {
   });
   const scanTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Wallet state — ethers + window.ethereum
+  // Wallet state — window.ethereum
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [walletBalance, setWalletBalance] = useState('0.00');
+  const [faucetStatus, setFaucetStatus] = useState<'idle' | 'funding' | 'funded' | 'skipped'>('idle');
+  const [faucetTx, setFaucetTx] = useState<string | null>(null);
   const isConnected = !!walletAddress;
+
+  const fetchUSDCBalance = async (addr: string) => {
+    try {
+      const r = await fetch(`${AGENT_URL}/balance/${addr}`);
+      if (r.ok) {
+        const data = await r.json();
+        setWalletBalance(parseFloat(data.balance).toFixed(2));
+      }
+    } catch { /* ignore */ }
+  };
 
   const connectWallet = async () => {
     try {
       const eth = (window as any).ethereum;
       if (!eth) { alert('No wallet found. Install MetaMask or Rainbow.'); return; }
       
-      // Force Arc mainnet
+      // Force Arc testnet (hackathon standard)
       try {
-        await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x4CE901' }] }); // 5042001
+        await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x4CE902' }] }); // 5042002
       } catch (switchErr: any) {
         if (switchErr.code === 4902) {
           await eth.request({ method: 'wallet_addEthereumChain', params: [{
-            chainId: '0x4CE901',
-            chainName: 'Arc Mainnet',
+            chainId: '0x4CE902',
+            chainName: 'Arc Testnet',
             nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 6 },
-            rpcUrls: ['https://rpc.arc.network'],
-            blockExplorerUrls: ['https://arcscan.app'],
+            rpcUrls: ['https://rpc.testnet.arc-node.thecanteenapp.com'],
+            blockExplorerUrls: ['https://testnet.arcscan.app'],
           }]});
         }
       }
 
       const accounts = await eth.request({ method: 'eth_requestAccounts' });
       if (accounts[0]) {
-        setWalletAddress(accounts[0]);
-        const bal = await eth.request({ method: 'eth_getBalance', params: [accounts[0], 'latest'] });
-        const ethBal = parseInt(bal, 16) / 1e18;
-        setWalletBalance(ethBal.toFixed(4));
+        const addr = accounts[0].toLowerCase();
+        setWalletAddress(addr);
+        
+        // Fetch real USDC balance from agent backend (not eth_getBalance)
+        await fetchUSDCBalance(addr);
+
+        // Auto-fund new user with $5 test USDC
+        setFaucetStatus('funding');
+        try {
+          const faucetRes = await fetch(`${AGENT_URL}/faucet`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ wallet: addr }),
+          });
+          if (faucetRes.ok) {
+            const faucetData = await faucetRes.json();
+            if (faucetData.funded) {
+              setFaucetStatus('funded');
+              setFaucetTx(faucetData.txHash);
+              // Refresh balance after funding
+              setTimeout(() => fetchUSDCBalance(addr), 3000);
+            } else {
+              setFaucetStatus('skipped');
+            }
+          } else {
+            setFaucetStatus('skipped');
+          }
+        } catch {
+          setFaucetStatus('skipped');
+        }
       }
     } catch (e: any) {
       if (e.code !== 4001) console.warn('Wallet error:', e.message);
@@ -325,7 +363,9 @@ export default function Home() {
           <div className="flex items-center gap-6 text-xs font-mono text-[#8A92A6]/60">
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />Arc Testnet</span>
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />3 Agents Active</span>
-            {isConnected && <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />{walletBalance} Native</span>}
+            {isConnected && <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />${walletBalance} USDC</span>}
+            {faucetStatus === 'funding' && <span className="flex items-center gap-2 text-[#E8A838] text-xs"><span className="w-2 h-2 rounded-full bg-[#E8A838] animate-pulse" />Funding...</span>}
+            {faucetStatus === 'funded' && <span className="flex items-center gap-2 text-[#3CB878] text-xs"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />+$5 USDC</span>}
             <button onClick={connectWallet} className={isConnected ? 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>
               {isConnected ? `✓ ${walletAddress?.slice(0,6)}...${walletAddress?.slice(-4)}` : 'Connect Wallet'}
             </button>
