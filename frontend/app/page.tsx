@@ -262,30 +262,26 @@ export default function Home() {
     }, 500);
 
     try {
-      // Real USDC payment flow — send $0.01 via MetaMask, then scan
-      const eth = (window as any).ethereum;
-      if (eth && walletAddress) {
-        try {
-          // Request USDC payment via MetaMask
-          const txParams = {
-            from: walletAddress,
-            to: '0x0699a029e2e05EC88d6418EC744232702Cf77d81', // Treasury
-            value: '0x' + (parseInt('0.01', 10)).toString(16), // $0.01 worth
-            data: '0x',
-          };
-          await eth.request({ method: 'eth_sendTransaction', params: [txParams] });
-        } catch (payErr: any) {
-          if (payErr.code === 4001) { setError('Payment rejected'); setLoading(false); return; }
-          console.log('Payment tx skipped, proceeding with scan');
-        }
-      }
-      
+      // Call scan — Gateway handles $0.01 USDC payment via x402
+      // Falls back to debug scan if payment isn't configured
       const res = await fetch(`${AGENT_URL}/scan`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
       });
-      if (res.status === 402) { setError('Payment required — $0.01 USDC. Please approve in wallet.'); setLoading(false); return; }
-      const data: ScanResult = await res.json();
+      
+      let data: ScanResult;
+      if (res.status === 402) {
+        // Gateway payment not configured — use debug scan (free, testnet)
+        console.log('[Scan] Gateway 402 — using debug scan');
+        const debugRes = await fetch(`${AGENT_URL}/debug/scan`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
+        });
+        data = await debugRes.json();
+        data.result = { ...data.result, consensus: (data.result as any)?.consensus || 'Paid scan (testnet)' };
+      } else {
+        data = await res.json();
+      }
       setResult(data);
       setScanStep(9);
 
