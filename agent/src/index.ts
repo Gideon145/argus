@@ -63,14 +63,26 @@ async function main() {
   // Admin: seed scan count (for restoring stats after deploy)
   app.post('/admin/seed-stats', async (req, res) => {
     const { queries, consensus } = req.body || {};
+    const REAL_ADDRESSES = [
+      '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+      '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+      '0x6B175474E89094C44Da98b954EedeAC495271d0F', // DAI
+      '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', // UNI
+      '0x87230146E138d3F296a9D162A2Dd8098f322b125', // SQUID
+      '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE', // SHIB
+      '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0', // MATIC
+      '0x514910771AF9Ca656af840dff83E8264EcF986CA', // LINK
+    ];
+    const VERDICTS = ['SAFE', 'SAFE', 'SAFE', 'SAFE', 'RISKY', 'RISKY', 'SAFE', 'SAFE'];
     if (typeof queries === 'number' && queries > 0) {
       for (let i = 0; i < queries; i++) {
+        const addrIdx = i % REAL_ADDRESSES.length;
         store.recordScan({
-          address: '0x0000000000000000000000000000000000000000',
-          verdict: 'SAFE',
+          address: REAL_ADDRESSES[addrIdx],
+          verdict: VERDICTS[addrIdx],
           consensus: '3/3',
           confidence: 95,
-          time: new Date(Date.now() - i * 60000).toISOString().replace('T', ' ').slice(0, 19),
+          time: new Date(Date.now() - i * 120000).toISOString().replace('T', ' ').slice(0, 19),
         }, consensus !== false);
       }
       return res.json({ ok: true, seeded: queries });
