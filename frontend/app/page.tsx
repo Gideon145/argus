@@ -116,7 +116,7 @@ export default function Home() {
       const eth = (window as any).ethereum;
       if (!eth) { alert('No wallet found. Install MetaMask or Rainbow.'); return; }
 
-      const ARC_CHAIN = '0x4CE902'; // 5042002
+      const ARC_CHAIN = '0x4CEF52'; // 5042002
 
       // Step 1: Request accounts (triggers MetaMask popup)
       const accounts = await eth.request({ method: 'eth_requestAccounts' });
@@ -140,7 +140,7 @@ export default function Home() {
               method: 'wallet_addEthereumChain',
               params: [{
                 chainId: ARC_CHAIN,
-                chainName: 'Arc Testnet',
+                chainName: 'Arc (Testnet)',
                 nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
                 rpcUrls: ['https://rpc.testnet.arc.network'],
                 blockExplorerUrls: ['https://testnet.arcscan.app'],
@@ -293,7 +293,7 @@ export default function Home() {
 
       // Step 1: Verify we're on Arc testnet before attempting payment
       const currentChain = await eth.request({ method: 'eth_chainId' });
-      if (currentChain !== '0x4CE902') {
+      if (currentChain !== '0x4CEF52') {
         setError('Not on Arc Testnet. Please switch MetaMask to Arc Testnet (Chain 5042002) manually, then try again.');
         setLoading(false);
         if (scanTimerRef.current) clearInterval(scanTimerRef.current);
