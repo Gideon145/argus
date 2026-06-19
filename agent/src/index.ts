@@ -102,6 +102,32 @@ async function main() {
     }
   });
 
+  // Treasury overview — balance + explorer links
+  app.get('/treasury', async (_req, res) => {
+    try {
+      const treasuryAddr = process.env.TREASURY_ADDRESS || '0x0699a029e2e05EC88d6418EC744232702Cf77d81';
+      const fundingAddr = getFundingWalletAddress();
+      const treasuryBalance = await getUSDCBalance(treasuryAddr as `0x${string}`);
+      const fundingBalance = await getUSDCBalance(fundingAddr as `0x${string}`);
+      res.json({
+        treasury: {
+          address: treasuryAddr,
+          balance: treasuryBalance,
+          explorer: `https://testnet.arcscan.app/address/${treasuryAddr}`,
+        },
+        funding: {
+          address: fundingAddr,
+          balance: fundingBalance,
+          explorer: `https://testnet.arcscan.app/address/${fundingAddr}`,
+        },
+        stats: store.getStats(),
+        network: 'Arc testnet (5042002)',
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Treasury check failed', detail: err.message });
+    }
+  });
+
   // Admin: seed scan count (for restoring stats after deploy)
   app.post('/admin/seed-stats', async (req, res) => {
     const { queries, consensus } = req.body || {};
