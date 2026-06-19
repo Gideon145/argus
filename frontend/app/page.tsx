@@ -129,7 +129,7 @@ export default function Home() {
       const currentChain = await eth.request({ method: 'eth_chainId' });
       console.log('[Wallet] Current chain:', currentChain);
       
-      if (currentChain !== ARC_CHAIN) {
+      if (parseInt(currentChain, 16) !== 5042002) {
         // Try switching first
         try {
           await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: ARC_CHAIN }] });
@@ -293,8 +293,8 @@ export default function Home() {
 
       // Step 1: Verify we're on Arc testnet before attempting payment
       const currentChain = await eth.request({ method: 'eth_chainId' });
-      if (currentChain !== '0x4CEF52') {
-        setError('Not on Arc Testnet. Please switch MetaMask to Arc Testnet (Chain 5042002) manually, then try again.');
+      if (parseInt(currentChain, 16) !== 5042002) {
+        setError('Not on Arc Testnet. Please switch to Arc Testnet (Chain 5042002) in MetaMask, then try again.');
         setLoading(false);
         if (scanTimerRef.current) clearInterval(scanTimerRef.current);
         return;

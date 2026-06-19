@@ -1,6 +1,9 @@
 # Argus
 
 <p align="center">
+  <a href="https://argusarc.xyz">
+    <img src="https://img.shields.io/badge/LIVE-argusarc.xyz-3CB878?style=for-the-badge" alt="Live">
+  </a>
   <a href="https://x.com/Argus_arc">
     <img src="https://img.shields.io/badge/X-@Argus__arc-1DA1F2?style=for-the-badge&logo=x&logoColor=white" alt="X">
   </a>
@@ -65,7 +68,7 @@ User pays $0.01 USDC
 | Staking | arc-agent-pay primitives (signed intents, settlement batches) |
 | Reputation | ELO engine (K=32) — self-correcting |
 | Orchestrator | Node.js + TypeScript + Express |
-| Frontend | Next.js 15 + Tailwind v4 |
+| Frontend | Next.js 15 + Tailwind v3 |
 | Deploy | Railway (agent) + Vercel (frontend) |
 
 ## Quick Start
@@ -88,6 +91,8 @@ cd contracts && npm install && npx hardhat compile
 | 1 | Jun 15 | Scaffold: agent, contracts, frontend. ARC CLI setup. |
 | 2 | Jun 16 | 3-agent pipeline live (DeepSeek + Claude + rules). Consensus + ELO working. ArgusOracle deployed on Arc testnet. Gateway x402 wired. Per-agent reasoning in responses. v0.1 submitted. |
 | 3 | Jun 17 | Circle Agent Wallets created for all 3 agents (0x284e...a320, 0x3f75...a34f, 0x1fa7...46de). Circle CLI authenticated. Stack now 2/5 Circle primitives. |
+| 4 | Jun 18 | v0.3 — live at argusarc.xyz (Vercel + custom domain + SSL). Agent on Railway with persistent volume-backed store. Server-side global stats + scan history. Premium dark UI — real data, no mockups. Per-agent check indicators, performance tracking, analysis history table. Free scans for first 24h. X launch thread. Build shared in Canteen Discord. 5+ test scans producing accurate differentiated verdicts. Google form v0.3 submitted. |
+| 5 | Jun 19 | v0.4 — paid scans + auto-funding pipeline. Real MetaMask tx confirmation ($0.01 USDC), payment verified on-chain before scan runs. Auto-funding: connect wallet → agent sends $0.50 test USDC → zero faucet friction. Two-wallet architecture (funding + treasury). Fixed Arc chain ID hex (0x4CE902 → 0x4CEF52). 70+ real scans in first 24h. Agent performance: DeepSeek-V3 100%, Claude Sonnet 4.5 61%, Rule Engine 70%. X post with stats published. Google form v0.4 + CLI submitted. |
 
 ---
 
