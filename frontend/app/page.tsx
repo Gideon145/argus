@@ -116,24 +116,16 @@ export default function Home() {
       const eth = (window as any).ethereum;
       if (!eth) { alert('No wallet found. Install MetaMask or Rainbow.'); return; }
 
-      // Step 1: Request accounts FIRST (this triggers the MetaMask popup)
-      const accounts = await eth.request({ method: 'eth_requestAccounts' });
-      if (!accounts || !accounts[0]) { alert('No account selected. Try again.'); return; }
-      const addr: string = accounts[0].toLowerCase();
-      setWalletAddress(addr);
-      console.log('[Wallet] Connected:', addr.slice(0, 8) + '...');
-
-      // Step 2: Switch to Arc testnet (hackathon standard, chain 5042002)
+      // Step 1: Switch to Arc testnet FIRST (before requesting accounts)
+      const ARC_CHAIN = '0x4CE902'; // 5042002
       try {
-        await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x4CE902' }] });
+        await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: ARC_CHAIN }] });
         console.log('[Wallet] Switched to Arc testnet');
       } catch (switchErr: any) {
-        console.log('[Wallet] Switch error:', switchErr.code, switchErr.message);
         if (switchErr.code === 4902) {
-          // Chain not added yet — add it
           try {
             await eth.request({ method: 'wallet_addEthereumChain', params: [{
-              chainId: '0x4CE902',
+              chainId: ARC_CHAIN,
               chainName: 'Arc Testnet',
               nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
               rpcUrls: ['https://rpc.testnet.arc.network'],
@@ -142,10 +134,19 @@ export default function Home() {
             console.log('[Wallet] Arc testnet added');
           } catch (addErr: any) {
             console.error('[Wallet] Failed to add Arc testnet:', addErr.message);
-            alert('Failed to add Arc testnet. Please add it manually:\n\nRPC: https://rpc.testnet.arc.network\nChain ID: 5042002\nSymbol: USDC');
+            alert('Please add Arc Testnet manually:\nRPC: https://rpc.testnet.arc.network\nChain ID: 5042002\nSymbol: USDC (18 decimals)');
+            return;
           }
         }
+        // If switch failed for another reason, try requesting accounts anyway
       }
+
+      // Step 2: Request accounts (triggers MetaMask unlock/connect popup)
+      const accounts = await eth.request({ method: 'eth_requestAccounts' });
+      if (!accounts || !accounts[0]) { alert('No account selected. Try again.'); return; }
+      const addr: string = accounts[0].toLowerCase();
+      setWalletAddress(addr);
+      console.log('[Wallet] Connected:', addr.slice(0, 8) + '...');
 
       // Step 3: Fetch USDC balance from agent backend
       await fetchUSDCBalance(addr);
@@ -285,7 +286,7 @@ export default function Home() {
         try {
           const txHash = await eth.request({
             method: 'eth_sendTransaction',
-            params: [{ from: walletAddress, to: TREASURY, value: PAYMENT_WEI }],
+            params: [{ from: walletAddress, to: TREASURY, value: PAYMENT_WEI, chainId: '0x4CE902' }],
           });
           console.log('[Scan] Payment tx submitted:', txHash);
 
