@@ -167,6 +167,7 @@ export default function Home() {
   const isValidAddress = (addr: string) => /^0x[a-fA-F0-9]{40}$/.test(addr);
 
   const handleScan = async () => {
+    if (!isConnected) { setError('Connect wallet to scan'); return; }
     if (!isValidAddress(address)) { setError('Invalid address'); return; }
     setError(''); setLoading(true); setResult(null); setScanStep(0); setCompletedChecks({});
 
@@ -175,7 +176,6 @@ export default function Home() {
     scanTimerRef.current = setInterval(() => {
       step++;
       setScanStep(step);
-      // Simulate individual agent check completions
       if (step >= 2 && step <= 4) {
         const agent = step === 2 ? 'Agent-α' : step === 3 ? 'Agent-β' : 'Agent-γ';
         const totalChecks = AGENT_META[agent]?.checks.length || 5;
@@ -192,11 +192,19 @@ export default function Home() {
     }, 500);
 
     try {
-      const start = performance.now();
-      const res = await fetch(`${AGENT_URL}/scan`, {
+      // Try paid /scan first (Gateway x402), fallback to debug
+      let res = await fetch(`${AGENT_URL}/scan`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
       });
+      if (res.status === 402 || !res.ok) {
+        // Gateway payment required — fallback to debug for now
+        console.log('Gateway 402 — using debug mode (x402 client pending)');
+        res = await fetch(`${AGENT_URL}/debug/scan`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
+        });
+      }
       const data: ScanResult = await res.json();
       setResult(data);
       setScanStep(9);
@@ -291,7 +299,7 @@ export default function Home() {
           <div className="flex items-center gap-6 text-xs font-mono text-[#8A92A6]/60">
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />Arc Testnet</span>
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />3 Agents Active</span>
-            {isConnected && <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />{walletBalance} ARC</span>}
+            {isConnected && <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />{walletBalance} Native</span>}
             <button onClick={connectWallet} className={isConnected ? 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>
               {isConnected ? `✓ ${walletAddress?.slice(0,6)}...${walletAddress?.slice(-4)}` : 'Connect Wallet'}
             </button>
