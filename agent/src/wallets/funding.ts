@@ -22,8 +22,8 @@ function getRpcUrl(): string {
 }
 
 const FUNDING_KEY = process.env.FUNDING_WALLET_PRIVATE_KEY || '';
-const FUNDING_AMOUNT = '5'; // $5 test USDC per new user (native, 18 decimals)
-const MIN_BALANCE_THRESHOLD = '1'; // Only fund if user has < $1 USDC
+const FUNDING_AMOUNT = '0.5'; // $0.50 test USDC per new user (50 scans at $0.01 each)
+const MIN_BALANCE_THRESHOLD = '0.01'; // Only fund if user has < $0.01 USDC
 
 const chain = {
   id: ARC_TESTNET_CHAIN_ID,

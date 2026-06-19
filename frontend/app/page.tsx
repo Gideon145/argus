@@ -365,7 +365,7 @@ export default function Home() {
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />3 Agents Active</span>
             {isConnected && <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />${walletBalance} USDC</span>}
             {faucetStatus === 'funding' && <span className="flex items-center gap-2 text-[#E8A838] text-xs"><span className="w-2 h-2 rounded-full bg-[#E8A838] animate-pulse" />Funding...</span>}
-            {faucetStatus === 'funded' && <span className="flex items-center gap-2 text-[#3CB878] text-xs"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />+$5 USDC</span>}
+            {faucetStatus === 'funded' && <span className="flex items-center gap-2 text-[#3CB878] text-xs"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />+$0.50 USDC</span>}
             <button onClick={connectWallet} className={isConnected ? 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>
               {isConnected ? `✓ ${walletAddress?.slice(0,6)}...${walletAddress?.slice(-4)}` : 'Connect Wallet'}
             </button>

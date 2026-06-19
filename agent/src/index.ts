@@ -79,7 +79,7 @@ async function main() {
         txHash: result.txHash || null,
         reason: result.reason || null,
         fundingWallet: getFundingWalletAddress(),
-        amount: result.funded ? '5.00' : '0',
+        amount: result.funded ? '0.50' : '0',
         network: 'Arc testnet (5042002)',
       });
     } catch (err: any) {
