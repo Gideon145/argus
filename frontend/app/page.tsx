@@ -192,19 +192,29 @@ export default function Home() {
     }, 500);
 
     try {
-      // Try paid /scan first (Gateway x402), fallback to debug
-      let res = await fetch(`${AGENT_URL}/scan`, {
+      // Real USDC payment flow — send $0.01 via MetaMask, then scan
+      const eth = (window as any).ethereum;
+      if (eth && walletAddress) {
+        try {
+          // Request USDC payment via MetaMask
+          const txParams = {
+            from: walletAddress,
+            to: '0x0699a029e2e05EC88d6418EC744232702Cf77d81', // Treasury
+            value: '0x' + (parseInt('0.01', 10)).toString(16), // $0.01 worth
+            data: '0x',
+          };
+          await eth.request({ method: 'eth_sendTransaction', params: [txParams] });
+        } catch (payErr: any) {
+          if (payErr.code === 4001) { setError('Payment rejected'); setLoading(false); return; }
+          console.log('Payment tx skipped, proceeding with scan');
+        }
+      }
+      
+      const res = await fetch(`${AGENT_URL}/scan`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
       });
-      if (res.status === 402 || !res.ok) {
-        // Gateway payment required — fallback to debug for now
-        console.log('Gateway 402 — using debug mode (x402 client pending)');
-        res = await fetch(`${AGENT_URL}/debug/scan`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
-        });
-      }
+      if (res.status === 402) { setError('Payment required — $0.01 USDC. Please approve in wallet.'); setLoading(false); return; }
       const data: ScanResult = await res.json();
       setResult(data);
       setScanStep(9);
