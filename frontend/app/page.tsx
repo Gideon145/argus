@@ -23,12 +23,6 @@ const AGENT_META: Record<string, { label: string; model: string; color: string; 
   'Agent-γ': { label: 'Agent γ', model: 'Rule Engine', color: '#b57ed8', checks: ['Signature scan', 'Pattern match', 'Bytecode audit', 'Blacklist check', 'Known exploits'] },
 };
 
-const EXAMPLES = [
-  { label: 'USDC', addr: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' },
-  { label: 'SQUID (rugpull)', addr: '0x87230146E138d3F296a9D162A2Dd8098f322b125' },
-  { label: 'WETH', addr: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' },
-];
-
 const LIVE_FEED = [
   { time: '2s ago', addr: '0x8f3c...2a1d', verdict: 'RISKY' as const, consensus: '2/3' },
   { time: '18s ago', addr: '0xb21a...7e3f', verdict: 'SAFE' as const, consensus: '3/3' },
@@ -178,7 +172,7 @@ export default function Home() {
 
     try {
       const start = performance.now();
-      const res = await fetch(`${AGENT_URL}/debug/scan`, {
+      const res = await fetch(`${AGENT_URL}/scan`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
       });
@@ -223,7 +217,6 @@ export default function Home() {
     }
   };
 
-  const selectExample = (addr: string) => { setAddress(addr); setError(''); };
   const verdictBadge = (v: string) => v === 'SAFE' ? 'badge-safe' : v === 'RISKY' ? 'badge-risky' : 'badge-scam';
   const verdictColor = (v: string) => v === 'SAFE' ? '#3CB878' : v === 'RISKY' ? '#E8A838' : '#E85555';
   const feedVerdictColor = (v: string) => v === 'SAFE' ? '#3CB878' : v === 'RISKY' ? '#E8A838' : '#E85555';
@@ -320,7 +313,6 @@ export default function Home() {
                 </motion.button>
               </div>
               <div className="flex items-center justify-center gap-4 mt-3">
-                {EXAMPLES.map(ex => <motion.button key={ex.label} onClick={() => selectExample(ex.addr)} className="text-xs font-mono text-[#8A92A6]/50 hover:text-[#D4AF37]/80 transition-colors" whileHover={{ scale: 1.05 }}>{ex.label}</motion.button>)}
                 {error && <span className="text-[#E85555] text-xs font-mono">{error}</span>}
               </div>
             </motion.div>
