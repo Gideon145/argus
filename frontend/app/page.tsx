@@ -81,6 +81,28 @@ export default function Home() {
   });
   const scanTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Wallet state — ethers + window.ethereum
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [walletBalance, setWalletBalance] = useState('0.00');
+  const isConnected = !!walletAddress;
+
+  const connectWallet = async () => {
+    try {
+      const eth = (window as any).ethereum;
+      if (!eth) { alert('No wallet found. Install MetaMask or Rainbow.'); return; }
+      const accounts = await eth.request({ method: 'eth_requestAccounts' });
+      if (accounts[0]) {
+        setWalletAddress(accounts[0]);
+        const { ethers } = await import('ethers');
+        const provider = new ethers.BrowserProvider(eth);
+        const balance = await provider.getBalance(accounts[0]);
+        setWalletBalance(ethers.formatEther(balance).slice(0, 6));
+      }
+    } catch (e: any) {
+      if (e.code !== 4001) console.warn('Wallet error:', e.message);
+    }
+  };
+
   useEffect(() => {
     const onMove = (e: MouseEvent) => setMousePos({ x: (e.clientX / window.innerWidth - 0.5) * 20, y: (e.clientY / window.innerHeight - 0.5) * 20 });
     window.addEventListener('mousemove', onMove);
@@ -270,6 +292,10 @@ export default function Home() {
           <div className="flex items-center gap-6 text-xs font-mono text-[#8A92A6]/60">
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />Arc Testnet</span>
             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />3 Agents Active</span>
+            {isConnected && <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />{walletBalance} ARC</span>}
+            <button onClick={connectWallet} className={isConnected ? 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>
+              {isConnected ? `✓ ${walletAddress?.slice(0,6)}...${walletAddress?.slice(-4)}` : 'Connect Wallet'}
+            </button>
           </div>
         </header>
 
