@@ -277,55 +277,38 @@ export default function Home() {
     try {
       const eth = (window as any).ethereum;
       const TREASURY = '0x0699a029e2e05EC88d6418EC744232702Cf77d81';
-      const ARC_CHAIN_ID = '0x4CE902'; // 5042002
-      // $0.01 USDC = 0.01 * 10^18 = 10000000000000000 wei
+      // $0.01 USDC = 0.01 × 10^18 = 10000000000000000 wei (Arc native token = USDC, 18 decimals)
       const PAYMENT_WEI = '0x2386f26fc10000';
 
-      // Step 1: Verify we're on Arc testnet
-      if (eth) {
-        const currentChainId = await eth.request({ method: 'eth_chainId' });
-        if (currentChainId !== ARC_CHAIN_ID) {
-          setError('Wrong network. Switch to Arc Testnet (Chain 5042002) in MetaMask.');
-          setLoading(false);
-          if (scanTimerRef.current) clearInterval(scanTimerRef.current);
-          return;
-        }
-      }
-
-      // Step 2: Send $0.01 USDC payment — MUST confirm before scanning
-      let txConfirmed = false;
+      // Step 1: Send $0.01 USDC via MetaMask (native transfer on Arc)
       if (eth && walletAddress) {
         try {
           const txHash = await eth.request({
             method: 'eth_sendTransaction',
             params: [{ from: walletAddress, to: TREASURY, value: PAYMENT_WEI }],
           });
-          console.log('[Scan] Payment sent:', txHash);
+          console.log('[Scan] Payment tx submitted:', txHash);
 
-          // Step 3: Wait for transaction confirmation
-          setScanStep(1); // Show "Confirming payment..."
-          const receipt = await waitForTransaction(eth, txHash, 15000);
+          // Step 2: Wait for on-chain confirmation
+          const receipt = await waitForTransaction(eth, txHash, 20000);
           if (!receipt) {
             setError('Transaction pending too long. Try again.');
             setLoading(false);
             if (scanTimerRef.current) clearInterval(scanTimerRef.current);
             return;
           }
-          if (receipt.status === '0x0' || receipt.status === 0) {
-            setError('Payment transaction failed on-chain. Check MetaMask and try again.');
+          if (receipt.status === '0x0') {
+            setError('Payment transaction reverted on-chain. Check your wallet has USDC.');
             setLoading(false);
             if (scanTimerRef.current) clearInterval(scanTimerRef.current);
             return;
           }
-          console.log('[Scan] Payment confirmed in block', receipt.blockNumber);
-          txConfirmed = true;
+          console.log('[Scan] Payment confirmed — block', parseInt(receipt.blockNumber, 16));
         } catch (payErr: any) {
           if (payErr.code === 4001) {
             setError('Payment rejected — scan cancelled');
-          } else if (payErr.code === -32000 || payErr.message?.includes('insufficient')) {
+          } else if (payErr.message?.includes('insufficient')) {
             setError('Insufficient USDC. You need at least $0.01 to scan.');
-          } else if (payErr.message?.includes('invalid chain')) {
-            setError('Wrong network. Switch MetaMask to Arc Testnet and reconnect.');
           } else {
             setError('Payment failed: ' + (payErr.message || 'Unknown error'));
           }
@@ -333,16 +316,14 @@ export default function Home() {
           if (scanTimerRef.current) clearInterval(scanTimerRef.current);
           return;
         }
-      }
-
-      if (!txConfirmed) {
-        setError('Payment not confirmed. Please approve the MetaMask transaction.');
+      } else {
+        setError('Connect wallet to scan');
         setLoading(false);
         if (scanTimerRef.current) clearInterval(scanTimerRef.current);
         return;
       }
 
-      // Step 4: Payment confirmed — run the scan
+      // Step 3: Payment confirmed — run the scan analysis
       const res = await fetch(`${AGENT_URL}/scan`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
