@@ -278,7 +278,10 @@ export default function Home() {
           body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
         });
         data = await debugRes.json();
-        data.result = { ...data.result, consensus: (data.result as any)?.consensus || 'Paid scan (testnet)' };
+        // Tag as testnet scan
+        if (data.result) {
+          (data.result as any).consensus = (data.result as any).consensus || 'Paid scan (testnet)';
+        }
       } else {
         data = await res.json();
       }
