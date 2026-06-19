@@ -116,42 +116,47 @@ export default function Home() {
       const eth = (window as any).ethereum;
       if (!eth) { alert('No wallet found. Install MetaMask or Rainbow.'); return; }
 
-      // Step 1: Switch to Arc testnet FIRST (before requesting accounts)
       const ARC_CHAIN = '0x4CE902'; // 5042002
-      try {
-        await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: ARC_CHAIN }] });
-        console.log('[Wallet] Switched to Arc testnet');
-      } catch (switchErr: any) {
-        if (switchErr.code === 4902) {
-          try {
-            await eth.request({ method: 'wallet_addEthereumChain', params: [{
-              chainId: ARC_CHAIN,
-              chainName: 'Arc Testnet',
-              nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
-              rpcUrls: ['https://rpc.testnet.arc.network'],
-              blockExplorerUrls: ['https://testnet.arcscan.app'],
-            }]});
-            console.log('[Wallet] Arc testnet added');
-          } catch (addErr: any) {
-            console.error('[Wallet] Failed to add Arc testnet:', addErr.message);
-            alert('Please add Arc Testnet manually:\nRPC: https://rpc.testnet.arc.network\nChain ID: 5042002\nSymbol: USDC (18 decimals)');
-            return;
-          }
-        }
-        // If switch failed for another reason, try requesting accounts anyway
-      }
 
-      // Step 2: Request accounts (triggers MetaMask unlock/connect popup)
+      // Step 1: Request accounts (triggers MetaMask popup)
       const accounts = await eth.request({ method: 'eth_requestAccounts' });
       if (!accounts || !accounts[0]) { alert('No account selected. Try again.'); return; }
       const addr: string = accounts[0].toLowerCase();
       setWalletAddress(addr);
       console.log('[Wallet] Connected:', addr.slice(0, 8) + '...');
 
-      // Step 3: Fetch USDC balance from agent backend
+      // Step 2: Ensure we're on Arc testnet
+      const currentChain = await eth.request({ method: 'eth_chainId' });
+      console.log('[Wallet] Current chain:', currentChain);
+      
+      if (currentChain !== ARC_CHAIN) {
+        // Try switching first
+        try {
+          await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: ARC_CHAIN }] });
+        } catch (switchErr: any) {
+          // If chain not found, add it
+          if (switchErr.code === 4902) {
+            await eth.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: ARC_CHAIN,
+                chainName: 'Arc Testnet',
+                nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+                rpcUrls: ['https://rpc.testnet.arc.network'],
+                blockExplorerUrls: ['https://testnet.arcscan.app'],
+              }],
+            });
+          } else {
+            // Switch failed for other reasons
+            alert('Could not switch to Arc Testnet.\n\nPlease manually switch to Arc Testnet in MetaMask:\n• Chain ID: 5042002\n• RPC: https://rpc.testnet.arc.network\n• Symbol: USDC\n\nIf you already have it added, try removing and re-adding it.');
+          }
+        }
+      }
+
+      // Step 3: Fetch USDC balance
       await fetchUSDCBalance(addr);
 
-      // Step 4: Auto-fund new user with $0.50 test USDC
+      // Step 4: Auto-fund with $0.50 test USDC
       setFaucetStatus('funding');
       try {
         const faucetRes = await fetch(`${AGENT_URL}/faucet`, {
@@ -277,48 +282,56 @@ export default function Home() {
 
     try {
       const eth = (window as any).ethereum;
+      if (!eth || !walletAddress) {
+        setError('Connect wallet to scan');
+        setLoading(false);
+        if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+        return;
+      }
       const TREASURY = '0x0699a029e2e05EC88d6418EC744232702Cf77d81';
-      // $0.01 USDC = 0.01 × 10^18 = 10000000000000000 wei (Arc native token = USDC, 18 decimals)
-      const PAYMENT_WEI = '0x2386f26fc10000';
+      const PAYMENT_WEI = '0x2386f26fc10000'; // $0.01 USDC in wei (18 decimals)
 
-      // Step 1: Send $0.01 USDC via MetaMask (native transfer on Arc)
-      if (eth && walletAddress) {
-        try {
-          const txHash = await eth.request({
-            method: 'eth_sendTransaction',
-            params: [{ from: walletAddress, to: TREASURY, value: PAYMENT_WEI, chainId: '0x4CE902' }],
-          });
-          console.log('[Scan] Payment tx submitted:', txHash);
+      // Step 1: Verify we're on Arc testnet before attempting payment
+      const currentChain = await eth.request({ method: 'eth_chainId' });
+      if (currentChain !== '0x4CE902') {
+        setError('Not on Arc Testnet. Please switch MetaMask to Arc Testnet (Chain 5042002) manually, then try again.');
+        setLoading(false);
+        if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+        return;
+      }
 
-          // Step 2: Wait for on-chain confirmation
-          const receipt = await waitForTransaction(eth, txHash, 20000);
-          if (!receipt) {
-            setError('Transaction pending too long. Try again.');
-            setLoading(false);
-            if (scanTimerRef.current) clearInterval(scanTimerRef.current);
-            return;
-          }
-          if (receipt.status === '0x0') {
-            setError('Payment transaction reverted on-chain. Check your wallet has USDC.');
-            setLoading(false);
-            if (scanTimerRef.current) clearInterval(scanTimerRef.current);
-            return;
-          }
-          console.log('[Scan] Payment confirmed — block', parseInt(receipt.blockNumber, 16));
-        } catch (payErr: any) {
-          if (payErr.code === 4001) {
-            setError('Payment rejected — scan cancelled');
-          } else if (payErr.message?.includes('insufficient')) {
-            setError('Insufficient USDC. You need at least $0.01 to scan.');
-          } else {
-            setError('Payment failed: ' + (payErr.message || 'Unknown error'));
-          }
+      // Step 2: Send $0.01 USDC via MetaMask (native transfer on Arc)
+      try {
+        const txHash = await eth.request({
+          method: 'eth_sendTransaction',
+          params: [{ from: walletAddress, to: TREASURY, value: PAYMENT_WEI }],
+        });
+        console.log('[Scan] Payment tx:', txHash);
+
+        // Step 3: Wait for on-chain confirmation
+        const receipt = await waitForTransaction(eth, txHash, 20000);
+        if (!receipt) {
+          setError('Transaction pending. Check MetaMask — it may need manual confirmation.');
           setLoading(false);
           if (scanTimerRef.current) clearInterval(scanTimerRef.current);
           return;
         }
-      } else {
-        setError('Connect wallet to scan');
+        if (receipt.status === '0x0') {
+          setError('Transaction reverted. Your wallet may not have enough USDC for gas.');
+          setLoading(false);
+          if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+          return;
+        }
+        console.log('[Scan] Payment confirmed');
+      } catch (payErr: any) {
+        if (payErr.code === 4001) {
+          setError('Payment rejected — scan cancelled');
+        } else if (payErr.message?.includes('insufficient')) {
+          setError('Not enough USDC. You need $0.01 to scan.');
+        } else {
+          // Show the actual error so we can debug
+          setError('Payment failed: ' + (payErr.message || String(payErr.code) || 'Unknown'));
+        }
         setLoading(false);
         if (scanTimerRef.current) clearInterval(scanTimerRef.current);
         return;
