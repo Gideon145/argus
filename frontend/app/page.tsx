@@ -102,57 +102,73 @@ export default function Home() {
     try {
       const eth = (window as any).ethereum;
       if (!eth) { alert('No wallet found. Install MetaMask or Rainbow.'); return; }
-      
-      // Force Arc testnet (hackathon standard)
+
+      // Step 1: Request accounts FIRST (this triggers the MetaMask popup)
+      const accounts = await eth.request({ method: 'eth_requestAccounts' });
+      if (!accounts || !accounts[0]) { alert('No account selected. Try again.'); return; }
+      const addr: string = accounts[0].toLowerCase();
+      setWalletAddress(addr);
+      console.log('[Wallet] Connected:', addr.slice(0, 8) + '...');
+
+      // Step 2: Switch to Arc testnet (hackathon standard, chain 5042002)
       try {
-        await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x4CE902' }] }); // 5042002
+        await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x4CE902' }] });
+        console.log('[Wallet] Switched to Arc testnet');
       } catch (switchErr: any) {
+        console.log('[Wallet] Switch error:', switchErr.code, switchErr.message);
         if (switchErr.code === 4902) {
-          await eth.request({ method: 'wallet_addEthereumChain', params: [{
-            chainId: '0x4CE902',
-            chainName: 'Arc Testnet',
-            nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 6 },
-            rpcUrls: ['https://rpc.testnet.arc-node.thecanteenapp.com'],
-            blockExplorerUrls: ['https://testnet.arcscan.app'],
-          }]});
+          // Chain not added yet — add it
+          try {
+            await eth.request({ method: 'wallet_addEthereumChain', params: [{
+              chainId: '0x4CE902',
+              chainName: 'Arc Testnet',
+              nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+              rpcUrls: ['https://rpc.testnet.arc.network'],
+              blockExplorerUrls: ['https://testnet.arcscan.app'],
+            }]});
+            console.log('[Wallet] Arc testnet added');
+          } catch (addErr: any) {
+            console.error('[Wallet] Failed to add Arc testnet:', addErr.message);
+            alert('Failed to add Arc testnet. Please add it manually:\n\nRPC: https://rpc.testnet.arc.network\nChain ID: 5042002\nSymbol: USDC');
+          }
         }
       }
 
-      const accounts = await eth.request({ method: 'eth_requestAccounts' });
-      if (accounts[0]) {
-        const addr = accounts[0].toLowerCase();
-        setWalletAddress(addr);
-        
-        // Fetch real USDC balance from agent backend (not eth_getBalance)
-        await fetchUSDCBalance(addr);
+      // Step 3: Fetch USDC balance from agent backend
+      await fetchUSDCBalance(addr);
 
-        // Auto-fund new user with $5 test USDC
-        setFaucetStatus('funding');
-        try {
-          const faucetRes = await fetch(`${AGENT_URL}/faucet`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ wallet: addr }),
-          });
-          if (faucetRes.ok) {
-            const faucetData = await faucetRes.json();
-            if (faucetData.funded) {
-              setFaucetStatus('funded');
-              setFaucetTx(faucetData.txHash);
-              // Refresh balance after funding
-              setTimeout(() => fetchUSDCBalance(addr), 3000);
-            } else {
-              setFaucetStatus('skipped');
-            }
+      // Step 4: Auto-fund new user with $0.50 test USDC
+      setFaucetStatus('funding');
+      try {
+        const faucetRes = await fetch(`${AGENT_URL}/faucet`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet: addr }),
+        });
+        if (faucetRes.ok) {
+          const faucetData = await faucetRes.json();
+          if (faucetData.funded) {
+            setFaucetStatus('funded');
+            setFaucetTx(faucetData.txHash);
+            setTimeout(() => fetchUSDCBalance(addr), 3000);
           } else {
             setFaucetStatus('skipped');
           }
-        } catch {
+        } else {
           setFaucetStatus('skipped');
         }
+      } catch {
+        setFaucetStatus('skipped');
       }
     } catch (e: any) {
-      if (e.code !== 4001) console.warn('Wallet error:', e.message);
+      console.error('[Wallet] Connection error:', e.code, e.message);
+      if (e.code === 4001) {
+        alert('Connection rejected. Please approve the MetaMask request.');
+      } else if (e.code === -32002) {
+        alert('MetaMask is already processing a request. Check your MetaMask extension.');
+      } else {
+        alert('Wallet connection failed: ' + (e.message || 'Unknown error. Check console.'));
+      }
     }
   };
 
