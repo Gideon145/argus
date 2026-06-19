@@ -90,6 +90,22 @@ export default function Home() {
     try {
       const eth = (window as any).ethereum;
       if (!eth) { alert('No wallet found. Install MetaMask or Rainbow.'); return; }
+      
+      // Force Arc mainnet
+      try {
+        await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x4CE901' }] }); // 5042001
+      } catch (switchErr: any) {
+        if (switchErr.code === 4902) {
+          await eth.request({ method: 'wallet_addEthereumChain', params: [{
+            chainId: '0x4CE901',
+            chainName: 'Arc Mainnet',
+            nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 6 },
+            rpcUrls: ['https://rpc.arc.network'],
+            blockExplorerUrls: ['https://arcscan.app'],
+          }]});
+        }
+      }
+
       const accounts = await eth.request({ method: 'eth_requestAccounts' });
       if (accounts[0]) {
         setWalletAddress(accounts[0]);
