@@ -49,7 +49,8 @@ export const store = {
       queries: d.queries,
       consensusReached: d.consensusReached,
       onChainRecords: d.consensusReached,
-      avgConfidence: d.queries > 0 ? Math.round((d.consensusReached / d.queries) * 100) : 0,
+      // Average confidence calculated from stored history (most recent records)
+      avgConfidence: d.history && d.history.length > 0 ? Math.round(d.history.reduce((s, r) => s + (r.confidence || 0), 0) / d.history.length) : 0,
       status: 'live' as const,
     };
   },

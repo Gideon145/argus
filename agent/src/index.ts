@@ -138,7 +138,7 @@ async function main() {
       queries: data.queries,
       wins: data.wins,
       losses: data.losses,
-      accuracy: data.queries > 0 ? Math.round((data.wins / data.queries) * 100) : 100,
+      accuracy: data.queries > 0 ? Math.round((data.wins / data.queries) * 100) : 0,
     }));
     // Sort by ELO descending
     agents.sort((a, b) => b.elo - a.elo);
