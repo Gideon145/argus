@@ -142,22 +142,47 @@ export default function Home() {
     } catch { /* ignore */ }
   };
 
+  /** Wait up to 3s for MetaMask to inject window.ethereum (race condition on mobile) */
+  const getEthereum = async (): Promise<any> => {
+    // Check immediately
+    const w = window as any;
+    if (w.ethereum) return w.ethereum;
+    // Some mobile wallets use a providers array
+    if (w.ethereum?.providers?.length) {
+      // Prefer MetaMask if multiple wallets
+      const mm = w.ethereum.providers.find((p: any) => p.isMetaMask);
+      if (mm) return mm;
+      return w.ethereum.providers[0];
+    }
+    // Wait up to 3s for injection
+    for (let i = 0; i < 30; i++) {
+      await new Promise(r => setTimeout(r, 100));
+      if (w.ethereum) return w.ethereum;
+      if (w.ethereum?.providers?.length) {
+        const mm = w.ethereum.providers.find((p: any) => p.isMetaMask);
+        return mm || w.ethereum.providers[0];
+      }
+    }
+    return null;
+  };
+
   const connectWallet = async () => {
     try {
-      const eth = (window as any).ethereum;
+      const eth = await getEthereum();
       
-      // Mobile: no injected wallet — offer deep link to MetaMask browser
+      // No wallet found after waiting
       if (!eth) {
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         if (isMobile) {
+          // Try direct MetaMask deep link
           const openInMetamask = confirm(
-            'Mobile MetaMask detected.\n\nFor the best experience, open this site in the MetaMask app browser.\n\nTap OK to open, or Cancel to continue in this browser.'
+            'To connect your wallet, open this site in the MetaMask app.\n\nTap OK to open MetaMask now.'
           );
           if (openInMetamask) {
-            window.open('https://metamask.app.link/dapp/argusarc.xyz', '_blank');
+            window.location.href = 'https://metamask.app.link/dapp/argusarc.xyz';
           }
         } else {
-          alert('No wallet found. Install MetaMask or Rainbow.');
+          alert('No wallet found. Install MetaMask or Rainbow to use Argus.');
         }
         return;
       }
