@@ -42,6 +42,37 @@ const INTEL_FEED = [
 
 const SCAN_STEPS = ['Contract validated','Argus Eye activated','Ownership scan complete','Proxy analysis complete','Holder distribution analyzed','Liquidity structure analyzed','Deterministic checks complete','Consensus forming','Verdict finalized'];
 
+/** Small ELO badge — shows agent reputation inline */
+function EloBadge() {
+  const [eloData, setEloData] = useState<{agent:string;elo:number;accuracy:number}[]>([]);
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const r = await fetch(`${AGENT_URL}/elo`);
+        if (r.ok) {
+          const data = await r.json();
+          setEloData(data.agents?.slice(0, 3) || []);
+        }
+      } catch {}
+    };
+    poll();
+    const i = setInterval(poll, 30000);
+    return () => clearInterval(i);
+  }, []);
+  if (!eloData.length) return null;
+  return (
+    <span className="flex items-center gap-3 text-xs font-mono text-[#8A92A6]/60">
+      {eloData.map(a => (
+        <span key={a.agent} className="flex items-center gap-1">
+          <span className="text-[#D4AF37]">{a.agent.replace('Agent-','')}</span>
+          <span className="text-[#8A92A6]/40">{a.elo}</span>
+          <span className="text-[#3CB878]/60">{a.accuracy}%</span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
 /** Poll for transaction receipt. Returns receipt or null if timeout. */
 async function waitForTransaction(eth: any, txHash: string, timeoutMs: number): Promise<any> {
   const start = Date.now();
@@ -450,6 +481,7 @@ export default function Home() {
             {isConnected && <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />${walletBalance} USDC</span>}
             {faucetStatus === 'funding' && <span className="flex items-center gap-2 text-[#E8A838] text-xs"><span className="w-2 h-2 rounded-full bg-[#E8A838] animate-pulse" />Funding...</span>}
             {faucetStatus === 'funded' && <span className="flex items-center gap-2 text-[#3CB878] text-xs"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />+$0.50 USDC</span>}
+            <EloBadge />
             <button onClick={connectWallet} className={isConnected ? 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>
               {isConnected ? `✓ ${walletAddress?.slice(0,6)}...${walletAddress?.slice(-4)}` : 'Connect Wallet'}
             </button>
