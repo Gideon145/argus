@@ -26,6 +26,38 @@ body {
   color: var(--text-primary);
   font-family: 'EB Garamond', serif;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Responsive breakpoint utilities */
+@layer utilities {
+  .container-responsive {
+    @apply w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .text-hero {
+    font-size: clamp(3rem, 8vw, 8rem);
+  }
+  .text-section {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+  }
+}
+
+/* Mobile touch targets */
+@media (max-width: 640px) {
+  button, a, input, .clickable {
+    min-height: 44px;
+  }
+}
+
+/* Reduce particles on mobile */
+@media (max-width: 768px) {
+  .starfield::before {
+    background-image: 
+      radial-gradient(1px 1px at 10% 20%, rgba(212,175,55,0.2), transparent),
+      radial-gradient(1px 1px at 40% 15%, rgba(212,175,55,0.15), transparent),
+      radial-gradient(1px 1px at 70% 35%, rgba(212,175,55,0.2), transparent),
+      radial-gradient(1px 1px at 90% 80%, rgba(212,175,55,0.15), transparent);
+  }
 }
 
 .font-cinzel { font-family: 'Cinzel', serif; }

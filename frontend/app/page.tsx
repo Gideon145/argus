@@ -145,7 +145,22 @@ export default function Home() {
   const connectWallet = async () => {
     try {
       const eth = (window as any).ethereum;
-      if (!eth) { alert('No wallet found. Install MetaMask or Rainbow.'); return; }
+      
+      // Mobile: no injected wallet — offer deep link to MetaMask browser
+      if (!eth) {
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) {
+          const openInMetamask = confirm(
+            'Mobile MetaMask detected.\n\nFor the best experience, open this site in the MetaMask app browser.\n\nTap OK to open, or Cancel to continue in this browser.'
+          );
+          if (openInMetamask) {
+            window.open('https://metamask.app.link/dapp/argusarc.xyz', '_blank');
+          }
+        } else {
+          alert('No wallet found. Install MetaMask or Rainbow.');
+        }
+        return;
+      }
 
       const ARC_CHAIN = '0x4CEF52'; // 5042002
 
@@ -451,8 +466,8 @@ export default function Home() {
             return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#D4AF37" strokeWidth="0.3"><animate attributeName="opacity" values="0.1;0.3;0.1" dur={`${4 + Math.random() * 5}s`} repeatCount="indefinite" /></line>;
           })}
         </svg>
-        {/* Floating particles */}
-        {Array.from({ length: 25 }, (_, i) => (
+        {/* Floating particles — reduced count */}
+        {Array.from({ length: 12 }, (_, i) => (
           <motion.div key={i} className="absolute rounded-full"
             style={{ width: 1 + Math.random() * 2, height: 1 + Math.random() * 2, background: Math.random() > 0.5 ? '#D4AF37' : '#7eb8da', left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, opacity: 0 }}
             animate={{ y: [-20, -120], opacity: [0, 0.5, 0], x: [0, (Math.random() - 0.5) * 30] }}
@@ -468,32 +483,32 @@ export default function Home() {
       <div className="relative z-10 min-h-screen flex flex-col">
 
         {/* Top bar */}
-        <header className="border-b border-[#D4AF37]/10 px-8 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <motion.span className="font-cinzel text-2xl tracking-[0.25em] text-[#D4AF37]" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+        <header className="border-b border-[#D4AF37]/10 px-3 sm:px-6 lg:px-8 py-3 sm:py-5 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <motion.span className="font-cinzel text-xl sm:text-2xl tracking-[0.15em] sm:tracking-[0.25em] text-[#D4AF37]" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
               ARGUS
             </motion.span>
-            <span className="text-[#8A92A6]/40 text-xs font-cinzel tracking-[0.2em] hidden sm:inline">Τρεις οφθαλμοί. Μια κρίσις.</span>
+            <span className="text-[#8A92A6]/40 text-[10px] sm:text-xs font-cinzel tracking-[0.1em] sm:tracking-[0.2em] hidden sm:inline">Τρεις οφθαλμοί. Μια κρίσις.</span>
           </div>
-          <div className="flex items-center gap-6 text-xs font-mono text-[#8A92A6]/60">
-            <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />Arc Testnet</span>
-            <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />3 Agents Active</span>
-            {isConnected && <span className="flex items-center gap-2 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />${walletBalance} USDC</span>}
-            {faucetStatus === 'funding' && <span className="flex items-center gap-2 text-[#E8A838] text-xs"><span className="w-2 h-2 rounded-full bg-[#E8A838] animate-pulse" />Funding...</span>}
-            {faucetStatus === 'funded' && <span className="flex items-center gap-2 text-[#3CB878] text-xs"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />+$0.50 USDC</span>}
+          <div className="flex items-center gap-2 sm:gap-4 lg:gap-6 text-[10px] sm:text-xs font-mono text-[#8A92A6]/60 flex-wrap">
+            <span className="flex items-center gap-1 sm:gap-2"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#3CB878] animate-pulse" /><span className="hidden sm:inline">Arc Testnet</span></span>
+            <span className="flex items-center gap-1 sm:gap-2"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#D4AF37] animate-pulse" /><span className="hidden sm:inline">3 Agents Active</span></span>
+            {isConnected && <span className="flex items-center gap-1 sm:gap-2 text-[#3CB878]"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#3CB878]" />${walletBalance} USDC</span>}
+            {faucetStatus === 'funding' && <span className="flex items-center gap-1 sm:gap-2 text-[#E8A838] text-[10px] sm:text-xs"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#E8A838] animate-pulse" />Funding...</span>}
+            {faucetStatus === 'funded' && <span className="flex items-center gap-1 sm:gap-2 text-[#3CB878] text-[10px] sm:text-xs"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#3CB878]" />+$0.50 USDC</span>}
             <EloBadge />
-            <button onClick={connectWallet} className={isConnected ? 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-3 py-1.5 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>
+            <button onClick={connectWallet} className={isConnected ? 'px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>
               {isConnected ? `✓ ${walletAddress?.slice(0,6)}...${walletAddress?.slice(-4)}` : 'Connect Wallet'}
             </button>
           </div>
         </header>
 
-        <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-6 pb-8">
+        <main className="flex-1 max-w-6xl mx-auto w-full px-3 sm:px-6 pt-4 sm:pt-6 pb-6 sm:pb-8">
 
           {/* Hero + Search */}
-          <motion.div className="text-center mb-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
-            <div className="relative inline-block mb-4">
-              <motion.h1 className="font-cinzel text-8xl md:text-9xl font-bold tracking-[0.2em] text-[#D4AF37] select-none"
+          <motion.div className="text-center mb-3 sm:mb-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
+            <div className="relative inline-block mb-2 sm:mb-4">
+              <motion.h1 className="font-cinzel text-hero font-bold tracking-[0.15em] sm:tracking-[0.2em] text-[#D4AF37] select-none"
                 initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2, ease: 'easeOut' }}>
                 ARGUS
               </motion.h1>
@@ -501,26 +516,26 @@ export default function Home() {
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 8, ease: 'easeInOut' }}
                 style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.12) 45%, rgba(255,255,255,0.2) 50%, rgba(212,175,55,0.12) 55%, transparent 100%)', pointerEvents: 'none' }} />
             </div>
-            <motion.p className="text-[#8A92A6] text-xl md:text-2xl tracking-[0.3em] font-cinzel mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
+            <motion.p className="text-[#8A92A6] text-lg sm:text-xl md:text-2xl tracking-[0.2em] sm:tracking-[0.3em] font-cinzel mb-2 sm:mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
               Τρεις οφθαλμοί. Μια κρίσις.
             </motion.p>
-            <motion.p className="text-[#8A92A6]/70 text-base max-w-xl mx-auto leading-relaxed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
+            <motion.p className="text-[#8A92A6]/70 text-sm sm:text-base max-w-xl mx-auto leading-relaxed px-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
               Three independent intelligence systems analyze every token contract. Each stakes real capital on its verdict. Consensus determines the truth.
             </motion.p>
 
             {/* Search */}
-            <motion.div className="mt-8 max-w-2xl mx-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}>
-              <div className="flex gap-3">
+            <motion.div className="mt-4 sm:mt-8 max-w-2xl mx-auto px-1 sm:px-0" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}>
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <motion.div className="flex-1 relative" whileHover={{ scale: 1.01 }}>
                   <input type="text" placeholder="Paste token contract address..." value={address}
                     onChange={(e) => { setAddress(e.target.value); setError(''); }}
                     onKeyDown={(e) => e.key === 'Enter' && handleScan()} disabled={loading}
-                    className="input-gold w-full bg-[#0E1423] border border-[#D4AF37]/30 rounded-xl px-5 py-5 font-mono text-base text-[#F8F8F5] placeholder-[#8A92A6]/40 disabled:opacity-50 transition-all duration-300 focus:border-[#D4AF37]/60 focus:shadow-[0_0_40px_rgba(212,175,55,0.1)]" autoFocus />
+                    className="input-gold w-full bg-[#0E1423] border border-[#D4AF37]/30 rounded-xl px-4 sm:px-5 py-3.5 sm:py-5 font-mono text-sm sm:text-base text-[#F8F8F5] placeholder-[#8A92A6]/40 disabled:opacity-50 transition-all duration-300 focus:border-[#D4AF37]/60 focus:shadow-[0_0_40px_rgba(212,175,55,0.1)]" autoFocus />
                   {loading && <motion.div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none" initial={{ x: '-100%' }} animate={{ x: '100%' }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}>
                     <div className="w-20 h-full bg-gradient-to-r from-transparent via-[#D4AF37]/10 to-transparent" /></motion.div>}
                 </motion.div>
                 <motion.button onClick={handleScan} disabled={loading || !isValidAddress(address)}
-                  className="bg-[#D4AF37]/10 border border-[#D4AF37]/40 rounded-xl px-8 py-5 font-cinzel text-sm text-[#D4AF37] tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:shadow-[0_0_40px_rgba(212,175,55,0.2)] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 min-w-[140px] relative overflow-hidden"
+                  className="bg-[#D4AF37]/10 border border-[#D4AF37]/40 rounded-xl px-6 sm:px-8 py-3.5 sm:py-5 font-cinzel text-sm text-[#D4AF37] tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:shadow-[0_0_40px_rgba(212,175,55,0.2)] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 sm:min-w-[140px] relative overflow-hidden"
                   whileHover={!loading && isValidAddress(address) ? { scale: 1.03 } : {}}
                   whileTap={!loading && isValidAddress(address) ? { scale: 0.97 } : {}}
                 >
@@ -582,26 +597,26 @@ export default function Home() {
             {!loading && consensus && (
               <motion.div className="space-y-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
                 {/* Consensus header */}
-                <motion.div className="bg-[#0E1423] border rounded-2xl p-6 relative overflow-hidden"
+                <motion.div className="bg-[#0E1423] border rounded-2xl p-4 sm:p-6 relative overflow-hidden"
                   initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
                   style={{ borderColor: consensus.verdict === 'SAFE' ? 'rgba(60,184,120,0.3)' : consensus.verdict === 'RISKY' ? 'rgba(232,168,56,0.3)' : 'rgba(232,85,85,0.3)' }}>
                   {/* Pulse ring on verdict */}
                   <motion.div className="absolute inset-0 rounded-2xl" initial={{ boxShadow: `0 0 0px ${verdictColor(consensus.verdict)}` }}
                     animate={{ boxShadow: [`0 0 0px ${verdictColor(consensus.verdict)}00`, `0 0 40px ${verdictColor(consensus.verdict)}15`, `0 0 0px ${verdictColor(consensus.verdict)}00`] }}
                     transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} />
-                  <div className="relative flex items-center justify-between">
-                    <div className="flex items-center gap-5">
-                      <motion.span className="font-cinzel text-4xl tracking-wider" style={{ color: verdictColor(consensus.verdict) }} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}>
+                  <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+                    <div className="flex items-center gap-4 sm:gap-5">
+                      <motion.span className="font-cinzel text-3xl sm:text-4xl tracking-wider" style={{ color: verdictColor(consensus.verdict) }} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}>
                         {consensus.agreementCount}/{consensus.totalAgents}
                       </motion.span>
                       <div>
                         <p className="font-mono text-xs text-[#8A92A6] tracking-wider uppercase">Consensus</p>
-                        <motion.p className="font-cinzel text-2xl tracking-wider" style={{ color: verdictColor(consensus.verdict) }} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+                        <motion.p className="font-cinzel text-xl sm:text-2xl tracking-wider" style={{ color: verdictColor(consensus.verdict) }} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
                           {consensus.verdict}
                         </motion.p>
                       </div>
                       {/* Vote indicators */}
-                      <div className="flex gap-2 ml-4">
+                      <div className="flex gap-2 ml-0 sm:ml-4">
                         {['Agent-α', 'Agent-β', 'Agent-γ'].map((name, i) => {
                           const meta = AGENT_META[name];
                           const agreed = consensus.winningAgents.includes(name);
@@ -612,7 +627,7 @@ export default function Home() {
                         })}
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                       <p className="font-mono text-xs text-[#8A92A6]">{consensus.winningAgents.join(', ')} agreed</p>
                       {consensus.settlementBatchId && (
                         <motion.p className="font-mono text-xs text-[#3CB878] mt-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
@@ -633,7 +648,7 @@ export default function Home() {
                         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.15, duration: 0.5 }}
                         whileHover={{ borderColor: meta.color + '50', y: -2 }} style={{ borderColor: won ? `${meta.color}25` : 'rgba(138,146,166,0.08)' }}>
                         <motion.div className="h-1" style={{ background: won ? verdictColor(agent.verdict) : '#1a1a2e' }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.5 + i * 0.15, duration: 0.6 }} />
-                        <div className="p-5">
+                        <div className="p-4 sm:p-5">
                           <div className="flex items-center justify-between mb-4">
                             <div>
                               <div className="flex items-center gap-2">
@@ -664,8 +679,8 @@ export default function Home() {
                 </div>
 
                 {/* Live Scan Activity + Intelligence Feed */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <motion.div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+                  <motion.div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-4 sm:p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
                     <div className="flex items-center gap-2 mb-4">
                       <span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />
                       <p className="font-mono text-xs text-[#8A92A6]/60 tracking-wider uppercase">Live Scan Activity</p>
@@ -686,7 +701,7 @@ export default function Home() {
                       <p className="font-mono text-xs text-[#8A92A6]/25 py-4 text-center">No scans yet.</p>
                     )}
                   </motion.div>
-                  <motion.div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }}>
+                  <motion.div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-4 sm:p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }}>
                     <div className="flex items-center gap-2 mb-4">
                       <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
                       <p className="font-mono text-xs text-[#8A92A6]/60 tracking-wider uppercase">Intelligence Feed</p>
@@ -709,9 +724,9 @@ export default function Home() {
 
                 {/* Recent Verdicts */}
                 {recentVerdicts.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{recentVerdicts.map((v,i)=>(<motion.div key={v.name+'-'+i} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-2xl tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">{recentVerdicts.map((v,i)=>(<motion.div key={v.name+'-'+i} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-3 sm:p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-xl sm:text-2xl tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
                 ) : (
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-5 text-center">
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 sm:p-5 text-center">
                   <p className="font-mono text-sm text-[#8A92A6]/40">No completed analyses yet.</p>
                   <p className="font-mono text-xs text-[#8A92A6]/20 mt-1">Awaiting first contract scan.</p>
                 </div>
@@ -719,7 +734,7 @@ export default function Home() {
 
                 {/* Agent Performance */}
                 {agentPerf.length > 0 ? (
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-6">{agentPerf.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-base tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-xs font-mono mb-3">{a.model}</p><p className="font-mono text-4xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><div className="w-28 h-1.5 mx-auto rounded-full bg-[#F8F8F5]/5 mb-2"><motion.div className="h-1.5 rounded-full" style={{background:a.color}} initial={{width:0}} animate={{width:`${a.accuracy}%`}} transition={{delay:1+i*0.1,duration:1}}/></div><p className="text-[#8A92A6]/40 text-xs font-mono">{a.total.toLocaleString()} analyses · {a.avgConf}% avg</p><p className="text-[#3CB878] text-xs font-mono mt-1">↑ {a.trend} this week</p></motion.div>))}</div></div>
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-4 sm:p-6"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">{agentPerf.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-base tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-xs font-mono mb-3">{a.model}</p><p className="font-mono text-3xl sm:text-4xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><div className="w-28 h-1.5 mx-auto rounded-full bg-[#F8F8F5]/5 mb-2"><motion.div className="h-1.5 rounded-full" style={{background:a.color}} initial={{width:0}} animate={{width:`${a.accuracy}%`}} transition={{delay:1+i*0.1,duration:1}}/></div><p className="text-[#8A92A6]/40 text-xs font-mono">{a.total.toLocaleString()} analyses · {a.avgConf}% avg</p><p className="text-[#3CB878] text-xs font-mono mt-1">↑ {a.trend} this week</p></motion.div>))}</div></div>
                 ) : (
                 <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6 text-center">
                   <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p>
@@ -730,7 +745,7 @@ export default function Home() {
 
                 {/* Analysis History */}
                 {analysisHistory.length > 0 ? (
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-sm font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-5 py-3 font-normal">Contract</th><th className="px-5 py-3 font-normal">Verdict</th><th className="px-5 py-3 font-normal">Consensus</th><th className="px-5 py-3 font-normal">Confidence</th><th className="px-5 py-3 font-normal">Timestamp</th></tr></thead><tbody>{analysisHistory.map((row,i)=>(<motion.tr key={row.addr+'-'+i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-5 py-3 text-[#7eb8da] font-medium">{row.addr}</td><td className="px-5 py-3"><span className="inline-flex items-center gap-1.5 font-cinzel text-sm tracking-wider" style={{color:verdictColor(row.verdict)}}><span className="w-1.5 h-1.5 rounded-full" style={{background:verdictColor(row.verdict),boxShadow:`0 0 6px ${verdictColor(row.verdict)}`}}/>{row.verdict}</span></td><td className="px-5 py-3 text-[#8A92A6]/60">{row.consensus}</td><td className="px-5 py-3 text-[#F8F8F5]/80 font-medium">{row.confidence}%</td><td className="px-5 py-3 text-[#8A92A6]/40">{row.time}</td></motion.tr>))}</tbody></table></div></div>
+                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="overflow-x-auto"><table className="w-full text-sm font-mono"><thead><tr className="text-[#8A92A6]/50 text-left"><th className="px-3 sm:px-5 py-3 font-normal">Contract</th><th className="px-3 sm:px-5 py-3 font-normal">Verdict</th><th className="px-3 sm:px-5 py-3 font-normal hidden sm:table-cell">Consensus</th><th className="px-3 sm:px-5 py-3 font-normal">Conf.</th><th className="px-3 sm:px-5 py-3 font-normal hidden sm:table-cell">Timestamp</th></tr></thead><tbody>{analysisHistory.map((row,i)=>(<motion.tr key={row.addr+'-'+i} className="border-t border-[#D4AF37]/3 hover:bg-[#D4AF37]/3 transition-colors cursor-default" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.8+i*0.05}}><td className="px-3 sm:px-5 py-3 text-[#7eb8da] font-medium">{row.addr}</td><td className="px-3 sm:px-5 py-3"><span className="inline-flex items-center gap-1.5 font-cinzel text-sm tracking-wider" style={{color:verdictColor(row.verdict)}}><span className="w-1.5 h-1.5 rounded-full" style={{background:verdictColor(row.verdict),boxShadow:`0 0 6px ${verdictColor(row.verdict)}`}}/>{row.verdict}</span></td><td className="px-3 sm:px-5 py-3 text-[#8A92A6]/60 hidden sm:table-cell">{row.consensus}</td><td className="px-3 sm:px-5 py-3 text-[#F8F8F5]/80 font-medium">{row.confidence}%</td><td className="px-3 sm:px-5 py-3 text-[#8A92A6]/40 hidden sm:table-cell">{row.time}</td></motion.tr>))}</tbody></table></div></div>
                 ) : (
                 <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="p-6 text-center"><p className="font-mono text-sm text-[#8A92A6]/40">No scan history yet.</p><p className="font-mono text-xs text-[#8A92A6]/20 mt-1">Run a token scan to populate this table.</p></div></div>
                 )}
@@ -749,11 +764,11 @@ export default function Home() {
           </AnimatePresence>
 
           {!loading && !consensus && (
-            <div className="max-w-6xl mx-auto w-full space-y-16 pb-12">
+            <div className="max-w-6xl mx-auto w-full space-y-10 sm:space-y-16 pb-8 sm:pb-12">
 
               <motion.div className="max-w-4xl mx-auto" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:2}}>
-                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-6 text-center">How Argus Works</p>
-                <div className="flex flex-col items-center gap-2">
+                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4 sm:mb-6 text-center">How Argus Works</p>
+                <div className="flex flex-col items-center gap-2 px-2">
                   {[
                     {step:'01',label:'Contract Address',desc:'User submits a token contract for analysis',color:'#D4AF37'},
                     {step:'02',label:'Agent α · DeepSeek-V3',desc:'Contract logic analysis — ownership, proxies, honeypots',color:'#7eb8da'},
@@ -761,18 +776,18 @@ export default function Home() {
                     {step:'04',label:'Agent γ · Rule Engine',desc:'Deterministic checks — patterns, exploits, signatures',color:'#b57ed8'},
                     {step:'05',label:'Consensus Formation',desc:'2/3 threshold — agents stake real USDC on verdicts',color:'#D4AF37'},
                     {step:'06',label:'On-Chain Verdict',desc:'Final result recorded immutably on Arc testnet',color:'#3CB878'},
-                  ].map((s,i)=>(<motion.div key={s.step} className="flex items-center gap-4 w-full max-w-md" initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}} transition={{delay:2.2+i*0.12}}>
-                    <span className="font-mono text-xs w-8 h-8 rounded-full flex items-center justify-center border flex-shrink-0" style={{color:s.color,borderColor:s.color+'30'}}>{s.step}</span>
-                    <div><p className="text-sm text-[#F8F8F5]/90">{s.label}</p><p className="text-[10px] text-[#8A92A6]/50 font-mono">{s.desc}</p></div>
+                  ].map((s,i)=>(<motion.div key={s.step} className="flex items-center gap-3 sm:gap-4 w-full max-w-md" initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}} transition={{delay:2.2+i*0.12}}>
+                    <span className="font-mono text-[10px] sm:text-xs w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center border flex-shrink-0" style={{color:s.color,borderColor:s.color+'30'}}>{s.step}</span>
+                    <div><p className="text-xs sm:text-sm text-[#F8F8F5]/90">{s.label}</p><p className="text-[10px] text-[#8A92A6]/50 font-mono hidden sm:block">{s.desc}</p></div>
                     {i<5&&<span className="text-[#D4AF37]/20 ml-auto">↓</span>}
                   </motion.div>))}
                 </div>
               </motion.div>
 
               <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:2.5}}>
-                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-6 text-center">Meet the Agents</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  {Object.entries(AGENT_META).map(([key,meta])=>(<motion.div key={key} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6 group hover:border-[#D4AF37]/20 transition-all duration-300" whileHover={{y:-2}}>
+                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4 sm:mb-6 text-center">Meet the Agents</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 px-2 sm:px-0">
+                  {Object.entries(AGENT_META).map(([key,meta])=>(<motion.div key={key} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-4 sm:p-6 group hover:border-[#D4AF37]/20 transition-all duration-300" whileHover={{y:-2}}>
                     <div className="w-10 h-10 rounded-full mb-4 flex items-center justify-center text-lg font-cinzel" style={{background:meta.color+'15',color:meta.color}}>{['α','β','γ'][['Agent-α','Agent-β','Agent-γ'].indexOf(key)]}</div>
                     <p className="font-cinzel text-base tracking-wider mb-1" style={{color:meta.color}}>{meta.label}</p>
                     <p className="text-[#8A92A6]/50 text-xs font-mono mb-4">{meta.model}</p>
@@ -782,8 +797,8 @@ export default function Home() {
               </motion.div>
 
               <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:2.8}}>
-                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-6 text-center">Example Analysis</p>
-                <div className="bg-[#0E1423] border border-[#3CB878]/20 rounded-2xl p-6 max-w-lg mx-auto" style={{boxShadow:'0 0 40px rgba(60,184,120,0.05)'}}>
+                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4 sm:mb-6 text-center">Example Analysis</p>
+                <div className="bg-[#0E1423] border border-[#3CB878]/20 rounded-2xl p-4 sm:p-6 max-w-lg mx-auto mx-2 sm:mx-auto" style={{boxShadow:'0 0 40px rgba(60,184,120,0.05)'}}>
                   <div className="flex items-center justify-between mb-4"><p className="font-mono text-sm text-[#7eb8da]">USDC</p><span className="font-cinzel text-xs px-3 py-1 rounded-full badge-safe">SAFE</span></div>
                   <div className="flex items-center gap-4 mb-4"><span className="font-cinzel text-2xl text-[#3CB878]">3/3</span><span className="text-xs font-mono text-[#8A92A6]">Consensus · 96% confidence</span></div>
                   <div className="space-y-1.5 text-xs font-mono text-[#3CB878]/80"><p>✓ Ownership verified</p><p>✓ No honeypot detected</p><p>✓ Deep liquidity confirmed</p><p>✓ Holder distribution healthy</p><p>✓ No deterministic risks</p></div>
@@ -791,8 +806,8 @@ export default function Home() {
               </motion.div>
 
               <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:3}}>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  {[{agent:'Agent α',model:'DeepSeek-V3',desc:'Contract logic analysis — ownership, proxies, honeypots, access control',color:'#7eb8da'},{agent:'Agent β',model:'Claude Sonnet 4',desc:'Tokenomics analysis — holders, liquidity, whales, trading patterns',color:'#D4AF37'},{agent:'Agent γ',model:'Rule Engine',desc:'Deterministic security checks — patterns, exploits, signatures',color:'#b57ed8'},{agent:'Consensus Engine',model:'2/3 Threshold',desc:'Verdict aggregation with real USDC stakes — final outcome recorded on-chain',color:'#3CB878'}].map((c,i)=>(<motion.div key={c.agent} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5 text-center group hover:border-[#D4AF37]/15 transition-all duration-300" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:3+i*0.1}}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-2 sm:px-0">
+                  {[{agent:'Agent α',model:'DeepSeek-V3',desc:'Contract logic analysis — ownership, proxies, honeypots, access control',color:'#7eb8da'},{agent:'Agent β',model:'Claude Sonnet 4',desc:'Tokenomics analysis — holders, liquidity, whales, trading patterns',color:'#D4AF37'},{agent:'Agent γ',model:'Rule Engine',desc:'Deterministic security checks — patterns, exploits, signatures',color:'#b57ed8'},{agent:'Consensus Engine',model:'2/3 Threshold',desc:'Verdict aggregation with real USDC stakes — final outcome recorded on-chain',color:'#3CB878'}].map((c,i)=>(<motion.div key={c.agent} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-4 sm:p-5 text-center group hover:border-[#D4AF37]/15 transition-all duration-300" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:3+i*0.1}}>
                     <span className="font-cinzel text-lg tracking-wider mb-2 block" style={{color:c.color}}>{c.agent}</span>
                     <p className="text-[#8A92A6]/50 text-[10px] font-mono mb-2">{c.model}</p>
                     <p className="text-[#8A92A6]/60 text-xs leading-relaxed">{c.desc}</p>
@@ -801,9 +816,9 @@ export default function Home() {
               </motion.div>
 
               <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:3.3}}>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {[{value:stats.queries.toLocaleString(),label:'Contracts Analyzed',sub:`Live on Arc Testnet`},{value:stats.consensusReached.toLocaleString(),label:'Consensus Decisions',sub:stats.queries>0?`${Math.round(stats.consensusReached/stats.queries*100)}% rate`:'Awaiting data'},{value:stats.onChainRecords.toLocaleString(),label:'On-Chain Records',sub:'Immutable on Arc'},{value:stats.avgConfidence+'%',label:'Avg Confidence',sub:stats.queries>0?'From real scans':'No data yet'}].map((s,i)=>(<motion.div key={s.label} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-5 text-center" initial={{opacity:0,scale:0.9}} animate={{opacity:1,scale:1}} transition={{delay:3.3+i*0.1}}>
-                    <p className="font-mono text-2xl font-bold text-[#F8F8F5] mb-1">{s.value}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono uppercase tracking-wider">{s.label}</p><p className="text-[#8A92A6]/20 text-[9px] font-mono mt-1">{s.sub}</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-1 sm:px-0">
+                  {[{value:stats.queries.toLocaleString(),label:'Contracts Analyzed',sub:`Live on Arc Testnet`},{value:stats.consensusReached.toLocaleString(),label:'Consensus',sub:stats.queries>0?`${Math.round(stats.consensusReached/stats.queries*100)}% rate`:'Awaiting data'},{value:stats.onChainRecords.toLocaleString(),label:'On-Chain Records',sub:'Immutable on Arc'},{value:stats.avgConfidence+'%',label:'Avg Confidence',sub:stats.queries>0?'From real scans':'No data yet'}].map((s,i)=>(<motion.div key={s.label} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-3 sm:p-5 text-center" initial={{opacity:0,scale:0.9}} animate={{opacity:1,scale:1}} transition={{delay:3.3+i*0.1}}>
+                    <p className="font-mono text-xl sm:text-2xl font-bold text-[#F8F8F5] mb-1">{s.value}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono uppercase tracking-wider">{s.label}</p><p className="text-[#8A92A6]/20 text-[9px] font-mono mt-1">{s.sub}</p>
                   </motion.div>))}
                 </div>
               </motion.div>
@@ -812,10 +827,10 @@ export default function Home() {
           )}
         </main>
 
-        <footer className="border-t border-[#D4AF37]/10 mt-16 px-8 py-8">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-center md:text-left"><p className="font-cinzel text-lg tracking-[0.2em] text-[#D4AF37]">ARGUS</p><p className="text-[#8A92A6]/30 text-[10px] font-cinzel tracking-wider mt-1">Τρεις οφθαλμοί. Μια κρίσις.</p></div>
-            <div className="flex items-center gap-6 text-[10px] font-mono text-[#8A92A6]/30">
+        <footer className="border-t border-[#D4AF37]/10 mt-8 sm:mt-16 px-4 sm:px-8 py-6 sm:py-8">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
+            <div className="text-center md:text-left"><p className="font-cinzel text-base sm:text-lg tracking-[0.15em] sm:tracking-[0.2em] text-[#D4AF37]">ARGUS</p><p className="text-[#8A92A6]/30 text-[10px] font-cinzel tracking-wider mt-1">Τρεις οφθαλμοί. Μια κρίσις.</p></div>
+            <div className="flex items-center gap-4 sm:gap-6 text-[10px] font-mono text-[#8A92A6]/30 flex-wrap justify-center">
               <a href="https://github.com/Gideon145/argus" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37]/60 transition-colors">GitHub</a>
               <a href="https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37]/60 transition-colors">ArcScan</a>
               <a href="https://x.com/Argus_arc" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37]/60 transition-colors">X</a>
