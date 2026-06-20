@@ -44,7 +44,7 @@ const SCAN_STEPS = ['Contract validated','Argus Eye activated','Ownership scan c
 
 /** Small ELO badge — shows agent reputation inline */
 function EloBadge() {
-  const [eloData, setEloData] = useState<{agent:string;elo:number;accuracy:number}[]>([]);
+  const [eloData, setEloData] = useState<{name:string;elo:number;accuracy:number}[]>([]);
   useEffect(() => {
     const poll = async () => {
       try {
@@ -63,8 +63,8 @@ function EloBadge() {
   return (
     <span className="flex items-center gap-3 text-xs font-mono text-[#8A92A6]/60">
       {eloData.map(a => (
-        <span key={a.agent} className="flex items-center gap-1">
-          <span className="text-[#D4AF37]">{a.agent.replace('Agent-','')}</span>
+        <span key={a.name} className="flex items-center gap-1">
+          <span className="text-[#D4AF37]">{a.name?.replace('Agent-','') || '?'}</span>
           <span className="text-[#8A92A6]/40">{a.elo}</span>
           <span className="text-[#3CB878]/60">{a.accuracy}%</span>
         </span>
