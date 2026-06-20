@@ -8,6 +8,7 @@ import { Orchestrator, QueryRequest } from './orchestrator';
 import { createLogger, Logger } from './logger';
 import { store } from './store';
 import { fundUserIfNeeded, getFundingWalletAddress, getUSDCBalance } from './wallets/funding';
+import { getEloStore } from './reputation';
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -126,6 +127,22 @@ async function main() {
     } catch (err: any) {
       res.status(500).json({ error: 'Treasury check failed', detail: err.message });
     }
+  });
+
+  // Agent ELO leaderboard — real-time reputation scores
+  app.get('/elo', (_req, res) => {
+    const eloData = getEloStore();
+    const agents = Object.entries(eloData).map(([name, data]) => ({
+      name,
+      elo: data.elo,
+      queries: data.queries,
+      wins: data.wins,
+      losses: data.losses,
+      accuracy: data.queries > 0 ? Math.round((data.wins / data.queries) * 100) : 100,
+    }));
+    // Sort by ELO descending
+    agents.sort((a, b) => b.elo - a.elo);
+    res.json({ agents, lastUpdated: new Date().toISOString() });
   });
 
   // Admin: seed scan count (for restoring stats after deploy)
