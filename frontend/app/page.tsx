@@ -125,11 +125,13 @@ export default function Home() {
   });
   const scanTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Wallet state — window.ethereum
+  // Wallet state — window.ethereum + Circle
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [walletBalance, setWalletBalance] = useState('0.00');
   const [faucetStatus, setFaucetStatus] = useState<'idle' | 'funding' | 'funded' | 'skipped'>('idle');
   const [faucetTx, setFaucetTx] = useState<string | null>(null);
+  const [isCircleWallet, setIsCircleWallet] = useState(false);
+  const [circleUserId, setCircleUserId] = useState<string | null>(null);
   const isConnected = !!walletAddress;
 
   const fetchUSDCBalance = async (addr: string) => {
@@ -194,6 +196,7 @@ export default function Home() {
       if (!accounts || !accounts[0]) { alert('No account selected. Try again.'); return; }
       const addr: string = accounts[0].toLowerCase();
       setWalletAddress(addr);
+      setIsCircleWallet(false);
       console.log('[Wallet] Connected:', addr.slice(0, 8) + '...');
 
       // Step 2: Ensure we're on Arc testnet
@@ -259,6 +262,61 @@ export default function Home() {
       } else {
         alert('Wallet connection failed: ' + (e.message || 'Unknown error. Check console.'));
       }
+    }
+  };
+
+  /** Circle pre-create wallet — instant onboarding, no MetaMask needed */
+  const getStartedWithCircle = async () => {
+    try {
+      // Get or create a persistent user ID
+      let uid = circleUserId;
+      if (!uid) {
+        uid = localStorage.getItem('argus_circle_uid');
+        if (!uid) {
+          uid = 'argus_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+          localStorage.setItem('argus_circle_uid', uid);
+        }
+        setCircleUserId(uid);
+      }
+
+      setFaucetStatus('funding');
+
+      // Step 1: Assign a Circle wallet
+      const assignRes = await fetch(`${AGENT_URL}/wallet/assign`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: uid }),
+      });
+      if (!assignRes.ok) throw new Error('Wallet assignment failed');
+      const assignData = await assignRes.json();
+      const addr = assignData.address;
+      setWalletAddress(addr);
+      setIsCircleWallet(true);
+
+      // Step 2: Auto-fund with $0.50 USDC
+      const faucetRes = await fetch(`${AGENT_URL}/faucet`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallet: addr }),
+      });
+      if (faucetRes.ok) {
+        const faucetData = await faucetRes.json();
+        if (faucetData.funded) {
+          setFaucetStatus('funded');
+          setFaucetTx(faucetData.txHash);
+        } else {
+          setFaucetStatus('skipped');
+        }
+      } else {
+        setFaucetStatus('skipped');
+      }
+
+      // Step 3: Fetch balance
+      setTimeout(() => fetchUSDCBalance(addr), 3000);
+    } catch (e: any) {
+      console.error('[Circle] Get started error:', e.message);
+      setFaucetStatus('idle');
+      alert('Could not set up your wallet. Please try again or use MetaMask.');
     }
   };
 
@@ -352,72 +410,82 @@ export default function Home() {
     }, 500);
 
     try {
-      const eth = (window as any).ethereum;
-      if (!eth || !walletAddress) {
-        setError('Connect wallet to scan');
-        setLoading(false);
-        if (scanTimerRef.current) clearInterval(scanTimerRef.current);
-        return;
-      }
-      const TREASURY = '0x0699a029e2e05EC88d6418EC744232702Cf77d81';
-      const PAYMENT_WEI = '0x2386f26fc10000'; // $0.01 USDC in wei (18 decimals)
-
-      // Step 1: Verify we're on Arc testnet before attempting payment
-      const currentChain = await eth.request({ method: 'eth_chainId' });
-      if (parseInt(currentChain, 16) !== 5042002) {
-        setError('Not on Arc Testnet. Please switch to Arc Testnet (Chain 5042002) in MetaMask, then try again.');
-        setLoading(false);
-        if (scanTimerRef.current) clearInterval(scanTimerRef.current);
-        return;
-      }
-
-      // Step 2: Send $0.01 USDC via MetaMask (native transfer on Arc)
-      try {
-        const txHash = await eth.request({
-          method: 'eth_sendTransaction',
-          params: [{ from: walletAddress, to: TREASURY, value: PAYMENT_WEI }],
-        });
-        console.log('[Scan] Payment tx:', txHash);
-
-        // Step 3: Wait for on-chain confirmation
-        const receipt = await waitForTransaction(eth, txHash, 20000);
-        if (!receipt) {
-          setError('Transaction pending. Check MetaMask — it may need manual confirmation.');
-          setLoading(false);
-          if (scanTimerRef.current) clearInterval(scanTimerRef.current);
-          return;
-        }
-        if (receipt.status === '0x0') {
-          setError('Transaction reverted. Your wallet may not have enough USDC for gas.');
-          setLoading(false);
-          if (scanTimerRef.current) clearInterval(scanTimerRef.current);
-          return;
-        }
-        console.log('[Scan] Payment confirmed');
-      } catch (payErr: any) {
-        if (payErr.code === 4001) {
-          setError('Payment rejected — scan cancelled');
-        } else if (payErr.message?.includes('insufficient')) {
-          setError('Not enough USDC. You need $0.01 to scan.');
-        } else {
-          // Show the actual error so we can debug
-          setError('Payment failed: ' + (payErr.message || String(payErr.code) || 'Unknown'));
-        }
-        setLoading(false);
-        if (scanTimerRef.current) clearInterval(scanTimerRef.current);
-        return;
-      }
-
-      // Step 3: Payment confirmed — run the scan analysis
-      const res = await fetch(`${AGENT_URL}/scan`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
-      });
-
       let data: ScanResult;
-      if (res.status === 402) {
-        const debugRes = await fetch(`${AGENT_URL}/debug/scan`, {
+      // Circle wallet scan — no MetaMask needed
+      if (isCircleWallet && circleUserId) {
+        const res = await fetch(`${AGENT_URL}/scan/circle`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: circleUserId, contractAddress: address, chain: 'arc' }),
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || 'Scan failed');
+        }
+        data = await res.json();
+      } else {
+        // MetaMask wallet scan
+        const eth = (window as any).ethereum;
+        if (!eth || !walletAddress) {
+          setError('Connect wallet to scan');
+          setLoading(false);
+          if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+          return;
+        }
+        const TREASURY = '0x0699a029e2e05EC88d6418EC744232702Cf77d81';
+        const PAYMENT_WEI = '0x2386f26fc10000'; // $0.01 USDC in wei (18 decimals)
+
+        // Step 1: Verify we're on Arc testnet
+        const currentChain = await eth.request({ method: 'eth_chainId' });
+        if (parseInt(currentChain, 16) !== 5042002) {
+          setError('Not on Arc Testnet. Please switch to Arc Testnet (Chain 5042002) in MetaMask, then try again.');
+          setLoading(false);
+          if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+          return;
+        }
+
+        // Step 2: Send $0.01 via MetaMask
+        try {
+          const txHash = await eth.request({
+            method: 'eth_sendTransaction',
+            params: [{ from: walletAddress, to: TREASURY, value: PAYMENT_WEI }],
+          });
+          console.log('[Scan] Payment tx:', txHash);
+
+          const receipt = await waitForTransaction(eth, txHash, 20000);
+          if (!receipt) {
+            setError('Transaction pending. Check MetaMask — it may need manual confirmation.');
+            setLoading(false);
+            if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+            return;
+          }
+          if (receipt.status === '0x0') {
+            setError('Transaction reverted. Your wallet may not have enough USDC for gas.');
+            setLoading(false);
+            if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+            return;
+          }
+        } catch (payErr: any) {
+          if (payErr.code === 4001) {
+            setError('Payment rejected — scan cancelled');
+          } else if (payErr.message?.includes('insufficient')) {
+            setError('Not enough USDC. You need $0.01 to scan.');
+          } else {
+            setError('Payment failed: ' + (payErr.message || String(payErr.code) || 'Unknown'));
+          }
+          setLoading(false);
+          if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+          return;
+        }
+
+        // Step 3: Run scan
+        const res = await fetch(`${AGENT_URL}/scan`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
+        });
+
+        if (res.status === 402) {
+          const debugRes = await fetch(`${AGENT_URL}/debug/scan`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ contractAddress: address, chain: 'eth' }),
         });
         data = await debugRes.json();
@@ -522,9 +590,23 @@ export default function Home() {
             {faucetStatus === 'funding' && <span className="flex items-center gap-1 sm:gap-2 text-[#E8A838] text-[10px] sm:text-xs"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#E8A838] animate-pulse" />Funding...</span>}
             {faucetStatus === 'funded' && <span className="flex items-center gap-1 sm:gap-2 text-[#3CB878] text-[10px] sm:text-xs"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#3CB878]" />+$0.50 USDC</span>}
             <EloBadge />
-            <button onClick={connectWallet} className={isConnected ? 'px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300' : 'px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300'}>
-              {isConnected ? `✓ ${walletAddress?.slice(0,6)}...${walletAddress?.slice(-4)}` : 'Connect Wallet'}
-            </button>
+            {!isConnected ? (
+              <div className="flex items-center gap-2">
+                <button onClick={getStartedWithCircle} disabled={faucetStatus === 'funding'}
+                  className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#D4AF37]/60 text-[#050816] bg-[#D4AF37] hover:bg-[#C4A030] transition-all duration-300 disabled:opacity-50">
+                  {faucetStatus === 'funding' ? 'Setting up...' : 'Get Started'}
+                </button>
+                <button onClick={connectWallet}
+                  className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300">
+                  MetaMask
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => { setWalletAddress(null); setIsCircleWallet(false); setCircleUserId(null); }}
+                className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300">
+                {isCircleWallet ? '⚡ ' : '✓ '}{walletAddress?.slice(0,6)}...{walletAddress?.slice(-4)}
+              </button>
+            )}
           </div>
         </header>
 
