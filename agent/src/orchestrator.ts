@@ -4,6 +4,7 @@ import { gammaAgent } from './agents/gamma';
 import { runConsensus, ConsensusResult } from './consensus';
 import { settleStakes } from './treasury';
 import { updateReputation } from './reputation';
+import { settleAgentPayments } from './payments/agentPayments';
 import { processPayment } from './gateway';
 import { store } from './store';
 
@@ -86,6 +87,17 @@ export class Orchestrator {
 
     // Step 5: Update ELO reputation
     await updateReputation(verdicts, result);
+
+    // Step 6: Agent-to-agent nanopayments — winners rewarded, losers pay micro-stake
+    if (result.consensusReached) {
+      settleAgentPayments(result.winningAgents, result.losingAgents, queryId)
+        .then(records => {
+          if (records.length > 0) {
+            this.logger.info(`[AgentPay] ${records.length} payments settled`);
+          }
+        })
+        .catch(() => {}); // Fire-and-forget — don't block scan response
+    }
 
     this.queryCount++;
     this.logger.info(
