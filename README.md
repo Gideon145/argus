@@ -38,6 +38,9 @@ Multi-agent security consensus oracle on Arc. Three independent AI agents analyz
 > 
 > **Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/a4Mn7s_OKoU](https://youtube.com/shorts/a4Mn7s_OKoU) · **X:** [@Argus_arc](https://x.com/Argus_arc)
 
+> 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture, deployment
+> 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved during the build
+
 ---
 
 ## Why This Exists
