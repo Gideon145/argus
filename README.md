@@ -239,7 +239,7 @@ Most security tools are single-model wrappers. Argus:
 
 5. **Is publicly verifiable** — every address, every transaction, every verdict is on ArcScan. Judges can verify everything independently without running the code.
 
-6. **Builds on the Canteen thesis** — Argus is a security sidecar for any token launch, any contract interaction. The Distribution Bootstrap for Payments Founders sketches eight patterns for attaching payments to existing communities. Argus attaches security to the community that already exists: token traders, DAO members, and anyone who's ever asked "is this token safe?"
+6. **Builds on the Canteen thesis** — The Distribution Bootstrap sketches eight sidecars for attaching payments to existing communities. Argus is one of them: a security sidecar that any token launch, any DAO, any trader can call for $0.01. No integration required. No SDK. Just an address.
 
 ---
 
@@ -247,14 +247,14 @@ Most security tools are single-model wrappers. Argus:
 
 | Phase | What | Status |
 |-------|------|--------|
-| **v0.1–v0.6** | Core oracle, paid scans, ELO, agent economy, Circle wallets | ✅ Shipped (Jun 15–21) |
-| **v0.7** | Configurable consensus threshold (2/3 vs 3/3) + on-chain ELO via ArgusOracle | 🚧 Jun 22 |
-| **v0.8** | App Kit integration — Unified Balance + CCTP cross-chain settlement | 📋 Next |
-| **v0.9** | Batch scans, analytics dashboard, shareable scan links | 📋 Next |
-| **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | 📋 Post-hackathon |
+| **v0.1–v0.6** | Core oracle, paid scans, ELO, agent economy, Circle wallets | Shipped (Jun 15–21) |
+| **v0.7** | Configurable consensus threshold (2/3 vs 3/3) + on-chain ELO via ArgusOracle | Next (Jun 22) |
+| **v0.8** | App Kit integration — Unified Balance + CCTP cross-chain settlement | Planned |
+| **v0.9** | Batch scans, analytics dashboard, shareable scan links | Planned |
+| **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 Circle primitive completion:
-- ✅ Gateway x402 · ✅ Agent Wallets · ✅ Dev-Controlled Wallets · 🚧 Contracts (v0.7) · 📋 App Kit (v0.8)
+- Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts (v0.7) · App Kit (v0.8)
 
 ---
 
