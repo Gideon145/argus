@@ -223,7 +223,35 @@ async function main() {
 
       logger.info(`Circle scan: ${contractAddress} by user ${userId.slice(0, 8)}... (wallet ${wallet.address.slice(0, 10)}...)`);
 
-      // Run the scan (payment sponsored for Circle users — $0.01 negligible)
+      // Pay $0.01 USDC from funding wallet to treasury (simulates user payment, real on-chain)
+      let paymentTx: string | null = null;
+      try {
+        const { createWalletClient, http, parseEther } = await import('viem');
+        const { privateKeyToAccount } = await import('viem/accounts');
+        const fundingKey = process.env.FUNDING_WALLET_PRIVATE_KEY;
+        const treasury = (process.env.TREASURY_ADDRESS || '0x0699a029e2e05EC88d6418EC744232702Cf77d81') as `0x${string}`;
+        if (fundingKey) {
+          const payChain = {
+            id: 5042002,
+            name: 'Arc Testnet',
+            nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+            rpcUrls: { default: { http: [process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com'] } },
+          } as const;
+          const payClient = createWalletClient({ chain: payChain, transport: http(payChain.rpcUrls.default.http[0]) });
+          const account = privateKeyToAccount(fundingKey as `0x${string}`);
+          const txHash = await payClient.sendTransaction({
+            account,
+            to: treasury,
+            value: parseEther('0.01'),
+          });
+          paymentTx = txHash;
+          logger.info(`Circle scan payment: $0.01 → treasury (${txHash.slice(0, 10)}...)`);
+        }
+      } catch (payErr: any) {
+        logger.warn(`Circle scan payment failed (continuing): ${payErr.message?.slice(0, 80)}`);
+      }
+
+      // Run the scan
       const queryReq: QueryRequest = {
         contractAddress,
         chain: chain || 'arc',
@@ -251,7 +279,7 @@ async function main() {
             reasoning: v.reasoning,
           })),
         },
-        payment: { note: 'Circle wallet — sponsored scan' },
+        payment: { note: 'Circle wallet — $0.01 paid to treasury', txHash: paymentTx },
       });
     } catch (err: any) {
       logger.error('Circle scan error:', err.message);
