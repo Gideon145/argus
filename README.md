@@ -32,15 +32,11 @@
 
 Multi-agent security consensus oracle on Arc. Three independent AI agents analyze token contracts, stake real USDC on their verdicts, and reach 2/3 consensus. Every scan costs $0.01. Every verdict is immutable on-chain. Agents pay each other when they disagree.
 
-> Built for the [Lepton Agents Hackathon](https://lepton.thecanteenapp.com/) (Jun 15–29, 2026) — Canteen × Circle × Arc
-> 
-> **Stack:** 3/5 Circle primitives · 3 AI models · $0.01 nanopayments · Autonomous agent economy
-> 
-> **Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/a4Mn7s_OKoU](https://youtube.com/shorts/a4Mn7s_OKoU) · **X:** [@Argus_arc](https://x.com/Argus_arc)
-
 > **Stack:** 3/5 Circle primitives · 3 AI models · $0.01 nanopayments · Autonomous agent economy
 > 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
 > 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved during the build
+
+**Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/a4Mn7s_OKoU](https://youtube.com/shorts/a4Mn7s_OKoU) · **X:** [@Argus_arc](https://x.com/Argus_arc)
 
 ---
 
