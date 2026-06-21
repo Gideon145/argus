@@ -201,6 +201,54 @@ async function main() {
     res.json({ address: wallet.address, walletId: wallet.walletId, assignedAt: wallet.assignedAt });
   });
 
+  // Scan via Circle-assigned wallet — no MetaMask, no extension, works on mobile
+  app.post('/scan/circle', async (req, res) => {
+    try {
+      const { userId, contractAddress, chain } = req.body || {};
+      if (!userId || !contractAddress) {
+        return res.status(400).json({ error: 'userId and contractAddress required' });
+      }
+
+      // Look up user's Circle wallet
+      const wallet = walletPool.getByRefId(userId);
+      if (!wallet) {
+        return res.status(404).json({ error: 'No wallet found. Get started first.' });
+      }
+
+      logger.info(`Circle scan: ${contractAddress} by user ${userId.slice(0, 8)}... (wallet ${wallet.address.slice(0, 10)}...)`);
+
+      // Run the scan (payment sponsored for Circle users — $0.01 negligible)
+      const queryReq: QueryRequest = {
+        contractAddress,
+        chain: chain || 'arc',
+        user: wallet.address,
+      };
+
+      const result = await orchestrator.processQuery(queryReq);
+
+      res.json({
+        query: { contractAddress, chain: chain || 'arc' },
+        wallet: { address: wallet.address },
+        result: {
+          verdict: result.finalVerdict,
+          confidence: result.agreementCount === 3 ? 'high' : result.agreementCount === 2 ? 'medium' : 'none',
+          consensus: result.details,
+          settlementBatchId: result.settlementBatchId,
+          agents: result.agentVerdicts.map(v => ({
+            name: v.agent,
+            verdict: v.verdict,
+            confidence: v.confidence,
+            reasoning: v.reasoning,
+          })),
+        },
+        payment: { note: 'Circle wallet — sponsored scan' },
+      });
+    } catch (err: any) {
+      logger.error('Circle scan error:', err.message);
+      res.status(500).json({ error: 'Scan failed', detail: err.message });
+    }
+  });
+
   // Agent ELO leaderboard — real-time reputation scores
   app.get('/elo', (_req, res) => {
     const eloData = getEloStore();
