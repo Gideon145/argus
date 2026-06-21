@@ -173,6 +173,11 @@ async function main() {
     }
   });
 
+  // Pool stats (public) — MUST be before /wallet/:userId to avoid route conflict
+  app.get('/wallet/pool-stats', (_req, res) => {
+    res.json(walletPool.stats());
+  });
+
   // Get user's wallet
   app.get('/wallet/:userId', (req, res) => {
     const { userId } = req.params;
@@ -181,11 +186,6 @@ async function main() {
       return res.status(404).json({ error: 'No wallet found for this user' });
     }
     res.json({ address: wallet.address, walletId: wallet.walletId, assignedAt: wallet.assignedAt });
-  });
-
-  // Pool stats (public)
-  app.get('/wallet/pool-stats', (_req, res) => {
-    res.json(walletPool.stats());
   });
 
   // Agent ELO leaderboard — real-time reputation scores
