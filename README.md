@@ -243,6 +243,21 @@ Most security tools are single-model wrappers. Argus:
 
 ---
 
+## Roadmap
+
+| Phase | What | Status |
+|-------|------|--------|
+| **v0.1–v0.6** | Core oracle, paid scans, ELO, agent economy, Circle wallets | ✅ Shipped (Jun 15–21) |
+| **v0.7** | Configurable consensus threshold (2/3 vs 3/3) + on-chain ELO via ArgusOracle | 🚧 Jun 22 |
+| **v0.8** | App Kit integration — Unified Balance + CCTP cross-chain settlement | 📋 Next |
+| **v0.9** | Batch scans, analytics dashboard, shareable scan links | 📋 Next |
+| **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | 📋 Post-hackathon |
+
+Circle primitive completion:
+- ✅ Gateway x402 · ✅ Agent Wallets · ✅ Dev-Controlled Wallets · 🚧 Contracts (v0.7) · 📋 App Kit (v0.8)
+
+---
+
 ## Daily Log
 
 *Built for the [Lepton Agents Hackathon](https://lepton.thecanteenapp.com/) (Jun 15–29, 2026) — Canteen × Circle × Arc*
