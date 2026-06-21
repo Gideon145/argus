@@ -36,20 +36,6 @@ Multi-agent security consensus oracle on Arc. Three independent AI agents stake 
 
 ---
 
-## Daily Log
-
-| Day | Date | Shipped |
-|-----|------|---------|
-| 1 | Jun 15 | Scaffold: agent, contracts, frontend. ARC CLI setup. |
-| 2 | Jun 16 | 3-agent pipeline live (DeepSeek + Claude + rules). Consensus engine. |
-| 3 | Jun 17 | Circle Agent Wallets created for all 3 agents. |
-| 4 | Jun 18 | v0.3 — live at argusarc.xyz (Vercel + custom domain + SSL). |
-| 5 | Jun 19 | v0.4 — paid scans + auto-funding pipeline. Real MetaMask tx confirmation ($0.01 USDC). 70+ scans in first 24h. |
-| 6 | Jun 20 | v0.5 — ELO scoring fixed (pairwise expected-score math, disk persistence). Stats bug fixed (avgConfidence now 92%). Agent γ overhauled (entropy detection, calibrated confidence). First 5 paying users. |
-| 7 | Jun 21 | v0.6 — Circle pre-create wallets (no MetaMask required, works on mobile). Agent-to-agent nanopayments live (losing agent pays winners 0.001 USDC). Circle scans now pay $0.01 to treasury. 50-wallet pool, auto-refill. 340+ scans. |
-
----
-
 ## Architecture
 
 ```
@@ -123,6 +109,8 @@ cd contracts && npm install && npx hardhat compile
 | 3 | Jun 17 | Circle Agent Wallets created for all 3 agents (0x284e...a320, 0x3f75...a34f, 0x1fa7...46de). Circle CLI authenticated. Stack now 2/5 Circle primitives. |
 | 4 | Jun 18 | v0.3 — live at argusarc.xyz (Vercel + custom domain + SSL). Agent on Railway with persistent volume-backed store. Server-side global stats + scan history. Premium dark UI — real data, no mockups. Per-agent check indicators, performance tracking, analysis history table. Free scans for first 24h. X launch thread. Build shared in Canteen Discord. 5+ test scans producing accurate differentiated verdicts. Google form v0.3 submitted. |
 | 5 | Jun 19 | v0.4 — paid scans + auto-funding pipeline. Real MetaMask tx confirmation ($0.01 USDC), payment verified on-chain before scan runs. Auto-funding: connect wallet → agent sends $0.50 test USDC → zero faucet friction. Two-wallet architecture (funding + treasury). Fixed Arc chain ID hex (0x4CE902 → 0x4CEF52). 70+ real scans in first 24h. Agent performance: DeepSeek-V3 100%, Claude Sonnet 4.5 61%, Rule Engine 70%. X post with stats published. Google form v0.4 + CLI submitted. |
+| 6 | Jun 20 | v0.5 — ELO scoring fixed (was static 0.5 expected score, now proper pairwise math against other agents, persisted to disk, survives redeploys). Stats bug fixed (avgConfidence was 100% computing consensus rate, now 92% real average across 332 scans). Agent γ overhauled (entropy detection, digit-run heuristics, calibrated confidence). First 5 paying users verified on-chain. Scoreboard: γ 1384/100%, β 1333/83%, α 1281/67%. Google form v0.5 + CLI submitted. |
+| 7 | Jun 21 | v0.6 — Circle pre-create wallets: users click "Get Started", instant Circle SCA wallet, auto-funded $0.50, no MetaMask needed, works on mobile. 50-wallet pool with auto-refill. Agent-to-agent nanopayments live: losing agent pays winners 0.001 USDC on-chain per scan (RFB 3). Circle scans now pay $0.01 to treasury via funding wallet. 3/5 Circle primitives integrated (Dev-Controlled Wallets + Gateway x402 + Agent Wallets). 340+ scans. Demo: https://youtube.com/shorts/a4Mn7s_OKoU. Google form v0.6 + CLI submitted. |
 
 ---
 
