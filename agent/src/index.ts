@@ -233,6 +233,10 @@ async function main() {
           verdict: result.finalVerdict,
           confidence: result.agreementCount === 3 ? 'high' : result.agreementCount === 2 ? 'medium' : 'none',
           consensus: result.details,
+          agreementCount: result.agreementCount,
+          totalAgents: result.totalAgents,
+          winningAgents: result.winningAgents,
+          losingAgents: result.losingAgents,
           settlementBatchId: result.settlementBatchId,
           agents: result.agentVerdicts.map(v => ({
             name: v.agent,
