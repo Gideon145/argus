@@ -36,6 +36,20 @@ Multi-agent security consensus oracle on Arc. Three independent AI agents stake 
 
 ---
 
+## Daily Log
+
+| Day | Date | Shipped |
+|-----|------|---------|
+| 1 | Jun 15 | Scaffold: agent, contracts, frontend. ARC CLI setup. |
+| 2 | Jun 16 | 3-agent pipeline live (DeepSeek + Claude + rules). Consensus engine. |
+| 3 | Jun 17 | Circle Agent Wallets created for all 3 agents. |
+| 4 | Jun 18 | v0.3 — live at argusarc.xyz (Vercel + custom domain + SSL). |
+| 5 | Jun 19 | v0.4 — paid scans + auto-funding pipeline. Real MetaMask tx confirmation ($0.01 USDC). 70+ scans in first 24h. |
+| 6 | Jun 20 | v0.5 — ELO scoring fixed (pairwise expected-score math, disk persistence). Stats bug fixed (avgConfidence now 92%). Agent γ overhauled (entropy detection, calibrated confidence). First 5 paying users. |
+| 7 | Jun 21 | v0.6 — Circle pre-create wallets (no MetaMask required, works on mobile). Agent-to-agent nanopayments live (losing agent pays winners 0.001 USDC). Circle scans now pay $0.01 to treasury. 50-wallet pool, auto-refill. 340+ scans. |
+
+---
+
 ## Architecture
 
 ```
