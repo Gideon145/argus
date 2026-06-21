@@ -492,6 +492,7 @@ export default function Home() {
       } else {
         data = await res.json();
       }
+      } // end MetaMask else
       
       setResult(data);
       setScanStep(9);
