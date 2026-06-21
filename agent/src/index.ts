@@ -9,6 +9,7 @@ import { createLogger, Logger } from './logger';
 import { store } from './store';
 import { fundUserIfNeeded, getFundingWalletAddress, getUSDCBalance } from './wallets/funding';
 import { getEloStore } from './reputation';
+import { walletPool } from './wallets/precreate';
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -18,6 +19,9 @@ const logger: Logger = createLogger('Argus');
 
 async function main() {
   logger.info('Argus agent starting...');
+
+  // Initialize wallet pool if empty (first deploy or after cleanup)
+  walletPool.initIfEmpty().catch((err) => logger.warn('Wallet pool init warning:', err.message));
 
   // --- Config ---
   const config = {
@@ -127,6 +131,61 @@ async function main() {
     } catch (err: any) {
       res.status(500).json({ error: 'Treasury check failed', detail: err.message });
     }
+  });
+
+  // --- Circle Pre-Create Wallets — instant onboarding, no MetaMask needed ---
+
+  // Assign a wallet to a new user
+  app.post('/wallet/assign', async (req, res) => {
+    try {
+      const { userId } = req.body || {};
+      if (!userId || typeof userId !== 'string') {
+        return res.status(400).json({ error: 'userId (string) required' });
+      }
+
+      // Check if user already has a wallet
+      const existing = walletPool.getByRefId(userId);
+      if (existing) {
+        return res.json({
+          address: existing.address,
+          walletId: existing.walletId,
+          assignedAt: existing.assignedAt,
+          note: 'Wallet already assigned',
+        });
+      }
+
+      const assigned = await walletPool.assign(userId);
+      if (!assigned) {
+        // Pool empty — try topping up
+        logger.info('Wallet pool exhausted, topping up...');
+        await walletPool.topUp(10);
+        const retry = await walletPool.assign(userId);
+        if (!retry) {
+          return res.status(503).json({ error: 'No wallets available. Try again shortly.' });
+        }
+        return res.json({ address: retry.address, walletId: retry.walletId, note: 'Fresh wallet (pool refilled)' });
+      }
+
+      res.json({ address: assigned.address, walletId: assigned.walletId, note: 'Wallet assigned' });
+    } catch (err: any) {
+      logger.error('Wallet assign error:', err.message);
+      res.status(500).json({ error: 'Wallet assignment failed', detail: err.message });
+    }
+  });
+
+  // Get user's wallet
+  app.get('/wallet/:userId', (req, res) => {
+    const { userId } = req.params;
+    const wallet = walletPool.getByRefId(userId);
+    if (!wallet) {
+      return res.status(404).json({ error: 'No wallet found for this user' });
+    }
+    res.json({ address: wallet.address, walletId: wallet.walletId, assignedAt: wallet.assignedAt });
+  });
+
+  // Pool stats (public)
+  app.get('/wallet/pool-stats', (_req, res) => {
+    res.json(walletPool.stats());
   });
 
   // Agent ELO leaderboard — real-time reputation scores
