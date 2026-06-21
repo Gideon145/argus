@@ -10,6 +10,7 @@ import { store } from './store';
 import { fundUserIfNeeded, getFundingWalletAddress, getUSDCBalance } from './wallets/funding';
 import { getEloStore } from './reputation';
 import { walletPool } from './wallets/precreate';
+import { getAgentPaymentStats } from './payments/agentPayments';
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -56,6 +57,11 @@ async function main() {
 
   app.get('/history', (_req, res) => {
     res.json(store.getHistory());
+  });
+
+  // Agent-to-agent nanopayments — internal economy
+  app.get('/agent-payments', (_req, res) => {
+    res.json(getAgentPaymentStats());
   });
 
   app.get('/status', (_req, res) => {
