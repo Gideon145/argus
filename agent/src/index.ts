@@ -178,6 +178,19 @@ async function main() {
     res.json(walletPool.stats());
   });
 
+  // Top up wallet pool (admin)
+  app.post('/admin/topup-wallets', async (req, res) => {
+    try {
+      const { count } = req.body || {};
+      const n = typeof count === 'number' && count > 0 ? count : 30;
+      const added = await walletPool.topUp(n);
+      const stats = walletPool.stats();
+      res.json({ added, ...stats });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Top-up failed', detail: err.message });
+    }
+  });
+
   // Get user's wallet
   app.get('/wallet/:userId', (req, res) => {
     const { userId } = req.params;
