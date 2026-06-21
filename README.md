@@ -38,7 +38,8 @@ Multi-agent security consensus oracle on Arc. Three independent AI agents analyz
 > 
 > **Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/a4Mn7s_OKoU](https://youtube.com/shorts/a4Mn7s_OKoU) · **X:** [@Argus_arc](https://x.com/Argus_arc)
 
-> 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture, deployment
+> **Stack:** 3/5 Circle primitives · 3 AI models · $0.01 nanopayments · Autonomous agent economy
+> 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
 > 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved during the build
 
 ---
@@ -230,7 +231,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ## What Makes This Different
 
-Most hackathon security tools are single-model wrappers. Argus:
+Most security tools are single-model wrappers. Argus:
 
 1. **Runs genuine multi-agent consensus** — three independent AI models, not three calls to the same API with different prompts. DeepSeek-V3, Claude Sonnet 4.5, and a deterministic rule engine produce genuinely diverse reasoning.
 
@@ -247,6 +248,8 @@ Most hackathon security tools are single-model wrappers. Argus:
 ---
 
 ## Daily Log
+
+*Built for the [Lepton Agents Hackathon](https://lepton.thecanteenapp.com/) (Jun 15–29, 2026) — Canteen × Circle × Arc*
 
 | Day | Date | Shipped |
 |-----|------|---------|
