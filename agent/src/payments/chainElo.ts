@@ -71,14 +71,15 @@ export async function writeEloToChain(agentId: string, eloDelta: number): Promis
 
 export async function getEloFromChain(agentId: string): Promise<number> {
   try {
-    const client = createWalletClient({
+    const { createPublicClient, http: vHttp } = await import('viem');
+    const client = createPublicClient({
       chain: {
         id: 5042002,
         name: 'Arc Testnet',
         nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
         rpcUrls: { default: { http: [rpc] } },
       },
-      transport: http(rpc),
+      transport: vHttp(rpc),
     });
 
     const elo = await client.readContract({
@@ -89,7 +90,8 @@ export async function getEloFromChain(agentId: string): Promise<number> {
     });
 
     return Number(elo);
-  } catch {
+  } catch (err: any) {
+    console.warn(`[ChainELO] Read failed for ${agentId}: ${err.message?.slice(0, 60)}`);
     return 1500;
   }
 }
