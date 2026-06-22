@@ -11,6 +11,7 @@ import { fundUserIfNeeded, getFundingWalletAddress, getUSDCBalance } from './wal
 import { getEloStore } from './reputation';
 import { walletPool } from './wallets/precreate';
 import { getAgentPaymentStats } from './payments/agentPayments';
+import { getEloFromChain } from './payments/chainElo';
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -62,6 +63,20 @@ async function main() {
   // Agent-to-agent nanopayments — internal economy
   app.get('/agent-payments', (_req, res) => {
     res.json(getAgentPaymentStats());
+  });
+
+  // On-chain ELO from ArgusOracle
+  app.get('/chain-elo', async (_req, res) => {
+    try {
+      const agents = ['Agent-α', 'Agent-β', 'Agent-γ'];
+      const results: Record<string, number> = {};
+      for (const agent of agents) {
+        results[agent] = await getEloFromChain(agent);
+      }
+      res.json({ agents: results, oracle: process.env.ARGUS_ORACLE_ADDRESS });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Failed to read on-chain ELO', detail: err.message });
+    }
   });
 
   app.get('/status', (_req, res) => {

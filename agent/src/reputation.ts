@@ -1,6 +1,7 @@
 import { Verdict, ConsensusResult } from './orchestrator';
 import fs from 'fs';
 import path from 'path';
+import { writeEloToChain } from './payments/chainElo';
 
 /**
  * ELO reputation engine (SYMBIOSIS pattern)
@@ -81,6 +82,9 @@ export async function updateReputation(
     if (actualScore === 1.0) record.wins++; else record.losses++;
 
     console.log(`[ELO] ${agent}: ${actualScore === 1.0 ? '+' : ''}${eloDelta} -> ${record.elo} (${record.wins}W/${record.losses}L)`);
+
+    // Write ELO to on-chain ArgusOracle (fire-and-forget)
+    writeEloToChain(agent, eloDelta).catch(() => {});
   }
 
   // Persist store after update
