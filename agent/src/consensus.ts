@@ -17,10 +17,11 @@ export interface ConsensusResult {
 }
 
 /**
- * 2/3 consensus: two agents must agree for a verdict to pass.
- * Unanimous = max confidence. Split = no consensus, query rejected.
+ * Configurable threshold consensus:
+ * - threshold=2: 2/3 must agree (default, pragmatic)
+ * - threshold=3: 3/3 must agree (maximum safety)
  */
-export function runConsensus(verdicts: Verdict[]): ConsensusResult {
+export function runConsensus(verdicts: Verdict[], threshold: number = 2): ConsensusResult {
   const counts: Record<string, Verdict[]> = {};
 
   for (const v of verdicts) {
@@ -40,7 +41,7 @@ export function runConsensus(verdicts: Verdict[]): ConsensusResult {
     }
   }
 
-  const consensusReached = maxCount >= 2; // 2/3 threshold
+  const consensusReached = maxCount >= threshold;
 
   const winningAgents = consensusReached
     ? counts[maxVerdict].map(v => v.agent)
@@ -60,6 +61,6 @@ export function runConsensus(verdicts: Verdict[]): ConsensusResult {
     agentVerdicts: verdicts,
     details: consensusReached
       ? `${maxCount}/${verdicts.length} agents agreed: ${maxVerdict}`
-      : `No consensus reached (best: ${maxCount}/${verdicts.length})`,
+      : `No consensus reached (threshold: ${threshold}/${verdicts.length}, best: ${maxCount}/3)`,
   };
 }
