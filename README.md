@@ -32,7 +32,7 @@
 
 Multi-agent security consensus oracle on Arc. Three independent AI agents analyze token contracts, stake real USDC on their verdicts, and reach 2/3 consensus. Every scan costs $0.01. Every verdict is immutable on-chain. Agents pay each other when they disagree.
 
-> **Stack:** 3/5 Circle primitives · 3 AI models · $0.01 nanopayments · Autonomous agent economy
+> **Stack:** 4/5 Circle primitives · 3 AI models · $0.01 nanopayments · Autonomous agent economy
 > 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
 > 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved during the build
 
@@ -121,14 +121,14 @@ Each agent operates independently — no shared state, no prompt leakage between
 
 ## Circle/Arc Stack
 
-Argus integrates 3 of the 5 Circle developer primitives, with the remaining 2 in active development:
+Argus integrates 4 of the 5 Circle developer primitives, with the remaining 1 in active development:
 
 | Primitive | Status | How Argus Uses It |
 |-----------|--------|-------------------|
 | **Gateway x402** | ✅ Live | $0.01 USDC nanopayment paywall on every scan. Gasless batched settlement. |
 | **Agent Wallets** | ✅ Live | Three autonomous Circle SCAs — one per agent. Each stakes USDC on verdicts independently. |
 | **Dev-Controlled Wallets** | ✅ Live | Pre-created wallet pool. Users get instant SCA wallets — no MetaMask, no extension. 50 wallets, auto-refill. |
-| **Contracts** | 🚧 Planned | On-chain ELO reputation via ArgusOracle. Immutable verdict log already deployed. |
+| **Contracts** | ✅ Live | On-chain ELO reputation via ArgusOracle. Immutable verdict log + ELO scores written to Arc after every scan. |
 | **App Kit** | 🚧 Planned | Unified Balance for chain-abstracted payments. CCTP for cross-chain USDC settlement. |
 
 Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallets, and oracle — all publicly auditable on ArcScan.
@@ -248,13 +248,13 @@ Most security tools are single-model wrappers. Argus:
 | Phase | What | Status |
 |-------|------|--------|
 | **v0.1–v0.6** | Core oracle, paid scans, ELO, agent economy, Circle wallets | Shipped (Jun 15–21) |
-| **v0.7** | Configurable consensus threshold (2/3 vs 3/3) + on-chain ELO via ArgusOracle | Next (Jun 22) |
+| **v0.7** | Configurable consensus threshold (2/3 vs 3/3) + on-chain ELO via ArgusOracle | Shipped (Jun 22) |
 | **v0.8** | App Kit integration — Unified Balance + CCTP cross-chain settlement | Planned |
 | **v0.9** | Batch scans, analytics dashboard, shareable scan links | Planned |
 | **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 Circle primitive completion:
-- Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts (v0.7) · App Kit (v0.8)
+- Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit (v0.8)
 
 ---
 
@@ -271,6 +271,7 @@ Circle primitive completion:
 | 5 | Jun 19 | v0.4 — paid scans + auto-funding pipeline. Real MetaMask tx confirmation ($0.01 USDC), payment verified on-chain before scan runs. Auto-funding: connect wallet → agent sends $0.50 test USDC → zero faucet friction. Two-wallet architecture (funding + treasury). Fixed Arc chain ID hex (0x4CE902 → 0x4CEF52). 70+ real scans in first 24h. Agent performance: DeepSeek-V3 100%, Claude Sonnet 4.5 61%, Rule Engine 70%. X post with stats published. Google form v0.4 + CLI submitted. |
 | 6 | Jun 20 | v0.5 — ELO scoring fixed (was static 0.5 expected score, now proper pairwise math against other agents, persisted to disk, survives redeploys). Stats bug fixed (avgConfidence was 100% computing consensus rate, now 92% real average across 332 scans). Agent γ overhauled (entropy detection, digit-run heuristics, calibrated confidence). First 5 paying users verified on-chain. Scoreboard: γ 1384/100%, β 1333/83%, α 1281/67%. Google form v0.5 + CLI submitted. |
 | 7 | Jun 21 | v0.6 — Circle pre-create wallets: users click "Get Started", instant Circle SCA wallet, auto-funded $0.50, no MetaMask needed, works on mobile. 50-wallet pool with auto-refill. Agent-to-agent nanopayments live: losing agent pays winners 0.001 USDC on-chain per scan (RFB 3). Circle scans now pay $0.01 to treasury via funding wallet. 3/5 Circle primitives integrated (Dev-Controlled Wallets + Gateway x402 + Agent Wallets). 340+ scans. Demo: youtube.com/shorts/a4Mn7s_OKoU. Google form v0.6 + CLI submitted. |
+| 8 | Jun 22 | v0.7 — Configurable consensus threshold: users can toggle 2/3 (default) or 3/3 (maximum safety) per scan. On-chain ELO via ArgusOracle: agent reputation now written to Arc testnet immutably after every verdict. 4/5 Circle primitives (Contracts added). ELO verifiable at /chain-elo. 16 total users, 25 wallets assigned, treasury at 0.28 USDC. |
 
 ---
 
