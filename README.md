@@ -35,6 +35,7 @@ Multi-agent security consensus oracle on Arc. Three independent AI agents analyz
 > **Stack:** 4/5 Circle primitives · 3 AI models · $0.01 nanopayments · Autonomous agent economy
 > 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
 > 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved during the build
+> ✅ **[verify.sh](verify.sh)** — 31-check end-to-end verifier. Run `bash verify.sh` to confirm everything is live.
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/a4Mn7s_OKoU](https://youtube.com/shorts/a4Mn7s_OKoU) · **X:** [@Argus_arc](https://x.com/Argus_arc)
 
