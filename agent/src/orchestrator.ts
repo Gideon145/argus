@@ -51,12 +51,12 @@ export class Orchestrator {
     };
   }
 
-  async processQuery(req: QueryRequest): Promise<ConsensusResult> {
+  async processQuery(req: QueryRequest, consensusThreshold: number = 2): Promise<ConsensusResult> {
     this.logger.info(`Processing query for ${req.contractAddress} from ${req.user}`);
     const queryId = `query-${Date.now()}-${this.queryCount}`;
 
     // Cache check — same address, instant return, zero API cost
-    const cacheKey = req.contractAddress.toLowerCase();
+    const cacheKey = `${req.contractAddress.toLowerCase()}:${consensusThreshold}`;
     if (this.scanCache.has(cacheKey)) {
       this.logger.info(`Cache hit for ${cacheKey} — returning cached result`);
       return this.scanCache.get(cacheKey)!;
@@ -76,7 +76,7 @@ export class Orchestrator {
     const verdicts: Verdict[] = [verdictA, verdictB, verdictC];
 
     // Step 3: Run consensus
-    const result = runConsensus(verdicts);
+    const result = runConsensus(verdicts, consensusThreshold);
 
     // Step 4: Settle stakes using arc-agent-pay
     if (result.consensusReached) {
