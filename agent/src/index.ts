@@ -210,7 +210,7 @@ async function main() {
   // Scan via Circle-assigned wallet — no MetaMask, no extension, works on mobile
   app.post('/scan/circle', async (req, res) => {
     try {
-      const { userId, contractAddress, chain } = req.body || {};
+      const { userId, contractAddress, chain, threshold } = req.body || {};
       if (!userId || !contractAddress) {
         return res.status(400).json({ error: 'userId and contractAddress required' });
       }
@@ -258,7 +258,7 @@ async function main() {
         user: wallet.address,
       };
 
-      const result = await orchestrator.processQuery(queryReq);
+      const result = await orchestrator.processQuery(queryReq, threshold || 2);
 
       res.json({
         query: { contractAddress, chain: chain || 'arc' },
@@ -336,7 +336,7 @@ async function main() {
   // Debug endpoint — bypasses Gateway for testing
   app.post('/debug/scan', async (req, res) => {
     try {
-      const { contractAddress, chain } = req.body || {};
+      const { contractAddress, chain, threshold } = req.body || {};
       if (!contractAddress) {
         return res.status(400).json({ error: 'contractAddress required' });
       }
@@ -349,7 +349,7 @@ async function main() {
         user: '0xDebugTester00000000000000000000000000000000',
       };
 
-      const result = await orchestrator.processQuery(queryReq);
+      const result = await orchestrator.processQuery(queryReq, threshold || 2);
 
       res.json({
         query: { contractAddress, chain: chain || 'arc' },
@@ -380,7 +380,7 @@ async function main() {
   // Paywalled scan endpoint — $0.01 USDC per query
   app.post('/scan', gateway.require('$0.01'), async (req: any, res) => {
     try {
-      const { contractAddress, chain } = req.body || {};
+      const { contractAddress, chain, threshold } = req.body || {};
       if (!contractAddress) {
         return res.status(400).json({ error: 'contractAddress required' });
       }
@@ -394,7 +394,7 @@ async function main() {
         user: payment?.payer || '0xunknown',
       };
 
-      const result = await orchestrator.processQuery(queryReq);
+      const result = await orchestrator.processQuery(queryReq, threshold || 2);
 
       res.json({
         query: { contractAddress, chain: chain || 'arc' },
