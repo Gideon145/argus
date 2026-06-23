@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { QueryRequest, Verdict } from '../orchestrator';
 
-const SYSTEM_PROMPT = `You are Agent-α (Alpha) of Argus — a security consensus oracle on Arc.
+const SYSTEM_PROMPT = `You are Agent-α (Alpha) of Argus — a multi-agent security consensus oracle.
 Your specialty: SMART CONTRACT CODE ANALYSIS.
 You analyze token contracts for honeypots, unchecked external calls, proxy upgrade risks,
 ownership centralization, mint function abuse, and other Solidity-level vulnerabilities.
@@ -45,7 +45,7 @@ export const alphaAgent = {
         max_tokens: 512,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: `Analyze this token contract for security vulnerabilities:\n\nContract address: ${req.contractAddress}\nChain: ${req.chain}\n\nFocus on:\n1. Proxy patterns — can the implementation be upgraded maliciously?\n2. Ownership — is the contract renounced? Who controls it?\n3. Mint/burn functions — can tokens be minted arbitrarily?\n4. External calls — are there unchecked external calls?\n5. Honeypot signatures — can buyers sell? Are there transfer restrictions?\n6. Access control — are admin functions properly gated?` },
+          { role: 'user', content: `Analyze this EVM token contract for security vulnerabilities:\n\nContract address: ${req.contractAddress}\n\nFocus on:\n1. Proxy patterns — can the implementation be upgraded maliciously?\n2. Ownership — is the contract renounced? Who controls it?\n3. Mint/burn functions — can tokens be minted arbitrarily?\n4. External calls — are there unchecked external calls?\n5. Honeypot signatures — can buyers sell? Are there transfer restrictions?\n6. Access control — are admin functions properly gated?` },
         ],
       });
 
