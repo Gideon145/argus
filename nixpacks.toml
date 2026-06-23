@@ -8,4 +8,4 @@ cmds = ["cd agent && npm install"]
 cmds = ["cd agent && npm run build"]
 
 [start]
-cmd = "node agent/dist/index.js"
+cmd = "node dist/index.js"
