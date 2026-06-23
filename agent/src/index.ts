@@ -80,20 +80,6 @@ async function main() {
     }
   });
 
-  // App Kit Unified Balance — cross-chain USDC balance (5/5 Circle primitives)
-  app.get('/balance/unified/:address', async (req, res) => {
-    try {
-      const { address } = req.params;
-      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
-        return res.status(400).json({ error: 'Valid address required' });
-      }
-      const balance = await getUnifiedBalance(address.toLowerCase() as `0x${string}`);
-      res.json({ address, ...balance, poweredBy: 'Circle App Kit — Unified Balance' });
-    } catch (err: any) {
-      res.status(500).json({ error: 'Unified balance check failed', detail: err.message });
-    }
-  });
-
   app.get('/status', (_req, res) => {
     res.json({ ...store.getStats(), uptime: process.uptime() });
   });
@@ -126,6 +112,20 @@ async function main() {
     } catch (err: any) {
       logger.error('Faucet error:', err.message);
       res.status(500).json({ error: 'Faucet failed', detail: err.message });
+    }
+  });
+
+  // App Kit Unified Balance — cross-chain USDC balance (5/5 Circle primitives)
+  app.get('/balance/unified/:address', async (req, res) => {
+    try {
+      const { address } = req.params;
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+        return res.status(400).json({ error: 'Valid address required' });
+      }
+      const balance = await getUnifiedBalance(address.toLowerCase() as `0x${string}`);
+      res.json({ address, ...balance, poweredBy: 'Circle App Kit — Unified Balance' });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Unified balance check failed', detail: err.message });
     }
   });
 
