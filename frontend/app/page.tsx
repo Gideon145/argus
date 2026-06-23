@@ -665,7 +665,7 @@ export default function Home() {
               Τρεις οφθαλμοί. Μια κρίσις.
             </motion.p>
             <motion.p className="text-[#8A92A6]/70 text-sm sm:text-base max-w-xl mx-auto leading-relaxed px-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
-              Three independent intelligence systems analyze every token contract. Each stakes real capital on its verdict. Consensus determines the truth.
+              Don&apos;t get rugged. Paste any token address — three independent AI agents analyze it, stake real USDC on their verdicts, and tell you if it&apos;s SAFE, RISKY, or a SCAM. No MetaMask needed. $0.01 per scan.
             </motion.p>
 
             {/* Search */}
