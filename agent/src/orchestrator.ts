@@ -7,6 +7,9 @@ import { updateReputation } from './reputation';
 import { settleAgentPayments } from './payments/agentPayments';
 import { processPayment } from './gateway';
 import { store } from './store';
+import { Logger } from './logger';
+
+export { ConsensusResult } from './consensus';
 
 export interface AgentConfig {
   arcRpc: string;
