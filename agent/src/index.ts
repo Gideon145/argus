@@ -12,6 +12,7 @@ import { getEloStore } from './reputation';
 import { walletPool } from './wallets/precreate';
 import { getAgentPaymentStats } from './payments/agentPayments';
 import { getEloFromChain } from './payments/chainElo';
+import { getUnifiedBalance } from './payments/unifiedBalance';
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -76,6 +77,20 @@ async function main() {
       res.json({ agents: results, oracle: process.env.ARGUS_ORACLE_ADDRESS });
     } catch (err: any) {
       res.status(500).json({ error: 'Failed to read on-chain ELO', detail: err.message });
+    }
+  });
+
+  // App Kit Unified Balance — cross-chain USDC balance (5/5 Circle primitives)
+  app.get('/balance/unified/:address', async (req, res) => {
+    try {
+      const { address } = req.params;
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+        return res.status(400).json({ error: 'Valid address required' });
+      }
+      const balance = await getUnifiedBalance(address.toLowerCase() as `0x${string}`);
+      res.json({ address, ...balance, poweredBy: 'Circle App Kit — Unified Balance' });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Unified balance check failed', detail: err.message });
     }
   });
 
