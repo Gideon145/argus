@@ -70,6 +70,15 @@ CELO=$(curl -sS "$AGENT_URL/chain-elo" 2>/dev/null || echo '{}')
 check "/chain-elo returns agents"     'echo "$CELO" | grep -q "agents"'
 check "/chain-elo has oracle address" 'echo "$CELO" | grep -q "0x563b2DA572"'
 
+# ── App Kit Unified Balance (5/5 Circle primitives) ──
+echo ""
+echo "── App Kit Unified Balance ──"
+
+UBAL=$(curl -sS "$AGENT_URL/balance/unified/0x0699a029e2e05EC88d6418EC744232702Cf77d81" 2>/dev/null || echo '{}')
+check "/balance/unified returns chains"       'echo "$UBAL" | grep -q "chains"'
+check "/balance/unified returns total"         'echo "$UBAL" | grep -q "total"'
+check "/balance/unified poweredBy App Kit"    'echo "$UBAL" | grep -q "App Kit"'
+
 # ── Treasury ──
 echo ""
 echo "── Treasury ──"
