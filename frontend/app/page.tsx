@@ -73,6 +73,41 @@ function EloBadge() {
   );
 }
 
+/** App Kit badge — shows treasury balance via Circle Unified Balance (5/5 primitives) */
+function AppKitBadge() {
+  const [treasuryBalance, setTreasuryBalance] = useState<string | null>(null);
+  const TREASURY = '0x0699a029e2e05EC88d6418EC744232702Cf77d81';
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const r = await fetch(`${AGENT_URL}/balance/unified/${TREASURY}`);
+        if (r.ok) {
+          const data = await r.json();
+          // Convert 18-decimal wei to human-readable USDC
+          const raw = BigInt(data.total || '0');
+          const human = Number(raw / BigInt(1e12)) / 1e6; // 18→6 decimals
+          setTreasuryBalance(human.toFixed(2));
+        }
+      } catch {}
+    };
+    poll();
+    const i = setInterval(poll, 60000);
+    return () => clearInterval(i);
+  }, []);
+  return (
+    <span
+      className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono text-[#8A92A6]/60 cursor-help"
+      title="5/5 Circle primitives — App Kit Unified Balance"
+    >
+      <span className="w-1.5 h-1.5 rounded-full bg-[#7C5CF0] animate-pulse" />
+      <span className="hidden sm:inline">App Kit</span>
+      {treasuryBalance !== null && (
+        <span className="text-[#7C5CF0]/80">${treasuryBalance}</span>
+      )}
+    </span>
+  );
+}
+
 /** Poll for transaction receipt. Returns receipt or null if timeout. */
 async function waitForTransaction(eth: any, txHash: string, timeoutMs: number): Promise<any> {
   const start = Date.now();
@@ -592,6 +627,7 @@ export default function Home() {
             {faucetStatus === 'funding' && <span className="flex items-center gap-1 sm:gap-2 text-[#E8A838] text-[10px] sm:text-xs"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#E8A838] animate-pulse" />Funding...</span>}
             {faucetStatus === 'funded' && <span className="flex items-center gap-1 sm:gap-2 text-[#3CB878] text-[10px] sm:text-xs"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#3CB878]" />+$0.50 USDC</span>}
             <EloBadge />
+            <AppKitBadge />
             {!isConnected ? (
               <div className="flex items-center gap-2">
                 <button onClick={getStartedWithCircle} disabled={faucetStatus === 'funding'}
