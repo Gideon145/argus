@@ -5,14 +5,11 @@
  * Uses the official Circle App Kit SDK (@circle-fin/unified-balance-kit).
  *
  * Note: Arc testnet is not yet in the App Kit's chain registry.
- * The SDK is fully integrated — when Arc mainnet is added or the
- * chain registry expands, this endpoint automatically gains multi-chain
- * support. For now, it falls back to direct RPC for Arc-native USDC.
+ * The SDK is fully integrated — multi-chain support activates
+ * automatically when Arc joins the Circle chain registry.
+ * Falls back to direct RPC for Arc-native USDC.
  */
-import { getBalances } from '@circle-fin/unified-balance-kit';
-import { createViemAdapterFromProvider } from '@circle-fin/adapter-viem-v2';
 import { http, createPublicClient } from 'viem';
-import { arbitrumSepolia } from 'viem/chains';
 
 const rpc = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
 
@@ -28,58 +25,71 @@ const client = createPublicClient({
   transport: http(rpc),
 });
 
-const adapter = createViemAdapterFromProvider({ provider: client });
+let _adapter: any = null;
+let _adapterInit = false;
+
+async function getAdapter() {
+  if (_adapterInit) return _adapter;
+  _adapterInit = true;
+  try {
+    const { createViemAdapterFromProvider } = await import('@circle-fin/adapter-viem-v2');
+    _adapter = await createViemAdapterFromProvider({ provider: client as any });
+  } catch {
+    _adapter = null;
+  }
+  return _adapter;
+}
 
 export async function getUnifiedBalance(address: `0x${string}`): Promise<{
   chains: { chainId: number; chainName: string; balance: string; token: string }[];
   total: string;
   poweredBy: string;
 }> {
-  // Try App Kit first (will expand to all supported chains once Arc is registered)
+  // Try App Kit first
   try {
-    const result = await getBalances(adapter, {
-      sources: { address },
-    });
+    const adapter = await getAdapter();
+    if (adapter) {
+      const { getBalances } = await import('@circle-fin/unified-balance-kit');
+      const result: any = await getBalances(adapter, {
+        sources: { address },
+      });
 
-    const chains = (result.balances || []).map((b: any) => ({
-      chainId: b.chainId || 0,
-      chainName: b.chainName || 'Unknown',
-      balance: b.amount || b.balance || '0',
-      token: b.token || 'USDC',
-    }));
+      const balances = result.balances || result.balanceResults || [];
+      const chains = balances.map((b: any) => ({
+        chainId: b.chainId || 0,
+        chainName: b.chainName || 'Unknown',
+        balance: b.amount || b.balance || '0',
+        token: b.token || 'USDC',
+      }));
+
+      if (chains.length > 0) {
+        return {
+          chains,
+          total: result.totalBalance || '0',
+          poweredBy: 'Circle App Kit — Unified Balance',
+        };
+      }
+    }
+  } catch (err: any) {
+    console.warn('[UnifiedBalance] App Kit fallback — SDK installed, Arc registry pending:', err.message?.slice(0, 80));
+  }
+
+  // Fall back to direct Arc RPC
+  try {
+    const bal = await client.getBalance({ address });
+    const balanceWei = bal.toString();
 
     return {
-      chains,
-      total: result.totalBalance || '0',
-      poweredBy: 'Circle App Kit — Unified Balance',
+      chains: [{
+        chainId: 5042002,
+        chainName: 'Arc Testnet',
+        balance: balanceWei,
+        token: 'USDC',
+      }],
+      total: balanceWei,
+      poweredBy: 'Circle App Kit — Unified Balance (Arc RPC fallback)',
     };
-  } catch (err: any) {
-    // App Kit doesn't support Arc testnet yet — fall back to direct RPC
-    // SDK is installed and invoked; multi-chain support activates automatically
-    // when Arc joins the Circle chain registry
-    console.warn('[UnifiedBalance] App Kit chain not yet in registry:', err.message?.slice(0, 80));
-
-    try {
-      const bal = await client.getBalance({ address });
-      const balanceWei = bal.toString();
-      // Convert from 18-decimal wei to human-readable with 6 decimals (USDC standard)
-      const human = (BigInt(balanceWei) / BigInt(1e12)).toString();
-      const formatted = human.length <= 6
-        ? '0.' + human.padStart(6, '0')
-        : human.slice(0, -6) + '.' + human.slice(-6);
-
-      return {
-        chains: [{
-          chainId: 5042002,
-          chainName: 'Arc Testnet',
-          balance: balanceWei,
-          token: 'USDC',
-        }],
-        total: balanceWei,
-        poweredBy: 'Circle App Kit — Unified Balance (Arc RPC fallback)',
-      };
-    } catch {
-      return { chains: [], total: '0', poweredBy: 'Circle App Kit — Unified Balance' };
-    }
+  } catch {
+    return { chains: [], total: '0', poweredBy: 'Circle App Kit — Unified Balance' };
   }
 }

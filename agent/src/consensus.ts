@@ -30,7 +30,7 @@ export function runConsensus(verdicts: Verdict[], threshold: number = 2): Consen
   }
 
   // Find the verdict with most agreement
-  let maxVerdict = 'NO_CONSENSUS';
+  let maxVerdict: 'SAFE' | 'RISKY' | 'SCAM' | 'NO_CONSENSUS' = 'NO_CONSENSUS';
   let maxCount = 0;
   const options = ['SCAM', 'RISKY', 'SAFE'] as const;
 

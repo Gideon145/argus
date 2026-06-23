@@ -11,7 +11,7 @@
  * Use eth_getBalance and native transfers, NOT ERC-20 contract calls.
  */
 
-import { createWalletClient, http, parseEther, formatEther } from 'viem';
+import { createWalletClient, createPublicClient, http, parseEther, formatEther } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 
 // ── Config ──────────────────────────────────────────────────────────────────
@@ -37,9 +37,9 @@ const chain = {
  */
 export async function getUSDCBalance(address: `0x${string}`): Promise<string> {
   try {
-    const client = createWalletClient({ chain, transport: http(getRpcUrl()) });
-    const hexBalance = await client.request({ method: 'eth_getBalance', params: [address, 'latest'] }) as string;
-    return formatEther(BigInt(hexBalance)); // 18 decimals
+    const client = createPublicClient({ chain, transport: http(getRpcUrl()) });
+    const hexBalance = await client.getBalance({ address });
+    return formatEther(hexBalance); // 18 decimals
   } catch (e: any) {
     console.warn('[Funding] getBalance failed:', e.message);
     return '0';

@@ -28,7 +28,7 @@ function loadStore(): Record<string, { elo: number; queries: number; wins: numbe
       const parsed = JSON.parse(raw);
       return { ...DEFAULT_STORE, ...parsed };
     }
-  } catch (e) {
+  } catch (e: any) {
     console.warn('Failed to load elo store:', e.message || e);
   }
   return { ...DEFAULT_STORE };
@@ -38,7 +38,7 @@ function saveStore(store: Record<string, { elo: number; queries: number; wins: n
   try {
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
     fs.writeFileSync(ELO_FILE, JSON.stringify(store, null, 2), 'utf8');
-  } catch (e) {
+  } catch (e: any) {
     console.warn('Failed to save elo store:', e.message || e);
   }
 }

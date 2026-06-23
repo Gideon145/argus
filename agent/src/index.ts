@@ -285,7 +285,7 @@ async function main() {
       const queryReq: QueryRequest = {
         contractAddress,
         chain: chain || 'arc',
-        user: wallet.address,
+        user: wallet.address as `0x${string}`,
       };
 
       const result = await orchestrator.processQuery(queryReq, threshold || 2);

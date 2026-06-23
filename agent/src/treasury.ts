@@ -29,7 +29,7 @@ export async function settleStakes(
   const nonceStore = new Set<string>();
 
   // Each agent creates a signed stake + verdict receipt
-  const stakeIntents = [];
+  const stakeIntents: { stake: any; receipt: any }[] = [];
   for (const v of verdicts) {
     const stake = createAgentStake({
       agentId: v.agent,
@@ -49,7 +49,7 @@ export async function settleStakes(
   }
 
   // Record fulfilled requests for winning agents
-  const fulfilled = result.winningAgents.map((agentId, i) => ({
+  const fulfilled = result.winningAgents.map((agentId: string, i) => ({
     intent: stakeIntents.find(s => s.stake.metadata!.agentId === agentId)!.stake,
     requestId: `${queryId}-${agentId}`,
     fulfilledAt: new Date().toISOString(),
@@ -64,7 +64,7 @@ export async function settleStakes(
     usageUnits: f.usageUnits,
   })));
 
-  const submitted = submitSettlementBatch(batch, demoSettlementTxHash(batch));
+  const submitted: any = await submitSettlementBatch(batch);
 
   console.log(`[Treasury] Query ${queryId} settled — batch ${submitted.id}, status: ${submitted.status}`);
 
