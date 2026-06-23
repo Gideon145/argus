@@ -34,7 +34,7 @@
 >
 > No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
-| **387+ tokens scanned** | **$0.68 treasury** | **40 user wallets** | **5/5 Circle primitives** |
+| **398+ tokens scanned** | **$0.83 treasury** | **52 user wallets** | **5/5 Circle primitives** |
 |---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/a4Mn7s_OKoU](https://youtube.com/shorts/a4Mn7s_OKoU) · **X:** [@Argus_arc](https://x.com/Argus_arc)
@@ -270,10 +270,10 @@ Circle primitive completion:
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Tokens scanned** | 387 | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 383 (99%) | 3-agent pipeline live since Jun 16 |
-| **User wallets** | 40 | Circle pre-create pool (80 total, 40 available) |
-| **Treasury balance** | $0.68 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Tokens scanned** | 398 | `/stats` endpoint · on-chain records |
+| **Consensus reached** | 394 (99%) | 3-agent pipeline live since Jun 16 |
+| **User wallets** | 52 | Circle pre-create pool (80 total, 28 available) |
+| **Treasury balance** | $0.83 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | $0.02 USDC | 4 agent-to-agent nanopayments settled |
 | **ELO leaderboard** | α 2257 (93%) · β 2205 (89%) · γ 2132 (70%) | `/elo` endpoint · on-chain at `/chain-elo` |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
@@ -290,7 +290,7 @@ Circle primitive completion:
 | Jun 20 | 8 | 332 | $0.12 | ELO fixed · Agent γ overhauled · v0.5 submitted |
 | Jun 21 | 12 | 340 | $0.22 | Circle wallets (no MetaMask) · agent payments · v0.6 submitted |
 | Jun 22 | 16 | 365 | $0.28 | Threshold toggle · on-chain ELO · v0.7 submitted |
-| **Jun 23** | **40** | **387** | **$0.68** | **App Kit 5/5 · Dockerfile deploy · v0.8 submitted** |
+| **Jun 23** | **52** | **398** | **$0.83** | **App Kit 5/5 · Dockerfile deploy · v0.8 submitted** |
 
 ---
 
