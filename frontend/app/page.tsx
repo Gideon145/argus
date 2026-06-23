@@ -691,7 +691,7 @@ export default function Home() {
                 {error && <span className="text-[#E85555] text-xs font-mono">{error}</span>}
                 {!error && (
                   <span className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-[#8A92A6]/60 cursor-pointer select-none" onClick={() => setConsensusThreshold(consensusThreshold === 2 ? 3 : 2)}>
-                    Consensus:
+                    Threshold:
                     <span className={`px-2 py-0.5 rounded border transition-all ${consensusThreshold === 2 ? 'border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5' : 'border-[#E8A838]/40 text-[#E8A838] bg-[#E8A838]/5'}`}>
                       {consensusThreshold}/3
                     </span>
