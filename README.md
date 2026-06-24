@@ -143,6 +143,20 @@ Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallet
 
 ---
 
+## Agent Prompts
+
+*All three agent system prompts are open source and verifiable in the repo.*
+
+| Agent | File | Model | Prompt |
+|-------|------|-------|--------|
+| **Agent α** | [`agent/src/agents/alpha.ts`](agent/src/agents/alpha.ts) | DeepSeek-V3 | Contract-level security: ownership, proxies, honeypots, access control, upgradeability, external calls. 6-point structured analysis. |
+| **Agent β** | [`agent/src/agents/beta.ts`](agent/src/agents/beta.ts) | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. 6-point structured analysis. |
+| **Agent γ** | [`agent/src/agents/gamma.ts`](agent/src/agents/gamma.ts) | Rule Engine (local) | Deterministic checks: address entropy (Shannon formula), digit-run heuristics, known scam deployer patterns, EIP-55 checksum validation, blacklist matching. Zero API cost. |
+
+Each agent operates independently — no shared state, no prompt leakage between models. Agent γ is fully deterministic; run the same address twice, get the same result. See [`AGENTS.md`](AGENTS.md) for how to plug any AI agent into Argus.
+
+---
+
 ## Agent-to-Agent Nanopayments (RFB 3)
 
 Since v0.6, Argus agents run an internal economy. After every scan where consensus is reached but not unanimous:
