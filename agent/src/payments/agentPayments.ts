@@ -5,6 +5,11 @@
  * All settled in native USDC on Arc testnet.
  */
 import { ethers } from 'ethers';
+import fs from 'fs';
+import path from 'path';
+
+const DATA_DIR = process.env.DATA_DIR || '/argus-data';
+const PAYMENTS_FILE = path.join(DATA_DIR, 'agent_payments.json');
 
 const AGENT_KEYS: Record<string, string> = {
   'Agent-α': process.env.AGENT_ALPHA_PRIVATE_KEY || '',
@@ -24,8 +29,24 @@ interface PaymentRecord {
   reason: string;
 }
 
-// In-memory payment log (adds to store later if needed)
-const paymentLog: PaymentRecord[] = [];
+// Load persisted payment log from disk
+function loadPayments(): PaymentRecord[] {
+  try {
+    if (fs.existsSync(PAYMENTS_FILE)) {
+      return JSON.parse(fs.readFileSync(PAYMENTS_FILE, 'utf8'));
+    }
+  } catch (e) { /* ignore */ }
+  return [];
+}
+
+function savePayments(log: PaymentRecord[]) {
+  try {
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(PAYMENTS_FILE, JSON.stringify(log.slice(-100), null, 2), 'utf8');
+  } catch (e) { /* ignore */ }
+}
+
+const paymentLog: PaymentRecord[] = loadPayments();
 
 function getProvider() {
   const rpc = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
@@ -88,6 +109,7 @@ export async function settleAgentPayments(
     paymentLog.push(...records);
     // Keep only last 100 records
     if (paymentLog.length > 100) paymentLog.splice(0, paymentLog.length - 100);
+    savePayments(paymentLog);
 
   } catch (err: any) {
     console.warn('[AgentPay] Settlement error:', err.message?.slice(0, 80));
