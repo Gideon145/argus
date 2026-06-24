@@ -618,7 +618,7 @@ export default function Home() {
             <motion.span className="font-cinzel text-xl sm:text-2xl tracking-[0.15em] sm:tracking-[0.25em] text-[#D4AF37]" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
               ARGUS
             </motion.span>
-            <a href="/stats" className="text-[#8A92A6]/40 text-[10px] sm:text-xs font-mono tracking-[0.1em] hover:text-[#D4AF37]/60 transition-colors">Stats</a>
+            <a href="/stats" className="text-[#D4AF37]/60 text-[10px] sm:text-xs font-mono tracking-[0.1em] hover:text-[#D4AF37] transition-colors">Stats</a>
             <span className="text-[#8A92A6]/40 text-[10px] sm:text-xs font-cinzel tracking-[0.1em] sm:tracking-[0.2em] hidden sm:inline">Τρεις οφθαλμοί. Μια κρίσις.</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-4 lg:gap-6 text-[10px] sm:text-xs font-mono text-[#8A92A6]/60 flex-wrap">
