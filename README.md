@@ -286,7 +286,7 @@ Circle primitive completion:
 | Limit | Status |
 |-------|--------|
 | **Agent analysis is AI-inferred, not on-chain bytecode audit** | Agents use training knowledge + pattern matching. They cannot decompile or verify deployed bytecode. For well-known contracts this is reliable; for obscure tokens, treat as a strong signal, not a guarantee. |
-| **Private keys in environment variables** | Agent wallets use raw private keys for signing (RFB 3 payments + ELO writes). A planned upgrade migrates to Circle W3S Programmable Wallets (like Mimir's approach) so no key material sits in worker processes. |
+| **Private keys in environment variables** | Agent wallets use raw private keys for signing (RFB 3 payments + ELO writes). A planned upgrade migrates to Circle W3S Programmable Wallets (like Mimir's approach) so no key material sits in worker processes. Implementation path: provision W3S wallets → replace `privateKeyToAccount` with `executeContract(...)` via Circle W3S API → remove all ARGENT_*_PRIVATE_KEY env vars. Estimated: 2-3 hours of focused work. |
 | **Holder distribution + liquidity are estimated** | Agent β infers tokenomics from training data — it does not query holder snapshots or DEX liquidity pools in real-time. Production upgrade: integrate on-chain balanceOf queries + DexScreener/GeckoTerminal APIs. |
 | **Arc testnet only** | All USDC is testnet. No real value at risk. Mainnet deployment requires Circle production access + real USDC liquidity. |
 | **Single oracle address** | ArgusOracle.sol has one owner. Multi-sig or DAO-governed upgrade is planned for mainnet. |
