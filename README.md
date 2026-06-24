@@ -41,6 +41,7 @@
 
 > 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
 > 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved
+> 🤖 **[AGENTS.md](AGENTS.md)** — How any AI agent can plug into Argus as a security oracle
 > ✅ **[verify.sh](verify.sh)** — 34-check end-to-end verifier
 
 ---
@@ -263,19 +264,6 @@ Most security tools are single-model wrappers. Argus:
 
 Circle primitive completion:
 - Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit ✅ (all 5/5)
-
----
-
-## Rubric Fit
-
-*How Argus maps to the 30/30/20/20 judging criteria.*
-
-| Criterion | Weight | Argus Evidence |
-|-----------|--------|----------------|
-| **Agentic Sophistication** | 30% | Three independent AI models (DeepSeek-V3, Claude Sonnet 4.5, deterministic rule engine) reach consensus autonomously. Agents stake real USDC on verdicts with no human in the loop. Losing agents pay winners automatically — 20 payments settled on-chain. ELO reputation is proper pairwise math, not a static score. Agents decide when to pay based on consensus outcome (RFB 1). |
-| **Traction** | 30% | 63 users onboarded via Circle wallets, 467 scans, $1.27 USDC treasury, 20 agent-to-agent payments. Two projects blocked @Argus_arc after scam verdicts. One scammer deleted their shill post. DexScreener trending tokens scanned in real-time. Terminal dashboard for live verifiable stats. |
-| **Circle Tool Usage** | 20% | All 5 Circle primitives integrated with load-bearing impact: Gateway x402 ($0.01 paywall on every scan), Agent Wallets (3 autonomous SCAs staking USDC), Dev-Controlled Wallets (80-wallet pre-create pool — removing this requires MetaMask), Contracts (ArgusOracle — immutable on-chain verdicts + ELO), App Kit (Unified Balance — chain-abstracted treasury). |
-| **Innovation** | 20% | Multi-model AI consensus with economic stakes is a new primitive on Arc. No existing repo combines cross-model agent consensus, staking, ELO reputation, and autonomous agent payments. The agent economy (RFB 3) is novel: agents pay each other when they disagree, creating a self-regulating trust system backed by real USDC. |
 
 ---
 
