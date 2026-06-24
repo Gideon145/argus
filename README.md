@@ -37,7 +37,7 @@
 | **398+ tokens scanned** | **$0.83 treasury** | **52 user wallets** | **5/5 Circle primitives** |
 |---|---|---|---|
 
-**Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/a4Mn7s_OKoU](https://youtube.com/shorts/a4Mn7s_OKoU) · **X:** [@Argus_arc](https://x.com/Argus_arc)
+**Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/_J39OKjtDyo](https://youtube.com/shorts/_J39OKjtDyo) · **X:** [@Argus_arc](https://x.com/Argus_arc)
 
 > 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
 > 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved
