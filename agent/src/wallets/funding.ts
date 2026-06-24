@@ -18,7 +18,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 const ARC_TESTNET_CHAIN_ID = 5042002;
 
 function getRpcUrl(): string {
-  return process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
+  return process.env.ARC_RPC_URL || 'https://rpc.testnet.arc.network';
 }
 
 const FUNDING_KEY = process.env.FUNDING_WALLET_PRIVATE_KEY || '';
