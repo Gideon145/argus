@@ -903,12 +903,12 @@ export default function Home() {
                 <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl overflow-hidden"><div className="px-5 py-4 border-b border-[#D4AF37]/5"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase">Analysis History</p></div><div className="p-6 text-center"><p className="font-mono text-sm text-[#8A92A6]/40">No scan history yet.</p><p className="font-mono text-xs text-[#8A92A6]/20 mt-1">Run a token scan to populate this table.</p></div></div>
                 )}
 
-                {/* ArcScan link */}
+                {/* ArcScan link — points to ArgusOracle where verdict is recorded on-chain */}
                 {consensus.settlementBatchId && (
                   <motion.div className="text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
-                    <a href={`https://testnet.arcscan.app/address/${address}`} target="_blank" rel="noopener noreferrer"
+                    <a href="https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8" target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-xs font-mono text-[#8A92A6]/40 hover:text-[#D4AF37]/60 transition-colors">
-                      View on ArcScan →
+                      Verdict recorded on-chain — View on ArcScan →
                     </a>
                   </motion.div>
                 )}
