@@ -126,6 +126,8 @@ Each agent operates independently — no shared state, no prompt leakage between
 
 ## Circle/Arc Stack
 
+> **How payments work:** For Circle "Get Started" users (no MetaMask), the funding wallet covers the $0.01 scan fee and sends it to treasury. This is why all treasury transactions appear from a single address — it's the funding wallet paying on behalf of users who onboarded via one-click Circle wallets. MetaMask users pay directly from their own wallet. Every transaction is verifiable on ArcScan.
+
 Argus integrates all 5 Circle developer primitives:
 
 | Primitive | Status | How Argus Uses It |
