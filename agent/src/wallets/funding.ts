@@ -34,14 +34,37 @@ const chain = {
 
 /**
  * Get native USDC balance for an address (Arc native gas token = USDC, 18 decimals)
+ * Uses direct JSON-RPC call for maximum compatibility.
  */
 export async function getUSDCBalance(address: `0x${string}`): Promise<string> {
   try {
-    const client = createPublicClient({ chain, transport: http(getRpcUrl()) });
-    const hexBalance = await client.getBalance({ address });
-    return formatEther(hexBalance); // 18 decimals
+    const rpcUrl = getRpcUrl();
+    const body = JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'eth_getBalance',
+      params: [address, 'latest'],
+      id: 1,
+    });
+    const response = await fetch(rpcUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok) {
+      console.warn(`[Funding] getBalance HTTP ${response.status} for ${address.slice(0, 10)}...`);
+      return '0';
+    }
+    const data = await response.json() as any;
+    if (data.error) {
+      console.warn(`[Funding] getBalance RPC error: ${data.error.message}`);
+      return '0';
+    }
+    const hex = data.result as string;
+    if (!hex || hex === '0x0') return '0';
+    return formatEther(BigInt(hex));
   } catch (e: any) {
-    console.warn('[Funding] getBalance failed:', e.message);
+    console.warn('[Funding] getBalance failed:', e.message?.slice(0, 80) || e);
     return '0';
   }
 }
