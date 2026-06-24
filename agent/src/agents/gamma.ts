@@ -12,6 +12,16 @@ const KNOWN_TOKENS: Record<string, { verdict: 'SAFE' | 'RISKY' | 'SCAM'; note: s
   '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': { verdict: 'SAFE', note: 'WETH — canonical wrapped Ether, widely trusted' },
   '0xdac17f958d2ee523a2206206994597c13d831ec7': { verdict: 'SAFE', note: 'USDT — Tether, largest stablecoin by volume' },
   '0x87230146e138d3f296a9d162a2dd8098f322b125': { verdict: 'RISKY', note: 'SQUID token — proxy with centralized ownership, transfer restrictions possible' },
+  // Arc-native USDC
+  '0x07865c6e87b9a5e213ae308ba4f8a9aadf7e2b0c': { verdict: 'SAFE', note: 'Arc USDC — official Circle USDC on Arc testnet' },
+  // Argus own contracts
+  '0x563b2da572948c2b54b5f1f26ccfebc153cb46c8': { verdict: 'SAFE', note: 'ArgusOracle — immutable verdict log, deployed by Argus team' },
+  '0x0699a029e2e05ec88d6418ec744232702cf77d81': { verdict: 'SAFE', note: 'Argus Treasury — public treasury wallet, deployed by Argus team' },
+  '0x4dd5e289168ddb28f9b34134eabccaf373eb64cb': { verdict: 'SAFE', note: 'Argus Funding Wallet — user onboarding faucet' },
+  // Argus agent SCAs
+  '0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320': { verdict: 'SAFE', note: 'Agent Alpha — Circle-managed SCA wallet' },
+  '0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f': { verdict: 'SAFE', note: 'Agent Beta — Circle-managed SCA wallet' },
+  '0x1fa79f59abbada269de477b45ded38c75a6146de': { verdict: 'SAFE', note: 'Agent Gamma — Circle-managed SCA wallet' },
 };
 
 // Heuristic checks based on address patterns
