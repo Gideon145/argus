@@ -34,7 +34,7 @@
 >
 > No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
-| **398+ tokens scanned** | **$0.83 treasury** | **52 user wallets** | **5/5 Circle primitives** |
+| **500+ tokens scanned** | **$1.71 treasury** | **100+ user wallets** | **5/5 Circle primitives** |
 |---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/_J39OKjtDyo](https://youtube.com/shorts/_J39OKjtDyo) · **X:** [@Argus_arc](https://x.com/Argus_arc)
@@ -135,7 +135,7 @@ Argus integrates all 5 Circle developer primitives:
 |-----------|--------|-------------------|
 | **Gateway x402** | ✅ Live | $0.01 USDC nanopayment paywall on every scan. Gasless batched settlement. |
 | **Agent Wallets** | ✅ Live | Three autonomous Circle SCAs — one per agent. Each stakes USDC on verdicts independently. |
-| **Dev-Controlled Wallets** | ✅ Live | Pre-created wallet pool. Users get instant SCA wallets — no MetaMask, no extension. 50 wallets, auto-refill. |
+| **Dev-Controlled Wallets** | ✅ Live | Pre-created wallet pool. Users get instant SCA wallets — no MetaMask, no extension. 100+ wallets, auto-refill. |
 | **Contracts** | ✅ Live | On-chain ELO reputation via ArgusOracle. Immutable verdict log + ELO scores written to Arc after every scan. |
 | **App Kit** | ✅ Live | Unified Balance — chain-abstracted USDC balance API. All 5 Circle primitives fully integrated. |
 
@@ -201,7 +201,7 @@ MetaMask remains available as a secondary option. But the primary path requires 
 # Agent health
 curl https://argus-agent-production-ab97.up.railway.app/health
 
-# Current stats (340+ scans, 89% avg confidence)
+# Current stats (500+ scans, 98% consensus rate)
 curl https://argus-agent-production-ab97.up.railway.app/stats | jq .
 
 # ELO leaderboard
