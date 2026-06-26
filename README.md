@@ -302,8 +302,8 @@ Circle primitive completion:
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | 500+ | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 483 (98%) | 3-agent pipeline live since Jun 16 |
+| **Scans processed** | 642 | `/stats` endpoint · on-chain records |
+| **Consensus reached** | 613 (95%) | 3-agent pipeline live since Jun 16 |
 | **Users** | 100+ | Circle pre-create wallets |
 | **Treasury balance** | $3.00 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 215 queries each | 20+ agent-to-agent nanopayments settled |
@@ -323,6 +323,9 @@ Circle primitive completion:
 | Jun 21 | 12 | 340 | $0.22 | Circle wallets (no MetaMask) · agent payments · v0.6 submitted |
 | Jun 22 | 16 | 365 | $0.28 | Threshold toggle · on-chain ELO · v0.7 submitted |
 | **Jun 23** | **52** | **398** | **$0.83** | **App Kit 5/5 · Dockerfile deploy · v0.8 submitted** |
+| Jun 24 | 63 | 467 | $1.27 | UI redesign · Case Files · shareable links · v0.9 submitted |
+| Jun 25 | 100+ | 500+ | $3.00 | 100 users milestone · 500 scans crossed · v0.9 shipped |
+| **Jun 26** | **100+** | **642** | **$3.00** | **Arc Ecosystem section · v0.10 live** |
 
 ---
 
