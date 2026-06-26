@@ -34,7 +34,7 @@
 >
 > No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
-| **500+ tokens scanned** | **$3.00 treasury** | **100+ user wallets** | **5/5 Circle primitives** |
+| **500+ scans** | **$3.00 treasury** | **100+ users** | **5/5 Circle primitives** |
 |---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/_J39OKjtDyo](https://youtube.com/shorts/_J39OKjtDyo) · **X:** [@Argus_arc](https://x.com/Argus_arc)
