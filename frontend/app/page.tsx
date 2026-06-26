@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import GuardianFigure from '@/components/GuardianFigure';
+import { extractFindings, computeRiskScore, verdictColor, verdictBg, verdictBorder, verdictGlow, verdictLabel, AgentCard, ExpandedAnalysis, RiskFactorItem, sortFindingsBySeverity } from '@/components/ScanResults';
 
 const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'http://localhost:3001';
 
@@ -23,90 +23,7 @@ const AGENT_META: Record<string, { label: string; model: string; color: string; 
   'Agent-γ': { label: 'Agent γ', model: 'Rule Engine', color: '#b57ed8', checks: ['Signature scan', 'Pattern match', 'Bytecode audit', 'Blacklist check', 'Known exploits'] },
 };
 
-const LIVE_FEED = [
-  { time: '2s ago', addr: '0x8f3c...2a1d', verdict: 'RISKY' as const, consensus: '2/3' },
-  { time: '18s ago', addr: '0xb21a...7e3f', verdict: 'SAFE' as const, consensus: '3/3' },
-  { time: '34s ago', addr: '0x4d9e...1b8c', verdict: 'RISKY' as const, consensus: '2/3' },
-  { time: '51s ago', addr: '0xa745...9f02', verdict: 'SAFE' as const, consensus: '3/3' },
-  { time: '1m ago', addr: '0x3c1d...6e8a', verdict: 'SCAM' as const, consensus: '3/3' },
-];
-
-const INTEL_FEED = [
-  { text: 'Consensus recorded on-chain', time: '3s ago' },
-  { text: 'Agent α flagged ownership risk', time: '12s ago' },
-  { text: 'New verdict finalized', time: '27s ago' },
-  { text: 'Liquidity anomaly detected', time: '41s ago' },
-  { text: 'Transaction batch verified', time: '55s ago' },
-  { text: 'Proxy upgrade risk identified', time: '1m ago' },
-];
-
 const SCAN_STEPS = ['Contract validated','Argus Eye activated','Ownership scan complete','Proxy analysis complete','Holder distribution analyzed','Liquidity structure analyzed','Deterministic checks complete','Consensus forming','Verdict finalized'];
-
-/** Small ELO badge — shows agent reputation inline */
-function EloBadge() {
-  const [eloData, setEloData] = useState<{name:string;elo:number;accuracy:number}[]>([]);
-  useEffect(() => {
-    const poll = async () => {
-      try {
-        const r = await fetch(`${AGENT_URL}/elo`);
-        if (r.ok) {
-          const data = await r.json();
-          setEloData(data.agents?.slice(0, 3) || []);
-        }
-      } catch {}
-    };
-    poll();
-    const i = setInterval(poll, 30000);
-    return () => clearInterval(i);
-  }, []);
-  if (!eloData.length) return null;
-  return (
-    <span className="flex items-center gap-3 text-xs font-mono text-[#8A92A6]/60">
-      {eloData.map(a => (
-        <span key={a.name} className="flex items-center gap-1">
-          <span className="text-[#D4AF37]">{a.name?.replace('Agent-','') || '?'}</span>
-          <span className="text-[#8A92A6]/40">{a.elo}</span>
-          <span className="text-[#3CB878]/60">{a.accuracy}%</span>
-        </span>
-      ))}
-    </span>
-  );
-}
-
-/** App Kit badge — shows treasury balance via Circle Unified Balance (5/5 primitives) */
-function AppKitBadge() {
-  const [treasuryBalance, setTreasuryBalance] = useState<string | null>(null);
-  const TREASURY = '0x0699a029e2e05EC88d6418EC744232702Cf77d81';
-  useEffect(() => {
-    const poll = async () => {
-      try {
-        const r = await fetch(`${AGENT_URL}/balance/unified/${TREASURY}`);
-        if (r.ok) {
-          const data = await r.json();
-          // Convert 18-decimal wei to human-readable USDC
-          const raw = BigInt(data.total || '0');
-          const human = Number(raw / BigInt(1e12)) / 1e6; // 18→6 decimals
-          setTreasuryBalance(human.toFixed(2));
-        }
-      } catch {}
-    };
-    poll();
-    const i = setInterval(poll, 60000);
-    return () => clearInterval(i);
-  }, []);
-  return (
-    <span
-      className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono text-[#8A92A6]/60 cursor-help"
-      title="5/5 Circle primitives — App Kit Unified Balance"
-    >
-      <span className="w-1.5 h-1.5 rounded-full bg-[#7C5CF0] animate-pulse" />
-      <span className="hidden sm:inline">App Kit</span>
-      {treasuryBalance !== null && (
-        <span className="text-[#7C5CF0]/80">${treasuryBalance}</span>
-      )}
-    </span>
-  );
-}
 
 /** Poll for transaction receipt. Returns receipt or null if timeout. */
 async function waitForTransaction(eth: any, txHash: string, timeoutMs: number): Promise<any> {
@@ -128,7 +45,6 @@ export default function Home() {
   const [error, setError] = useState('');
   const [scanStep, setScanStep] = useState(-1);
   const [completedChecks, setCompletedChecks] = useState<Record<string, number>>({});
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [stats, setStats] = useState({ queries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0 });
   const [recentVerdicts, setRecentVerdicts] = useState<{name:string;verdict:string;consensus:string;time:string;confidence:number}[]>(() => {
     if (typeof window === 'undefined') return [];
@@ -168,6 +84,10 @@ export default function Home() {
   const [isCircleWallet, setIsCircleWallet] = useState(false);
   const [circleUserId, setCircleUserId] = useState<string | null>(null);
   const [consensusThreshold, setConsensusThreshold] = useState(2); // 2 = default, 3 = max safety
+  const [copied, setCopied] = useState(false);
+  const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
+  const [lastScanTime, setLastScanTime] = useState<string | null>(null);
+  const [latestScan, setLatestScan] = useState<{address:string;verdict:string;consensus:string;confidence:number;time:string} | null>(null);
   const isConnected = !!walletAddress;
 
   const fetchUSDCBalance = async (addr: string) => {
@@ -356,18 +276,29 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => setMousePos({ x: (e.clientX / window.innerWidth - 0.5) * 20, y: (e.clientY / window.innerHeight - 0.5) * 20 });
-    window.addEventListener('mousemove', onMove);
-    return () => window.removeEventListener('mousemove', onMove);
-  }, []);
-
-  // Poll real stats from agent backend
+  // Poll real stats + latest scan
   useEffect(() => {
     const poll = async () => {
       try {
         const r = await fetch(`${AGENT_URL}/stats`);
         if (r.ok) setStats(await r.json());
+      } catch {}
+      try {
+        const hr = await fetch(`${AGENT_URL}/history`);
+        if (hr.ok) {
+          const history = await hr.json();
+          if (Array.isArray(history) && history.length > 0) {
+            const last = history[0];
+            setLatestScan({
+              address: last.address,
+              verdict: last.verdict,
+              consensus: last.consensus,
+              confidence: last.confidence,
+              time: last.time,
+            });
+            setLastScanTime(last.time);
+          }
+        }
       } catch {}
     };
     poll();
@@ -570,79 +501,94 @@ export default function Home() {
     }
   };
 
-  const verdictBadge = (v: string) => v === 'SAFE' ? 'badge-safe' : v === 'RISKY' ? 'badge-risky' : 'badge-scam';
-  const verdictColor = (v: string) => v === 'SAFE' ? '#3CB878' : v === 'RISKY' ? '#E8A838' : '#E85555';
-  const feedVerdictColor = (v: string) => v === 'SAFE' ? '#3CB878' : v === 'RISKY' ? '#E8A838' : '#E85555';
-  const verdictGlow = (v: string) => v === 'SAFE' ? 'shadow-[0_0_30px_rgba(60,184,120,0.25)]' : v === 'RISKY' ? 'shadow-[0_0_30px_rgba(232,168,56,0.25)]' : 'shadow-[0_0_30px_rgba(232,85,85,0.25)]';
+  const verdictBadgeCss = (v: string) => v === 'SAFE' ? 'badge-safe' : v === 'RISKY' ? 'badge-risky' : 'badge-scam';
+  const verdictGlowClass = (v: string) => v === 'SAFE' ? 'shadow-[0_0_30px_rgba(60,184,120,0.25)]' : v === 'RISKY' ? 'shadow-[0_0_30px_rgba(232,168,56,0.25)]' : 'shadow-[0_0_30px_rgba(232,85,85,0.25)]';
   const agents = result?.result?.agents || [];
   const consensus = result?.result;
+  const riskScore = consensus ? computeRiskScore(consensus.verdict, agents) : 0;
+  const allFindings = agents.flatMap(a => extractFindings(a.reasoning));
+  const uniqueFindings = sortFindingsBySeverity([...new Set(allFindings)]).slice(0, 8);
+  const vLabel = consensus ? verdictLabel(consensus.verdict) : null;
   const scanProgress = scanStep >= 0 && scanStep < 9;
+  const verdictRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to verdict when scan completes
+  useEffect(() => {
+    if (consensus && verdictRef.current) {
+      setTimeout(() => verdictRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
+  }, [consensus]);
+
+  // Auto-expand most important agent when scan completes
+  useEffect(() => {
+    if (!consensus || !agents.length) return;
+    const scamAgent = agents.find(a => a.verdict === 'SCAM');
+    if (scamAgent) { setExpandedAgent(scamAgent.name); return; }
+    const riskyAgents = agents.filter(a => a.verdict === 'RISKY');
+    if (riskyAgents.length) {
+      riskyAgents.sort((a, b) => b.confidence - a.confidence);
+      setExpandedAgent(riskyAgents[0].name);
+      return;
+    }
+    const safeAgents = agents.filter(a => a.verdict === 'SAFE');
+    if (safeAgents.length) {
+      safeAgents.sort((a, b) => b.confidence - a.confidence);
+      setExpandedAgent(safeAgents[0].name);
+    }
+  }, [consensus, agents]);
+
+  // Share handlers
+  const handleShare = useCallback(async () => {
+    const shareUrl = `https://argusarc.xyz/scan/${address}`;
+    const shareText = consensus
+      ? `${consensus.agreementCount}/${consensus.totalAgents} ${consensus.verdict} — Argus scanned ${address.slice(0, 6)}...${address.slice(-4)}`
+      : `Argus scan of ${address.slice(0, 6)}...${address.slice(-4)}`;
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try { await navigator.share({ title: 'Argus Scan Result', text: shareText, url: shareUrl }); return; } catch {}
+    }
+    try { await navigator.clipboard.writeText(shareUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch {}
+  }, [address, consensus]);
+
+  const handleTweet = useCallback(() => {
+    const shareUrl = `https://argusarc.xyz/scan/${address}`;
+    const shareText = consensus
+      ? `${consensus.agreementCount}/${consensus.totalAgents} ${consensus.verdict} — Argus scanned ${address.slice(0, 6)}...${address.slice(-4)}`
+      : `Argus scan of ${address.slice(0, 6)}...${address.slice(-4)}`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+  }, [address, consensus]);
 
   return (
-    <div className="min-h-screen bg-[#050816] text-[#F8F8F5] overflow-x-hidden">
-      {/* Background layers */}
-      <div className="fixed inset-0 z-0">
-        <div className="starfield" />
-        {/* Network nodes */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.03]" viewBox="0 0 1200 800" preserveAspectRatio="none">
-          {Array.from({ length: 8 }, (_, i) => (
-            <circle key={i} cx={100 + Math.random() * 1000} cy={50 + Math.random() * 700} r="2" fill="#D4AF37">
-              <animate attributeName="opacity" values="0.2;0.6;0.2" dur={`${3 + Math.random() * 4}s`} repeatCount="indefinite" />
-            </circle>
-          ))}
-          {Array.from({ length: 12 }, (_, i) => {
-            const x1 = 100 + (i * 90) % 1100, y1 = 50 + (i * 70) % 750;
-            const x2 = x1 + (Math.random() - 0.5) * 200, y2 = y1 + (Math.random() - 0.5) * 200;
-            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#D4AF37" strokeWidth="0.3"><animate attributeName="opacity" values="0.1;0.3;0.1" dur={`${4 + Math.random() * 5}s`} repeatCount="indefinite" /></line>;
-          })}
-        </svg>
-        {/* Floating particles — reduced count */}
-        {Array.from({ length: 12 }, (_, i) => (
-          <motion.div key={i} className="absolute rounded-full"
-            style={{ width: 1 + Math.random() * 2, height: 1 + Math.random() * 2, background: Math.random() > 0.5 ? '#D4AF37' : '#7eb8da', left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, opacity: 0 }}
-            animate={{ y: [-20, -120], opacity: [0, 0.5, 0], x: [0, (Math.random() - 0.5) * 30] }}
-            transition={{ duration: 3 + Math.random() * 5, repeat: Infinity, delay: Math.random() * 8, ease: 'easeInOut' }} />
-        ))}
-      </div>
-
-      {/* Guardian parallax */}
-      <motion.div className="fixed inset-0 z-0 pointer-events-none" animate={{ x: mousePos.x * 0.4, y: mousePos.y * 0.4 }} transition={{ type: 'spring', stiffness: 40, damping: 30 }}>
-        <GuardianFigure />
-      </motion.div>
-
+    <div className="min-h-screen bg-[#050816] text-[#F8F8F5]">
       <div className="relative z-10 min-h-screen flex flex-col">
 
         {/* Top bar */}
         <header className="border-b border-[#D4AF37]/10 px-3 sm:px-6 lg:px-8 py-3 sm:py-5 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2 sm:gap-4">
-            <motion.span className="font-cinzel text-xl sm:text-2xl tracking-[0.15em] sm:tracking-[0.25em] text-[#D4AF37]" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+          <div className="flex items-center gap-3 sm:gap-5">
+            <motion.span className="font-cinzel text-2xl sm:text-3xl tracking-[0.15em] text-[#D4AF37]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
               ARGUS
             </motion.span>
-            <a href="/stats" className="text-[#D4AF37]/60 text-[10px] sm:text-xs font-mono tracking-[0.1em] hover:text-[#D4AF37] transition-colors">Stats</a>
-            <span className="text-[#8A92A6]/40 text-[10px] sm:text-xs font-cinzel tracking-[0.1em] sm:tracking-[0.2em] hidden sm:inline">Τρεις οφθαλμοί. Μια κρίσις.</span>
+            <a href="/stats" className="text-[#D4AF37]/50 text-xs sm:text-sm font-mono tracking-[0.1em] hover:text-[#D4AF37] transition-colors">Stats</a>
+            <a href="/shame" className="text-[#E85555]/50 text-xs sm:text-sm font-mono tracking-[0.1em] hover:text-[#E85555] transition-colors">Shame</a>
           </div>
-          <div className="flex items-center gap-2 sm:gap-4 lg:gap-6 text-[10px] sm:text-xs font-mono text-[#8A92A6]/60 flex-wrap">
-            <span className="flex items-center gap-1 sm:gap-2"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#3CB878] animate-pulse" /><span className="hidden sm:inline">Arc Testnet</span></span>
-            <span className="flex items-center gap-1 sm:gap-2"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#D4AF37] animate-pulse" /><span className="hidden sm:inline">3 Agents Active</span></span>
-            {isConnected && <span className="flex items-center gap-1 sm:gap-2 text-[#3CB878]"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#3CB878]" />${walletBalance} USDC</span>}
-            {faucetStatus === 'funding' && <span className="flex items-center gap-1 sm:gap-2 text-[#E8A838] text-[10px] sm:text-xs"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#E8A838] animate-pulse" />Funding...</span>}
-            {faucetStatus === 'funded' && <span className="flex items-center gap-1 sm:gap-2 text-[#3CB878] text-[10px] sm:text-xs"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#3CB878]" />+$0.50 USDC</span>}
-            <EloBadge />
-            <AppKitBadge />
+          <div className="flex items-center gap-3 sm:gap-5 text-xs sm:text-sm font-mono text-[#8A92A6]/50 flex-wrap">
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />3 agents online</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#D4AF37]" />Arc Testnet</span>
+            {lastScanTime && <span className="text-[#8A92A6]/30 hidden sm:inline">Last scan {lastScanTime}</span>}
+            {isConnected && <span className="flex items-center gap-1.5 text-[#3CB878]"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />${walletBalance} USDC</span>}
             {!isConnected ? (
               <div className="flex items-center gap-2">
                 <button onClick={getStartedWithCircle} disabled={faucetStatus === 'funding'}
-                  className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#D4AF37]/60 text-[#050816] bg-[#D4AF37] hover:bg-[#C4A030] transition-all duration-300 disabled:opacity-50">
+                  className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium tracking-wide border border-[#D4AF37]/60 text-[#050816] bg-[#D4AF37] hover:bg-[#C4A030] transition-colors disabled:opacity-50">
                   {faucetStatus === 'funding' ? 'Setting up...' : 'Get Started'}
                 </button>
                 <button onClick={connectWallet}
-                  className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-all duration-300">
+                  className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium tracking-wide border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/10 transition-colors">
                   MetaMask
                 </button>
               </div>
             ) : (
               <button onClick={() => { setWalletAddress(null); setIsCircleWallet(false); setCircleUserId(null); }}
-                className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-cinzel tracking-wider border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-all duration-300">
+                className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium tracking-wide border border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5 transition-colors">
                 {isCircleWallet ? '⚡ ' : '✓ '}{walletAddress?.slice(0,6)}...{walletAddress?.slice(-4)}
               </button>
             )}
@@ -651,37 +597,35 @@ export default function Home() {
 
         <main className="flex-1 max-w-6xl mx-auto w-full px-3 sm:px-6 pt-4 sm:pt-6 pb-6 sm:pb-8">
 
-          {/* Hero + Search */}
-          <motion.div className="text-center mb-3 sm:mb-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
-            <div className="relative inline-block mb-2 sm:mb-4">
-              <motion.h1 className="font-cinzel text-hero font-bold tracking-[0.15em] sm:tracking-[0.2em] text-[#D4AF37] select-none"
-                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2, ease: 'easeOut' }}>
-                ARGUS
-              </motion.h1>
-              <motion.div className="absolute inset-0" initial={{ x: '-100%' }} animate={{ x: '200%' }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 8, ease: 'easeInOut' }}
-                style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.12) 45%, rgba(255,255,255,0.2) 50%, rgba(212,175,55,0.12) 55%, transparent 100%)', pointerEvents: 'none' }} />
-            </div>
-            <motion.p className="text-[#8A92A6] text-lg sm:text-xl md:text-2xl tracking-[0.2em] sm:tracking-[0.3em] font-cinzel mb-2 sm:mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
-              Τρεις οφθαλμοί. Μια κρίσις.
-            </motion.p>
-            <motion.p className="text-[#8A92A6]/70 text-sm sm:text-base max-w-xl mx-auto leading-relaxed px-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
-              Don&apos;t get rugged. Paste any token address — three independent AI agents analyze it, stake real USDC on their verdicts, and tell you if it&apos;s SAFE, RISKY, or a SCAM. No MetaMask needed. $0.01 per scan.
-            </motion.p>
+          {/* Hero + Search — shrinks when results present */}
+          <div className={`text-center transition-all duration-500 ${consensus ? 'mb-2' : 'mb-6 sm:mb-8'}`}>
+            <h1 className={`font-cinzel font-bold tracking-[0.15em] sm:tracking-[0.2em] text-[#D4AF37] select-none transition-all duration-500 ${consensus ? 'text-2xl sm:text-3xl' : 'text-hero'}`}>
+              ARGUS
+            </h1>
+            {!consensus && (
+              <>
+                <p className="text-[#8A92A6] text-base sm:text-lg tracking-[0.2em] sm:tracking-[0.3em] font-cinzel mb-2">
+                  Τρεις οφθαλμοί. Μια κρίσις.
+                </p>
+                <p className="text-[#8A92A6]/60 text-lg sm:text-xl max-w-lg mx-auto leading-relaxed px-2">
+                  Three AI agents scan any token contract. You get a verdict — SAFE, RISKY, or SCAM. $0.01.
+                </p>
+              </>
+            )}
 
             {/* Search */}
-            <motion.div className="mt-4 sm:mt-8 max-w-2xl mx-auto px-1 sm:px-0" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}>
+            <motion.div className={`max-w-2xl mx-auto px-1 sm:px-0 transition-all duration-500 ${consensus ? 'mt-2' : 'mt-4 sm:mt-8'}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}>
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <motion.div className="flex-1 relative" whileHover={{ scale: 1.01 }}>
                   <input type="text" placeholder="Paste token contract address..." value={address}
                     onChange={(e) => { setAddress(e.target.value); setError(''); }}
                     onKeyDown={(e) => e.key === 'Enter' && handleScan()} disabled={loading}
-                    className="input-gold w-full bg-[#0E1423] border border-[#D4AF37]/30 rounded-xl px-4 sm:px-5 py-3.5 sm:py-5 font-mono text-sm sm:text-base text-[#F8F8F5] placeholder-[#8A92A6]/40 disabled:opacity-50 transition-all duration-300 focus:border-[#D4AF37]/60 focus:shadow-[0_0_40px_rgba(212,175,55,0.1)]" autoFocus />
+                    className="input-gold w-full bg-[#0E1423] border border-[#D4AF37]/30 rounded-xl px-5 sm:px-6 py-4 sm:py-6 font-mono text-base sm:text-lg text-[#F8F8F5] placeholder-[#8A92A6]/40 disabled:opacity-50 transition-all duration-300 focus:border-[#D4AF37]/60 focus:shadow-[0_0_40px_rgba(212,175,55,0.1)]" autoFocus />
                   {loading && <motion.div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none" initial={{ x: '-100%' }} animate={{ x: '100%' }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}>
                     <div className="w-20 h-full bg-gradient-to-r from-transparent via-[#D4AF37]/10 to-transparent" /></motion.div>}
                 </motion.div>
                 <motion.button onClick={handleScan} disabled={loading || !isValidAddress(address)}
-                  className="bg-[#D4AF37]/10 border border-[#D4AF37]/40 rounded-xl px-6 sm:px-8 py-3.5 sm:py-5 font-cinzel text-sm text-[#D4AF37] tracking-wider uppercase hover:bg-[#D4AF37]/20 hover:shadow-[0_0_40px_rgba(212,175,55,0.2)] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 sm:min-w-[140px] relative overflow-hidden"
+                  className="bg-[#D4AF37]/10 border border-[#D4AF37]/40 rounded-xl px-8 sm:px-10 py-4 sm:py-6 font-medium text-base sm:text-lg text-[#D4AF37] tracking-wide uppercase hover:bg-[#D4AF37]/20 hover:shadow-[0_0_40px_rgba(212,175,55,0.2)] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 sm:min-w-[160px]"
                   whileHover={!loading && isValidAddress(address) ? { scale: 1.03 } : {}}
                   whileTap={!loading && isValidAddress(address) ? { scale: 0.97 } : {}}
                 >
@@ -691,16 +635,51 @@ export default function Home() {
               <div className="flex items-center justify-center gap-4 mt-3">
                 {error && <span className="text-[#E85555] text-xs font-mono">{error}</span>}
                 {!error && (
-                  <span className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-[#8A92A6]/60 cursor-pointer select-none" onClick={() => setConsensusThreshold(consensusThreshold === 2 ? 3 : 2)}>
-                    Threshold:
-                    <span className={`px-2 py-0.5 rounded border transition-all ${consensusThreshold === 2 ? 'border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5' : 'border-[#E8A838]/40 text-[#E8A838] bg-[#E8A838]/5'}`}>
+                <span className="flex items-center gap-2 text-xs sm:text-sm font-mono text-[#8A92A6]/60 cursor-pointer select-none" onClick={() => setConsensusThreshold(consensusThreshold === 2 ? 3 : 2)}>
+                  Threshold:
+                  <span className={`px-2.5 py-1 rounded border transition-all ${consensusThreshold === 2 ? 'border-[#3CB878]/40 text-[#3CB878] bg-[#3CB878]/5' : 'border-[#E8A838]/40 text-[#E8A838] bg-[#E8A838]/5'}`}>
                       {consensusThreshold}/3
                     </span>
                   </span>
                 )}
               </div>
             </motion.div>
-          </motion.div>
+          </div>
+
+          {/* Workflow — hide when results present */}
+          {!consensus && (
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mt-6 text-xs sm:text-sm font-mono text-[#8A92A6]/30">
+              <span>Paste address</span><span className="text-[#8A92A6]/15">→</span>
+              <span style={{color:'#7eb8da'}}>Agent α</span><span className="text-[#8A92A6]/15">→</span>
+              <span style={{color:'#D4AF37'}}>Agent β</span><span className="text-[#8A92A6]/15">→</span>
+              <span style={{color:'#b57ed8'}}>Agent γ</span><span className="text-[#8A92A6]/15">→</span>
+              <span>Consensus</span><span className="text-[#8A92A6]/15">→</span>
+              <span className="text-[#3CB878]/50">On-chain verdict</span>
+            </div>
+          )}
+
+          {/* Arc Ecosystem — hide when results present */}
+          {!consensus && (
+            <div className="mt-6 max-w-2xl mx-auto">
+              <p className="text-[10px] font-mono text-[#8A92A6]/25 uppercase tracking-wider text-center mb-2">Arc Ecosystem</p>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {[
+                  { label: 'Arc USDC', addr: '0x65bCeeAa40F538dB48c552Ef2757Ff21062826A7', color: '#3CB878' },
+                  { label: 'Arc Bridge', addr: '0xB9C21A6fF5C6d95BCd0Ae9A9df6aA442d8BEf826', color: '#7eb8da' },
+                  { label: 'Argus Oracle', addr: '0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8', color: '#D4AF37' },
+                ].map(token => (
+                  <button
+                    key={token.addr}
+                    onClick={() => { setAddress(token.addr); setError(''); }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-mono border border-[#D4AF37]/10 bg-[#0E1423] text-[#8A92A6]/50 hover:border-[#D4AF37]/30 hover:text-[#8A92A6]/80 transition-all"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full inline-block mr-1.5" style={{ background: token.color }} />
+                    {token.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Scan progress */}
           <AnimatePresence>
@@ -750,120 +729,141 @@ export default function Home() {
           <AnimatePresence>
             {!loading && consensus && (
               <motion.div className="space-y-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
-                {/* Consensus header */}
-                <motion.div className="bg-[#0E1423] border rounded-2xl p-4 sm:p-6 relative overflow-hidden"
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-                  style={{ borderColor: consensus.verdict === 'SAFE' ? 'rgba(60,184,120,0.3)' : consensus.verdict === 'RISKY' ? 'rgba(232,168,56,0.3)' : 'rgba(232,85,85,0.3)' }}>
-                  {/* Pulse ring on verdict */}
-                  <motion.div className="absolute inset-0 rounded-2xl" initial={{ boxShadow: `0 0 0px ${verdictColor(consensus.verdict)}` }}
-                    animate={{ boxShadow: [`0 0 0px ${verdictColor(consensus.verdict)}00`, `0 0 40px ${verdictColor(consensus.verdict)}15`, `0 0 0px ${verdictColor(consensus.verdict)}00`] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} />
-                  <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-                    <div className="flex items-center gap-4 sm:gap-5">
-                      <motion.span className="font-cinzel text-3xl sm:text-4xl tracking-wider" style={{ color: verdictColor(consensus.verdict) }} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}>
-                        {consensus.agreementCount}/{consensus.totalAgents}
-                      </motion.span>
-                      <div>
-                        <p className="font-mono text-xs text-[#8A92A6] tracking-wider uppercase">Consensus</p>
-                        <motion.p className="font-cinzel text-xl sm:text-2xl tracking-wider" style={{ color: verdictColor(consensus.verdict) }} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-                          {consensus.verdict}
-                        </motion.p>
-                      </div>
-                      {/* Vote indicators */}
-                      <div className="flex gap-2 ml-0 sm:ml-4">
-                        {['Agent-α', 'Agent-β', 'Agent-γ'].map((name, i) => {
-                          const meta = AGENT_META[name];
-                          const agreed = consensus.winningAgents.includes(name);
-                          return (
-                            <motion.div key={name} className="w-3 h-3 rounded-full" style={{ background: agreed ? meta.color : '#1a1a2e', boxShadow: agreed ? `0 0 8px ${meta.color}` : 'none' }}
-                              initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4 + i * 0.1, type: 'spring' }} />
-                          );
-                        })}
-                      </div>
-                    </div>
-                    <div className="text-left sm:text-right">
-                      <p className="font-mono text-xs text-[#8A92A6]">{consensus.winningAgents.join(', ')} agreed</p>
-                      {consensus.settlementBatchId && (
-                        <motion.p className="font-mono text-xs text-[#3CB878] mt-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-                          Verified on-chain · {consensus.settlementBatchId.slice(0, 14)}...
-                        </motion.p>
-                      )}
+                {/* ===== HERO VERDICT ===== */}
+                <div ref={verdictRef} className="rounded-2xl p-4 sm:p-5 text-center"
+                  style={{ background: verdictBg(consensus.verdict), border: `1px solid ${verdictBorder(consensus.verdict)}`, boxShadow: verdictGlow(consensus.verdict) }}>
+                  
+                  <p className="font-cinzel text-2xl sm:text-3xl md:text-4xl font-bold tracking-wider mb-0.5" style={{ color: verdictColor(consensus.verdict) }}>
+                    {consensus.verdict}
+                  </p>
+                  {vLabel && <p className="text-sm text-[#8A92A6]/50 mb-2">{vLabel.short}</p>}
+
+                  <p className="font-mono text-2xl sm:text-3xl font-bold tracking-tight mb-0.5" style={{ color: verdictColor(consensus.verdict) }}>
+                    {riskScore}<span className="text-lg sm:text-xl text-[#8A92A6]/30">/100</span>
+                  </p>
+                  <p className="font-mono text-xs text-[#8A92A6]/50 uppercase tracking-wider mb-2">Risk Score</p>
+
+                  <div className="flex items-center justify-center gap-3 sm:gap-4 text-xs font-mono text-[#8A92A6]/50 flex-wrap mb-2">
+                    <span>{consensus.agreementCount}/{consensus.totalAgents} consensus</span>
+                    {consensus.settlementBatchId && (
+                      <><span className="text-[#8A92A6]/20">|</span><span className="text-[#3CB878]/70">Verified on-chain</span></>
+                    )}
+                    {uniqueFindings.length > 0 && (
+                      <><span className="text-[#8A92A6]/20">|</span><span className="text-[#E85555]/70">{uniqueFindings.length} risk factor{uniqueFindings.length > 1 ? 's' : ''}</span></>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-center gap-3 sm:gap-5 text-xs font-mono flex-wrap">
+                    {['Agent-α', 'Agent-β', 'Agent-γ'].map(name => {
+                      const meta = AGENT_META[name];
+                      const agentResult = agents.find(a => a.name === name);
+                      const v = agentResult?.verdict || '—';
+                      return (
+                        <span key={name} className="flex items-center gap-1.5">
+                          <span style={{ color: meta.color }}>{meta.label}</span>
+                          <span style={{ color: verdictColor(v) }}>{v}</span>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* ===== CONTRACT METADATA ===== */}
+                <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-xs font-mono text-[#8A92A6]/40">
+                  <a href={`https://testnet.arcscan.app/address/${address}`} target="_blank" rel="noopener noreferrer"
+                    className="text-[#7eb8da]/60 hover:text-[#7eb8da] transition-colors">
+                    {address.slice(0,8)}...{address.slice(-6)} ↗
+                  </a>
+                  <span className="text-[#8A92A6]/15">|</span>
+                  <span>Arc Testnet</span>
+                  <span className="text-[#8A92A6]/15">|</span>
+                  <span>{consensus.agreementCount}/{consensus.totalAgents} consensus</span>
+                  {consensus.settlementBatchId && (
+                    <><span className="text-[#8A92A6]/15">|</span><span className="text-[#3CB878]/60">On-chain verified</span></>
+                  )}
+                </div>
+
+                {/* ===== DECISION SUMMARY ===== */}
+                {uniqueFindings.length > 0 && (
+                  <div className="bg-[#0E1423] border border-[#D4AF37]/10 rounded-xl p-4 sm:p-5">
+                    <p className="font-mono text-sm text-[#8A92A6]/40 uppercase tracking-wider mb-3">
+                      Why this is {consensus.verdict.toLowerCase()}
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-3">
+                      {uniqueFindings.map((f, j) => (
+                        <RiskFactorItem key={j} factor={f} />
+                      ))}
                     </div>
                   </div>
-                </motion.div>
+                )}
 
                 {/* Agent panels */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  {agents.map((agent, i) => {
-                    const meta = AGENT_META[agent.name] || { label: agent.name, model: '', color: '#8A92A6', checks: [] };
-                    const won = consensus.winningAgents.includes(agent.name);
-                    return (
-                      <motion.div key={agent.name} className="bg-[#0E1423] border rounded-2xl overflow-hidden group"
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.15, duration: 0.5 }}
-                        whileHover={{ borderColor: meta.color + '50', y: -2 }} style={{ borderColor: won ? `${meta.color}25` : 'rgba(138,146,166,0.08)' }}>
-                        <motion.div className="h-1" style={{ background: won ? verdictColor(agent.verdict) : '#1a1a2e' }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.5 + i * 0.15, duration: 0.6 }} />
-                        <div className="p-4 sm:p-5">
-                          <div className="flex items-center justify-between mb-4">
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: meta.color }} />
-                                <p className="font-cinzel text-sm tracking-wider" style={{ color: meta.color }}>{meta.label}</p>
-                              </div>
-                              <p className="text-[#8A92A6]/60 text-xs font-mono mt-0.5">{meta.model}</p>
-                            </div>
-                            <motion.span className={`font-cinzel text-xs px-3 py-1 rounded-full uppercase tracking-wider ${verdictBadge(agent.verdict)}`}
-                              initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', delay: 0.6 + i * 0.1 }}>
-                              {agent.verdict}
-                            </motion.span>
-                          </div>
-                          <div className="mb-4">
-                            <div className="flex justify-between text-xs font-mono mb-1.5">
-                              <span className="text-[#8A92A6]/60">Confidence</span>
-                              <motion.span style={{ color: meta.color }}>{agent.confidence}%</motion.span>
-                            </div>
-                            <div className="w-full h-1.5 rounded-full bg-[#F8F8F5]/5">
-                              <motion.div className="h-1.5 rounded-full" style={{ background: verdictColor(agent.verdict) }} initial={{ width: 0 }} animate={{ width: `${agent.confidence}%` }} transition={{ delay: 0.7 + i * 0.1, duration: 1, ease: 'easeOut' }} />
-                            </div>
-                          </div>
-                          <p className="text-[#8A92A6]/80 text-sm leading-relaxed">{agent.reasoning}</p>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {agents.map((agent) => (
+                    <AgentCard
+                      key={agent.name}
+                      agent={agent}
+                      meta={AGENT_META[agent.name] || { label: agent.name, model: '', color: '#8A92A6', checks: [] }}
+                      expanded={expandedAgent === agent.name}
+                      onToggle={() => setExpandedAgent(expandedAgent === agent.name ? null : agent.name)}
+                    />
+                  ))}
                 </div>
+
+                {/* ===== EXPANDED ANALYSIS (full-width) ===== */}
+                {expandedAgent && (() => {
+                  const agent = agents.find(a => a.name === expandedAgent);
+                  if (!agent) return null;
+                  return (
+                    <ExpandedAnalysis
+                      agent={agent}
+                      meta={AGENT_META[agent.name] || { label: agent.name, model: '', color: '#8A92A6' }}
+                    />
+                  );
+                })()}
+
+                {/* Share bar */}
+                <motion.div className="flex items-center justify-center gap-3 flex-wrap" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
+                  <button onClick={handleShare} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-cinzel tracking-wider border border-[#D4AF37]/30 text-[#D4AF37]/80 hover:bg-[#D4AF37]/10 transition-colors">
+                    {copied ? '✓ Link copied!' : <><svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg> Copy link</>}
+                  </button>
+                  <button onClick={handleTweet} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-cinzel tracking-wider border border-[#1DA1F2]/30 text-[#1DA1F2]/80 hover:bg-[#1DA1F2]/10 transition-colors">
+                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Tweet
+                  </button>
+                </motion.div>
 
                 {/* Live Scan Activity + Intelligence Feed */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                   <motion.div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-4 sm:p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
                     <div className="flex items-center gap-2 mb-4">
                       <span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />
-                      <p className="font-mono text-xs text-[#8A92A6]/60 tracking-wider uppercase">Live Scan Activity</p>
+                      <p className="font-mono text-sm text-[#8A92A6]/60 tracking-wider uppercase">Live Scan Activity</p>
                     </div>
                     {liveFeed.length > 0 ? (
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       {liveFeed.map((item, i) => (
-                        <motion.div key={i} className="flex items-center gap-3 text-xs font-mono py-1.5 border-b border-[#D4AF37]/3 last:border-0"
+                        <motion.div key={i} className="flex items-center gap-3 text-sm font-mono py-2 border-b border-[#D4AF37]/3 last:border-0"
                           initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.0 + i * 0.1 }}>
                           <span className="text-[#8A92A6]/30 w-14 flex-shrink-0">{item.time}</span>
                           <span className="text-[#8A92A6]/50">{item.addr}</span>
                           <span className="text-[#8A92A6]/50">{item.consensus}</span>
-                          <span className="uppercase tracking-wider font-cinzel text-[10px] ml-auto" style={{ color: feedVerdictColor(item.verdict) }}>{item.verdict}</span>
+                          <span className="uppercase tracking-wider font-medium text-xs ml-auto" style={{ color: verdictColor(item.verdict) }}>{item.verdict}</span>
                         </motion.div>
                       ))}
                     </div>
                     ) : (
-                      <p className="font-mono text-xs text-[#8A92A6]/25 py-4 text-center">No scans yet.</p>
+                      <p className="font-mono text-sm text-[#8A92A6]/25 py-4 text-center">No scans yet.</p>
                     )}
                   </motion.div>
                   <motion.div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-4 sm:p-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }}>
                     <div className="flex items-center gap-2 mb-4">
                       <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
-                      <p className="font-mono text-xs text-[#8A92A6]/60 tracking-wider uppercase">Intelligence Feed</p>
+                      <p className="font-mono text-sm text-[#8A92A6]/60 tracking-wider uppercase">Intelligence Feed</p>
                     </div>
                     {liveFeed.length > 0 ? (
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       {liveFeed.slice(0, 6).map((item, i) => (
-                        <motion.div key={i} className="flex items-center gap-3 text-xs font-mono py-1.5 border-b border-[#D4AF37]/3 last:border-0"
+                        <motion.div key={i} className="flex items-center gap-3 text-sm font-mono py-2 border-b border-[#D4AF37]/3 last:border-0"
                           initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.1 + i * 0.1 }}>
                           <span className="text-[#8A92A6]/30 w-14 flex-shrink-0">{item.time}</span>
                           <span className="text-[#8A92A6]/50">Consensus: {item.verdict} ({item.consensus})</span>
@@ -871,29 +871,18 @@ export default function Home() {
                       ))}
                     </div>
                     ) : (
-                      <p className="font-mono text-xs text-[#8A92A6]/25 py-4 text-center">Intelligence events appear during scans.</p>
+                      <p className="font-mono text-sm text-[#8A92A6]/25 py-4 text-center">Intelligence events appear during scans.</p>
                     )}
                   </motion.div>
                 </div>
 
                 {/* Recent Verdicts */}
                 {recentVerdicts.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">{recentVerdicts.map((v,i)=>(<motion.div key={v.name+'-'+i} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-3 sm:p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-xl sm:text-2xl tracking-wider mb-1 ${verdictGlow(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">{recentVerdicts.map((v,i)=>(<motion.div key={v.name+'-'+i} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-3 sm:p-4 text-center" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.6+i*0.08}} whileHover={{borderColor:`${verdictColor(v.verdict)}40`,y:-1}}><p className="font-mono text-xs text-[#8A92A6]/50 mb-2">{v.name}</p><p className={`font-cinzel text-xl sm:text-2xl tracking-wider mb-1 ${verdictGlowClass(v.verdict)}`} style={{color:verdictColor(v.verdict)}}>{v.verdict}</p><p className="font-mono text-[10px] text-[#8A92A6]/40">{v.consensus} · {v.time}</p></motion.div>))}</div>
                 ) : (
                 <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-xl p-4 sm:p-5 text-center">
                   <p className="font-mono text-sm text-[#8A92A6]/40">No completed analyses yet.</p>
                   <p className="font-mono text-xs text-[#8A92A6]/20 mt-1">Awaiting first contract scan.</p>
-                </div>
-                )}
-
-                {/* Agent Performance */}
-                {agentPerf.length > 0 ? (
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-4 sm:p-6"><p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p><div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">{agentPerf.map((a,i)=>(<motion.div key={a.label} className="text-center" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.7+i*0.1}}><p className="font-cinzel text-base tracking-wider mb-1" style={{color:a.color}}>{a.label}</p><p className="text-[#8A92A6]/40 text-xs font-mono mb-3">{a.model}</p><p className="font-mono text-3xl sm:text-4xl font-bold mb-1" style={{color:a.color}}>{a.accuracy}%</p><div className="w-28 h-1.5 mx-auto rounded-full bg-[#F8F8F5]/5 mb-2"><motion.div className="h-1.5 rounded-full" style={{background:a.color}} initial={{width:0}} animate={{width:`${a.accuracy}%`}} transition={{delay:1+i*0.1,duration:1}}/></div><p className="text-[#8A92A6]/40 text-xs font-mono">{a.total.toLocaleString()} analyses · {a.avgConf}% avg</p><p className="text-[#3CB878] text-xs font-mono mt-1">↑ {a.trend} this week</p></motion.div>))}</div></div>
-                ) : (
-                <div className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-6 text-center">
-                  <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4">Agent Performance</p>
-                  <p className="font-mono text-sm text-[#8A92A6]/40">No performance data yet.</p>
-                  <p className="font-mono text-xs text-[#8A92A6]/20 mt-1">ELO scores populate after agent staking rounds complete.</p>
                 </div>
                 )}
 
@@ -918,65 +907,35 @@ export default function Home() {
           </AnimatePresence>
 
           {!loading && !consensus && (
-            <div className="max-w-6xl mx-auto w-full space-y-10 sm:space-y-16 pb-8 sm:pb-12">
-
-              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:2}}>
-                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4 sm:mb-6 text-center">How Argus Works</p>
-                <div className="flex flex-col items-center gap-2 px-2">
-                  {[
-                    {step:'01',label:'Contract Address',desc:'User submits a token contract for analysis',color:'#D4AF37'},
-                    {step:'02',label:'Agent α · DeepSeek-V3',desc:'Contract logic analysis — ownership, proxies, honeypots',color:'#7eb8da'},
-                    {step:'03',label:'Agent β · Claude Sonnet 4',desc:'Tokenomics analysis — holders, liquidity, whales',color:'#D4AF37'},
-                    {step:'04',label:'Agent γ · Rule Engine',desc:'Deterministic checks — patterns, exploits, signatures',color:'#b57ed8'},
-                    {step:'05',label:'Consensus Formation',desc:'2/3 threshold — agents stake real USDC on verdicts',color:'#D4AF37'},
-                    {step:'06',label:'On-Chain Verdict',desc:'Final result recorded immutably on Arc testnet',color:'#3CB878'},
-                  ].map((s,i)=>(<motion.div key={s.step} className="flex items-center gap-3 sm:gap-4 w-full max-w-md" initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}} transition={{delay:2.2+i*0.12}}>
-                    <span className="font-mono text-[10px] sm:text-xs w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center border flex-shrink-0" style={{color:s.color,borderColor:s.color+'30'}}>{s.step}</span>
-                    <div><p className="text-xs sm:text-sm text-[#F8F8F5]/90">{s.label}</p><p className="text-[10px] text-[#8A92A6]/50 font-mono hidden sm:block">{s.desc}</p></div>
-                    {i<5&&<span className="text-[#D4AF37]/20 ml-auto">↓</span>}
-                  </motion.div>))}
+            <div className="max-w-2xl mx-auto space-y-6">
+              {/* Latest scan — real data from backend */}
+              {latestScan ? (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/10 rounded-xl p-5">
+                  <p className="font-mono text-xs text-[#8A92A6]/40 uppercase tracking-wider mb-3">Latest Analysis</p>
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div>
+                      <a href={`/scan/${latestScan.address}`} className="font-mono text-sm text-[#7eb8da] hover:underline">
+                        {latestScan.address.slice(0,8)}...{latestScan.address.slice(-6)}
+                      </a>
+                      <p className="font-mono text-xs text-[#8A92A6]/30 mt-1">{latestScan.time}</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="font-mono text-sm text-[#8A92A6]/50">{latestScan.consensus}</span>
+                      <span className={`font-medium text-sm px-3 py-1 rounded-full uppercase tracking-wider ${
+                        latestScan.verdict === 'SAFE' ? 'bg-[#3CB878]/10 text-[#3CB878] border border-[#3CB878]/20' :
+                        latestScan.verdict === 'RISKY' ? 'bg-[#E8A838]/10 text-[#E8A838] border border-[#E8A838]/20' :
+                        'bg-[#E85555]/10 text-[#E85555] border border-[#E85555]/20'
+                      }`}>{latestScan.verdict}</span>
+                      <span className="font-mono text-sm text-[#F8F8F5]/60">{latestScan.confidence}%</span>
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
-
-              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:2.5}}>
-                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4 sm:mb-6 text-center">Meet the Agents</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 px-2 sm:px-0">
-                  {Object.entries(AGENT_META).map(([key,meta])=>(<motion.div key={key} className="bg-[#0E1423] border border-[#D4AF37]/8 rounded-2xl p-4 sm:p-6 group hover:border-[#D4AF37]/20 transition-all duration-300" whileHover={{y:-2}}>
-                    <div className="w-10 h-10 rounded-full mb-4 flex items-center justify-center text-lg font-cinzel" style={{background:meta.color+'15',color:meta.color}}>{['α','β','γ'][['Agent-α','Agent-β','Agent-γ'].indexOf(key)]}</div>
-                    <p className="font-cinzel text-base tracking-wider mb-1" style={{color:meta.color}}>{meta.label}</p>
-                    <p className="text-[#8A92A6]/50 text-xs font-mono mb-4">{meta.model}</p>
-                    <div className="space-y-1.5">{meta.checks.map(c=>(<p key={c} className="text-[#8A92A6]/60 text-xs font-mono flex items-center gap-2"><span className="w-1 h-1 rounded-full" style={{background:meta.color}}/>{c}</p>))}</div>
-                  </motion.div>))}
+              ) : (
+                <div className="text-center py-6">
+                  <p className="font-mono text-base text-[#8A92A6]/30">No scans yet</p>
+                  <p className="font-mono text-sm text-[#8A92A6]/15 mt-1">Paste an address above to run your first analysis.</p>
                 </div>
-              </motion.div>
-
-              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:2.8}}>
-                <p className="font-cinzel text-sm text-[#D4AF37]/80 tracking-wider uppercase mb-4 sm:mb-6 text-center">Example Analysis</p>
-                <div className="bg-[#0E1423] border border-[#3CB878]/20 rounded-2xl p-4 sm:p-6 max-w-lg mx-auto mx-2 sm:mx-auto" style={{boxShadow:'0 0 40px rgba(60,184,120,0.05)'}}>
-                  <div className="flex items-center justify-between mb-4"><p className="font-mono text-sm text-[#7eb8da]">USDC</p><span className="font-cinzel text-xs px-3 py-1 rounded-full badge-safe">SAFE</span></div>
-                  <div className="flex items-center gap-4 mb-4"><span className="font-cinzel text-2xl text-[#3CB878]">3/3</span><span className="text-xs font-mono text-[#8A92A6]">Consensus · 96% confidence</span></div>
-                  <div className="space-y-1.5 text-xs font-mono text-[#3CB878]/80"><p>✓ Ownership verified</p><p>✓ No honeypot detected</p><p>✓ Deep liquidity confirmed</p><p>✓ Holder distribution healthy</p><p>✓ No deterministic risks</p></div>
-                </div>
-              </motion.div>
-
-              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:3}}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-2 sm:px-0">
-                  {[{agent:'Agent α',model:'DeepSeek-V3',desc:'Contract logic analysis — ownership, proxies, honeypots, access control',color:'#7eb8da'},{agent:'Agent β',model:'Claude Sonnet 4',desc:'Tokenomics analysis — holders, liquidity, whales, trading patterns',color:'#D4AF37'},{agent:'Agent γ',model:'Rule Engine',desc:'Deterministic security checks — patterns, exploits, signatures',color:'#b57ed8'},{agent:'Consensus Engine',model:'2/3 Threshold',desc:'Verdict aggregation with real USDC stakes — final outcome recorded on-chain',color:'#3CB878'}].map((c,i)=>(<motion.div key={c.agent} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-4 sm:p-5 text-center group hover:border-[#D4AF37]/15 transition-all duration-300" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:3+i*0.1}}>
-                    <span className="font-cinzel text-lg tracking-wider mb-2 block" style={{color:c.color}}>{c.agent}</span>
-                    <p className="text-[#8A92A6]/50 text-[10px] font-mono mb-2">{c.model}</p>
-                    <p className="text-[#8A92A6]/60 text-xs leading-relaxed">{c.desc}</p>
-                  </motion.div>))}
-                </div>
-              </motion.div>
-
-              <motion.div className="max-w-4xl mx-auto" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:3.3}}>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-1 sm:px-0">
-                  {[{value:stats.queries.toLocaleString(),label:'Contracts Analyzed',sub:`Live on Arc Testnet`},{value:stats.consensusReached.toLocaleString(),label:'Consensus',sub:stats.queries>0?`${Math.round(stats.consensusReached/stats.queries*100)}% rate`:'Awaiting data'},{value:stats.onChainRecords.toLocaleString(),label:'On-Chain Records',sub:'Immutable on Arc'},{value:stats.avgConfidence+'%',label:'Avg Confidence',sub:stats.queries>0?'From real scans':'No data yet'}].map((s,i)=>(<motion.div key={s.label} className="bg-[#0E1423] border border-[#D4AF37]/5 rounded-2xl p-3 sm:p-5 text-center" initial={{opacity:0,scale:0.9}} animate={{opacity:1,scale:1}} transition={{delay:3.3+i*0.1}}>
-                    <p className="font-mono text-xl sm:text-2xl font-bold text-[#F8F8F5] mb-1">{s.value}</p><p className="text-[#8A92A6]/40 text-[10px] font-mono uppercase tracking-wider">{s.label}</p><p className="text-[#8A92A6]/20 text-[9px] font-mono mt-1">{s.sub}</p>
-                  </motion.div>))}
-                </div>
-              </motion.div>
-
+              )}
             </div>
           )}
         </main>
