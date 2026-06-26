@@ -658,29 +658,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Arc Ecosystem — hide when results present */}
-          {!consensus && (
-            <div className="mt-6 max-w-2xl mx-auto">
-              <p className="text-[10px] font-mono text-[#8A92A6]/25 uppercase tracking-wider text-center mb-2">Arc Ecosystem</p>
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {[
-                  { label: 'Arc USDC', addr: '0x65bCeeAa40F538dB48c552Ef2757Ff21062826A7', color: '#3CB878' },
-                  { label: 'Arc Bridge', addr: '0xB9C21A6fF5C6d95BCd0Ae9A9df6aA442d8BEf826', color: '#7eb8da' },
-                  { label: 'Argus Oracle', addr: '0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8', color: '#D4AF37' },
-                ].map(token => (
-                  <button
-                    key={token.addr}
-                    onClick={() => { setAddress(token.addr); setError(''); }}
-                    className="px-3 py-1.5 rounded-lg text-xs font-mono border border-[#D4AF37]/10 bg-[#0E1423] text-[#8A92A6]/50 hover:border-[#D4AF37]/30 hover:text-[#8A92A6]/80 transition-all"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full inline-block mr-1.5" style={{ background: token.color }} />
-                    {token.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Scan progress */}
           <AnimatePresence>
             {scanProgress && (
