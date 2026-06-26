@@ -143,6 +143,20 @@ Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallet
 
 ---
 
+## Arc Ecosystem
+
+Argus is built FOR Arc, not just deployed on Arc. The homepage features pre-loaded Arc-native addresses for one-click scanning:
+
+| Contract | Address | Purpose |
+|----------|---------|---------|
+| **Arc USDC** | `0x65bCeeAa40...2628A7` | Official Arc USDC — agents correctly identify as SAFE |
+| **Arc Bridge** | `0xB9C21A6fF5...8BEf826` | Arc bridge contract — infrastructure verification |
+| **Argus Oracle** | `0x563b2DA572...Cb46C8` | Our own on-chain verdict log — self-test |
+
+Agents discriminate between legitimate Arc infrastructure and unknown tokens. This proves the models understand Arc's ecosystem rather than treating every contract as a generic EVM address.
+
+---
+
 ## Agent Prompts
 
 *All three agent system prompts are open source and verifiable in the repo.*
