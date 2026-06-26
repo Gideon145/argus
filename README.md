@@ -274,8 +274,8 @@ Most security tools are single-model wrappers. Argus:
 |-------|------|--------|
 | **v0.1–v0.8** | Core oracle, paid scans, ELO, agent economy, Circle wallets, App Kit | ✅ Shipped (Jun 15–23) |
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
-| **v0.10** | DexScreener trending feed, CLI tool (`npx argus scan`), retention features | Planned |
-| **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon (Arc is testnet-only) |
+| **v0.10** | CLI tool (`npx argus scan`), retention features, polish | Planned |
+| **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 Circle primitive completion:
 - Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit ✅ (all 5/5)
