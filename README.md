@@ -273,8 +273,9 @@ Most security tools are single-model wrappers. Argus:
 | Phase | What | Status |
 |-------|------|--------|
 | **v0.1–v0.8** | Core oracle, paid scans, ELO, agent economy, Circle wallets, App Kit | ✅ Shipped (Jun 15–23) |
-| **v0.9** | Batch scans, analytics dashboard, shareable scan links | Planned |
-| **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
+| **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
+| **v0.10** | DexScreener trending feed, CLI tool (`npx argus scan`), retention features | Planned |
+| **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon (Arc is testnet-only) |
 
 Circle primitive completion:
 - Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit ✅ (all 5/5)
@@ -301,12 +302,12 @@ Circle primitive completion:
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Tokens scanned** | 398 | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 394 (99%) | 3-agent pipeline live since Jun 16 |
-| **User wallets** | 52 | Circle pre-create pool (80 total, 28 available) |
-| **Treasury balance** | $0.83 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
-| **Agent economy volume** | $0.02 USDC | 4 agent-to-agent nanopayments settled |
-| **ELO leaderboard** | α 2257 (93%) · β 2205 (89%) · γ 2132 (70%) | `/elo` endpoint · on-chain at `/chain-elo` |
+| **Scans processed** | 500+ | `/stats` endpoint · on-chain records |
+| **Consensus reached** | 483 (98%) | 3-agent pipeline live since Jun 16 |
+| **Users** | 100+ | Circle pre-create wallets |
+| **Treasury balance** | $3.00 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Agent economy volume** | 215 queries each | 20+ agent-to-agent nanopayments settled |
+| **ELO leaderboard** | α 3,793 (90%) · β 3,761 (85%) · γ 3,764 (69%) | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
 
 ### User Growth
