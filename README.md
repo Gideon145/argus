@@ -290,7 +290,7 @@ Most security tools are single-model wrappers. Argus:
 |-------|------|--------|
 | **v0.1–v0.8** | Core oracle, paid scans, ELO, agent economy, Circle wallets, App Kit | ✅ Shipped (Jun 15–23) |
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
-| **v0.10** | CLI tool (`npx argus scan`), retention features, polish | 🔨 In progress (Jun 29) |
+| **v0.10** | CLI tool (`npx argus-scan`), retention features, polish | ✅ Shipped (Jun 29) |
 | **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 Circle primitive completion:
@@ -368,19 +368,19 @@ Scan any address from your terminal — no browser needed:
 
 ```bash
 # Scan an address
-node cli/index.js scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+npx argus-scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
 
 # JSON output (pipe-friendly)
-node cli/index.js scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 --json
+npx argus-scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 --json
 
 # Live stats
-node cli/index.js stats
+npx argus-scan stats
 
-# Case Files
-node cli/index.js shame
+# Help
+npx argus-scan help
 ```
 
-> **Coming soon:** `npx argus scan 0x...` — publishing to npm before the hackathon deadline. For now, run directly with Node.
+> Published on npm as [`argus-scan`](https://www.npmjs.com/package/argus-scan). Zero dependencies, Node 18+.
 
 ---
 
