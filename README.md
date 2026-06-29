@@ -34,7 +34,7 @@
 >
 > No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
-| **500+ scans** | **$3.00 treasury** | **100+ users** | **5/5 Circle primitives** |
+| **648 scans** | **$5.80 treasury** | **100+ users** | **5/5 Circle primitives** | **Shadow Float V2** |
 |---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/_J39OKjtDyo](https://youtube.com/shorts/_J39OKjtDyo) · **X:** [@Argus_arc](https://x.com/Argus_arc)
@@ -143,6 +143,22 @@ Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallet
 
 ---
 
+## Shadow Float V2 — Agent Credit Lines
+
+All three Argus agents have on-chain credit lines via [Shadow Float V2](https://testnet.arcscan.app/address/0x20dcA96B0C487D94De885c726c956ffaF38b12C2) on Arc. Each agent signs EIP-712 FloatSpendIntents, borrows USDC from Shadow's sponsor reserve, and repays after the scan cycle — a full autonomous credit lifecycle with no human intervention.
+
+| Agent | Borrow | Repay | ArcScan |
+|-------|--------|-------|---------|
+| **Agent α** (`0x5c0b33`) | `0x50831f...53aa2c` | `0x4ae592...0bf896` | [Borrow](https://testnet.arcscan.app/tx/0x50831fd00ef83a2c5fdb5bd5829ac6800c783aa34ec2149eb92c1bb38553aa2c) · [Repay](https://testnet.arcscan.app/tx/0x4ae5922841cb91b090e2785e26b94789a9c4028340bea5c162106657280bf896) |
+| **Agent β** (`0x7D4897`) | `0x03d67f...a9ba9` | `0xac1b0d...97d679` | [Borrow](https://testnet.arcscan.app/tx/0x03d67f3f911abda8e862700787f33d5ad7002e49a6fd989172dfbca5d6aa9ba9) · [Repay](https://testnet.arcscan.app/tx/0xac1b0d231b0d19ebcb8e18877e7fcffbb2cbf990f204f648c288053bb597d679) |
+| **Agent γ** (`0x43e063`) | `0x49acee...dc33e` | `0xad8301...bb1682` | [Borrow](https://testnet.arcscan.app/tx/0x49aceee516b7eb037c9b475cdf9f238335eea9975c2102731b05826c6a0dc33e) · [Repay](https://testnet.arcscan.app/tx/0xad8301ca4edbbed18bc7204d8da9be53492116649a326728ad0ca5bc19bb1682) |
+
+**Why this matters:** Autonomous agents need autonomous capital. Shadow Float V2 gives each agent a sponsor-backed credit line — they borrow to cover x402 data costs, produce verdicts, then repay from earnings. Six on-chain transactions, all verified. Full lifecycle: sign → bind → spend → approve → repay. No private keys exposed to the credit protocol — only EIP-712 signed intents.
+
+This is cross-protocol agent infrastructure on Arc: Argus agents using Shadow Float for credit, Circle for wallets, and Gateway x402 for nanopayments — three protocols, one autonomous agent economy.
+
+---
+
 ## Agent Prompts
 
 *All three agent system prompts are open source and verifiable in the repo.*
@@ -201,7 +217,7 @@ MetaMask remains available as a secondary option. But the primary path requires 
 # Agent health
 curl https://argus-agent-production-ab97.up.railway.app/health
 
-# Current stats (500+ scans, 98% consensus rate)
+# Current stats (648 scans, 95% consensus rate)
 curl https://argus-agent-production-ab97.up.railway.app/stats | jq .
 
 # ELO leaderboard
@@ -274,7 +290,7 @@ Most security tools are single-model wrappers. Argus:
 |-------|------|--------|
 | **v0.1–v0.8** | Core oracle, paid scans, ELO, agent economy, Circle wallets, App Kit | ✅ Shipped (Jun 15–23) |
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
-| **v0.10** | CLI tool (`npx argus scan`), retention features, polish | Planned |
+| **v0.10** | CLI tool (`npx argus scan`), retention features, polish | 🔨 In progress (Jun 29) |
 | **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 Circle primitive completion:
@@ -302,13 +318,14 @@ Circle primitive completion:
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | 642 | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 613 (95%) | 3-agent pipeline live since Jun 16 |
+| **Scans processed** | 648 | `/stats` endpoint · on-chain records |
+| **Consensus reached** | 618 (95%) | 3-agent pipeline live since Jun 16 |
 | **Users** | 100+ | Circle pre-create wallets |
-| **Treasury balance** | $3.00 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
-| **Agent economy volume** | 215 queries each | 20+ agent-to-agent nanopayments settled |
+| **Treasury balance** | $5.80 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Agent economy volume** | 215+ queries each | 20+ agent-to-agent nanopayments settled |
 | **ELO leaderboard** | α 3,793 (90%) · β 3,761 (85%) · γ 3,764 (69%) | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
+| **Shadow Float V2** | 3/3 agents | Full borrow-repay lifecycle · 6 on-chain txs verified |
 
 ### User Growth
 
@@ -326,6 +343,9 @@ Circle primitive completion:
 | Jun 24 | 63 | 467 | $1.27 | UI redesign · Case Files · shareable links · v0.9 submitted |
 | Jun 25 | 100+ | 500+ | $3.00 | 100 users milestone · 500 scans crossed · v0.9 shipped |
 | **Jun 26** | **100+** | **642** | **$3.00** | **Arc Ecosystem section · v0.10 live** |
+| Jun 27 | 100+ | 644 | $5.63 | Shadow Float V2 Alpha — borrow + repay lifecycle closed |
+| Jun 28 | 100+ | 646 | $5.79 | Shadow Float V2 Beta & Gamma — all 3 agents with credit lines |
+| **Jun 29** | **100+** | **648** | **$5.80** | **CLI tool in progress · README polished · 8 days to submission** |
 
 ---
 
