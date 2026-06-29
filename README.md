@@ -345,7 +345,42 @@ Circle primitive completion:
 | **Jun 26** | **100+** | **642** | **$3.00** | **Arc Ecosystem section · v0.10 live** |
 | Jun 27 | 100+ | 644 | $5.63 | Shadow Float V2 Alpha — borrow + repay lifecycle closed |
 | Jun 28 | 100+ | 646 | $5.79 | Shadow Float V2 Beta & Gamma — all 3 agents with credit lines |
-| **Jun 29** | **100+** | **648** | **$5.80** | **CLI tool in progress · README polished · 8 days to submission** |
+| **Jun 29** | **100+** | **648** | **$5.80** | **CLI shipped to npm · `npx argus-scan` live · Discord + X posted** |
+
+---
+
+## CLI: Scan from Your Terminal
+
+No browser. No MetaMask. No signup. Just a terminal.
+
+```bash
+npx argus-scan@latest 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+```
+
+**What happens:**
+1. First run auto-creates a Circle wallet (stored locally, no key management)
+2. Pays $0.01 USDC to treasury via Gateway x402 — real on-chain transaction
+3. Three agents analyze independently (DeepSeek, Claude, Rule Engine)
+4. Consensus locks in — dissenters pay winners 0.0005 USDC each
+5. Verdict recorded on-chain via ArgusOracle on Arc
+
+Every CLI scan is identical to a website scan — same agents, same consensus, same on-chain record. The only difference is where you type.
+
+```bash
+# Scan any token address
+npx argus-scan@latest 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+
+# Pipe-friendly JSON
+npx argus-scan@latest 0x... --json | jq .result.verdict
+
+# Live stats
+npx argus-scan@latest stats
+
+# Show your Circle wallet
+npx argus-scan@latest whoami
+```
+
+📦 Published as [`argus-scan`](https://www.npmjs.com/package/argus-scan) on npm. Zero dependencies, Node 18+. Source in [`cli/`](cli/).
 
 ---
 
@@ -361,26 +396,6 @@ cd frontend && npm install && npm run dev
 # Contracts
 cd contracts && npm install && npx hardhat compile
 ```
-
-### CLI Tool
-
-Scan any address from your terminal — no browser needed:
-
-```bash
-# Scan an address
-npx argus-scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
-
-# JSON output (pipe-friendly)
-npx argus-scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 --json
-
-# Live stats
-npx argus-scan stats
-
-# Help
-npx argus-scan help
-```
-
-> Published on npm as [`argus-scan`](https://www.npmjs.com/package/argus-scan). Zero dependencies, Node 18+.
 
 ---
 
