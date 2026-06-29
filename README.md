@@ -362,6 +362,26 @@ cd frontend && npm install && npm run dev
 cd contracts && npm install && npx hardhat compile
 ```
 
+### CLI Tool
+
+Scan any address from your terminal — no browser needed:
+
+```bash
+# Scan an address
+node cli/index.js scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+
+# JSON output (pipe-friendly)
+node cli/index.js scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 --json
+
+# Live stats
+node cli/index.js stats
+
+# Case Files
+node cli/index.js shame
+```
+
+> **Coming soon:** `npx argus scan 0x...` — publishing to npm before the hackathon deadline. For now, run directly with Node.
+
 ---
 
 ## Team

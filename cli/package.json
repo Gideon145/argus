@@ -1,0 +1,18 @@
+{
+  "name": "argus",
+  "version": "0.10.0",
+  "description": "Argus CLI — multi-agent security oracle. Scan any token address from your terminal.",
+  "main": "index.js",
+  "bin": {
+    "argus": "./index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": ["argus", "security", "oracle", "scan", "token", "audit", "ai", "lepton"],
+  "license": "MIT",
+  "repository": "Gideon145/argus",
+  "engines": {
+    "node": ">=18"
+  }
+}
