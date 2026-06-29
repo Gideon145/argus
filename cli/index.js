@@ -2,11 +2,73 @@
 
 // ─── Argus CLI ───────────────────────────────────────────
 // Multi-agent security oracle — scan any token address
-// Usage: npx argus scan 0x... | npx argus stats
+// Usage: npx argus-scan 0x... | npx argus-scan stats
 // ─────────────────────────────────────────────────────────
 
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+const crypto = require('crypto');
 const API = 'argus-agent-production-ab97.up.railway.app';
+
+// ─── Config ──────────────────────────────────────────────
+
+const CONFIG_DIR = path.join(os.homedir(), '.argus');
+const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+
+function loadConfig() {
+  try {
+    if (fs.existsSync(CONFIG_FILE)) {
+      return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+    }
+  } catch {}
+  return null;
+}
+
+function saveConfig(cfg) {
+  if (!fs.existsSync(CONFIG_DIR)) fs.mkdirSync(CONFIG_DIR, { recursive: true });
+  fs.writeFileSync(CONFIG_FILE, JSON.stringify(cfg, null, 2), 'utf8');
+}
+
+// ─── Wallet setup ────────────────────────────────────────
+
+async function ensureWallet() {
+  let cfg = loadConfig();
+
+  // Already registered
+  if (cfg && cfg.userId && cfg.walletAddress) {
+    return cfg;
+  }
+
+  // First time — register a Circle wallet
+  const userId = 'cli-' + crypto.randomBytes(8).toString('hex');
+  process.stderr.write(`  First time setup — creating your wallet...\n`);
+
+  let wallet;
+  try {
+    wallet = await apiPost('/wallet/assign', { userId });
+  } catch (e) {
+    throw new Error(`Failed to create wallet: ${e.message}`);
+  }
+
+  if (!wallet || !wallet.address) {
+    throw new Error('Wallet creation returned no address.');
+  }
+
+  cfg = {
+    userId,
+    walletAddress: wallet.address,
+    walletId: wallet.walletId || null,
+    createdAt: new Date().toISOString(),
+  };
+  saveConfig(cfg);
+
+  process.stderr.write(`  Wallet created: ${wallet.address.slice(0, 10)}...\n`);
+  process.stderr.write(`  Funded with 0.50 test USDC (one-time)\n\n`);
+
+  return cfg;
+}
 
 // ─── Helpers ─────────────────────────────────────────────
 
@@ -125,10 +187,23 @@ async function cmdScan(address, opts = {}) {
     process.exit(1);
   }
 
-  // JSON mode — silent, no banner, no spinner, output raw JSON to stdout
+  // Ensure wallet is set up
+  let cfg;
+  try {
+    cfg = await ensureWallet();
+  } catch (e) {
+    console.error(`${C.red}Error:${C.reset} ${e.message}`);
+    process.exit(1);
+  }
+
+  // JSON mode — silent, no banner, no spinner
   if (opts.json) {
     try {
-      const result = await apiPost('/debug/scan', { contractAddress: address, chain: 'arc' });
+      const result = await apiPost('/scan/circle', {
+        userId: cfg.userId,
+        contractAddress: address,
+        chain: 'arc',
+      });
       console.log(JSON.stringify(result, null, 2));
     } catch (e) {
       console.error(JSON.stringify({ error: 'API unreachable', detail: e.message }));
@@ -138,11 +213,12 @@ async function cmdScan(address, opts = {}) {
   }
 
   console.log(BANNER);
-  console.log(`${C.dim}  Scanning ${address}...${C.reset}\n`);
+  console.log(`${C.dim}  Wallet: ${cfg.walletAddress.slice(0, 10)}...  ·  Scanning ${address}...${C.reset}\n`);
 
   let result;
   try {
-    result = await spinner('Agents analyzing...', apiPost('/debug/scan', {
+    result = await spinner('Agents analyzing...', apiPost('/scan/circle', {
+      userId: cfg.userId,
       contractAddress: address,
       chain: 'arc',
     }));
@@ -198,13 +274,18 @@ async function cmdScan(address, opts = {}) {
   }
 
   // Footer
+  const payment = result.payment || {};
+  const txHash = payment.txHash || null;
   console.log(`${C.dim}  ─────────────────────────────────────────────${C.reset}`);
-  console.log(`${C.dim}  Fee: $0.01 USDC (waived for CLI) · argusarc.xyz${C.reset}`);
+  console.log(`${C.dim}  Paid: $0.01 USDC  ·  Treasury grew  ·  argusarc.xyz${C.reset}`);
+  if (txHash) console.log(`${C.dim}  Tx: ${txHash.slice(0, 20)}...  ·  ArcScan${C.reset}`);
   console.log(`${C.dim}  Settlement: ${r.settlementBatchId || 'n/a'}${C.reset}\n`);
 }
 
 async function cmdStats() {
   console.log(BANNER);
+  const cfg = loadConfig();
+
   let data;
   try {
     data = await spinner('Fetching stats...', apiGet('/treasury'));
@@ -222,8 +303,25 @@ async function cmdStats() {
   console.log(`    ${C.bold}Treasury:${C.reset}      $${t.balance || '?'} USDC`);
   console.log(`    ${C.bold}On-chain:${C.reset}      ${s.onChainRecords || '?'} records`);
   console.log(`    ${C.bold}Network:${C.reset}       Arc testnet (5042002)`);
+  if (cfg) {
+    console.log(`\n  ${C.bold}Your Wallet${C.reset}`);
+    console.log(`    ${C.bold}Address:${C.reset}      ${cfg.walletAddress}`);
+    console.log(`    ${C.bold}User ID:${C.reset}       ${cfg.userId}`);
+  }
   console.log(`\n  ${C.dim}Treasury: ${t.address}${C.reset}`);
   console.log(`  ${C.dim}Explorer: ${t.explorer || 'https://testnet.arcscan.app'}${C.reset}\n`);
+}
+
+async function cmdWhoami() {
+  const cfg = loadConfig();
+  if (!cfg) {
+    console.log(`  No wallet found. Run a scan first to create one.`);
+    return;
+  }
+  console.log(`  ${C.bold}Wallet:${C.reset}  ${cfg.walletAddress}`);
+  console.log(`  ${C.bold}User ID:${C.reset} ${cfg.userId}`);
+  console.log(`  ${C.bold}Created:${C.reset} ${cfg.createdAt || 'unknown'}`);
+  console.log(`  ${C.dim}Config: ${CONFIG_FILE}${C.reset}\n`);
 }
 
 async function cmdShame() {
@@ -254,14 +352,15 @@ async function main() {
     console.log(`  ${C.bold}Usage:${C.reset}`);
     console.log(`    npx argus-scan <address>          Scan a token address`);
     console.log(`    npx argus-scan <address> --json   JSON output`);
-    console.log(`    npx argus-scan scan <address>     Explicit scan`);
     console.log(`    npx argus-scan stats              Live stats`);
+    console.log(`    npx argus-scan whoami             Show your wallet`);
     console.log(`    npx argus-scan help               This help`);
     console.log(`\n  ${C.bold}Examples:${C.reset}`);
     console.log(`    npx argus-scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`);
     console.log(`    npx argus-scan 0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE --json`);
     console.log(`    npx argus-scan stats`);
-    console.log(`\n  ${C.dim}Live: https://argusarc.xyz  ·  npm: argus-scan${C.reset}\n`);
+    console.log(`\n  ${C.bold}Flow:${C.reset} First scan creates a Circle wallet + funds it. Every scan pays $0.01 USDC to treasury.`);
+    console.log(`  ${C.dim}Live: https://argusarc.xyz  ·  npm: argus-scan${C.reset}\n`);
     return;
   }
 
@@ -274,6 +373,9 @@ async function main() {
     }
     case 'stats':
       await cmdStats();
+      break;
+    case 'whoami':
+      await cmdWhoami();
       break;
     case 'shame':
       await cmdShame();
