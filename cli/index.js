@@ -234,21 +234,34 @@ async function cmdShame() {
 
 // ─── Main ────────────────────────────────────────────────
 
+function isAddress(s) {
+  return s && /^0x[a-fA-F0-9]{40}$/.test(s);
+}
+
 async function main() {
   const args = process.argv.slice(2);
-  const command = args[0];
+  let command = args[0];
+
+  // Auto-detect: if first arg looks like an address, default to scan
+  if (isAddress(command)) {
+    const json = args.includes('--json') || args.includes('-j');
+    await cmdScan(command, { json });
+    return;
+  }
 
   if (!command || command === 'help' || command === '--help' || command === '-h') {
     console.log(BANNER);
     console.log(`  ${C.bold}Usage:${C.reset}`);
-    console.log(`    npx argus scan <address>     Scan a token address`);
-    console.log(`    npx argus scan <address> --json   JSON output`);
-    console.log(`    npx argus stats              Show live stats`);
-    console.log(`    npx argus shame             Case Files archive`);
+    console.log(`    npx argus-scan <address>          Scan a token address`);
+    console.log(`    npx argus-scan <address> --json   JSON output`);
+    console.log(`    npx argus-scan scan <address>     Explicit scan`);
+    console.log(`    npx argus-scan stats              Live stats`);
+    console.log(`    npx argus-scan help               This help`);
     console.log(`\n  ${C.bold}Examples:${C.reset}`);
-    console.log(`    npx argus scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`);
-    console.log(`    npx argus scan 0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE --json`);
-    console.log(`\n  ${C.dim}Live: https://argusarc.xyz${C.reset}\n`);
+    console.log(`    npx argus-scan 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`);
+    console.log(`    npx argus-scan 0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE --json`);
+    console.log(`    npx argus-scan stats`);
+    console.log(`\n  ${C.dim}Live: https://argusarc.xyz  ·  npm: argus-scan${C.reset}\n`);
     return;
   }
 
