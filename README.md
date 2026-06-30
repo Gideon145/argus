@@ -111,6 +111,22 @@ Arc's Malachite BFT consensus provides deterministic sub-second finality with ze
 
 ---
 
+## Why Arc
+
+Argus could only exist on Arc. Here's why:
+
+**Native USDC gas changes the UX.** Every scan costs $0.01 and the user pays in USDC — no volatile gas token, no "buy ETH first," no fee surprise. A security check costs less than the coffee you drank while reading about the token. This is the difference between a product people try once and a product they use daily.
+
+**Malachite BFT finality makes agent economies real.** Three agents stake, vote, and pay each other on every scan. Loser pays winners 0.0005 USDC. That's a real-time economic loop — and it only works when settlement is sub-second and deterministic. On a probabilistic chain, you wait for confirmations. On Arc, the verdict lands and the payment clears in the same instant.
+
+**Gateway x402 nanopayments complete the circuit.** The $0.01 scan fee, the agent-to-agent payouts, the treasury deposits — every dollar of value that moves through Argus settles through Gateway's gasless batched x402 flow. Without it, agent payments that small would be eaten by gas fees. With it, 100 agent-to-agent payments cleared in two weeks at zero gas cost to users.
+
+**Cross-protocol composability is live.** All three Argus agents hold credit lines on Shadow Float V2 — another Arc-native protocol. They sign EIP-712 intents, borrow USDC, and repay on-chain. Six verified transactions across two protocols on the same chain, in the same session. That's not a mockup. That's Arc's composability at work.
+
+**The 5/5 Circle primitives aren't a checklist — they're the architecture.** Gateway x402 for the paywall. Agent Wallets for autonomous signing. Dev-Controlled Wallets for the no-MetaMask onboarding. Contracts for the immutable verdict log. App Kit Unified Balance for chain-abstracted USDC. Each one solves a specific problem that would otherwise require external infrastructure. Together they're the reason Argus went from zero to 100+ users in two weeks instead of two months.
+
+---
+
 ## The Three Agents
 
 | Agent | Model | Role | Cost per scan |
