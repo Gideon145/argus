@@ -30,11 +30,11 @@
 
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
-> **Don't get rugged.** Paste any token address. Three independent AI agents analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent.
+> **Don't get rugged.** Paste any token address — on web, CLI, or Telegram. Three independent AI agents analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent.
 >
 > No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
-| **666 scans** | **$6.93 treasury** | **100+ users** | **5/5 Circle primitives** | **Web · CLI · Telegram** |
+| **666 scans** | **$6.93 treasury** | **100+ users** | **5/5 Circle primitives** |
 |---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtube.com/shorts/GNrcgwZZx0Y](https://youtube.com/shorts/GNrcgwZZx0Y)
@@ -363,7 +363,7 @@ Circle primitive completion:
 | Jun 27 | 100+ | 644 | $5.63 | Shadow Float V2 Alpha — borrow + repay lifecycle closed |
 | Jun 28 | 100+ | 646 | $5.79 | Shadow Float V2 Beta & Gamma — all 3 agents with credit lines |
 | **Jun 29** | **100+** | **648** | **$5.80** | **CLI shipped to npm · `npx argus-scan` live · Discord + X posted** |
-| Jun 30 | 100+ | 666 | $6.85 | Shadow Float CitePay lifecycle closed · Why Arc section added |
+| Jun 30 | 100+ | 664 | $6.85 | Shadow Float CitePay lifecycle closed · Why Arc section added |
 | **Jul 1** | **100+** | **666** | **$6.93** | **Telegram bot live · t.me/argus_arc_bot · three surfaces shipped** |
 
 ---
