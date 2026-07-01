@@ -34,10 +34,10 @@
 >
 > No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
-| **648 scans** | **$5.80 treasury** | **100+ users** | **5/5 Circle primitives** |
+| **666 scans** | **$6.93 treasury** | **100+ users** | **5/5 Circle primitives** | **Web · CLI · Telegram** |
 |---|---|---|---|
 
-**Live:** [argusarc.xyz](https://argusarc.xyz) · **Demo:** [youtube.com/shorts/_J39OKjtDyo](https://youtube.com/shorts/_J39OKjtDyo) · **X:** [@Argus_arc](https://x.com/Argus_arc)
+**Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtube.com/shorts/GNrcgwZZx0Y](https://youtube.com/shorts/GNrcgwZZx0Y)
 
 > 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
 > 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved
@@ -307,6 +307,7 @@ Most security tools are single-model wrappers. Argus:
 | **v0.1–v0.8** | Core oracle, paid scans, ELO, agent economy, Circle wallets, App Kit | ✅ Shipped (Jun 15–23) |
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
 | **v0.10** | CLI tool (`npx argus-scan`), retention features, polish | ✅ Shipped (Jun 29) |
+| **v0.11** | Telegram bot (`t.me/argus_arc_bot`) — third surface, multi-platform reach | ✅ Shipped (Jul 1) |
 | **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 Circle primitive completion:
@@ -334,14 +335,14 @@ Circle primitive completion:
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | 648 | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 618 (95%) | 3-agent pipeline live since Jun 16 |
-| **Users** | 100+ | Circle pre-create wallets |
-| **Treasury balance** | $5.80 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
-| **Agent economy volume** | 215+ queries each | 20+ agent-to-agent nanopayments settled |
-| **ELO leaderboard** | α 3,793 (90%) · β 3,761 (85%) · γ 3,764 (69%) | `/elo` endpoint · on-chain |
+| **Scans processed** | 666 | `/stats` endpoint · on-chain records |
+| **Consensus reached** | 635 (95%) | 3-agent pipeline live since Jun 16 |
+| **Users** | 100+ | Web · CLI · Telegram — three surfaces |
+| **Treasury balance** | $6.93 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
+| **ELO leaderboard** | α 91% · β 83% · γ 72% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
-| **Shadow Float V2** | 3/3 agents | Full borrow-repay lifecycle · 6 on-chain txs verified |
+| **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
 
 ### User Growth
 
@@ -362,6 +363,26 @@ Circle primitive completion:
 | Jun 27 | 100+ | 644 | $5.63 | Shadow Float V2 Alpha — borrow + repay lifecycle closed |
 | Jun 28 | 100+ | 646 | $5.79 | Shadow Float V2 Beta & Gamma — all 3 agents with credit lines |
 | **Jun 29** | **100+** | **648** | **$5.80** | **CLI shipped to npm · `npx argus-scan` live · Discord + X posted** |
+| Jun 30 | 100+ | 666 | $6.85 | Shadow Float CitePay lifecycle closed · Why Arc section added |
+| **Jul 1** | **100+** | **666** | **$6.93** | **Telegram bot live · t.me/argus_arc_bot · three surfaces shipped** |
+
+---
+
+## Telegram: Scan from Any Chat
+
+Open Telegram, paste an address, get a verdict. Same 3-agent consensus as web and CLI — now one `/scan` away.
+
+**[t.me/argus_arc_bot](https://t.me/argus_arc_bot)**
+
+```
+/scan 0x... — Scan any token
+/stats — Live treasury & scans
+/whoami — Your Circle wallet
+```
+
+First `/scan` auto-creates a Circle wallet per Telegram user. Every scan pays $0.01 USDC via Gateway x402. Full agent reasoning — not summarized. Agent payments shown when dissenters pay winners. Verdict recorded on-chain.
+
+Web. CLI. Telegram. Three surfaces. One oracle.
 
 ---
 
