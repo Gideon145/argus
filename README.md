@@ -344,6 +344,18 @@ Circle primitive completion:
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
 | **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
 
+### Where Users Come From
+
+```
+Web    ████████████████████████████████████████████████████ 113
+CLI    █ 2
+TG     ███ 6
+       ─────────────────────────────────────────────────────
+       Total: 121 assigned wallets
+```
+
+Web is the primary surface. Telegram growing from the bot launch. CLI just launched — dev adoption starting.
+
 ### User Growth
 
 | Date | Users | Scans | Treasury | Milestone |
