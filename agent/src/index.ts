@@ -475,14 +475,6 @@ async function main() {
     logger.info(`  /scan — $0.01 USDC (Gateway x402)`);
     logger.info(`  /status — public status endpoint`);
     logger.info(`  /health — health check`);
-
-    // Start Telegram bot alongside the server
-    try {
-      require('../bot');
-      logger.info('  Telegram bot started');
-    } catch (e: any) {
-      logger.warn(`  Telegram bot failed to start: ${e.message}`);
-    }
   });
 
   // --- Main loop ---

@@ -12,7 +12,20 @@ const crypto = require('crypto');
 const TOKEN = 'REDACTED_TELEGRAM_TOKEN';
 const API = 'argus-agent-production-ab97.up.railway.app';
 
-const bot = new TelegramBot(TOKEN, { polling: true });
+let bot;
+try {
+  bot = new TelegramBot(TOKEN, { polling: true });
+  console.log('🤖 Telegram bot polling started');
+} catch (e) {
+  console.error('Telegram bot init failed:', e.message);
+  // Don't crash — create a dummy bot that logs errors
+  bot = {
+    onText: () => {},
+    on: () => {},
+    sendMessage: () => Promise.resolve(),
+    editMessageText: () => Promise.resolve(),
+  };
+}
 
 // ─── User wallet store (chatId → { userId, walletAddress, walletId, createdAt }) ──
 const users = {};
