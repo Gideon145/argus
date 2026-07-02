@@ -134,10 +134,19 @@ export const walletPool = {
   /** Stats about the pool */
   stats() {
     const pool = loadPool();
+    const assigned = pool.filter((w) => w.assigned);
+    const sources: Record<string, number> = { web: 0, cli: 0, telegram: 0 };
+    for (const w of assigned) {
+      if (!w.refId) continue;
+      if (w.refId.startsWith('cli-')) sources.cli++;
+      else if (w.refId.startsWith('tg-')) sources.telegram++;
+      else sources.web++;
+    }
     return {
       total: pool.length,
-      assigned: pool.filter((w) => w.assigned).length,
+      assigned: assigned.length,
       available: pool.filter((w) => !w.assigned).length,
+      sources,
     };
   },
 

@@ -61,6 +61,11 @@ async function main() {
     res.json(store.getHistory());
   });
 
+  // User source breakdown — where users came from
+  app.get('/sources', (_req, res) => {
+    res.json(walletPool.stats());
+  });
+
   // Agent-to-agent nanopayments — internal economy
   app.get('/agent-payments', (_req, res) => {
     res.json(getAgentPaymentStats());
