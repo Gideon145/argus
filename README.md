@@ -30,7 +30,7 @@
 
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
-> **Don't get rugged.** Paste any token address — on web, CLI, or Telegram. Three independent AI agents analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent.
+> **Don't get rugged.** Paste any token address — on web, CLI, or Telegram. Two AI agents (DeepSeek-V3, Claude Sonnet 4.5) plus a deterministic rule engine analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent.
 >
 > No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
@@ -343,6 +343,34 @@ Most security tools are single-model wrappers. Argus:
 | **Holder distribution + liquidity are estimated** | Agent β infers tokenomics from training data — it does not query holder snapshots or DEX liquidity pools in real-time. Production upgrade: integrate on-chain balanceOf queries + DexScreener/GeckoTerminal APIs. |
 | **Arc testnet only** | All USDC is testnet. No real value at risk. Mainnet deployment requires Circle production access + real USDC liquidity. |
 | **Single oracle address** | ArgusOracle.sol has one owner. Multi-sig or DAO-governed upgrade is planned for mainnet. |
+
+---
+
+<!-- Screenshots needed:
+  □ Hero screenshot (homepage with search bar)
+  □ Scan result (verdict card with agent votes)
+  □ CLI output (npx argus-scan result)
+  □ Telegram bot (/scan response)
+  □ ArcScan transaction (payment proof)
+  □ Case Files (/shame archive)
+  □ Treasury (ArcScan balance)
+  □ Agent payment (on-chain dissent payout)
+-->
+
+## Accuracy Evaluation
+
+*Benchmark results will be published here. The evaluation methodology is documented; results are pending systematic testing.*
+
+| Metric | Expected | Status |
+|--------|----------|--------|
+| Known scams tested | 20+ common scam patterns | TODO — dataset curation |
+| Known safe tokens tested | 10+ verified safe contracts | TODO — dataset curation |
+| Precision | — | Pending |
+| Recall | — | Pending |
+| False positive rate | — | Pending |
+| False negative rate | — | Pending |
+
+**Methodology:** Each agent independently evaluates the same set of labeled contracts. Consensus accuracy is measured against ground truth. Agent-level precision/recall is computed per model. Full results will be linked from this section.
 
 ---
 
