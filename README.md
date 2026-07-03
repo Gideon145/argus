@@ -369,12 +369,12 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | Milestone | Date | Users | Scans | Treasury |
 |-----------|------|-------|-------|----------|
 | 3-agent consensus live | Jun 16 | 0 | 5 | $0.00 |
-| argusarc.xyz live | Jun 18 | 0 | 45 | $0.00 |
-| Circle wallets (no MetaMask) | Jun 21–24 | 10 | 340 | $0.22 |
-| 100 users · 500 scans | Jun 25 | 100 | 500+ | $3.00 |
+| argusarc.xyz live | Jun 18–20 | 0 | 45 | $0.00 |
+| Circle wallet launch | Jun 21 | 10 | 340 | $0.22 |
+| Circle wallet growth | Jun 22–25 | 100 | 500+ | $3.00 |
 | CLI shipped to npm | Jun 29 | 109 | 648 | $5.80 |
 | Telegram bot live | Jul 1 | 121 | 666 | $6.93 |
-| **800+ scans · 125 users** | **Jul 3** | **127** | **810** | **$7.93** |
+| **800+ scans · 127 users** | **Jul 3** | **127** | **810** | **$7.93** |
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 127 assigned wallets across 190 pre-created.*
 
