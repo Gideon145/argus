@@ -23,7 +23,7 @@ export interface ContractData {
 
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 const ETHERSCAN_BASE = 'https://api.etherscan.io/api';
-const MAINNET_RPC = process.env.MAINNET_RPC_URL || 'https://eth.llamarpc.com';
+const MAINNET_RPC = process.env.MAINNET_RPC_URL || 'https://ethereum-rpc.publicnode.com';
 
 let lastCallTime = 0;
 async function rateLimit(): Promise<void> {
@@ -66,7 +66,7 @@ async function fetchEtherscanSource(address: string): Promise<{ sourceCode: stri
   return null;
 }
 
-/** Fetch on-chain facts from mainnet RPC */
+/** Fetch on-chain facts from mainnet RPC (fast-fail if unreachable) */
 async function fetchMainnetFacts(address: string): Promise<{
   isContract: boolean;
   owner: string | null;
@@ -74,17 +74,18 @@ async function fetchMainnetFacts(address: string): Promise<{
   decimals: number | null;
 }> {
   try {
-    const provider = new ethers.JsonRpcProvider(MAINNET_RPC);
-
-    // Check if contract exists
-    const code = await provider.getCode(address);
-    const isContract = code !== '0x';
+    const provider = new ethers.JsonRpcProvider(MAINNET_RPC, undefined, { staticNetwork: true });
+    // Short timeout — if RPC is unreachable, fail fast
+    const code = await Promise.race([
+      provider.getCode(address),
+      new Promise<null>((_, reject) => setTimeout(() => reject(new Error('RPC timeout')), 3000)),
+    ]);
+    const isContract = code !== null && code !== '0x';
 
     if (!isContract) {
       return { isContract: false, owner: null, totalSupply: null, decimals: null };
     }
 
-    // Try ERC-20 interface
     const erc20 = new ethers.Contract(
       address,
       ['function totalSupply() view returns (uint256)', 'function decimals() view returns (uint8)', 'function owner() view returns (address)'],
@@ -134,7 +135,7 @@ export async function fetchContractData(address: string): Promise<ContractData> 
     flags: [],
   };
 
-  // Try Arc testnet first
+  // Try Arc testnet first — if found, return immediately
   const arc = await fetchArcFacts(address);
   if (arc.exists) {
     result.chain = 'arc-testnet';
@@ -143,10 +144,10 @@ export async function fetchContractData(address: string): Promise<ContractData> 
     return result;
   }
 
-  // Try Ethereum mainnet
+  // Contract not on Arc — try Ethereum mainnet sources in parallel
   const [source, facts] = await Promise.all([
-    fetchEtherscanSource(address),
-    fetchMainnetFacts(address),
+    fetchEtherscanSource(address).catch(() => null),
+    fetchMainnetFacts(address).catch(() => ({ isContract: false, owner: null, totalSupply: null, decimals: null })),
   ]);
 
   if (facts.isContract) {
