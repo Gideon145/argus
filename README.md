@@ -79,6 +79,8 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 **Argus makes contract security a nanopayment-native primitive.** Three AI agents — not one, not a wrapper around a single API call — independently analyze every contract. They stake real USDC on their verdicts. They reach consensus. They earn reputation when they're right and lose it when they're wrong. And now, they pay each other.
 
+**Built for everyone.** Connect with MetaMask and get auto-funded, or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Just paste a token address and get a security verdict from three independent AI agents. Web, CLI, or Telegram — same consensus, your choice.
+
 ---
 
 ## How It Works
@@ -86,25 +88,25 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 ```mermaid
 flowchart TB
     U[User] -->|$0.01 USDC| GW[Gateway x402]
-    U -->|paste address| WEB[Web<br/>argusarc.xyz]
-    U -->|npx| CLI[CLI<br/>npx argus-scan]
-    U -->|/scan| TG[Telegram<br/>t.me/argus_arc_bot]
+    U -->|paste address| WEB[Web - argusarc.xyz]
+    U -->|npx| CLI[CLI - npx argus-scan]
+    U -->|/scan| TG[Telegram - t.me/argus_arc_bot]
 
     WEB --> O[Orchestrator]
     CLI --> O
     TG --> O
 
-    O -->|fan out| A[Agent Alpha<br/>DeepSeek-V3<br/>Contract logic]
-    O -->|fan out| B[Agent Beta<br/>Claude Sonnet 4.5<br/>Tokenomics]
-    O -->|fan out| G[Agent Gamma<br/>Rule Engine<br/>Deterministic]
+    O -->|fan out| A[Agent Alpha - DeepSeek-V3 - Contract logic]
+    O -->|fan out| B[Agent Beta - Claude Sonnet 4.5 - Tokenomics]
+    O -->|fan out| G[Agent Gamma - Rule Engine - Deterministic]
 
-    A -->|verdict + stake| C[Consensus<br/>2/3 threshold]
+    A -->|verdict + stake| C[Consensus - 2/3 threshold]
     B -->|verdict + stake| C
     G -->|verdict + stake| C
 
     C -->|SAFE / RISKY / SCAM| R[Verdict]
-    C -->|dissenters pay winners| P[Agent Payments<br/>0.0005 USDC each]
-    C -->|record verdict| ORA[ArgusOracle<br/>on-chain]
+    C -->|dissenters pay winners| P[Agent Payments - 0.0005 USDC each]
+    C -->|record verdict| ORA[ArgusOracle - on-chain]
 
     GW -->|$0.01 fee| TR[Treasury]
     GW -->|fund wallets| W[Circle Wallets]

@@ -8,33 +8,33 @@ Multi-agent security consensus oracle on Arc.
 
 ```mermaid
 flowchart TB
-    U[User] -->|Submit address| F[Frontend<br/>Next.js 15 + Vercel]
-    U -->|"Get Started (no wallet)"| CW[Circle Pre-Create<br/>Wallet Pool]
+    U[User] -->|Submit address| F[Frontend - Next.js 15 + Vercel]
+    U -->|Get Started - no wallet| CW[Circle Pre-Create Wallet Pool]
     CW -->|Assign SCA wallet| U
     
-    F -->|$0.01 USDC| GW[Gateway x402<br/>Nanopayment]
-    F -->|Free scan| CS[/scan/circle]
+    F -->|$0.01 USDC| GW[Gateway x402 Nanopayment]
+    F -->|Free scan| CS[scan/circle]
     
-    GW --> O[Orchestrator<br/>Node.js + Express]
+    GW --> O[Orchestrator - Node.js + Express]
     CS --> O
     
-    O -->|Fan-out| A1[Agent α<br/>DeepSeek-V3]
-    O -->|Fan-out| A2[Agent β<br/>Claude Sonnet 4.5]
-    O -->|Fan-out| A3[Agent γ<br/>Rule Engine]
+    O -->|Fan-out| A1[Agent Alpha - DeepSeek-V3]
+    O -->|Fan-out| A2[Agent Beta - Claude Sonnet 4.5]
+    O -->|Fan-out| A3[Agent Gamma - Rule Engine]
     
-    A1 --> C[Consensus Engine<br/>2/3 Threshold]
+    A1 --> C[Consensus Engine - 2/3 Threshold]
     A2 --> C
     A3 --> C
     
-    C -->|Consensus reached| R[Reputation Engine<br/>ELO Scoring]
-    C -->|Dissenter exists| AP[Agent Payments<br/>Loser → Winners<br/>0.001 USDC]
+    C -->|Consensus reached| R[Reputation Engine - ELO Scoring]
+    C -->|Dissenter exists| AP[Agent Payments - Loser pays Winners 0.001 USDC]
     
-    R --> S[Store<br/>Railway Volume]
+    R --> S[Store - Railway Volume]
     AP --> S
     
-    C --> AO[ArgusOracle.sol<br/>Arc Testnet<br/>Immutable Verdict Log]
+    C --> AO[ArgusOracle.sol - Arc Testnet - Immutable Verdict Log]
     
-    S --> F2[Stats + History<br/>Public Endpoints]
+    S --> F2[Stats + History - Public Endpoints]
 ```
 
 ---

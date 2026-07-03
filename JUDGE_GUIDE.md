@@ -11,7 +11,11 @@ This guide walks you through Argus in 5 minutes. Every step is verifiable on-cha
 
 Go to **[argusarc.xyz](https://argusarc.xyz)**
 
-You'll see a clean search bar. No wallet connect prompts. No signup wall.
+Two ways to start:
+- **Connect MetaMask** — gets funded 0.50 test USDC automatically
+- **Get Started** — for mobile users, auto-creates a Circle wallet instantly
+
+No signup. No email. Just paste an address and scan.
 
 ---
 
