@@ -20,20 +20,23 @@ export interface ContractData {
 
 const ARC_RPC = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
 const ETHERSCAN_KEY = process.env.ETHERSCAN_API_KEY || '';
-const ETHERSCAN_URL = 'https://api.etherscan.io/api';
+const ETHERSCAN_URL = 'https://api.etherscan.io/v2/api';
 
 let lastCall = 0;
 async function rateLimit() { const e = Date.now() - lastCall; if (e < 250) await new Promise(r => setTimeout(r, 250 - e)); lastCall = Date.now(); }
 
-async function fetchEtherscan(address: string): Promise<{ contractName: string; sourceCode: string } | null> {
+async function fetchEtherscan(address: string): Promise<{ contractName: string; sourceCode: string; owner: string } | null> {
   if (!ETHERSCAN_KEY) return null;
   await rateLimit();
+  const params = { chainid: '1', module: 'contract', action: 'getsourcecode', address, apikey: ETHERSCAN_KEY };
   try {
-    const { data } = await axios.get(ETHERSCAN_URL, { params: { module: 'contract', action: 'getsourcecode', address, apikey: ETHERSCAN_KEY }, timeout: 8000 });
-    if (data?.status === '1' && data.result?.[0]?.ContractName) {
-      return { contractName: data.result[0].ContractName, sourceCode: data.result[0].SourceCode || '' };
+    const { data } = await axios.get(ETHERSCAN_URL, { params, timeout: 8000 });
+    if (data?.status === '1' && data.result?.[0]) {
+      const r = data.result[0];
+      if (r.Proxy === '1' && r.Implementation) { await rateLimit(); try { const { data: d2 } = await axios.get(ETHERSCAN_URL, { params: { chainid: '1', module: 'contract', action: 'getsourcecode', address: r.Implementation, apikey: ETHERSCAN_KEY }, timeout: 8000 }); if (d2?.status === '1' && d2.result?.[0]?.ContractName) return { contractName: d2.result[0].ContractName, sourceCode: d2.result[0].SourceCode || '', owner: r.Implementation }; } catch {} }
+      if (r.ContractName) return { contractName: r.ContractName, sourceCode: r.SourceCode || '', owner: '' };
     }
-  } catch { /* retry once */ try { await new Promise(r => setTimeout(r, 500)); const { data } = await axios.get(ETHERSCAN_URL, { params: { module: 'contract', action: 'getsourcecode', address, apikey: ETHERSCAN_KEY }, timeout: 8000 }); if (data?.status === '1' && data.result?.[0]) return { contractName: data.result[0].ContractName, sourceCode: data.result[0].SourceCode || '' }; } catch {} }
+  } catch { try { await new Promise(r2 => setTimeout(r2, 500)); const { data } = await axios.get(ETHERSCAN_URL, { params, timeout: 8000 }); if (data?.status === '1' && data.result?.[0]?.ContractName) return { contractName: data.result[0].ContractName, sourceCode: data.result[0].SourceCode || '', owner: '' }; } catch {} }
   return null;
 }
 
