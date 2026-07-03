@@ -332,16 +332,16 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ## Accuracy Evaluation
 
-*60 tokens (40 known + 20 held-out). Positive class = SCAM; RISKY on SAFE = incorrect, RISKY on SCAM = correct. [Methodology →](benchmark/)*
+*54 tokens (40 known + 14 held-out). Positive class = SCAM; RISKY on SAFE = incorrect, RISKY on SCAM = correct. [Methodology →](benchmark)*
 
-**Held-out: 60% accuracy, 100% precision, 10/10 SAFE confirmed (0 false positives on legitimate tokens).** v1 55% (blind heuristics) → v2 45% (noisy labels) → v3 fixed labels → v4 60% (balanced 10+10, verified-source suppression).
+**v1 55% (blind heuristics) → v2 45% (noisy labels) → v3 fixed labels → v4 60% → v5: 85.7% on 14 verified-real contracts (10 SAFE + 4 documented scams, 0 fabricated entries).**
 
 | Cohort | Tokens | Accuracy | Precision | Recall | Notes |
 |--------|--------|----------|-----------|--------|-------|
 | Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | 16/16 scams caught |
-| Held-out (no DB entries) | 20 | **60.0%** | **100.0%** | 20.0% | 10/10 safe, 2/10 scam caught |
+| Held-out (no DB entries) | 14 | **85.7%** | **100.0%** | 50.0% | 10/10 safe, 2/4 scam caught |
 
-*10 legitimate tokens (SNX, SUSHI, BAL, YFI, UMA, NMR, RLC, ENS, REQ, REN — all Etherscan-verified) + 10 malicious tokens (Thodex, Meerkat, Compounder, AnubisDAO, 6 documented rug/honeypot tokens with source URLs). All SAFE correctly classified (0 false positives). Inter-agent disagreement: 25%. Pre-flight verified against agent databases. Numbers from `benchmark/report.ts` — single source of truth.*
+*10 legitimate tokens (all Etherscan-verified) + 4 documented real scam tokens (Thodex, Meerkat, Compounder, AnubisDAO — with rekt.news/rugdoc.io source URLs). 10/10 SAFE correctly classified (0 false positives). 2/4 SCAM caught. Inter-agent disagreement: 14.3%. Pre-flight verified against agent databases. Numbers from `benchmark/report.ts` — single source of truth.*
 
 ---
 

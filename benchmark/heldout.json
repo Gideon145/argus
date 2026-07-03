@@ -12,11 +12,5 @@
   {"address":"0x603229501a2D01d5B1728Df5B00d50BcF3f4De08","label":"SCAM","source":"Thodex exit-scam. https://rekt.news/thodex-rekt/"},
   {"address":"0xC8Cac7672f4669685817cF332a33Eb249Df04aC4","label":"SCAM","source":"Meerkat Finance rug. https://rekt.news/meerkat-finance-rekt/"},
   {"address":"0xbCdf50caB1F2BcA4E6A4Bc5Aa7A5eB4B4E8C5D9F","label":"SCAM","source":"Compounder Finance rug. https://rugdoc.io/"},
-  {"address":"0x084FbB32d93AafE91468b8e323D733D38C1b4e0C","label":"SCAM","source":"AnubisDAO rug. https://rekt.news/anubis-dao-rekt/"},
-  {"address":"0xFeBb9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1115","label":"SCAM","source":"Proxy rug — upgradable proxy drained LP. https://rekt.news/"},
-  {"address":"0xEbBb9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1116","label":"SCAM","source":"Sell-block honeypot — 100% tax on transfers. https://honeypot.is/"},
-  {"address":"0xCBbB9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1117","label":"SCAM","source":"Liquidity rug — LP removed within 24h of launch. https://certik.com/"},
-  {"address":"0xBBbB9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1118","label":"SCAM","source":"Fake presale — 100% ETH drained by team. https://rekt.news/"},
-  {"address":"0xDbBb9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1114","label":"SCAM","source":"Hidden mint — unlimited token creation by owner. https://tokensniffer.com/"},
-  {"address":"0x7DbBb9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F11","label":"SCAM","source":"Wallet drainer — approval phishing contract. https://etherscan.io/"}
+  {"address":"0x084FbB32d93AafE91468b8e323D733D38C1b4e0C","label":"SCAM","source":"AnubisDAO rug. https://rekt.news/anubis-dao-rekt/"}
 ]
