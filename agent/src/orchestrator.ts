@@ -79,6 +79,22 @@ export class Orchestrator {
 
     const verdicts: Verdict[] = [verdictA, verdictB, verdictC];
 
+    // Step 2.5: Deterministic false-positive suppression
+    // If contract is Etherscan-verified + no concrete malicious mechanism → downgrade RISKY→SAFE
+    if (contractData?.hasSource && contractData.contractName) {
+      const maliciousKeywords = ['mint', 'blacklist', 'sell', 'hidden', 'proxy', 'backdoor', 'drain', 'honeypot', 'selfdestruct', 'suicide'];
+      for (const v of verdicts) {
+        if (v.verdict === 'RISKY') {
+          const hasMaliciousMechanism = maliciousKeywords.some(kw => v.reasoning.toLowerCase().includes(kw));
+          if (!hasMaliciousMechanism) {
+            v.verdict = 'SAFE';
+            v.confidence = Math.min(v.confidence, 70);
+            v.reasoning = `[Suppressed RISKY→SAFE] Verified contract (${contractData.contractName}), no concrete malicious mechanism found. ${v.reasoning}`;
+          }
+        }
+      }
+    }
+
     // Step 3: Run consensus
     const result = runConsensus(verdicts, consensusThreshold);
 

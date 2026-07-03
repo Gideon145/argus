@@ -20,6 +20,9 @@ const RESULTS_PATH = path.join(__dirname, 'results.json');
 const HELDOUT_RESULTS_PATH = path.join(__dirname, 'heldout-results.json');
 
 function computeMetrics(results: BenchmarkResult[], cohortName: string) {
+  // Single source of truth for accuracy/precision/recall.
+  // Positive class = SCAM. RISKY on SAFE-labeled token = INCORRECT.
+  // RISKY on SCAM-labeled token = CORRECT.
   const valid = results.filter(r => r.consensus !== 'ERROR' && r.consensus !== 'HELD_OUT_VIOLATION');
   const abstained = results.filter(r => r.consensus === 'INSUFFICIENT_DATA');
   const scored = valid.filter(r => r.consensus !== 'INSUFFICIENT_DATA');

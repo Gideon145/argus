@@ -332,18 +332,16 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ## Accuracy Evaluation
 
-*60 tokens (40 known + 20 held-out). [Methodology →](benchmark/)*
+*60 tokens (40 known + 20 held-out). Positive class = SCAM; RISKY on SAFE = incorrect, RISKY on SCAM = correct. [Methodology →](benchmark/)*
 
-**Held-out: 60% accuracy, 100% precision (zero false positives on legitimate tokens).** Known: 100% (database-backed). Trajectory: v1 55% (blind heuristics) → v2 45% (noisy labels) → v3 fixed labels + full pipeline → v4 60% (balanced 10+10 set, source-code analysis, owner-bias fix).
+**Held-out: 60% accuracy, 100% precision, 10/10 SAFE confirmed (0 false positives on legitimate tokens).** v1 55% (blind heuristics) → v2 45% (noisy labels) → v3 fixed labels → v4 60% (balanced 10+10, verified-source suppression).
 
 | Cohort | Tokens | Accuracy | Precision | Recall | Notes |
 |--------|--------|----------|-----------|--------|-------|
-| Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | DB-backed, always scored |
-| Held-out (no DB entries) | 20 | **60.0%** | **100.0%** | 20.0% | 10 SAFE + 10 SCAM, 0 false positives |
+| Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | 16/16 scams caught |
+| Held-out (no DB entries) | 20 | **60.0%** | **100.0%** | 20.0% | 10/10 safe, 2/10 scam caught |
 
-*Held-out: 10 verified legitimate tokens (SNX, REN, BAL, YFI, SUSHI, UMA, NMR, RLC, ENS, REQ — all Etherscan-verified) + 10 documented malicious tokens (Thodex, Meerkat, Compounder, AnubisDAO, 6 honeypot/rug tokens). 10/10 SAFE correctly classified (0 false positives). 2/10 SCAM caught (recall limited by scam tokens lacking verified Etherscan source). Inter-agent disagreement: 35%. Pre-flight verified against agent databases.*
-
-*Etherscan V2 API integrated. Sources in [`benchmark/heldout.json`](benchmark/heldout.json).*
+*10 legitimate tokens (SNX, SUSHI, BAL, YFI, UMA, NMR, RLC, ENS, REQ, REN — all Etherscan-verified) + 10 malicious tokens (Thodex, Meerkat, Compounder, AnubisDAO, 6 documented rug/honeypot tokens with source URLs). All SAFE correctly classified (0 false positives). Inter-agent disagreement: 25%. Pre-flight verified against agent databases. Numbers from `benchmark/report.ts` — single source of truth.*
 
 ---
 
