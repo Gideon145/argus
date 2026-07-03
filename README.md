@@ -79,6 +79,8 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 **Argus makes contract security a nanopayment-native primitive.** Three AI agents — not one, not a wrapper around a single API call — independently analyze every contract. They stake real USDC on their verdicts. They reach consensus. They earn reputation when they're right and lose it when they're wrong. And now, they pay each other.
 
+> *"The hard part of a payments product was never the rail. It was finding the people."* — Canteen, The Distribution Bootstrap
+
 **Argus is a Distribution Bootstrap security sidecar.** No SDK. No integration. No API key. Any token launch, any DAO, any trader can call Argus for $0.01. Paste an address, get a verdict. The users are already here — they just need a security layer that costs less than the coffee they drank while reading about the token.
 
 **Built for everyone.** Connect with MetaMask and get auto-funded, or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Just paste a token address and get a security verdict from three independent AI agents. Web, CLI, or Telegram — same consensus, your choice.
