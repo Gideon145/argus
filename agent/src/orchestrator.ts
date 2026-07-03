@@ -8,7 +8,6 @@ import { settleAgentPayments } from './payments/agentPayments';
 import { processPayment } from './gateway';
 import { store } from './store';
 import { Logger } from './logger';
-import { fetchContractData } from './dataProvider';
 
 export { ConsensusResult } from './consensus';
 
@@ -70,15 +69,11 @@ export class Orchestrator {
     const payment = await processPayment(req.user, queryId);
     this.logger.info(`Payment intent created: ${queryId}`);
 
-    // Step 1.5: Fetch cross-chain contract data for agent context
-    const contractData = await fetchContractData(req.contractAddress);
-    this.logger.info(`Contract data: chain=${contractData.chain} isContract=${contractData.isContract} hasSource=${contractData.hasSource}`);
-
-    // Step 2: Fan out to 3 agents in parallel with contract data
+    // Step 2: Fan out to 3 agents in parallel
     const [verdictA, verdictB, verdictC] = await Promise.all([
-      alphaAgent.analyze(req, contractData),
-      betaAgent.analyze(req, contractData),
-      gammaAgent.analyze(req, contractData),
+      alphaAgent.analyze(req),
+      betaAgent.analyze(req),
+      gammaAgent.analyze(req),
     ]);
 
     const verdicts: Verdict[] = [verdictA, verdictB, verdictC];

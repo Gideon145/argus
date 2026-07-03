@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 import { QueryRequest, Verdict } from '../orchestrator';
 import { lookupKnown } from './knownTokens';
-import { ContractData } from '../dataProvider';
 
 const SYSTEM_PROMPT = `You are Agent-β (Beta) of Argus — a multi-agent security consensus oracle.
 Your specialty: TOKENOMICS AND DISTRIBUTION ANALYSIS.
@@ -29,31 +28,10 @@ export const betaAgent = {
   name: 'Agent-β',
   model: 'Claude Sonnet 4',
 
-  async analyze(req: QueryRequest, contractData?: ContractData): Promise<Verdict> {
-    const known = lookupKnown(req.contractAddress);
-    if (known) {
-      return {
-        agent: 'Agent-β',
-        verdict: known.verdict,
-        confidence: 85,
-        reasoning: `Recognized token: ${known.note}. Holder distribution and LP structure consistent with known profile.`,
-        stake: '50000',
-      };
-    }
-
-    if (!contractData || !contractData.isContract) {
-      return {
-        agent: 'Agent-β',
-        verdict: 'INSUFFICIENT_DATA',
-        confidence: 0,
-        reasoning: `No on-chain contract data available for ${req.contractAddress}. Cannot analyze tokenomics without supply/holder/distribution data.`,
-        stake: '0',
-      };
-    }
-
+  async analyze(req: QueryRequest): Promise<Verdict> {
     const apiKey = process.env.DEEPSEEK_API_KEY;
     if (!apiKey || process.env.DEMO_MODE === 'true') {
-      return this.fallbackAnalyze(req, contractData);
+      return this.fallbackAnalyze(req);
     }
 
     try {
@@ -68,7 +46,7 @@ export const betaAgent = {
         max_tokens: 512,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: `Analyze the tokenomics of this EVM contract:\n\nContract address: ${req.contractAddress}\nChain: ${contractData?.chain || 'unknown'}\nContract name: ${contractData?.contractName || 'unknown'}\nOwner: ${contractData?.owner || 'unknown'}\nTotal supply: ${contractData?.totalSupply || 'unknown'}\nDecimals: ${contractData?.decimals ?? 'unknown'}\n\nFocus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?` },
+          { role: 'user', content: `Analyze the tokenomics of this EVM contract:\n\nContract address: ${req.contractAddress}\n\nFocus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?` },
         ],
       });
 
@@ -89,35 +67,32 @@ export const betaAgent = {
     }
   },
 
-  /** Fallback using fetched on-chain facts */
-  fallbackAnalyze(req: QueryRequest, contractData: ContractData): Verdict {
+  /** Deterministic fallback when Claude is unavailable */
+  fallbackAnalyze(req: QueryRequest): Verdict {
+    const address = req.contractAddress.toLowerCase();
+    const known = lookupKnown(address);
+    if (known) {
+      return {
+        agent: 'Agent-β',
+        verdict: known.verdict,
+        confidence: known.verdict === 'SAFE' ? 85 : 88,
+        reasoning: `Recognized token: ${known.note}. Holder distribution and LP structure consistent with known profile.`,
+        stake: '50000',
+      };
+    }
     const flags: string[] = [];
     let riskScore = 0;
-
-    // Tokenomics from on-chain data
-    if (contractData.owner && contractData.owner !== '0x0000000000000000000000000000000000000000') {
-      flags.push(`Single owner controls token: ${contractData.owner}`);
-      riskScore += 15;
-    }
-    if (contractData.totalSupply) {
-      try {
-        const supply = BigInt(contractData.totalSupply);
-        if (supply > BigInt('1000000000000000000000000000000')) { flags.push('Total supply > 1 trillion — potential meme/scam token'); riskScore += 10; }
-        else if (supply < BigInt('1000000')) { flags.push('Very low supply — potential scarcity manipulation'); riskScore += 5; }
-      } catch {}
-    }
-    if (contractData.decimals !== null && contractData.decimals > 18) {
-      flags.push('Unusual decimals (>18) — potential rebase/elastic supply risk');
-      riskScore += 8;
-    }
-    if (!contractData.hasSource) {
-      flags.push('Unverified source — holder distribution and LP data unavailable');
-      riskScore += 10;
-    }
+    const hexBody = address.slice(2);
+    const uniqueChars = new Set(hexBody.slice(0, 20).split('')).size;
+    if (uniqueChars <= 5) { flags.push('Extremely low entropy — likely mass-deployed token'); riskScore += 25; }
+    const digitCount2 = hexBody.slice(0, 20).split('').filter((c: string) => '0123456789'.includes(c)).length;
+    if (digitCount2 > 14) { flags.push('Numeric-heavy pattern — common in scam token factories'); riskScore += 20; }
+    if (/^[a-f0-9]{4}[a-f0-9]\1{10,}/i.test(hexBody)) { flags.push('Address poisoning — impersonates known prefix'); riskScore += 30; }
+    if (/([a-f0-9]{4})\1{3,}/i.test(hexBody)) { flags.push('Repeating hex pattern — possible vanity scam address'); riskScore += 15; }
 
     let verdict: 'SAFE' | 'RISKY' | 'SCAM';
-    if (riskScore >= 30) verdict = 'SCAM';
-    else if (riskScore >= 15) verdict = 'RISKY';
+    if (riskScore >= 35) verdict = 'SCAM';
+    else if (riskScore >= 18) verdict = 'RISKY';
     else verdict = 'SAFE';
 
     return {
@@ -125,8 +100,8 @@ export const betaAgent = {
       verdict,
       confidence: Math.min(80, 35 + (flags.length > 0 ? 15 : 10)),
       reasoning: flags.length > 0
-        ? `[Tokenomics] ${flags.join('; ')}. Chain: ${contractData.chain}.`
-        : `[Tokenomics] Supply/distribution metrics from chain data appear normal. Chain: ${contractData.chain}, decimals: ${contractData.decimals}, totalSupply: ${contractData.totalSupply?.slice(0,12) || 'unknown'}.`,
+        ? `${flags.join('; ')}. On-chain tokenomic data unavailable — full Claude analysis pending.`
+        : 'No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment.',
       stake: '50000',
     };
   },

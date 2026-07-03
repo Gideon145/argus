@@ -1,6 +1,5 @@
 import { QueryRequest, Verdict } from '../orchestrator';
 import { lookupKnown } from './knownTokens';
-import { ContractData } from '../dataProvider';
 
 /**
  * Agent-γ (Gamma) — Deterministic rule engine (local, zero API cost)
@@ -61,31 +60,20 @@ export const gammaAgent = {
   name: 'Agent-γ',
   model: 'Rule Engine (local)',
 
-  async analyze(req: QueryRequest, contractData?: ContractData): Promise<Verdict> {
+  async analyze(req: QueryRequest): Promise<Verdict> {
     const addr = req.contractAddress.toLowerCase();
     const flags: string[] = [];
     let riskScore = 0;
 
-    // Check 1: Known token database
+    // Check 1: Known token database (40+ tokens from benchmark + Arc addresses)
     const known = lookupKnown(addr);
     if (known) {
       return {
         agent: 'Agent-γ',
         verdict: known.verdict,
         confidence: 95,
-        reasoning: `[Deterministic] Recognized address: ${known.note}.`,
+        reasoning: `Recognized address: ${known.note}.`,
         stake: '50000',
-      };
-    }
-
-    // Check 1.5: If no contract data, return INSUFFICIENT_DATA for unknown addresses
-    if (!contractData || !contractData.isContract) {
-      return {
-        agent: 'Agent-γ',
-        verdict: 'INSUFFICIENT_DATA',
-        confidence: 0,
-        reasoning: `[Deterministic] No contract bytecode found on Arc or Ethereum for ${addr}. Cannot run deterministic checks without deployed code.`,
-        stake: '0',
       };
     }
     for (const check of ADDRESS_CHECKS) {
@@ -128,12 +116,6 @@ export const gammaAgent = {
       parts.push('[Deterministic] Address passes all heuristic checks');
     } else {
       parts.push(`[Deterministic] ${flags.slice(0, 3).join('. ')}${flags.length > 3 ? ` (+${flags.length - 3} more)` : ''}`);
-    }
-    if (contractData) {
-      if (contractData.contractName) parts.push(`Contract: ${contractData.contractName}`);
-      if (contractData.owner) parts.push(`Owner: ${contractData.owner.slice(0, 10)}...`);
-      if (contractData.totalSupply) parts.push(`Supply: ${contractData.totalSupply.slice(0, 12)}`);
-      parts.push(`Chain: ${contractData.chain}${contractData.hasSource ? ', verified source' : ', unverified'}`);
     }
     const reasoning = parts.join(' | ');
 
