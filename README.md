@@ -323,26 +323,15 @@ Most security tools are single-model wrappers. Argus:
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
 | **v0.10** | CLI tool (`npx argus-scan`), retention features, polish | ✅ Shipped (Jun 29) |
 | **v0.11** | Telegram bot (`t.me/argus_arc_bot`) — third surface, multi-platform reach | ✅ Shipped (Jul 1) |
-| **v0.12** | Scan history per user, agent accuracy trends, public leaderboard | Planned |
-| **v0.13** | Real-time holder queries (Agent β on-chain upgrade), DEX liquidity data | Planned |
-| **v1.0** | Arc mainnet — real USDC, real stakes, production oracle | Post-hackathon |
+| **v0.12** | Scan history per user, agent accuracy trends, public ELO leaderboard | Next |
+| **v0.13** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Next |
+| **v0.14** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Next |
+| **v1.0** | Arc mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 Circle primitive completion:
 - Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit ✅ (all 5/5)
 
----
-
-## Beyond the Hackathon
-
-Argus is not a demo. It's a product with 125 users, 806 scans, and $7.93 in on-chain revenue — and it keeps growing.
-
-- **Arc mainnet** — deploy the moment it launches. Real USDC, real stakes, real consequences.
-- **Agent β on-chain upgrade** — replace inferred tokenomics with real-time balanceOf queries and DEX liquidity data.
-- **Circle W3S migration** — move agent wallets from raw private keys to Programmable Wallets. No key material in worker processes.
-- **Public ELO leaderboard** — live reputation dashboard showing agent accuracy, trends, and total stakes won/lost.
-- **More agents** — the architecture supports N agents. Add domain-specific agents for NFT collections, DeFi protocols, L2 bridges.
-
-*"Building something that lasts past July 6 is the whole game."* — Lepton FAQ. We're playing.
+*"Building something that lasts past July 6 is the whole game."* — Lepton FAQ
 
 ---
 
