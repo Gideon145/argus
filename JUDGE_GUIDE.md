@@ -178,7 +178,7 @@ bash verify.sh
 | Case Files | [argusarc.xyz/shame](https://argusarc.xyz/shame) |
 | CLI (npm) | [npmjs.com/package/argus-scan](https://www.npmjs.com/package/argus-scan) |
 | Telegram | [t.me/argus_arc_bot](https://t.me/argus_arc_bot) |
-| Demo Video | [youtube.com/shorts/GNrcgwZZx0Y](https://youtube.com/shorts/GNrcgwZZx0Y) |
+| Demo Video | [youtu.be/-53bxqcXXg4](https://youtu.be/-53bxqcXXg4) |
 | GitHub | [github.com/Gideon145/argus](https://github.com/Gideon145/argus) |
 | X | [@Argus_arc](https://x.com/Argus_arc) |
 | ArcScan (Treasury) | [0x0699...f77d81](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
