@@ -29,6 +29,9 @@
   <a href="https://www.npmjs.com/package/argus-scan">
     <img src="https://img.shields.io/npm/dw/argus-scan" alt="npm downloads">
   </a>
+  <a href="https://argus-agent-production-ab97.up.railway.app/health">
+    <img src="https://img.shields.io/badge/API-health-3CB878?style=flat-square" alt="API health">
+  </a>
 </p>
 
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
@@ -318,9 +321,10 @@ Most security tools are single-model wrappers. Argus:
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
 | **v0.10** | CLI tool (`npx argus-scan`), retention features, polish | ✅ Shipped (Jun 29) |
 | **v0.11** | Telegram bot (`t.me/argus_arc_bot`) — third surface, multi-platform reach | ✅ Shipped (Jul 1) |
-| **v0.12** | Scan history per user, agent accuracy trends, public ELO leaderboard | Post-hackathon |
-| **v0.13** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
-| **v0.14** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
+| **v0.12** | Confidence-weighted staking — agents stake proportionally to certainty (95% sure = bigger stake, 50% sure = smaller). Rewards accuracy, not bravado | Post-hackathon |
+| **v0.13** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
+| **v0.14** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
+| **v0.15** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
 | **v1.0** | Arc mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 ---
@@ -415,59 +419,25 @@ Web is the primary surface. Telegram growing from the bot launch. CLI just launc
 | Jun 30 | 100+ | 664 | $6.85 | Shadow Float CitePay lifecycle closed · Why Arc section added |
 | **Jul 1** | **100+** | **666** | **$6.93** | **Telegram bot live · t.me/argus_arc_bot · three surfaces shipped** |
 | **Jul 2** | **125** | **806** | **$7.93** | **800+ scans · 125 users · Mermaid diagram · JUDGE_GUIDE · TOC** |
+| **Jul 3** | **125** | **810** | **$7.93** | **Benchmark: 40 tokens, 55% accuracy · CLI v0.11 shipped · AGENTS.md + ARCHITECTURE.md** |
 
 ---
 
 ## Telegram: Scan from Any Chat
 
-Open Telegram, paste an address, get a verdict. Same 3-agent consensus as web and CLI — now one `/scan` away.
-
-**[t.me/argus_arc_bot](https://t.me/argus_arc_bot)**
-
-```
-/scan 0x... — Scan any token
-/stats — Live treasury & scans
-/whoami — Your Circle wallet
-```
-
-First `/scan` auto-creates a Circle wallet per Telegram user. Every scan pays $0.01 USDC via Gateway x402. Full agent reasoning — not summarized. Agent payments shown when dissenters pay winners. Verdict recorded on-chain.
-
-Web. CLI. Telegram. Three surfaces. One oracle.
+**[t.me/argus_arc_bot](https://t.me/argus_arc_bot)** — `/scan 0x...` from any chat. Auto-creates a Circle wallet per user, pays $0.01 USDC via Gateway x402, shows full agent reasoning + dissent payments. Three surfaces, one oracle.
 
 ---
 
 ## CLI: Scan from Your Terminal
 
-No browser. No MetaMask. No signup. Just a terminal.
-
 ```bash
 npx argus-scan@latest 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
 ```
 
-**What happens:**
-1. First run auto-creates a Circle wallet (stored locally, no key management)
-2. Pays $0.01 USDC to treasury via Gateway x402 — real on-chain transaction
-3. Three agents analyze independently (DeepSeek, Claude, Rule Engine)
-4. Consensus locks in — dissenters pay winners 0.0005 USDC each
-5. Verdict recorded on-chain via ArgusOracle on Arc
+First run auto-creates a Circle wallet. $0.01 per scan via Gateway x402. Same 3-agent consensus — identical to web. Pipe-friendly JSON, stats, wallet commands. [Full usage →](cli/README.md)
 
-Every CLI scan is identical to a website scan — same agents, same consensus, same on-chain record. The only difference is where you type.
-
-```bash
-# Scan any token address
-npx argus-scan@latest 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
-
-# Pipe-friendly JSON
-npx argus-scan@latest 0x... --json | jq .result.verdict
-
-# Live stats
-npx argus-scan@latest stats
-
-# Show your Circle wallet
-npx argus-scan@latest whoami
-```
-
-📦 Published as [`argus-scan`](https://www.npmjs.com/package/argus-scan) on npm. Zero dependencies, Node 18+. Source in [`cli/`](cli/).
+📦 [`argus-scan` on npm](https://www.npmjs.com/package/argus-scan) · Zero dependencies · Node 18+
 
 ---
 
