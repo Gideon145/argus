@@ -81,6 +81,10 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 **Built for everyone.** Connect with MetaMask and get auto-funded, or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Just paste a token address and get a security verdict from three independent AI agents. Web, CLI, or Telegram — same consensus, your choice.
 
+> We didn't just build a website. We built three ways to reach the same truth — three independent AI agents, staking real USDC on every verdict, paying each other when they disagree. Web, CLI, Telegram. Pick your surface. Same consensus.
+>
+> The third eye is the tiebreaker. Always has been.
+
 ---
 
 ## How It Works
