@@ -40,7 +40,7 @@
 
 > **Don't get rugged.** Paste any token address — on web, CLI, or Telegram. Two AI agents (DeepSeek-V3, Claude Sonnet 4.5) plus a deterministic rule engine analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent. No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
-| **806 scans** | **$7.93 treasury** | **125 users** | **5/5 Circle primitives** |
+| **810+ scans (as of Jul 3)** | **$7.93 treasury** | **125 users** | **5/5 Circle primitives** |
 |---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtu.be/-53bxqcXXg4](https://youtu.be/-53bxqcXXg4)
@@ -143,7 +143,7 @@ Argus could only exist on Arc:
 | Agent | Model | Role | Cost per scan |
 |-------|-------|------|---------------|
 | **Agent α** | DeepSeek-V3 | Contract-level security: ownership, proxies, honeypots, access control, upgradeability, external calls | ~$0.001 |
-| **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading | ~$0.002 |
+| **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data — live holder/LP queries planned for v0.14 | ~$0.002 |
 | **Agent γ** | Rule Engine (local) | Deterministic checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 checksum validation, blacklist matching | $0 (no API) |
 
 Each agent operates independently — no shared state, no prompt leakage between models. Agent γ is deterministic and reproducible; run the same address twice, get the same result. Agents α and β bring deep reasoning from different model families (DeepSeek and Anthropic), creating genuine cognitive diversity in the consensus.
