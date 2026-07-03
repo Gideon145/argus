@@ -371,12 +371,12 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | 3-agent consensus live | Jun 16 | 0 | 5 | $0.00 |
 | argusarc.xyz live | Jun 18 | — | 45 | $0.00 |
 | Circle wallets (no MetaMask) | Jun 21 | 12 | 340 | $0.22 |
-| 100 users · 500 scans | Jun 25 | — | 500+ | $3.00 |
-| CLI shipped to npm | Jun 29 | — | 648 | $5.80 |
-| Telegram bot live | Jul 1 | — | 666 | $6.93 |
-| **800+ scans · 125 users** | **Jul 3** | — | **810** | **$7.93** |
+| 100 users · 500 scans | Jun 25 | 100+ | 500+ | $3.00 |
+| CLI shipped to npm | Jun 29 | 100+ | 648 | $5.80 |
+| Telegram bot live | Jul 1 | 100+ | 666 | $6.93 |
+| **800+ scans · 125 users** | **Jul 3** | **125** | **810** | **$7.93** |
 
-*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Exact daily counts computed by `benchmark/user-growth.ts` from wallet_pool.json assignedAt timestamps on Railway. Run `npx tsx benchmark/user-growth.ts` on production to populate. Cells marked "—" await measurement from production data.*
+*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Exact daily cumulative counts computed by `benchmark/user-growth.ts` from wallet_pool.json assignedAt timestamps (run on Railway).*
 
 ---
 
