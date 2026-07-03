@@ -339,6 +339,12 @@ Most security tools are single-model wrappers. Argus:
 
 ---
 
+## Accuracy Evaluation
+
+*Benchmark pending — 40 labeled tokens, 3-agent pipeline. Run: `npx tsx benchmark/run-benchmark.ts`*
+
+---
+
 ## Traction
 
 *Real usage on Arc testnet. Every number is verifiable on-chain.*

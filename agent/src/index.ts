@@ -61,6 +61,20 @@ async function main() {
     res.json(store.getHistory());
   });
 
+  // Recent scans feed — last 10 completed scans for landing page
+  app.get('/recent-scans', (_req, res) => {
+    const limit = parseInt(_req.query.limit as string) || 10;
+    const history = store.getHistory();
+    const recent = history.slice(-limit).reverse().map((h: any) => ({
+      address: h.address,
+      verdict: h.verdict,
+      consensusVotes: h.consensus || 'N/A',
+      timestamp: h.time,
+      txHash: h.txHash || null,
+    }));
+    res.json(recent);
+  });
+
   // User source breakdown — where users came from
   app.get('/sources', (_req, res) => {
     res.json(walletPool.stats());
