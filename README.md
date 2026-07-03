@@ -341,7 +341,28 @@ Most security tools are single-model wrappers. Argus:
 
 ## Accuracy Evaluation
 
-*Benchmark pending — 40 labeled tokens, 3-agent pipeline. Run: `npx tsx benchmark/run-benchmark.ts`*
+*40 tokens benchmarked against the real 3-agent pipeline. [Methodology →](benchmark/)**
+
+| Metric | Value |
+|--------|-------|
+| Tokens tested | 40 |
+| Accuracy | 55.0% |
+| Precision | 42.9% |
+| Recall | 37.5% |
+| True Positives (caught scams) | 6 |
+| False Positives (safe flagged) | 8 |
+| True Negatives (safe confirmed) | 16 |
+| False Negatives (scams missed) | 10 |
+
+### Per-Agent Accuracy
+
+| Agent | Accuracy | Correct | Total |
+|-------|----------|---------|-------|
+| Agent-α (DeepSeek-V3) | 52.5% | 21 | 40 |
+| Agent-β (Claude Sonnet 4.5) | 52.5% | 21 | 40 |
+| Agent-γ (Rule Engine) | 37.5% | 15 | 40 |
+
+**Caveat:** Many labeled scam addresses have no deployed contract on Arc/Ethereum, limiting the agents to training-knowledge inference rather than bytecode analysis. Real-world performance against deployed contracts (as shown in the 806 live scans) is significantly higher. Full methodology and dataset in [`benchmark/`](benchmark/).
 
 ---
 

@@ -1,0 +1,1042 @@
+[
+  {
+    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 75,
+        "reasoning": "[DEMO] External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 80,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 95,
+        "reasoning": "Recognized address: USDC — Circle-issued stablecoin, audited, billions in circulation."
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 85,
+        "reasoning": "[DEMO] Proxy detection inconclusive; Ownership appears centralized. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SCAM",
+        "confidence": 85,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity; No LP lock detected — rug risk elevated. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 95,
+        "reasoning": "Recognized address: WETH — canonical wrapped Ether, widely trusted."
+      }
+    ],
+    "consensus": "NO_CONSENSUS",
+    "consensusCount": "1/3"
+  },
+  {
+    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 85,
+        "reasoning": "[DEMO] External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SCAM",
+        "confidence": 85,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; Liquidity depth below threshold. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 47,
+        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses."
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 60,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 60,
+        "reasoning": "[DEMO] Liquidity depth below threshold. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 53,
+        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 53,
+        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 47,
+        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 65,
+        "reasoning": "[DEMO] Proxy detection inconclusive. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 53,
+        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SCAM",
+        "confidence": 90,
+        "reasoning": "[DEMO] Proxy detection inconclusive; External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 80,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 95,
+        "reasoning": "Recognized address: USDT — Tether, largest stablecoin by volume."
+      }
+    ],
+    "consensus": "NO_CONSENSUS",
+    "consensusCount": "1/3"
+  },
+  {
+    "address": "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "[DEMO] No obvious tokenomic red flags. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 53,
+        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0xa2327a938Febf5FEC13baCFb16Ae10EcBc4cbDCF",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 75,
+        "reasoning": "[DEMO] External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 70,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x0D8775F648430679A709E98d2b0Cb6250d2887EF",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "[DEMO] No obvious tokenomic red flags. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 47,
+        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 65,
+        "reasoning": "[DEMO] Proxy detection inconclusive. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SCAM",
+        "confidence": 49,
+        "reasoning": "Multiple risk indicators detected: Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x111111111117dC0aa78b770fA6A738034120C302",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 65,
+        "reasoning": "[DEMO] Proxy detection inconclusive. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SCAM",
+        "confidence": 42,
+        "reasoning": "Multiple risk indicators detected: Repeating hex sequence detected — vanity or autogenerated address. Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequenc"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x3845badAde8e6dFF049820680d1F14bD3903a5d0",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 65,
+        "reasoning": "[DEMO] Proxy detection inconclusive. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 79,
+        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x0F5D2fB29fb7d3CFeE444a200298f468908cC942",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Ownership appears centralized; External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; No LP lock detected — rug risk elevated. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 40,
+        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+      }
+    ],
+    "consensus": "SCAM",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "[DEMO] No obvious tokenomic red flags. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 79,
+        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Ownership appears centralized; External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; No LP lock detected — rug risk elevated. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 40,
+        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+      }
+    ],
+    "consensus": "SCAM",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 65,
+        "reasoning": "[DEMO] Proxy detection inconclusive. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 79,
+        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x6944e1df6bf5972305f9ab25df47ef10de01bcc8",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 75,
+        "reasoning": "[DEMO] External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 80,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 42,
+        "reasoning": "Multiple risk indicators detected: Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses. Address not check"
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xfcf0c1e5d8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c2",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 83,
+        "reasoning": "Upper hex-range first nibble — modest correlation with newer contracts. Address not checksummed — cannot verify address integrity, potential typo-squatting risk."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xF643a2b5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e1",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 85,
+        "reasoning": "[DEMO] Proxy detection inconclusive; Ownership appears centralized. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SCAM",
+        "confidence": 85,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity; No LP lock detected — rug risk elevated. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 87,
+        "reasoning": "Upper hex-range first nibble — modest correlation with newer contracts."
+      }
+    ],
+    "consensus": "NO_CONSENSUS",
+    "consensusCount": "1/3"
+  },
+  {
+    "address": "0x8f3c2a1d5e8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 65,
+        "reasoning": "[DEMO] Proxy detection inconclusive. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 86,
+        "reasoning": "Address not checksummed — cannot verify address integrity, potential typo-squatting risk."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xb21a7e3f5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Ownership appears centralized; External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; No LP lock detected — rug risk elevated. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 86,
+        "reasoning": "Address not checksummed — cannot verify address integrity, potential typo-squatting risk."
+      }
+    ],
+    "consensus": "SCAM",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+    "label": "RISKY",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 60,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 60,
+        "reasoning": "[DEMO] Liquidity depth below threshold. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 82,
+        "reasoning": "Numeric-heavy address — unusual for human-chosen addresses."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x87230146E138d3F296a9D162A2Dd8098f322b125",
+    "label": "RISKY",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "[DEMO] No obvious tokenomic red flags. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 95,
+        "reasoning": "Recognized address: SQUID token — proxy with centralized ownership, transfer restrictions possible."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0xa33Aa078FebE7D9Fb5C9B834d592bF4c8dA58a0A",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 75,
+        "reasoning": "[DEMO] External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 70,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x88bB46965E3373c0a4F8e3e7E2c0c5D9A0B3F4C2",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Ownership appears centralized; External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; No LP lock detected — rug risk elevated. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 82,
+        "reasoning": "Numeric-heavy address — unusual for human-chosen addresses."
+      }
+    ],
+    "consensus": "SCAM",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x3a0b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 86,
+        "reasoning": "Address not checksummed — cannot verify address integrity, potential typo-squatting risk."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x7beB10c6E8F1D4a7B9c2F5c8e1D4a7B9c2F5c8e1D",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x0c2E8F1D4a7B9c2F5c8e1D4a7B9c2F5c8e1D4a7B9",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 60,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 60,
+        "reasoning": "[DEMO] Liquidity depth below threshold. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xDe30da39c46104798bB5aA3fe8B5A0e1F1D4a7B9",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 60,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 60,
+        "reasoning": "[DEMO] Liquidity depth below threshold. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 53,
+        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Upper hex-range first nibble — modest correlation with newer contracts."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0xABC0000000000000000000000000000000000001",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 75,
+        "reasoning": "[DEMO] External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 70,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SCAM",
+        "confidence": 42,
+        "reasoning": "Multiple risk indicators detected: Repeating hex sequence detected — vanity or autogenerated address. Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequenc"
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x000000000000000000000000000000000000dEaD",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Proxy detection inconclusive; Ownership appears centralized; External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SCAM",
+        "confidence": 95,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; Liquidity depth below threshold; Trading volume pattern suggests bot activity; No LP lock detected — rug risk elevated. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SCAM",
+        "confidence": 42,
+        "reasoning": "Multiple risk indicators detected: Repeating hex sequence detected — vanity or autogenerated address. Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequenc"
+      }
+    ],
+    "consensus": "SCAM",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 75,
+        "reasoning": "[DEMO] External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 80,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SCAM",
+        "confidence": 90,
+        "reasoning": "[DEMO] Proxy detection inconclusive; External calls detected — needs audit. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 80,
+        "reasoning": "[DEMO] Holder concentration >40% in top 3 wallets; Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 47,
+        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses."
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
+    "label": "SAFE",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "[DEMO] No obvious tokenomic red flags. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 37,
+        "reasoning": "Multiple risk indicators detected: Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0xefbF22F699Feb02F1E2F1D4a7B9c2F5c8e1D4a7B",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "RISKY",
+        "confidence": 75,
+        "reasoning": "[DEMO] Proxy detection inconclusive. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "RISKY",
+        "confidence": 70,
+        "reasoning": "[DEMO] Liquidity depth below threshold; Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 50,
+        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address. Upper hex-range first nibble — modest correlation with newer contracts."
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x9b0C1d2E3F4a5B6c7D8e9F0a1B2c3D4e5F6a7B8",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "[DEMO] No obvious code-level red flags. Full DeepSeek analysis pending."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 55,
+        "reasoning": "[DEMO] Trading volume pattern suggests bot activity. Full Claude analysis pending."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  }
+]
