@@ -306,27 +306,28 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Poll global scan history from agent backend (shared across all users)
+  // Poll global recent scans from agent backend (shared across all users)
   useEffect(() => {
     const poll = async () => {
       try {
-        const r = await fetch(`${AGENT_URL}/history`);
+        const r = await fetch(`${AGENT_URL}/recent-scans?limit=10`);
         if (r.ok) {
-          const history = await r.json();
-          if (Array.isArray(history) && history.length > 0) {
-            setAnalysisHistory(history.map((h: any) => ({
-              addr: h.address.slice(0, 6) + '...' + h.address.slice(-4),
+          const recent = await r.json();
+          if (Array.isArray(recent) && recent.length > 0) {
+            setAnalysisHistory(recent.map((h: any) => ({
+              addr: (h.address || '').slice(0, 6) + '...' + (h.address || '').slice(-4),
               verdict: h.verdict,
-              consensus: h.consensus,
-              confidence: h.confidence,
-              time: h.time,
+              consensus: h.consensusVotes || h.consensus || 'N/A',
+              confidence: h.confidence || 0,
+              time: h.timestamp || '',
+              txHash: h.txHash || null,
             })));
-            setRecentVerdicts(history.slice(0, 8).map((h: any) => ({
-              name: h.address.slice(0, 6) + '...' + h.address.slice(-4),
+            setRecentVerdicts(recent.slice(0, 8).map((h: any) => ({
+              name: (h.address || '').slice(0, 6) + '...' + (h.address || '').slice(-4),
               verdict: h.verdict,
-              consensus: h.consensus,
+              consensus: h.consensusVotes || h.consensus || 'N/A',
               time: 'recent',
-              confidence: h.confidence,
+              confidence: h.confidence || 0,
             })));
             setLiveFeed(history.slice(0, 10).map((h: any) => ({
               time: 'recent',
