@@ -42,6 +42,7 @@
 > 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
 > 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved
 > 🤖 **[AGENTS.md](AGENTS.md)** — How any AI agent can plug into Argus as a security oracle
+> 📋 **[JUDGE_GUIDE.md](JUDGE_GUIDE.md)** — 5-minute review walkthrough for judges
 > ✅ **[verify.sh](verify.sh)** — 34-check end-to-end verifier
 
 ---
