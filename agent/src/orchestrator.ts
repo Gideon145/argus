@@ -91,15 +91,19 @@ export class Orchestrator {
     // Step 5: Update ELO reputation
     await updateReputation(verdicts, result);
 
-    // Step 6: Agent-to-agent nanopayments — winners rewarded, losers pay micro-stake
+    // Step 6: Agent-to-agent nanopayments — confidence-weighted stakes (v0.12)
     if (result.consensusReached) {
-      settleAgentPayments(result.winningAgents, result.losingAgents, queryId)
+      const confidences: Record<string, number> = {};
+      for (const v of verdicts) {
+        confidences[v.agent] = v.confidence;
+      }
+      settleAgentPayments(result.winningAgents, result.losingAgents, queryId, confidences)
         .then(records => {
           if (records.length > 0) {
-            this.logger.info(`[AgentPay] ${records.length} payments settled`);
+            this.logger.info(`[AgentPay] ${records.length} confidence-weighted payments settled`);
           }
         })
-        .catch(() => {}); // Fire-and-forget — don't block scan response
+        .catch(() => {});
     }
 
     this.queryCount++;
@@ -110,12 +114,13 @@ export class Orchestrator {
     // Cache result to avoid repeat API costs
     this.scanCache.set(cacheKey, result);
 
-    // Persist to file store (survives deploys, visible to all users)
+    // Persist to file store
+    const avgConf = Math.round(result.agentVerdicts.reduce((sum, v) => sum + v.confidence, 0) / result.agentVerdicts.length);
     store.recordScan({
       address: req.contractAddress,
       verdict: result.finalVerdict,
       consensus: `${result.agreementCount}/${result.totalAgents}`,
-      confidence: Math.round(result.agentVerdicts.reduce((sum, v) => sum + v.confidence, 0) / result.agentVerdicts.length),
+      confidence: avgConf,
       time: new Date().toISOString().replace('T', ' ').slice(0, 19),
     }, result.consensusReached);
 

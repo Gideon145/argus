@@ -17,8 +17,10 @@ const AGENT_KEYS: Record<string, string> = {
   'Agent-γ': process.env.AGENT_GAMMA_PRIVATE_KEY || '',
 };
 
-// 0.001 USDC in wei (18 decimals on Arc)
-const MICRO_STAKE = ethers.parseUnits('0.001', 18);
+// Base micro-stake: 0.0005 USDC in wei (18 decimals on Arc)
+// Scaled by agent confidence: stake = BASE_STAKE * (2 * confidenceRatio)
+// confidence=100 → 0.001 USDC | confidence=50 → 0.0005 USDC
+const BASE_STAKE = ethers.parseUnits('0.0005', 18);
 
 interface PaymentRecord {
   from: string;
@@ -56,24 +58,27 @@ function getProvider() {
 export async function settleAgentPayments(
   winningAgents: string[],
   losingAgents: string[],
-  queryId: string
+  queryId: string,
+  agentConfidences?: Record<string, number>
 ): Promise<PaymentRecord[]> {
   const records: PaymentRecord[] = [];
 
-  // Skip if no winners or no losers, or all agree
   if (losingAgents.length === 0 || winningAgents.length === 0) return records;
 
   try {
     const provider = getProvider();
 
-    // Each losing agent pays 0.001 USDC, split equally among winners
+    // Confidence-weighted: higher confidence = higher stake at risk
     for (const loser of losingAgents) {
       const loserKey = AGENT_KEYS[loser];
       if (!loserKey) continue;
 
       const loserWallet = new ethers.Wallet(loserKey, provider);
 
-      const sharePerWinner = MICRO_STAKE / BigInt(winningAgents.length);
+      // Scale by confidence: stake = BASE_STAKE * (2 * confidenceRatio)
+      const loserConf = (agentConfidences?.[loser] ?? 75) / 100;
+      const scaledStake = (BASE_STAKE * BigInt(Math.round(200 * loserConf))) / 100n;
+      const sharePerWinner = scaledStake / BigInt(winningAgents.length);
 
       for (const winner of winningAgents) {
         const winnerKey = AGENT_KEYS[winner];

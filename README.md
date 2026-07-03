@@ -194,11 +194,11 @@ All three agent system prompts are open source: [`agent/src/agents/`](agent/src/
 
 ## Agent-to-Agent Nanopayments (RFB 3)
 
-Since v0.6, Argus agents run an internal economy. After every scan where consensus is reached but not unanimous:
+Since v0.6, Argus agents run an internal economy. Since v0.12, stakes are **confidence-weighted**:
 
-- The **losing agent** pays **0.001 USDC** to each winning agent
+- The **losing agent** pays up to **0.001 USDC** scaled by their confidence — a 95%-sure agent risks more than a 55%-sure one
+- Formula: `stake = 0.0005 × (2 × confidenceRatio)` — rewards calibrated certainty, not bravado
 - Settled on-chain via native USDC transfers on Arc
-- Creates a real economic incentive: agents that consistently agree with consensus accumulate USDC; dissenters bleed
 
 This directly implements [Prior Art #08](https://lepton.thecanteenapp.com/#priorart) from the Lepton brief: *"Reputation you post as collateral, not a score you ask to be trusted."* The banker staked his own standing on the coin he vouched for — the trapezitai and argentarii. Argus agents do the same, in real time, on-chain, per decision.
 
@@ -308,7 +308,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
 | **v0.10** | CLI tool (`npx argus-scan`), retention features, polish | ✅ Shipped (Jun 29) |
 | **v0.11** | Telegram bot (`t.me/argus_arc_bot`) — third surface, multi-platform reach | ✅ Shipped (Jul 1) |
-| **v0.12** | Confidence-weighted staking — agents stake proportionally to certainty (95% sure = bigger stake, 50% sure = smaller). Rewards accuracy, not bravado | Post-hackathon |
+| **v0.12** | Confidence-weighted staking — agents stake proportionally to certainty. Higher confidence = bigger stake at risk. Rewards accuracy, not bravado | ✅ Shipped (Jul 3) |
 | **v0.13** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
 | **v0.14** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
 | **v0.15** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
@@ -332,34 +332,37 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ## Accuracy Evaluation
 
-*40 tokens benchmarked against the real 3-agent pipeline. [Methodology →](benchmark/)*
+*60 tokens (40 known + 20 held-out) benchmarked. [Methodology →](benchmark/)*
+
+### Known Tokens (database-backed, 40 tokens)
 
 | Metric | v1 (Jul 2) | v2 (Jul 3) | Improvement |
 |--------|-----------|-----------|-------------|
 | Accuracy | 55.0% | **100.0%** | +45pp |
 | Precision | 42.9% | **100.0%** | +57pp |
 | Recall | 37.5% | **100.0%** | +63pp |
-| Scams caught | 6/16 | **16/16** | +10 |
-| Safe confirmed | 16/24 | **24/24** | +8 |
-| Errors | 0 | 0 | — |
 
-### Per-Agent Accuracy
+### Held-Out Tokens (generalization, 20 tokens — no DB entries)
 
-| Agent | v1 | v2 | Improvement |
-|-------|-----|-----|-------------|
-| Agent-α (DeepSeek-V3) | 52.5% | **100.0%** | +47.5pp |
-| Agent-β (Claude Sonnet 4.5) | 52.5% | **100.0%** | +47.5pp |
-| Agent-γ (Rule Engine) | 37.5% | **100.0%** | +62.5pp |
+| Metric | Value |
+|--------|-------|
+| Accuracy | **70.0%** |
+| Precision | 63.6% |
+| Recall | **77.8%** |
+| Scams caught | 7/9 |
+| Safe confirmed | 7/11 |
+
+*Held-out tokens are absent from every agent lookup DB. Pre-flight assertion verifies this before scoring. See [`benchmark/heldout.json`](benchmark/heldout.json).*
+
+*Held-out tokens are absent from every agent lookup DB. Pre-flight assertion verifies this before scoring. See [`benchmark/heldout.json`](benchmark/heldout.json).*
 
 ### What changed
 
-**v1 root cause:** Fallback heuristics used random checksum-based scoring — USDC flagged RISKY, WETH flagged SCAM, DAI flagged RISKY. Agents had no shared knowledge of known tokens.
+**v1:** Random checksums. **v2:** Shared known-token DB + smarter heuristics. **v3:** Held-out cohort to measure generalization — tokens the agents have never seen.
 
-**v2 fix:** Shared known-token database (40+ tokens, queried by all three agents) + smarter heuristics (entropy analysis, digit-ratio scoring, address-poisoning detection) + cross-agent consistency (α, β, γ all reference the same ground truth).
+> **The eval-improvement loop**: benchmark → find failures → fix root cause → re-measure. v3 adds a held-out set to verify the heuristics generalize beyond memorized addresses.
 
-> **This is the eval-improvement loop in action.** We ran the benchmark, identified 18 failure cases, traced root causes, and fixed them systematically. The 45pp gain isn't from better AI — it's from better engineering. Real LLM analysis (DeepSeek-V3 + Claude Sonnet 4.5) runs when API keys are available; the fallback is now a credible safety net, not a random number generator.
-
-**Honest limits:** The benchmark tests known tokens. Real-world accuracy on novel contracts depends on LLM quality. 100% on this set proves the eval-improvement loop works — not that Argus is infallible. Full methodology and dataset in [`benchmark/`](benchmark/).
+Full methodology in [`benchmark/`](benchmark/).
 
 ---
 
