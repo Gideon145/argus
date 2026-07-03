@@ -83,53 +83,31 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 ## How It Works
 
-```
-User submits a token address
-  │
-  ▼
-┌─────────────────────────────┐
-│  Payment: $0.01 USDC          │  ← Gateway x402 nanopayment OR Circle wallet scan
-│  (MetaMask or instant wallet) │
-└────────────┬────────────────┘
-             │
-             ▼
-┌─────────────────────────────┐
-│  Orchestrator                │  ← Fans out to 3 agents in parallel
-└────┬──────────┬──────────┬───┘
-     │          │          │
-     ▼          ▼          ▼
-┌─────────┐ ┌─────────┐ ┌──────────┐
-│ Agent α  │ │ Agent β  │ │ Agent γ   │
-│ DeepSeek │ │ Claude   │ │ Rule      │
-│ V3       │ │ Sonnet 4 │ │ Engine    │
-│          │ │          │ │           │
-│ Contract │ │ Tokenomics│ │ Determin.  │
-│ logic    │ │ holders  │ │ patterns  │
-│ proxies  │ │ liquidity│ │ signatures│
-│ access   │ │ whales   │ │ bytecode  │
-└────┬────┘ └────┬────┘ └────┬─────┘
-     │          │          │
-     └──────────┼──────────┘
-                ▼
-┌─────────────────────────────┐
-│  Consensus (2/3 threshold)   │
-│  Agents stake USDC on verdict│
-└────────────┬────────────────┘
-             │
-     ┌───────┴───────┐
-     ▼               ▼
-┌──────────────┐  ┌──────────────────┐
-│ ELO updated   │  │ Agent-to-Agent    │
-│ Reputation    │  │ Nanopayments      │
-│ (persisted)   │  │ Loser pays winners│
-└──────────────┘  │ 0.001 USDC each   │
-                  └──────────────────┘
-             │
-             ▼
-┌─────────────────────────────┐
-│  ArgusOracle (Arc testnet)   │  ← Immutable verdict log
-│  0x563b2DA572...C153Cb46C8   │
-└─────────────────────────────┘
+```mermaid
+flowchart TB
+    U[👤 User] -->|$0.01 USDC| GW[Gateway x402]
+    U -->|paste address| WEB[Web<br/>argusarc.xyz]
+    U -->|npx| CLI[CLI<br/>npx argus-scan]
+    U -->|/scan| TG[Telegram<br/>t.me/argus_arc_bot]
+
+    WEB --> O[🎯 Orchestrator]
+    CLI --> O
+    TG --> O
+
+    O -->|fan out| A[🤖 Agent α<br/>DeepSeek-V3<br/>Contract logic]
+    O -->|fan out| B[🤖 Agent β<br/>Claude Sonnet 4.5<br/>Tokenomics]
+    O -->|fan out| G[🤖 Agent γ<br/>Rule Engine<br/>Deterministic]
+
+    A -->|verdict + stake| C[⚖️ Consensus<br/>2/3 threshold]
+    B -->|verdict + stake| C
+    G -->|verdict + stake| C
+
+    C -->|SAFE / RISKY / SCAM| R[📋 Verdict]
+    C -->|dissenters pay winners| P[💰 Agent Payments<br/>0.0005 USDC each]
+    C -->|record verdict| ORA[⛓️ ArgusOracle<br/>on-chain]
+
+    GW -->|$0.01 fee| TR[🏦 Treasury]
+    GW -->|fund wallets| W[💳 Circle Wallets]
 ```
 
 Arc's Malachite BFT consensus provides deterministic sub-second finality with zero reorg risk. Argus verdicts settle on the same finality guarantee — once a consensus result is recorded, it's immutable. No waiting for confirmations. No probabilistic uncertainty. The payment clears and the verdict stands.
