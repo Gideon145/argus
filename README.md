@@ -334,14 +334,14 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 *60 tokens (40 known + 20 held-out real contracts). [Methodology →](benchmark/)*
 
-**Held-out accuracy is the honest number: 70% on 20 real deployed contracts the agents have never seen, with source URLs for each scam post-mortem.** The 100% known-token score validates the eval-improvement loop (v1 was 55% with random fallbacks → v2 fixed with shared DB + heuristics).
+**v2 agents could not fetch mainnet data (45% blind-guessing with address heuristics); v3 adds a cross-chain data provider — results below.** When no contract data is available on any chain, agents abstain (INSUFFICIENT_DATA) rather than guessing. Coverage depends on Etherscan API access.
 
-| Cohort | Tokens | Accuracy | Precision | Recall | Notes |
-|--------|--------|----------|-----------|--------|-------|
-| Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | v1→v2: +45pp improvement |
-| Held-out real contracts | 20 | **45.0%** | 33.3% | 22.2% | No DB entries, pre-flight verified |
+| Cohort | Tokens | Coverage | Accuracy (on scored) | Abstentions | Notes |
+|--------|--------|----------|----------------------|-------------|-------|
+| Known (database-backed) | 40 | 100% | **100.0%** | 0 | DB-backed, always scored |
+| Held-out real contracts | 20 | 0%* | — | 20 | All Ethereum mainnet contracts; requires `ETHERSCAN_API_KEY` |
 
-*Held-out dataset: 11 legitimate contracts (SNX, REN, BAL, YFI, SUSHI, UMA, BAND, OCEAN, NMR, RLC, GNO) + 9 documented scams with source URLs (Thodex, Compounder, Wault, Rari, ForceDAO, PancakeBunny, Meerkat, Uranium, Bondly). Sources linked in [`benchmark/heldout.json`](benchmark/heldout.json). Held-out addresses are programmatically verified absent from all agent databases before scoring (see `benchmark/run-benchmark.ts`).*
+*\*With an Etherscan API key, coverage rises as contracts are fetched from mainnet. Without it, agents correctly abstain. Held-out addresses are programmatically verified absent from all agent databases before scoring (see `benchmark/run-benchmark.ts`). Sources linked in [`benchmark/heldout.json`](benchmark/heldout.json).*
 
 ---
 

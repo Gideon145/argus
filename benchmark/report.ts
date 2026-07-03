@@ -21,11 +21,13 @@ const HELDOUT_RESULTS_PATH = path.join(__dirname, 'heldout-results.json');
 
 function computeMetrics(results: BenchmarkResult[], cohortName: string) {
   const valid = results.filter(r => r.consensus !== 'ERROR' && r.consensus !== 'HELD_OUT_VIOLATION');
+  const abstained = results.filter(r => r.consensus === 'INSUFFICIENT_DATA');
+  const scored = valid.filter(r => r.consensus !== 'INSUFFICIENT_DATA');
 
   const isPositive = (label: string) => label === 'SCAM' || label === 'RISKY';
 
   let tp = 0, fp = 0, tn = 0, fn = 0;
-  for (const r of valid) {
+  for (const r of scored) {
     const actualPositive = isPositive(r.label);
     const predictedPositive = r.consensus === 'RISKY' || r.consensus === 'SCAM';
     if (actualPositive && predictedPositive) tp++;
@@ -35,23 +37,35 @@ function computeMetrics(results: BenchmarkResult[], cohortName: string) {
   }
 
   const total = tp + fp + tn + fn;
+  const coverage = valid.length > 0 ? ((scored.length / valid.length) * 100).toFixed(1) : '—';
   const accuracy = total > 0 ? ((tp + tn) / total * 100).toFixed(1) : '—';
   const precision = (tp + fp) > 0 ? ((tp / (tp + fp)) * 100).toFixed(1) : '—';
   const recall = (tp + fn) > 0 ? ((tp / (tp + fn)) * 100).toFixed(1) : '—';
 
+  // Inter-agent disagreement rate
+  let disagreementCount = 0;
+  for (const r of scored) {
+    const verdicts = r.agents.map(a => a.verdict);
+    if (new Set(verdicts).size > 1) disagreementCount++;
+  }
+  const disagreementRate = scored.length > 0 ? ((disagreementCount / scored.length) * 100).toFixed(1) : '—';
+  if (disagreementCount === 0 && scored.length > 0) {
+    console.warn(`⚠️  WARNING: 0% inter-agent disagreement across ${scored.length} scored tokens — agents may not be producing independent analyses`);
+  }
+
   const agentStats: Record<string, { correct: number; total: number }> = {};
-  for (const r of valid) {
+  for (const r of scored) {
     for (const a of r.agents) {
+      if (a.verdict === 'INSUFFICIENT_DATA') continue;
       if (!agentStats[a.agent]) agentStats[a.agent] = { correct: 0, total: 0 };
       agentStats[a.agent].total++;
-      // Agent is correct if its verdict matches the label direction
       const agentPositive = a.verdict === 'RISKY' || a.verdict === 'SCAM';
       const labelPositive = isPositive(r.label);
       if (agentPositive === labelPositive) agentStats[a.agent].correct++;
     }
   }
 
-  return { accuracy, precision, recall, tp, fp, tn, fn, total, agentStats, errors: results.length - valid.length };
+  return { accuracy, precision, recall, tp, fp, tn, fn, total, coverage, abstentionCount: abstained.length, disagreementRate, agentStats, errors: results.length - valid.length };
 }
 
 function run() {
@@ -91,11 +105,14 @@ function run() {
     console.log(`| Metric | Value |`);
     console.log(`|--------|-------|`);
     console.log(`| Tokens tested | ${m.total} |`);
-    console.log(`| Accuracy | ${m.accuracy}% |`);
+    console.log(`| Coverage (data fetched) | ${m.coverage}% |`);
+    console.log(`| Abstentions (no data) | ${m.abstentionCount} |`);
+    console.log(`| Accuracy (on scored) | ${m.accuracy}% |`);
     console.log(`| Precision | ${m.precision}% |`);
     console.log(`| Recall | ${m.recall}% |`);
     console.log(`| Scams caught | ${m.tp}/${m.tp + m.fn} |`);
     console.log(`| Safe confirmed | ${m.tn}/${m.tn + m.fp} |`);
+    console.log(`| Disagreement rate | ${m.disagreementRate}% |`);
     console.log(`| Errors | ${m.errors} |\n`);
 
     if (Object.keys(m.agentStats).length > 0) {
