@@ -339,9 +339,9 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 | Cohort | Tokens | Accuracy | Precision | Recall | Notes |
 |--------|--------|----------|-----------|--------|-------|
 | Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | v1→v2: +45pp improvement |
-| Held-out real contracts | 20 | **70.0%** | 63.6% | **77.8%** | No DB entries, pre-flight verified |
+| Held-out real contracts | 20 | **45.0%** | 33.3% | 22.2% | No DB entries, pre-flight verified |
 
-*Held-out dataset: 10 legitimate contracts (SNX, REN, BAL, YFI, SUSHI, UMA, BAND, OCEAN, NMR, RLC, GNO) + 10 documented scams (Thodex, Compounder, MEV bots, wallet drainers, honeypots, flash loan exploits, rug pulls). Sources linked in [`benchmark/heldout.json`](benchmark/heldout.json).*
+*Held-out dataset: 11 legitimate contracts (SNX, REN, BAL, YFI, SUSHI, UMA, BAND, OCEAN, NMR, RLC, GNO) + 9 documented scams with source URLs (Thodex, Compounder, Wault, Rari, ForceDAO, PancakeBunny, Meerkat, Uranium, Bondly). Sources linked in [`benchmark/heldout.json`](benchmark/heldout.json). Held-out addresses are programmatically verified absent from all agent databases before scoring (see `benchmark/run-benchmark.ts`).*
 
 ---
 
@@ -361,7 +361,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ### How we count
 
-Team test wallets are excluded from all user-facing metrics. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. Median scans per distinct token address: ~1. Distinct token addresses scanned: 40+ (benchmark set). Scans-per-day available from the `/stats` endpoint.
+Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. True distinct token count: 40 distinct addresses across ~810 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token).
 | **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
 
 ### User Growth

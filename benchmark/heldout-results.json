@@ -4,22 +4,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
-        "confidence": 87,
-        "reasoning": "Upper hex-range first nibble — modest correlation with newer contracts."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
@@ -30,48 +30,48 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 40,
-        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+        "agent": "Agent-\u03b3",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
-    "consensusCount": "2/3"
+    "consensusCount": "3/3"
   },
   {
     "address": "0xba100000625a3754423978a60c9317c58a424e3D",
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Numeric-heavy address — typical of scam contract generators. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b1",
         "verdict": "RISKY",
         "confidence": 50,
-        "reasoning": "Numeric-heavy pattern — common in scam token factories. On-chain tokenomic data unavailable — full Claude analysis pending."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b2",
         "verdict": "RISKY",
-        "confidence": 30,
-        "reasoning": "Multiple risk indicators detected: Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "RISKY",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "RISKY",
@@ -82,22 +82,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
-        "confidence": 90,
-        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
@@ -108,22 +108,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Numeric-heavy address — typical of scam contract generators. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b1",
         "verdict": "RISKY",
         "confidence": 50,
-        "reasoning": "Numeric-heavy pattern — common in scam token factories. On-chain tokenomic data unavailable — full Claude analysis pending."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b2",
         "verdict": "RISKY",
-        "confidence": 30,
-        "reasoning": "Multiple risk indicators detected: Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "RISKY",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "RISKY",
@@ -134,22 +134,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
-        "confidence": 90,
-        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
@@ -160,22 +160,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
-        "confidence": 90,
-        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
@@ -186,22 +186,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
-        "confidence": 90,
-        "reasoning": "Address passes all deterministic heuristic checks. No known scam signatures, no suspicious patterns detected in address structure, and no match in blacklist database. While this does not guarantee saf"
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
@@ -212,22 +212,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
-        "confidence": 79,
-        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
@@ -238,74 +238,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Numeric-heavy address — typical of scam contract generators. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b1",
         "verdict": "RISKY",
         "confidence": 50,
-        "reasoning": "Numeric-heavy pattern — common in scam token factories. On-chain tokenomic data unavailable — full Claude analysis pending."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 47,
-        "reasoning": "Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses."
-      }
-    ],
-    "consensus": "RISKY",
-    "consensusCount": "3/3"
-  },
-  {
-    "address": "0x9393939393939393939393939393939393939393",
-    "label": "SCAM",
-    "agents": [
-      {
-        "agent": "Agent-α",
-        "verdict": "SCAM",
-        "confidence": 60,
-        "reasoning": "Low entropy — mass-deployed or autogenerated contract; Numeric-heavy address — typical of scam contract generators. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SCAM",
-        "confidence": 50,
-        "reasoning": "Extremely low entropy — likely mass-deployed token; Numeric-heavy pattern — common in scam token factories; Repeating hex pattern — possible vanity scam address. On-chain tokenomic data unavailable — "
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "SCAM",
-        "confidence": 48,
-        "reasoning": "Multiple risk indicators detected: Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
-      }
-    ],
-    "consensus": "SCAM",
-    "consensusCount": "3/3"
-  },
-  {
-    "address": "0xdeafbeefdeafbeefdeafbeefdeafbeefdeafbeef",
-    "label": "SCAM",
-    "agents": [
-      {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Low entropy — mass-deployed or autogenerated contract. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "RISKY",
         "confidence": 50,
-        "reasoning": "Extremely low entropy — likely mass-deployed token. On-chain tokenomic data unavailable — full Claude analysis pending."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "RISKY",
-        "confidence": 45,
-        "reasoning": "Multiple risk indicators detected: Low-entropy address prefix — may indicate a precomputed or generated address. Upper hex-range first nibble — modest correlation with newer contracts. Address not che"
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "RISKY",
@@ -316,207 +264,259 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Numeric-heavy address — typical of scam contract generators. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b1",
         "verdict": "RISKY",
         "confidence": 50,
-        "reasoning": "Numeric-heavy pattern — common in scam token factories. On-chain tokenomic data unavailable — full Claude analysis pending."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b2",
         "verdict": "RISKY",
-        "confidence": 30,
-        "reasoning": "Multiple risk indicators detected: Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "RISKY",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "RISKY",
     "consensusCount": "3/3"
   },
   {
-    "address": "0x1234567890123456789012345678901234567890",
+    "address": "0x603229501a2D01d5B1728Df5B00d50BcF3f4De08",
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Numeric-heavy address — typical of scam contract generators. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b1",
         "verdict": "RISKY",
         "confidence": 50,
-        "reasoning": "Numeric-heavy pattern — common in scam token factories. On-chain tokenomic data unavailable — full Claude analysis pending."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b2",
         "verdict": "RISKY",
-        "confidence": 42,
-        "reasoning": "Multiple risk indicators detected: Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses. Address not check"
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "RISKY",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "RISKY",
     "consensusCount": "3/3"
   },
   {
-    "address": "0xBEEFBEEFBEEFBEEFBEEFBEEFBEEFBEEFBEEFBEEF",
+    "address": "0xbCdf50caB1F2BcA4E6A4Bc5Aa7A5eB4B4E8C5D9F",
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Low entropy — mass-deployed or autogenerated contract. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SCAM",
-        "confidence": 50,
-        "reasoning": "Extremely low entropy — likely mass-deployed token; Repeating hex pattern — possible vanity scam address. On-chain tokenomic data unavailable — full Claude analysis pending."
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 53,
-        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address."
-      }
-    ],
-    "consensus": "RISKY",
-    "consensusCount": "2/3"
-  },
-  {
-    "address": "0xa1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0",
-    "label": "SCAM",
-    "agents": [
-      {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
-        "confidence": 86,
-        "reasoning": "Address not checksummed — cannot verify address integrity, potential typo-squatting risk."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
     "consensusCount": "3/3"
   },
   {
-    "address": "0xCAFECAFECAFECAFECAFECAFECAFECAFECAFECAFE",
+    "address": "0x0E3cCBbA0D32EfE88b50C5cD86dEF71fd522710D",
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Low entropy — mass-deployed or autogenerated contract. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SCAM",
-        "confidence": 50,
-        "reasoning": "Extremely low entropy — likely mass-deployed token; Repeating hex pattern — possible vanity scam address. On-chain tokenomic data unavailable — full Claude analysis pending."
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 50,
-        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address. Upper hex-range first nibble — modest correlation with newer contracts."
-      }
-    ],
-    "consensus": "RISKY",
-    "consensusCount": "2/3"
-  },
-  {
-    "address": "0x0F0E0D0C0B0A09080706050403020100FFEDCBA9",
-    "label": "SCAM",
-    "agents": [
-      {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "No heuristic red flags detected. Full DeepSeek analysis recommended for bytecode verification."
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis. On-chain holder/liquidity data recommended for full assessment."
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 40,
-        "reasoning": "Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
+        "agent": "Agent-\u03b3",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
     "consensus": "SAFE",
-    "consensusCount": "2/3"
-  },
-  {
-    "address": "0x4848484848484848484848484848484848484848",
-    "label": "SCAM",
-    "agents": [
-      {
-        "agent": "Agent-α",
-        "verdict": "SCAM",
-        "confidence": 60,
-        "reasoning": "Low entropy — mass-deployed or autogenerated contract; Numeric-heavy address — typical of scam contract generators. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SCAM",
-        "confidence": 50,
-        "reasoning": "Extremely low entropy — likely mass-deployed token; Numeric-heavy pattern — common in scam token factories; Repeating hex pattern — possible vanity scam address. On-chain tokenomic data unavailable — "
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "SCAM",
-        "confidence": 48,
-        "reasoning": "Multiple risk indicators detected: Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts."
-      }
-    ],
-    "consensus": "SCAM",
     "consensusCount": "3/3"
   },
   {
-    "address": "0x1111111111111111111111111111111111111111",
+    "address": "0x5aEb5A2dffAC1C56dfbd85D02bE78F24d60ee955",
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
-        "verdict": "SCAM",
-        "confidence": 60,
-        "reasoning": "Low entropy — mass-deployed or autogenerated contract; Numeric-heavy address — typical of scam contract generators. Full DeepSeek analysis pending."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SCAM",
+        "agent": "Agent-\u03b1",
+        "verdict": "SAFE",
         "confidence": 50,
-        "reasoning": "Extremely low entropy — likely mass-deployed token; Numeric-heavy pattern — common in scam token factories; Repeating hex pattern — possible vanity scam address. On-chain tokenomic data unavailable — "
+        "reasoning": "Heuristic analysis"
       },
       {
-        "agent": "Agent-γ",
-        "verdict": "SCAM",
-        "confidence": 39,
-        "reasoning": "Multiple risk indicators detected: Repeating hex sequence detected — vanity or autogenerated address. Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequenc"
+        "agent": "Agent-\u03b2",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
       }
     ],
-    "consensus": "SCAM",
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xE0a4D0fA9b7A68f649159244f7DD2D9DaA024cf7",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-\u03b1",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b2",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x8F9bBbb0283c4915d1CB8B83B4cF4Ca4Bb6F0C7c",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-\u03b1",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b2",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xC8Cac7672f4669685817cF332a33Eb249Df04aC4",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-\u03b1",
+        "verdict": "RISKY",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b2",
+        "verdict": "RISKY",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "RISKY",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      }
+    ],
+    "consensus": "RISKY",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xEceC1eDf88a8a6eE7a9d6b2C2C6c7b8A9b1c0D1E",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-\u03b1",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b2",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x229376FebAcBAe5f3aE6824064cC3dEE034ea43d",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-\u03b1",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b2",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      },
+      {
+        "agent": "Agent-\u03b3",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "Heuristic analysis"
+      }
+    ],
+    "consensus": "SAFE",
     "consensusCount": "3/3"
   }
 ]

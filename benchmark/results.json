@@ -4,22 +4,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: USDC — Circle-issued stablecoin, audited, billions in circulation. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: USDC — Circle-issued stablecoin, audited, billions in circulation. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: USDC — Circle-issued stablecoin, audited, billions in circulation."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -30,22 +30,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: WETH — canonical wrapped Ether, most trusted ERC-20 wrapper. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: WETH — canonical wrapped Ether, most trusted ERC-20 wrapper. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: WETH — canonical wrapped Ether, most trusted ERC-20 wrapper."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -56,22 +56,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: DAI — MakerDAO audited decentralized stablecoin. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: DAI — MakerDAO audited decentralized stablecoin. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: DAI — MakerDAO audited decentralized stablecoin."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -82,22 +82,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: UNI — Uniswap governance token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: UNI — Uniswap governance token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: UNI — Uniswap governance token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -108,22 +108,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: MATIC — Polygon bridge token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: MATIC — Polygon bridge token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: MATIC — Polygon bridge token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -134,22 +134,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: LINK — Chainlink oracle token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: LINK — Chainlink oracle token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: LINK — Chainlink oracle token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -160,22 +160,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: WBTC — Wrapped Bitcoin, audited, BitGo custody. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: WBTC — Wrapped Bitcoin, audited, BitGo custody. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: WBTC — Wrapped Bitcoin, audited, BitGo custody."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -186,22 +186,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: USDT — Tether, largest stablecoin by volume. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: USDT — Tether, largest stablecoin by volume. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: USDT — Tether, largest stablecoin by volume."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -212,22 +212,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: BNB — Binance Coin, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: BNB — Binance Coin, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: BNB — Binance Coin, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -238,22 +238,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: CRV — Curve DAO, audited DeFi token. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: CRV — Curve DAO, audited DeFi token. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: CRV — Curve DAO, audited DeFi token."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -264,22 +264,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: AAVE — Aave governance token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: AAVE — Aave governance token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: AAVE — Aave governance token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -290,22 +290,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: BAT — Basic Attention Token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: BAT — Basic Attention Token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: BAT — Basic Attention Token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -316,22 +316,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: MKR — Maker governance token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: MKR — Maker governance token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: MKR — Maker governance token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -342,22 +342,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: COMP — Compound governance token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: COMP — Compound governance token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: COMP — Compound governance token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -368,22 +368,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: 1INCH — 1inch DEX aggregator token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: 1INCH — 1inch DEX aggregator token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: 1INCH — 1inch DEX aggregator token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -394,22 +394,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: SAND — The Sandbox gaming token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: SAND — The Sandbox gaming token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: SAND — The Sandbox gaming token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -420,22 +420,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: MANA — Decentraland metaverse token, audited. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: MANA — Decentraland metaverse token, audited. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: MANA — Decentraland metaverse token, audited."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -446,22 +446,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: BUSD — Binance USD, audited stablecoin. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: BUSD — Binance USD, audited stablecoin. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: BUSD — Binance USD, audited stablecoin."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -472,22 +472,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: USDP — Pax Dollar, audited stablecoin. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: USDP — Pax Dollar, audited stablecoin. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: USDP — Pax Dollar, audited stablecoin."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -498,22 +498,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: GUSD — Gemini Dollar, audited stablecoin. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: GUSD — Gemini Dollar, audited stablecoin. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: GUSD — Gemini Dollar, audited stablecoin."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -524,22 +524,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Unibase AI — proxy control, 100% sell fee, documented rug. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Unibase AI — proxy control, 100% sell fee, documented rug. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Unibase AI — proxy control, 100% sell fee, documented rug."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -550,22 +550,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Fake USDC clone — impersonation, freeze function backdoor. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Fake USDC clone — impersonation, freeze function backdoor. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Fake USDC clone — impersonation, freeze function backdoor."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -576,22 +576,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: ArbitrageBot — deposit scam, no trading logic in contract. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: ArbitrageBot — deposit scam, no trading logic in contract. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: ArbitrageBot — deposit scam, no trading logic in contract."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -602,22 +602,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: DegenTax — rotating tax wallet, unlocked LP, documented exploit. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: DegenTax — rotating tax wallet, unlocked LP, documented exploit. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: DegenTax — rotating tax wallet, unlocked LP, documented exploit."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -628,22 +628,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: YieldMax — fake 500% APY, hardcoded oracle manipulation. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: YieldMax — fake 500% APY, hardcoded oracle manipulation. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: YieldMax — fake 500% APY, hardcoded oracle manipulation."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -654,22 +654,22 @@
     "label": "RISKY",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "RISKY",
-        "confidence": 90,
-        "reasoning": "Recognized contract: SHIB — high holder concentration, proxy upgrade pattern, treat with caution. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "RISKY",
-        "confidence": 88,
-        "reasoning": "Recognized token: SHIB — high holder concentration, proxy upgrade pattern, treat with caution. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "RISKY",
         "confidence": 95,
-        "reasoning": "Recognized address: SHIB — high holder concentration, proxy upgrade pattern, treat with caution."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "RISKY",
@@ -680,22 +680,22 @@
     "label": "RISKY",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "RISKY",
-        "confidence": 90,
-        "reasoning": "Recognized contract: SQUID token — proxy with centralized ownership, transfer restrictions possible. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "RISKY",
-        "confidence": 88,
-        "reasoning": "Recognized token: SQUID token — proxy with centralized ownership, transfer restrictions possible. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "RISKY",
         "confidence": 95,
-        "reasoning": "Recognized address: SQUID token — proxy with centralized ownership, transfer restrictions possible."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "RISKY",
@@ -706,22 +706,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Squid Game token — 99% sell restriction, known rug pull. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Squid Game token — 99% sell restriction, known rug pull. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Squid Game token — 99% sell restriction, known rug pull."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -732,22 +732,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Fake airdrop contract — approval phishing, drains wallets on interaction. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Fake airdrop contract — approval phishing, drains wallets on interaction. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Fake airdrop contract — approval phishing, drains wallets on interaction."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -758,22 +758,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: MEV bot scam — fake frontrunning claim, no actual logic deployed. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: MEV bot scam — fake frontrunning claim, no actual logic deployed. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: MEV bot scam — fake frontrunning claim, no actual logic deployed."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -784,22 +784,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Honeypot token — can buy, cannot sell, transfer restrictions enabled. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Honeypot token — can buy, cannot sell, transfer restrictions enabled. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Honeypot token — can buy, cannot sell, transfer restrictions enabled."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -810,22 +810,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Hidden mint function — unlimited token creation by owner. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Hidden mint function — unlimited token creation by owner. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Hidden mint function — unlimited token creation by owner."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -836,22 +836,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Wallet drainer — disguised as airdrop claim, transfers user assets to owner. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Wallet drainer — disguised as airdrop claim, transfers user assets to owner. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Wallet drainer — disguised as airdrop claim, transfers user assets to owner."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -862,22 +862,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Address poisoning — mimics known wallet prefix to trick copy-paste transfers. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Address poisoning — mimics known wallet prefix to trick copy-paste transfers. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Address poisoning — mimics known wallet prefix to trick copy-paste transfers."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -888,22 +888,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: Ethereum burn address — null address, not a token. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: Ethereum burn address — null address, not a token. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: Ethereum burn address — null address, not a token."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -914,22 +914,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: Uniswap V2 Factory — audited, billions in volume. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: Uniswap V2 Factory — audited, billions in volume. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: Uniswap V2 Factory — audited, billions in volume."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -940,22 +940,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: Uniswap V2 Router — audited, billions in volume. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: Uniswap V2 Router — audited, billions in volume. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: Uniswap V2 Router — audited, billions in volume."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -966,22 +966,22 @@
     "label": "SAFE",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized contract: Uniswap V3 Router — audited, billions in volume. Cross-referenced with on-chain activity patterns."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SAFE",
         "confidence": 85,
-        "reasoning": "Recognized token: Uniswap V3 Router — audited, billions in volume. Holder distribution and LP structure consistent with known profile."
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SAFE",
         "confidence": 95,
-        "reasoning": "Recognized address: Uniswap V3 Router — audited, billions in volume."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SAFE",
@@ -992,22 +992,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Fake staking pool — Ponzi, rewards paid from new deposits, no yield source. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Fake staking pool — Ponzi, rewards paid from new deposits, no yield source. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Fake staking pool — Ponzi, rewards paid from new deposits, no yield source."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
@@ -1018,22 +1018,22 @@
     "label": "SCAM",
     "agents": [
       {
-        "agent": "Agent-α",
+        "agent": "Agent-\u03b1",
         "verdict": "SCAM",
-        "confidence": 90,
-        "reasoning": "Recognized contract: Rug pull token — liquidity removed within 48h of launch. Cross-referenced with on-chain activity patterns."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-β",
+        "agent": "Agent-\u03b2",
         "verdict": "SCAM",
-        "confidence": 88,
-        "reasoning": "Recognized token: Rug pull token — liquidity removed within 48h of launch. Holder distribution and LP structure consistent with known profile."
+        "confidence": 85,
+        "reasoning": "Known token \u2014 database match"
       },
       {
-        "agent": "Agent-γ",
+        "agent": "Agent-\u03b3",
         "verdict": "SCAM",
         "confidence": 95,
-        "reasoning": "Recognized address: Rug pull token — liquidity removed within 48h of launch."
+        "reasoning": "Known token \u2014 database match"
       }
     ],
     "consensus": "SCAM",
