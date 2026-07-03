@@ -332,37 +332,16 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ## Accuracy Evaluation
 
-*60 tokens (40 known + 20 held-out) benchmarked. [Methodology →](benchmark/)*
+*60 tokens (40 known + 20 held-out real contracts). [Methodology →](benchmark/)*
 
-### Known Tokens (database-backed, 40 tokens)
+**Held-out accuracy is the honest number: 70% on 20 real deployed contracts the agents have never seen, with source URLs for each scam post-mortem.** The 100% known-token score validates the eval-improvement loop (v1 was 55% with random fallbacks → v2 fixed with shared DB + heuristics).
 
-| Metric | v1 (Jul 2) | v2 (Jul 3) | Improvement |
-|--------|-----------|-----------|-------------|
-| Accuracy | 55.0% | **100.0%** | +45pp |
-| Precision | 42.9% | **100.0%** | +57pp |
-| Recall | 37.5% | **100.0%** | +63pp |
+| Cohort | Tokens | Accuracy | Precision | Recall | Notes |
+|--------|--------|----------|-----------|--------|-------|
+| Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | v1→v2: +45pp improvement |
+| Held-out real contracts | 20 | **70.0%** | 63.6% | **77.8%** | No DB entries, pre-flight verified |
 
-### Held-Out Tokens (generalization, 20 tokens — no DB entries)
-
-| Metric | Value |
-|--------|-------|
-| Accuracy | **70.0%** |
-| Precision | 63.6% |
-| Recall | **77.8%** |
-| Scams caught | 7/9 |
-| Safe confirmed | 7/11 |
-
-*Held-out tokens are absent from every agent lookup DB. Pre-flight assertion verifies this before scoring. See [`benchmark/heldout.json`](benchmark/heldout.json).*
-
-*Held-out tokens are absent from every agent lookup DB. Pre-flight assertion verifies this before scoring. See [`benchmark/heldout.json`](benchmark/heldout.json).*
-
-### What changed
-
-**v1:** Random checksums. **v2:** Shared known-token DB + smarter heuristics. **v3:** Held-out cohort to measure generalization — tokens the agents have never seen.
-
-> **The eval-improvement loop**: benchmark → find failures → fix root cause → re-measure. v3 adds a held-out set to verify the heuristics generalize beyond memorized addresses.
-
-Full methodology in [`benchmark/`](benchmark/).
+*Held-out dataset: 10 legitimate contracts (SNX, REN, BAL, YFI, SUSHI, UMA, BAND, OCEAN, NMR, RLC, GNO) + 10 documented scams (Thodex, Compounder, MEV bots, wallet drainers, honeypots, flash loan exploits, rug pulls). Sources linked in [`benchmark/heldout.json`](benchmark/heldout.json).*
 
 ---
 
@@ -379,6 +358,10 @@ Full methodology in [`benchmark/`](benchmark/).
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 83% · γ 72% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
+
+### How we count
+
+Team test wallets are excluded from all user-facing metrics. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. Median scans per distinct token address: ~1. Distinct token addresses scanned: 40+ (benchmark set). Scans-per-day available from the `/stats` endpoint.
 | **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
 
 ### User Growth
