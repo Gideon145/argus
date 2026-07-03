@@ -79,6 +79,8 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 **Argus makes contract security a nanopayment-native primitive.** Three AI agents — not one, not a wrapper around a single API call — independently analyze every contract. They stake real USDC on their verdicts. They reach consensus. They earn reputation when they're right and lose it when they're wrong. And now, they pay each other.
 
+**Argus is a Distribution Bootstrap security sidecar.** No SDK. No integration. No API key. Any token launch, any DAO, any trader can call Argus for $0.01. Paste an address, get a verdict. The users are already here — they just need a security layer that costs less than the coffee they drank while reading about the token.
+
 **Built for everyone.** Connect with MetaMask and get auto-funded, or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Just paste a token address and get a security verdict from three independent AI agents. Web, CLI, or Telegram — same consensus, your choice.
 
 > We didn't just build a website. We built three ways to reach the same truth — three independent AI agents, staking real USDC on every verdict, paying each other when they disagree. Web, CLI, Telegram. Pick your surface. Same consensus.
@@ -218,7 +220,11 @@ Agent γ → Agent β: 0.0005 USDC ✓
 Total agent economy volume visible at /agent-payments
 ```
 
-This hits RFB 3 (Agent-to-Agent Nanopayment Networks) directly. It also touches RFB 1 (Autonomous Paying Agents — agents decide when to pay based on consensus outcome) and the reputation-as-collateral thesis that runs through the entire Lepton design brief.
+> **[Prior Art #08](https://lepton.thecanteenapp.com/#priorart): Reputation you post as collateral, not a score you ask to be trusted.**
+>
+> *"The banker staked his own standing on the coin he vouched for — the trapezitai and argentarii. A broker agent posts a USDC bond to stand behind a match, and if the provider underdelivers, the bond slashes automatically. Reputation becomes capital at risk rather than a number you have to believe, which is far harder to fake."*
+>
+> Argus agents do exactly this — in real time, on-chain, per decision. Every dissent costs 0.0005 USDC. Every wrong verdict drops ELO. No trust required. The stakes are public. The slash is automatic. This is Prior Art #08, live on Arc.
 
 ---
 
@@ -317,10 +323,26 @@ Most security tools are single-model wrappers. Argus:
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
 | **v0.10** | CLI tool (`npx argus-scan`), retention features, polish | ✅ Shipped (Jun 29) |
 | **v0.11** | Telegram bot (`t.me/argus_arc_bot`) — third surface, multi-platform reach | ✅ Shipped (Jul 1) |
-| **v1.0** | Mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
+| **v0.12** | Scan history per user, agent accuracy trends, public leaderboard | Planned |
+| **v0.13** | Real-time holder queries (Agent β on-chain upgrade), DEX liquidity data | Planned |
+| **v1.0** | Arc mainnet — real USDC, real stakes, production oracle | Post-hackathon |
 
 Circle primitive completion:
 - Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit ✅ (all 5/5)
+
+---
+
+## Beyond the Hackathon
+
+Argus is not a demo. It's a product with 125 users, 806 scans, and $7.93 in on-chain revenue — and it keeps growing.
+
+- **Arc mainnet** — deploy the moment it launches. Real USDC, real stakes, real consequences.
+- **Agent β on-chain upgrade** — replace inferred tokenomics with real-time balanceOf queries and DEX liquidity data.
+- **Circle W3S migration** — move agent wallets from raw private keys to Programmable Wallets. No key material in worker processes.
+- **Public ELO leaderboard** — live reputation dashboard showing agent accuracy, trends, and total stakes won/lost.
+- **More agents** — the architecture supports N agents. Add domain-specific agents for NFT collections, DeFi protocols, L2 bridges.
+
+*"Building something that lasts past July 6 is the whole game."* — Lepton FAQ. We're playing.
 
 ---
 
