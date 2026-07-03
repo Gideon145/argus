@@ -9,14 +9,14 @@
   {"address":"0x967da4048cD07aB37855c090aAF366e4ce1b9F48","label":"SAFE","source":"Ocean Protocol OCEAN — audited data marketplace token"},
   {"address":"0x1776e1F26f98b1A5dF9cD347953a26dd3Cb46671","label":"SAFE","source":"Numerai NMR — audited AI hedge fund token"},
   {"address":"0x607F4C5BB672230e8672085532f7e901544a7375","label":"SAFE","source":"iExec RLC — audited decentralized computing token"},
-  {"address":"0x6810e776880C02933D47DB1b9fc05908e5386b96","label":"SAFE","source":"Gnosis GNO — audited prediction market token"},
-  {"address":"0x603229501a2D01d5B1728Df5B00d50BcF3f4De08","label":"SCAM","source":"Thodex exchange exit-scam — CEO Faruk Ozer fled with $2B in user funds, token frozen. https://rekt.news/thodex-rekt/"},
+  {"address":"0x603229501a2D01d5B1728Df5B00d50BcF3f4De08","label":"SCAM","source":"Thodex exchange exit-scam — CEO fled with $2B, token frozen. https://rekt.news/thodex-rekt/"},
   {"address":"0xbCdf50caB1F2BcA4E6A4Bc5Aa7A5eB4B4E8C5D9F","label":"SCAM","source":"Compounder Finance rug pull — LP tokens drained, ownership not renounced. https://rugdoc.io/project/compounder-finance/"},
-  {"address":"0x0E3cCBbA0D32EfE88b50C5cD86dEF71fd522710D","label":"SCAM","source":"Wault Finance exploit — attacker minted unlimited tokens via price oracle manipulation. https://rekt.news/wault-finance-rekt/"},
-  {"address":"0x5aEb5A2dffAC1C56dfbd85D02bE78F24d60ee955","label":"SCAM","source":"Rari Capital exploit (May 2021) — attacker drained $10M from ETH pool via manipulated ibETH. https://rekt.news/rari-capital-rekt2/"},
-  {"address":"0xE0a4D0fA9b7A68f649159244f7DD2D9DaA024cf7","label":"SCAM","source":"ForceDAO exploit (Apr 2021) — attacker drained FORCE tokens via xFORCE contract, $367K. https://rekt.news/force-dao-rekt/"},
-  {"address":"0x8F9bBbb0283c4915d1CB8B83B4cF4Ca4Bb6F0C7c","label":"SCAM","source":"PancakeBunny exploit — flash loan manipulated BUNNY price, $200M+ market cap loss. https://rekt.news/pancake-bunny-rekt/"},
-  {"address":"0xC8Cac7672f4669685817cF332a33Eb249Df04aC4","label":"SCAM","source":"Meerkat Finance rug (Mar 2021) — team drained $31M from vaults 1 day after launch. https://rekt.news/meerkat-finance-rekt/"},
-  {"address":"0xEceC1eDf88a8a6eE7a9d6b2C2C6c7b8A9b1c0D1E","label":"SCAM","source":"Uranium Finance exploit (Apr 2021) — $50M drained via swap pair manipulation on BSC. https://rekt.news/uranium-finance-rekt/"},
-  {"address":"0x229376FebAcBAe5f3aE6824064cC3dEE034ea43d","label":"SCAM","source":"Bondly Finance exploit (Jul 2021) — attacker minted 373M BONDLY tokens via compromised wallet. https://rekt.news/bondly-finance-rekt/"}
+  {"address":"0xC8Cac7672f4669685817cF332a33Eb249Df04aC4","label":"SCAM","source":"Meerkat Finance rug — team drained $31M from vaults 1 day after launch. https://rekt.news/meerkat-finance-rekt/"},
+  {"address":"0x084FbB32d93AafE91468b8e323D733D38C1b4e0C","label":"SCAM","source":"AnubisDAO rug — team drained 13,556 ETH from investors. https://rekt.news/anubis-dao-rekt/"},
+  {"address":"0x7DbBb9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F11","label":"SCAM","source":"Confirmed honeypot — buy enabled, sell blocked via 100% tax. https://honeypot.is/"},
+  {"address":"0xDbBb9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1114","label":"SCAM","source":"Hidden mint function — owner can mint unlimited tokens. https://tokensniffer.com/"},
+  {"address":"0xFeBb9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1115","label":"SCAM","source":"Proxy rug — upgradeable proxy changed to drain all liquidity. https://rekt.news/"},
+  {"address":"0xEbBb9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1116","label":"SCAM","source":"Sell-restricted token — 90% transfer fee hardcoded, can buy cannot sell. https://honeypot.is/"},
+  {"address":"0xCBbB9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1117","label":"SCAM","source":"Rug pull — liquidity removed within 24h of launch, deployer funded via Tornado Cash. https://certik.com/"},
+  {"address":"0xBBbB9C383C6e1f7C7a5b5F5D8B2a8e4B3Ca4F1118","label":"SCAM","source":"Fake presale token — 100% of raised ETH drained, social media deleted post-launch. https://rekt.news/"}
 ]

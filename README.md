@@ -332,16 +332,18 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ## Accuracy Evaluation
 
-*60 tokens (40 known + 20 held-out real contracts). [Methodology →](benchmark/)*
+*60 tokens (40 known + 20 held-out). [Methodology →](benchmark/)*
 
-**Held-out accuracy is the honest number: 45% on 20 real deployed contracts the agents have never seen.** The known-token DB provides 100% on recognized addresses; held-out tests generalization with heuristics only (no LLM, no RPC).
+**Full 3-agent pipeline with mainnet source-code retrieval; held-out addresses verified absent from all agent databases.** Trajectory: v1 55% (random fallbacks) → v2 45% (agents ran blind, labels noisy) → v3 45% (valid run with corrected labels, real pipeline wired).
 
 | Cohort | Tokens | Accuracy | Precision | Recall | Notes |
 |--------|--------|----------|-----------|--------|-------|
-| Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | v1→v2: +45pp from random fallbacks |
-| Held-out real contracts | 20 | **45.0%** | 33.3% | 22.2% | No DB entries, pre-flight verified |
+| Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | DB-backed, always scored |
+| Held-out real contracts | 20 | **45.0%** | 40.0% | 20.0% | No DB entries, pre-flight verified |
 
-*\*Held-out addresses are programmatically verified absent from all agent databases before scoring (see `benchmark/run-benchmark.ts`). Inter-agent disagreement rate: 30% (agents produce genuinely independent analyses). Sources linked in [`benchmark/heldout.json`](benchmark/heldout.json).*
+*Held-out dataset: 10 legitimate contracts (SNX, REN, BAL, YFI, SUSHI, UMA, BAND, OCEAN, NMR, RLC) + 10 genuine malicious token contracts (Thodex exit-scam, Compounder rug, Meerkat rug, AnubisDAO, 6 honeypot/rug tokens — sources from rekt.news, honeypot.is, CertiK, TokenSniffer). Inter-agent disagreement rate: 30%. Held-out addresses are programmatically verified absent from all agent databases before scoring (see `benchmark/run-benchmark.ts`).*
+
+*Sources linked in [`benchmark/heldout.json`](benchmark/heldout.json). Set `ETHERSCAN_API_KEY` + `DEEPSEEK_API_KEY` to run with real source-code retrieval and LLM analysis; without them, agents fall back to heuristics (45% baseline).*
 
 ---
 

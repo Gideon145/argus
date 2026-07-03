@@ -8,6 +8,7 @@ import { settleAgentPayments } from './payments/agentPayments';
 import { processPayment } from './gateway';
 import { store } from './store';
 import { Logger } from './logger';
+import { ContractData } from './dataProvider';
 
 export { ConsensusResult } from './consensus';
 
@@ -54,7 +55,7 @@ export class Orchestrator {
     };
   }
 
-  async processQuery(req: QueryRequest, consensusThreshold: number = 2): Promise<ConsensusResult> {
+  async processQuery(req: QueryRequest, consensusThreshold: number = 2, contractData?: ContractData): Promise<ConsensusResult> {
     this.logger.info(`Processing query for ${req.contractAddress} from ${req.user}`);
     const queryId = `query-${Date.now()}-${this.queryCount}`;
 
@@ -71,9 +72,9 @@ export class Orchestrator {
 
     // Step 2: Fan out to 3 agents in parallel
     const [verdictA, verdictB, verdictC] = await Promise.all([
-      alphaAgent.analyze(req),
-      betaAgent.analyze(req),
-      gammaAgent.analyze(req),
+      alphaAgent.analyze(req, contractData),
+      betaAgent.analyze(req, contractData),
+      gammaAgent.analyze(req, contractData),
     ]);
 
     const verdicts: Verdict[] = [verdictA, verdictB, verdictC];

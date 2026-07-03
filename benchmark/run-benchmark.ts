@@ -12,6 +12,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Orchestrator, QueryRequest } from '../agent/src/orchestrator';
 import { KNOWN_TOKENS } from '../agent/src/agents/knownTokens';
+import { fetchContractData } from '../agent/src/dataProvider';
 
 interface DatasetEntry {
   address: string;
@@ -82,13 +83,25 @@ async function runCohort(
     }
 
     try {
+      // For held-out cohort: fetch cross-chain contract data before analysis
+      let contractData;
+      if (verifyHeldOut) {
+        process.stdout.write(`[fetching data...] `);
+        contractData = await fetchContractData(entry.address);
+        if (contractData.isContract) {
+          process.stdout.write(`found(${contractData.chain}) `);
+        } else {
+          process.stdout.write(`no-data `);
+        }
+      }
+
       const queryReq: QueryRequest = {
         contractAddress: entry.address,
         chain: 'arc',
         user: '0xBenchmarkUser000000000000000000000000000000',
       };
 
-      const result = await orchestrator.processQuery(queryReq, 2);
+      const result = await orchestrator.processQuery(queryReq, 2, contractData);
 
       results.push({
         address: entry.address,

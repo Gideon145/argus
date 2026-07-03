@@ -60,7 +60,7 @@ export const gammaAgent = {
   name: 'Agent-γ',
   model: 'Rule Engine (local)',
 
-  async analyze(req: QueryRequest): Promise<Verdict> {
+  async analyze(req: QueryRequest, contractData?: ContractData): Promise<Verdict> {
     const addr = req.contractAddress.toLowerCase();
     const flags: string[] = [];
     let riskScore = 0;
