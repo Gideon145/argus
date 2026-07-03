@@ -329,7 +329,7 @@ export default function Home() {
               time: 'recent',
               confidence: h.confidence || 0,
             })));
-            setLiveFeed(history.slice(0, 10).map((h: any) => ({
+            setLiveFeed(recent.slice(0, 10).map((h: any) => ({
               time: 'recent',
               addr: h.address.slice(0, 6) + '...' + h.address.slice(-4),
               verdict: h.verdict,
