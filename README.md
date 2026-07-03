@@ -26,9 +26,14 @@
   <a href="https://testnet.arcscan.app/address/0x1fa79f59abbada269de477b45ded38c75a6146de">
     <img src="https://img.shields.io/badge/Agent_γ-ArcScan-b57ed8?style=flat-square" alt="Agent γ">
   </a>
+  <a href="https://www.npmjs.com/package/argus-scan">
+    <img src="https://img.shields.io/npm/dw/argus-scan" alt="npm downloads">
+  </a>
 </p>
 
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
+
+![Argus scan verdict](docs/media/scan-result.png)
 
 > **Don't get rugged.** Paste any token address — on web, CLI, or Telegram. Two AI agents (DeepSeek-V3, Claude Sonnet 4.5) plus a deterministic rule engine analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent.
 >
@@ -126,17 +131,13 @@ Arc's Malachite BFT consensus provides deterministic sub-second finality with ze
 
 ## Why Arc
 
-Argus could only exist on Arc. Here's why:
+Argus could only exist on Arc:
 
-**Native USDC gas changes the UX.** Every scan costs $0.01 and the user pays in USDC — no volatile gas token, no "buy ETH first," no fee surprise. A security check costs less than the coffee you drank while reading about the token. This is the difference between a product people try once and a product they use daily.
-
-**Malachite BFT finality makes agent economies real.** Three agents stake, vote, and pay each other on every scan. Loser pays winners 0.0005 USDC. That's a real-time economic loop — and it only works when settlement is sub-second and deterministic. On a probabilistic chain, you wait for confirmations. On Arc, the verdict lands and the payment clears in the same instant.
-
-**Gateway x402 nanopayments complete the circuit.** The $0.01 scan fee, the agent-to-agent payouts, the treasury deposits — every dollar of value that moves through Argus settles through Gateway's gasless batched x402 flow. Without it, agent payments that small would be eaten by gas fees. With it, 100 agent-to-agent payments cleared in two weeks at zero gas cost to users.
-
-**Cross-protocol composability is live.** All three Argus agents hold credit lines on Shadow Float V2 — another Arc-native protocol. They sign EIP-712 intents, borrow USDC, and repay on-chain. Six verified transactions across two protocols on the same chain, in the same session. That's not a mockup. That's Arc's composability at work.
-
-**The 5/5 Circle primitives aren't a checklist — they're the architecture.** Gateway x402 for the paywall. Agent Wallets for autonomous signing. Dev-Controlled Wallets for the no-MetaMask onboarding. Contracts for the immutable verdict log. App Kit Unified Balance for chain-abstracted USDC. Each one solves a specific problem that would otherwise require external infrastructure. Together they're the reason Argus went from zero to 100+ users in two weeks instead of two months.
+- **Native USDC gas** — $0.01 scans, no volatile gas token, no fee surprise
+- **Malachite BFT finality** — verdict and agent payment settle in the same sub-second instant
+- **Gateway x402** — 100+ agent payments cleared at zero gas cost to users via gasless batching
+- **Cross-protocol composability** — agents use Shadow Float V2 for on-chain credit on the same chain
+- **5/5 Circle primitives** — Gateway, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit — each solves a problem that would otherwise need external infra
 
 ---
 
@@ -190,15 +191,7 @@ This is cross-protocol agent infrastructure on Arc: Argus agents using Shadow Fl
 
 ## Agent Prompts
 
-*All three agent system prompts are open source and verifiable in the repo.*
-
-| Agent | File | Model | Prompt |
-|-------|------|-------|--------|
-| **Agent α** | [`agent/src/agents/alpha.ts`](agent/src/agents/alpha.ts) | DeepSeek-V3 | Contract-level security: ownership, proxies, honeypots, access control, upgradeability, external calls. 6-point structured analysis. |
-| **Agent β** | [`agent/src/agents/beta.ts`](agent/src/agents/beta.ts) | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. 6-point structured analysis. |
-| **Agent γ** | [`agent/src/agents/gamma.ts`](agent/src/agents/gamma.ts) | Rule Engine (local) | Deterministic checks: address entropy (Shannon formula), digit-run heuristics, known scam deployer patterns, EIP-55 checksum validation, blacklist matching. Zero API cost. |
-
-Each agent operates independently — no shared state, no prompt leakage between models. Agent γ is fully deterministic; run the same address twice, get the same result. See [`AGENTS.md`](AGENTS.md) for how to plug any AI agent into Argus.
+All three agent system prompts are open source: [`agent/src/agents/`](agent/src/agents/). See [`AGENTS.md`](AGENTS.md) for how to plug any AI agent into Argus.
 
 ---
 
@@ -343,34 +336,6 @@ Most security tools are single-model wrappers. Argus:
 | **Holder distribution + liquidity are estimated** | Agent β infers tokenomics from training data — it does not query holder snapshots or DEX liquidity pools in real-time. Production upgrade: integrate on-chain balanceOf queries + DexScreener/GeckoTerminal APIs. |
 | **Arc testnet only** | All USDC is testnet. No real value at risk. Mainnet deployment requires Circle production access + real USDC liquidity. |
 | **Single oracle address** | ArgusOracle.sol has one owner. Multi-sig or DAO-governed upgrade is planned for mainnet. |
-
----
-
-<!-- Screenshots needed:
-  □ Hero screenshot (homepage with search bar)
-  □ Scan result (verdict card with agent votes)
-  □ CLI output (npx argus-scan result)
-  □ Telegram bot (/scan response)
-  □ ArcScan transaction (payment proof)
-  □ Case Files (/shame archive)
-  □ Treasury (ArcScan balance)
-  □ Agent payment (on-chain dissent payout)
--->
-
-## Accuracy Evaluation
-
-*Benchmark results will be published here. The evaluation methodology is documented; results are pending systematic testing.*
-
-| Metric | Expected | Status |
-|--------|----------|--------|
-| Known scams tested | 20+ common scam patterns | TODO — dataset curation |
-| Known safe tokens tested | 10+ verified safe contracts | TODO — dataset curation |
-| Precision | — | Pending |
-| Recall | — | Pending |
-| False positive rate | — | Pending |
-| False negative rate | — | Pending |
-
-**Methodology:** Each agent independently evaluates the same set of labeled contracts. Consensus accuracy is measured against ground truth. Agent-level precision/recall is computed per model. Full results will be linked from this section.
 
 ---
 

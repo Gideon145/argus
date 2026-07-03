@@ -608,7 +608,7 @@ export default function Home() {
                   Τρεις οφθαλμοί. Μια κρίσις.
                 </p>
                 <p className="text-[#8A92A6]/60 text-lg sm:text-xl max-w-lg mx-auto leading-relaxed px-2">
-                  Three AI agents scan any token contract. You get a verdict — SAFE, RISKY, or SCAM. $0.01.
+                  Three independent agents scan any token contract. You get a verdict — SAFE, RISKY, or SCAM. $0.01.
                 </p>
               </>
             )}
