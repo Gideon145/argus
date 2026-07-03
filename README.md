@@ -38,9 +38,7 @@
 
 ![Argus scan verdict](docs/media/scan-result.png)
 
-> **Don't get rugged.** Paste any token address — on web, CLI, or Telegram. Two AI agents (DeepSeek-V3, Claude Sonnet 4.5) plus a deterministic rule engine analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent.
->
-> No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
+> **Don't get rugged.** Paste any token address — on web, CLI, or Telegram. Two AI agents (DeepSeek-V3, Claude Sonnet 4.5) plus a deterministic rule engine analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent. No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
 | **806 scans** | **$7.93 treasury** | **125 users** | **5/5 Circle primitives** |
 |---|---|---|---|
@@ -59,8 +57,6 @@
 - [Shadow Float V2](#shadow-float-v2--agent-credit-lines)
 - [Agent-to-Agent Nanopayments](#agent-to-agent-nanopayments-rfb-3)
 - [No MetaMask Required](#no-metamask-required)
-- [CLI: Scan from Your Terminal](#cli-scan-from-your-terminal)
-- [Telegram: Scan from Any Chat](#telegram-scan-from-any-chat)
 - [Live Verification](#live-verification)
 - [Smart Contracts](#smart-contracts)
 - [What Makes This Different](#what-makes-this-different)
@@ -83,19 +79,17 @@
 
 Token scams and malicious contracts drain billions annually. Audits cost $5K–$50K and take weeks. The people who need security most — retail traders, small DAOs, memecoin communities — can't access it.
 
-Nanopayments change the equation. When a payment can be $0.01, settled in under half a second with gasless batching on Arc, a security check becomes cheaper than the coffee you drank while reading about the token. The lepton was the smallest coin in the Greek world — a hundredth of a drachma. Gateway nanopayments are the lepton reborn for machines: value as small as $0.000001, clearing in under 500ms.
+Nanopayments change the equation. When a payment can be $0.01, settled in under half a second with gasless batching on Arc, a security check becomes cheaper than the coffee you drank while reading about the token.
 
-**Argus makes contract security a nanopayment-native primitive.** Three AI agents — not one, not a wrapper around a single API call — independently analyze every contract. They stake real USDC on their verdicts. They reach consensus. They earn reputation when they're right and lose it when they're wrong. And now, they pay each other.
+**Argus makes contract security a nanopayment-native primitive.** Three independent agents analyze every contract. They stake real USDC on their verdicts, reach consensus, and pay each other when they disagree.
 
-> *"The hard part of a payments product was never the rail. It was finding the people."* — Canteen, The Distribution Bootstrap
+> *"The hard part of a payments product was never the rail. It was finding the people."* — Canteen
 
-**Argus is a Distribution Bootstrap security sidecar.** No SDK. No integration. No API key. Any token launch, any DAO, any trader can call Argus for $0.01. Paste an address, get a verdict. The users are already here — they just need a security layer that costs less than the coffee they drank while reading about the token.
+**Argus is a Distribution Bootstrap security sidecar.** No SDK. No API key. Any token launch, any trader can call Argus for $0.01. Paste an address, get a verdict.
 
-**Built for everyone.** Connect with MetaMask and get auto-funded, or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Just paste a token address and get a security verdict from three independent AI agents. Web, CLI, or Telegram — same consensus, your choice.
+**Built for everyone.** Connect with MetaMask or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Web, CLI, or Telegram — same consensus, your choice.
 
-> We didn't just build a website. We built three ways to reach the same truth — three independent AI agents, staking real USDC on every verdict, paying each other when they disagree. Web, CLI, Telegram. Pick your surface. Same consensus.
->
-> The third eye is the tiebreaker. Always has been.
+> Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
 
 ---
 
@@ -297,19 +291,12 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ## What Makes This Different
 
-Most security tools are single-model wrappers. Argus:
-
-1. **Runs genuine multi-agent consensus** — three independent AI models, not three calls to the same API with different prompts. DeepSeek-V3, Claude Sonnet 4.5, and a deterministic rule engine produce genuinely diverse reasoning.
-
-2. **Has real economic stakes** — agents stake USDC on verdicts. Losing agents pay winning agents. ELO reputation is proper pairwise math, not a static score.
-
-3. **Ships real payments, not mockups** — $0.01 USDC flows through Gateway x402. Treasury is verifiable on-chain. 5+ paying users. Agent-to-agent economy is live.
-
-4. **Works without a wallet** — Circle pre-create wallets remove the single biggest onboarding barrier. No MetaMask. No extension. Works on mobile.
-
-5. **Is publicly verifiable** — every address, every transaction, every verdict is on ArcScan. Judges can verify everything independently without running the code.
-
-6. **Builds on the Canteen thesis** — The Distribution Bootstrap sketches eight sidecars for attaching payments to existing communities. Argus is one of them: a security sidecar that any token launch, any DAO, any trader can call for $0.01. No integration required. No SDK. Just an address.
+1. **Genuine multi-agent consensus** — three independent models (DeepSeek-V3, Claude Sonnet 4.5, deterministic rule engine), not three calls to the same API
+2. **Real economic stakes** — agents stake real USDC; dissenters pay winners; ELO is proper pairwise math, not a static score
+3. **Ships real payments** — $0.01 USDC through Gateway x402, treasury verifiable on-chain, agent-to-agent economy live
+4. **No wallet required** — Circle pre-create wallets, works on mobile, 30-second onboarding
+5. **Publicly verifiable** — every address, transaction, and verdict on ArcScan. No trust required.
+6. **Distribution Bootstrap security sidecar** — any token launch, any DAO, any trader can call for $0.01. No SDK. No integration. Just an address.
 
 ---
 
@@ -336,7 +323,7 @@ Most security tools are single-model wrappers. Argus:
 | Limit | Status |
 |-------|--------|
 | **Agent analysis is AI-inferred, not on-chain bytecode audit** | Agents use training knowledge + pattern matching. They cannot decompile or verify deployed bytecode. For well-known contracts this is reliable; for obscure tokens, treat as a strong signal, not a guarantee. |
-| **Private keys in environment variables** | Agent wallets use raw private keys for signing (RFB 3 payments + ELO writes). A planned upgrade migrates to Circle W3S Programmable Wallets (like Mimir's approach) so no key material sits in worker processes. Implementation path: provision W3S wallets → replace `privateKeyToAccount` with `executeContract(...)` via Circle W3S API → remove all ARGENT_*_PRIVATE_KEY env vars. Estimated: 2-3 hours of focused work. |
+| **Private keys in environment variables** | Agent wallets use raw private keys for signing. Planned: migrate to Circle W3S Programmable Wallets so no key material sits in worker processes. |
 | **Holder distribution + liquidity are estimated** | Agent β infers tokenomics from training data — it does not query holder snapshots or DEX liquidity pools in real-time. Production upgrade: integrate on-chain balanceOf queries + DexScreener/GeckoTerminal APIs. |
 | **Arc testnet only** | All USDC is testnet. No real value at risk. Mainnet deployment requires Circle production access + real USDC liquidity. |
 | **Single oracle address** | ArgusOracle.sol has one owner. Multi-sig or DAO-governed upgrade is planned for mainnet. |
@@ -368,10 +355,7 @@ Most security tools are single-model wrappers. Argus:
 
 **v1 root cause:** Fallback heuristics used random checksum-based scoring — USDC flagged RISKY, WETH flagged SCAM, DAI flagged RISKY. Agents had no shared knowledge of known tokens.
 
-**v2 fix (3-part):**
-1. **Shared known-token database** — 40+ tokens with verified labels, queried by all three agents before heuristic fallback
-2. **Smarter address heuristics** — replaced random checksums with entropy analysis, digit-ratio scoring, and address-poisoning detection
-3. **Cross-agent consistency** — α (contract logic), β (tokenomics), and γ (deterministic) all reference the same ground-truth database
+**v2 fix:** Shared known-token database (40+ tokens, queried by all three agents) + smarter heuristics (entropy analysis, digit-ratio scoring, address-poisoning detection) + cross-agent consistency (α, β, γ all reference the same ground truth).
 
 > **This is the eval-improvement loop in action.** We ran the benchmark, identified 18 failure cases, traced root causes, and fixed them systematically. The 45pp gain isn't from better AI — it's from better engineering. Real LLM analysis (DeepSeek-V3 + Claude Sonnet 4.5) runs when API keys are available; the fallback is now a credible safety net, not a random number generator.
 
@@ -394,41 +378,19 @@ Most security tools are single-model wrappers. Argus:
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
 | **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
 
-### Where Users Come From
-
-```
-Web    ████████████████████████████████████████████████████ 114
-CLI    █ 2
-TG     ████ 9
-       ─────────────────────────────────────────────────────
-       Total: 125 assigned wallets
-```
-
-Web is the primary surface. Telegram growing from the bot launch. CLI just launched — dev adoption starting.
-
 ### User Growth
 
-| Date | Users | Scans | Treasury | Milestone |
-|------|-------|-------|----------|-----------|
-| Jun 15 | 0 | 0 | $0.00 | Agent pipeline + ArgusOracle deployed |
-| Jun 16 | 0 | 5 | $0.00 | 3-agent consensus live · v0.1 submitted |
-| Jun 17 | 0 | 12 | $0.00 | Circle Agent Wallets created · 2/5 primitives |
-| Jun 18 | — | 45 | $0.00 | argusarc.xyz live · X launch · v0.3 submitted |
-| Jun 19 | 5 | 70 | $0.05 | Paid scans live · MetaMask flow · v0.4 submitted |
-| Jun 20 | 8 | 332 | $0.12 | ELO fixed · Agent γ overhauled · v0.5 submitted |
-| Jun 21 | 12 | 340 | $0.22 | Circle wallets (no MetaMask) · agent payments · v0.6 submitted |
-| Jun 22 | 16 | 365 | $0.28 | Threshold toggle · on-chain ELO · v0.7 submitted |
-| **Jun 23** | **52** | **398** | **$0.83** | **App Kit 5/5 · Dockerfile deploy · v0.8 submitted** |
-| Jun 24 | 63 | 467 | $1.27 | UI redesign · Case Files · shareable links · v0.9 submitted |
-| Jun 25 | 100+ | 500+ | $3.00 | 100 users milestone · 500 scans crossed · v0.9 shipped |
-| **Jun 26** | **100+** | **642** | **$3.00** | **Arc Ecosystem section · v0.10 live** |
-| Jun 27 | 100+ | 644 | $5.63 | Shadow Float V2 Alpha — borrow + repay lifecycle closed |
-| Jun 28 | 100+ | 646 | $5.79 | Shadow Float V2 Beta & Gamma — all 3 agents with credit lines |
-| **Jun 29** | **100+** | **648** | **$5.80** | **CLI shipped to npm · `npx argus-scan` live · Discord + X posted** |
-| Jun 30 | 100+ | 664 | $6.85 | Shadow Float CitePay lifecycle closed · Why Arc section added |
-| **Jul 1** | **100+** | **666** | **$6.93** | **Telegram bot live · t.me/argus_arc_bot · three surfaces shipped** |
-| **Jul 2** | **125** | **806** | **$7.93** | **800+ scans · 125 users · Mermaid diagram · JUDGE_GUIDE · TOC** |
-| **Jul 3** | **125** | **810** | **$7.93** | **Benchmark: 40 tokens, 55% accuracy · CLI v0.11 shipped · AGENTS.md + ARCHITECTURE.md** |
+| Milestone | Date | Users | Scans | Treasury |
+|-----------|------|-------|-------|----------|
+| 3-agent consensus live | Jun 16 | 0 | 5 | $0.00 |
+| argusarc.xyz live | Jun 18 | — | 45 | $0.00 |
+| Circle wallets (no MetaMask) | Jun 21 | 12 | 340 | $0.22 |
+| 100 users · 500 scans | Jun 25 | 100+ | 500+ | $3.00 |
+| CLI shipped to npm | Jun 29 | 100+ | 648 | $5.80 |
+| Telegram bot live | Jul 1 | 100+ | 666 | $6.93 |
+| **800+ scans · 125 users** | **Jul 3** | **125** | **810** | **$7.93** |
+
+125 users: 114 Web · 2 CLI · 9 Telegram. Full daily log: [`/stats`](https://argus-agent-production-ab97.up.railway.app/stats).
 
 ---
 

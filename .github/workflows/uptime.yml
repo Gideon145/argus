@@ -1,0 +1,33 @@
+name: Uptime Health Check
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # every 15 minutes
+  workflow_dispatch:  # manual trigger
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Argus API health
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://argus-agent-production-ab97.up.railway.app/health)
+          if [ "$STATUS" -ne 200 ]; then
+            echo "❌ Health check failed with status $STATUS"
+            exit 1
+          fi
+          echo "✅ Health check OK (HTTP $STATUS)"
+
+      - name: Check recent-scans endpoint
+        run: |
+          BODY=$(curl -s https://argus-agent-production-ab97.up.railway.app/recent-scans?limit=3)
+          if [ -z "$BODY" ] || [ "$BODY" = "[]" ]; then
+            echo "⚠️ recent-scans returned empty — backend may need restart"
+          else
+            echo "✅ Recent scans: $(echo $BODY | head -c 200)"
+          fi
+
+      - name: Verify stats endpoint
+        run: |
+          STATS=$(curl -s https://argus-agent-production-ab97.up.railway.app/stats)
+          echo "📊 Stats: $(echo $STATS | head -c 300)"
