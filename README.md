@@ -39,11 +39,35 @@
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtube.com/shorts/GNrcgwZZx0Y](https://youtube.com/shorts/GNrcgwZZx0Y)
 
-> 📂 **[ARCHITECTURE.md](ARCHITECTURE.md)** — Full system design, data flows, payment architecture
-> 🔧 **[ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md)** — 6 real bugs encountered and solved
-> 🤖 **[AGENTS.md](AGENTS.md)** — How any AI agent can plug into Argus as a security oracle
-> 📋 **[JUDGE_GUIDE.md](JUDGE_GUIDE.md)** — 5-minute review walkthrough for judges
-> ✅ **[verify.sh](verify.sh)** — 34-check end-to-end verifier
+---
+
+## Contents
+
+- [Why This Exists](#why-this-exists)
+- [How It Works](#how-it-works)
+- [Why Arc](#why-arc)
+- [The Three Agents](#the-three-agents)
+- [Circle/Arc Stack](#circlearc-stack)
+- [Shadow Float V2](#shadow-float-v2--agent-credit-lines)
+- [Agent-to-Agent Nanopayments](#agent-to-agent-nanopayments-rfb-3)
+- [No MetaMask Required](#no-metamask-required)
+- [CLI: Scan from Your Terminal](#cli-scan-from-your-terminal)
+- [Telegram: Scan from Any Chat](#telegram-scan-from-any-chat)
+- [Live Verification](#live-verification)
+- [Smart Contracts](#smart-contracts)
+- [What Makes This Different](#what-makes-this-different)
+- [What's Next](#whats-next)
+- [Honest Limits](#honest-limits)
+- [Traction](#traction)
+- [Quick Start](#quick-start)
+- [Team](#team)
+
+**Supplemental docs:**
+- 📂 [ARCHITECTURE.md](ARCHITECTURE.md) — Full system design, data flows, payment architecture
+- 🔧 [ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md) — 6 real bugs encountered and solved
+- 🤖 [AGENTS.md](AGENTS.md) — How any AI agent can plug into Argus
+- 📋 [JUDGE_GUIDE.md](JUDGE_GUIDE.md) — 5-minute review walkthrough for judges
+- ✅ [verify.sh](verify.sh) — 34-check end-to-end verifier
 
 ---
 
