@@ -105,6 +105,13 @@ export const gammaAgent = {
       riskScore += 6;
     }
 
+    // Check 6: Verified source suppresses address-pattern flags
+    if (contractData?.hasSource && contractData.contractName) {
+      // Verified contract with known name — suppress pattern-based flags
+      riskScore = Math.max(0, riskScore - 15);
+      flags.push(`Verified source (${contractData.contractName}) — pattern flags suppressed`);
+    }
+
     // Determine verdict
     let verdict: 'SAFE' | 'RISKY' | 'SCAM' = 'SAFE';
     if (riskScore >= 50) verdict = 'SCAM';

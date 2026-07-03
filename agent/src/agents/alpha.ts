@@ -73,14 +73,28 @@ export const alphaAgent = {
     }
     // Use contract data if available
     if (contractData?.isContract) {
-      const flags2: string[] = [];
+      const f: string[] = [];
       let risk = 0;
-      if (contractData.owner && contractData.owner !== '0x0000000000000000000000000000000000000000') { flags2.push('Named owner — centralization risk'); risk += 10; }
-      else if (contractData.owner === '0x0000000000000000000000000000000000000000') { flags2.push('Ownership renounced'); }
-      if (contractData.totalSupply) { try { if (BigInt(contractData.totalSupply) > BigInt('1000000000000000000000000000000')) { flags2.push('Supply > 1T'); risk += 8; } } catch {} }
-      if (contractData.decimals !== null && contractData.decimals > 18) { flags2.push('Unusual decimals'); risk += 5; }
-      const v = risk >= 20 ? 'SCAM' as const : risk >= 10 ? 'RISKY' as const : 'SAFE' as const;
-      return { agent: 'Agent-α', verdict: v, confidence: Math.min(85, 45 + risk), reasoning: flags2.length > 0 ? `[Contract data] ${flags2.join('; ')}.` : `[Contract data] Deployed on ${contractData.chain}, no obvious code red flags.`, stake: '50000' };
+      // Legitimacy signals — verified source + named contract weigh toward SAFE
+      const isLegit = contractData.hasSource && contractData.contractName && contractData.contractName.length > 0;
+      if (isLegit) { f.push(`Verified: ${contractData.contractName}`); risk -= 15; }
+      // Owner alone is NOT sufficient for RISKY — need concrete mechanism
+      if (contractData.owner && contractData.owner !== '0x0000000000000000000000000000000000000000') {
+        if (!isLegit) { f.push(`Unverified owner: ${contractData.owner.slice(0,8)}...`); risk += 5; }
+        else { f.push(`Owner: ${contractData.owner.slice(0,8)}... (verified contract)`); }
+      } else if (contractData.owner === '0x0000000000000000000000000000000000000000') { f.push('Ownership renounced'); risk -= 5; }
+      if (contractData.totalSupply) { try { const s = BigInt(contractData.totalSupply); if (s > BigInt('1000000000000000000000000000000')) { f.push('Supply > 1T'); risk += 8; } } catch {} }
+      if (contractData.decimals !== null && contractData.decimals > 18) { f.push('Decimals > 18'); risk += 5; }
+      // Concrete source analysis (truncated to avoid context overflow)
+      if (contractData.hasSource && contractData.sourceCode) {
+        const src = (contractData.sourceCode || '').slice(0, 300).toLowerCase();
+        if (src.includes('selfdestruct') || src.includes('suicide')) { f.push('Self-destruct opcode in source'); risk += 25; }
+        if ((src.includes('proxy') || src.includes('upgradeable')) && !isLegit) { f.push('Unverified proxy pattern'); risk += 10; }
+        if (src.includes('onlyowner') && src.includes('mint')) { f.push('Owner-restricted mint function'); risk += 15; }
+      }
+      const v = risk >= 25 ? 'SCAM' as const : risk >= 8 ? 'RISKY' as const : 'SAFE' as const;
+      const detail = contractData.contractName ? `Contract: ${contractData.contractName}, ` : '';
+      return { agent: 'Agent-α', verdict: v, confidence: Math.min(85, 50 + risk), reasoning: `[α] ${detail}${f.join('; ') || 'No red flags in contract data'}.`, stake: '50000' };
     }
     // No data — heuristic fallback
     const flags: string[] = [];

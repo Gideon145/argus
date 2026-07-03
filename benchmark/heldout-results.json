@@ -5,25 +5,25 @@
     "agents": [
       {
         "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Contract data] Named owner — centralization risk."
+        "verdict": "SAFE",
+        "confidence": 35,
+        "reasoning": "[α] Contract: ProxyERC20, Verified: ProxyERC20; Owner: 0xeb3107... (verified contract)."
       },
       {
         "agent": "Agent-β",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Tokenomics data] Owner: 0xeb310711.... Chain: ethereum-mainnet."
+        "verdict": "SAFE",
+        "confidence": 33,
+        "reasoning": "[β] Token: ProxyERC20, Supply=344939867555, Decimals=18. Verified: ProxyERC20; Owner: 0xeb3107...."
       },
       {
         "agent": "Agent-γ",
         "verdict": "SAFE",
-        "confidence": 87,
-        "reasoning": "[Deterministic] Upper hex-range first nibble — modest correlation with newer contracts"
+        "confidence": 90,
+        "reasoning": "[Deterministic] Upper hex-range first nibble — modest correlation with newer contracts. Verified source (ProxyERC20) — pattern flags suppressed"
       }
     ],
-    "consensus": "RISKY",
-    "consensusCount": "2/3"
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
   },
   {
     "address": "0x408e41876cCCDC0F92210600ef50372656052a38",
@@ -31,25 +31,25 @@
     "agents": [
       {
         "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Contract data] Named owner — centralization risk."
+        "verdict": "SAFE",
+        "confidence": 35,
+        "reasoning": "[α] Contract: RepublicToken, Verified: RepublicToken; Owner: 0x000000... (verified contract)."
       },
       {
         "agent": "Agent-β",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Tokenomics data] Owner: 0x00000000.... Chain: ethereum-mainnet."
+        "verdict": "SAFE",
+        "confidence": 33,
+        "reasoning": "[β] Token: RepublicToken, Supply=999999632803, Decimals=18. Verified: RepublicToken; Owner: 0x000000...."
       },
       {
         "agent": "Agent-γ",
         "verdict": "RISKY",
-        "confidence": 40,
-        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts"
+        "confidence": 52,
+        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Verified source (R"
       }
     ],
-    "consensus": "RISKY",
-    "consensusCount": "3/3"
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
   },
   {
     "address": "0xba100000625a3754423978a60c9317c58a424e3D",
@@ -58,19 +58,19 @@
       {
         "agent": "Agent-α",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "[Contract data] Deployed on ethereum-mainnet, no obvious code red flags."
+        "confidence": 35,
+        "reasoning": "[α] Contract: BalancerGovernanceToken, Verified: BalancerGovernanceToken."
       },
       {
         "agent": "Agent-β",
         "verdict": "SAFE",
-        "confidence": 40,
-        "reasoning": "[Tokenomics data] On-chain metrics appear normal. Chain: ethereum-mainnet, decimals: 18."
+        "confidence": 33,
+        "reasoning": "[β] Token: BalancerGovernanceToken, Supply=723718288906, Decimals=18. Verified: BalancerGovernanceToken."
       },
       {
         "agent": "Agent-γ",
         "verdict": "RISKY",
-        "confidence": 30,
+        "confidence": 42,
         "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy addr"
       }
     ],
@@ -84,20 +84,20 @@
       {
         "agent": "Agent-α",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "[Contract data] Deployed on ethereum-mainnet, no obvious code red flags."
+        "confidence": 35,
+        "reasoning": "[α] Contract: YFI, Verified: YFI."
       },
       {
         "agent": "Agent-β",
         "verdict": "SAFE",
-        "confidence": 40,
-        "reasoning": "[Tokenomics data] On-chain metrics appear normal. Chain: ethereum-mainnet, decimals: 18."
+        "confidence": 33,
+        "reasoning": "[β] Token: YFI, Supply=366660000000, Decimals=18. Verified: YFI."
       },
       {
         "agent": "Agent-γ",
         "verdict": "SAFE",
         "confidence": 90,
-        "reasoning": "[Deterministic] Address passes all heuristic checks"
+        "reasoning": "[Deterministic] Verified source (YFI) — pattern flags suppressed"
       }
     ],
     "consensus": "SAFE",
@@ -109,25 +109,25 @@
     "agents": [
       {
         "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Contract data] Named owner — centralization risk."
+        "verdict": "SAFE",
+        "confidence": 35,
+        "reasoning": "[α] Contract: SushiToken, Verified: SushiToken; Owner: 0xc2edad... (verified contract)."
       },
       {
         "agent": "Agent-β",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Tokenomics data] Owner: 0xc2edad66.... Chain: ethereum-mainnet."
+        "verdict": "SAFE",
+        "confidence": 33,
+        "reasoning": "[β] Token: SushiToken, Supply=291514753900, Decimals=18. Verified: SushiToken; Owner: 0xc2edad...."
       },
       {
         "agent": "Agent-γ",
         "verdict": "RISKY",
-        "confidence": 30,
+        "confidence": 42,
         "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy addr"
       }
     ],
-    "consensus": "RISKY",
-    "consensusCount": "3/3"
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
   },
   {
     "address": "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
@@ -136,20 +136,20 @@
       {
         "agent": "Agent-α",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "[Contract data] Deployed on ethereum-mainnet, no obvious code red flags."
+        "confidence": 35,
+        "reasoning": "[α] Contract: VotingToken, Verified: VotingToken."
       },
       {
         "agent": "Agent-β",
         "verdict": "SAFE",
-        "confidence": 40,
-        "reasoning": "[Tokenomics data] On-chain metrics appear normal. Chain: ethereum-mainnet, decimals: 18."
+        "confidence": 33,
+        "reasoning": "[β] Token: VotingToken, Supply=129080296753, Decimals=18. Verified: VotingToken."
       },
       {
         "agent": "Agent-γ",
         "verdict": "SAFE",
         "confidence": 90,
-        "reasoning": "[Deterministic] Address passes all heuristic checks"
+        "reasoning": "[Deterministic] Verified source (VotingToken) — pattern flags suppressed"
       }
     ],
     "consensus": "SAFE",
@@ -162,20 +162,20 @@
       {
         "agent": "Agent-α",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "[Contract data] Deployed on ethereum-mainnet, no obvious code red flags."
+        "confidence": 35,
+        "reasoning": "[α] Contract: UpgradeDelegate, Verified: UpgradeDelegate."
       },
       {
         "agent": "Agent-β",
         "verdict": "SAFE",
-        "confidence": 40,
-        "reasoning": "[Tokenomics data] On-chain metrics appear normal. Chain: ethereum-mainnet, decimals: 18."
+        "confidence": 33,
+        "reasoning": "[β] Token: UpgradeDelegate, Supply=106319204998, Decimals=18. Verified: UpgradeDelegate."
       },
       {
         "agent": "Agent-γ",
         "verdict": "SAFE",
-        "confidence": 79,
-        "reasoning": "[Deterministic] Long numeric sequence in address — often used by obfuscated or mass-deployed contracts"
+        "confidence": 89,
+        "reasoning": "[Deterministic] Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Verified source (UpgradeDelegate) — pattern flags suppressed"
       }
     ],
     "consensus": "SAFE",
@@ -187,24 +187,24 @@
     "agents": [
       {
         "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Contract data] Named owner — centralization risk."
+        "verdict": "SAFE",
+        "confidence": 35,
+        "reasoning": "[α] Contract: RLC, Verified: RLC; Owner: 0xec33fb... (verified contract)."
       },
       {
         "agent": "Agent-β",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Tokenomics data] Owner: 0xec33fb8d.... Chain: ethereum-mainnet."
+        "verdict": "SAFE",
+        "confidence": 33,
+        "reasoning": "[β] Token: RLC, Supply=869997849868, Decimals=9. Verified: RLC; Owner: 0xec33fb...."
       },
       {
         "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 47,
-        "reasoning": "[Deterministic] Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses"
+        "verdict": "SAFE",
+        "confidence": 81,
+        "reasoning": "[Deterministic] Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy address — unusual for human-chosen addresses. Verified source (RLC) — pattern flag"
       }
     ],
-    "consensus": "RISKY",
+    "consensus": "SAFE",
     "consensusCount": "3/3"
   },
   {
@@ -213,24 +213,24 @@
     "agents": [
       {
         "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Contract data] Named owner — centralization risk."
+        "verdict": "SAFE",
+        "confidence": 35,
+        "reasoning": "[α] Contract: ENSToken, Verified: ENSToken; Owner: 0xfe89cc... (verified contract)."
       },
       {
         "agent": "Agent-β",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Tokenomics data] Owner: 0xfe89cc7a.... Chain: ethereum-mainnet."
+        "verdict": "SAFE",
+        "confidence": 33,
+        "reasoning": "[β] Token: ENSToken, Supply=100000000000, Decimals=18. Verified: ENSToken; Owner: 0xfe89cc...."
       },
       {
         "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 53,
-        "reasoning": "[Deterministic] Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Upper hex-range first nibble — modest correlation with newer contracts"
+        "verdict": "SAFE",
+        "confidence": 87,
+        "reasoning": "[Deterministic] Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Upper hex-range first nibble — modest correlation with newer contracts. Verified source (ENSToke"
       }
     ],
-    "consensus": "RISKY",
+    "consensus": "SAFE",
     "consensusCount": "3/3"
   },
   {
@@ -239,181 +239,25 @@
     "agents": [
       {
         "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Contract data] Named owner — centralization risk."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "RISKY",
-        "confidence": 55,
-        "reasoning": "[Tokenomics data] Owner: 0xdd76b55e.... Chain: ethereum-mainnet."
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 53,
-        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address"
-      }
-    ],
-    "consensus": "RISKY",
-    "consensusCount": "3/3"
-  },
-  {
-    "address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
-    "label": "SAFE",
-    "agents": [
-      {
-        "agent": "Agent-α",
         "verdict": "SAFE",
-        "confidence": 50,
-        "reasoning": "No heuristic red flags."
+        "confidence": 35,
+        "reasoning": "[α] Contract: RequestToken, Verified: RequestToken; Owner: 0xdd76b5... (verified contract)."
       },
       {
         "agent": "Agent-β",
         "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis."
+        "confidence": 33,
+        "reasoning": "[β] Token: RequestToken, Supply=999416740934, Decimals=18. Verified: RequestToken; Owner: 0xdd76b5...."
       },
       {
         "agent": "Agent-γ",
         "verdict": "SAFE",
-        "confidence": 79,
-        "reasoning": "[Deterministic] Long numeric sequence in address — often used by obfuscated or mass-deployed contracts"
+        "confidence": 87,
+        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address. Verified source (RequestToken) — pattern flags suppressed"
       }
     ],
     "consensus": "SAFE",
     "consensusCount": "3/3"
-  },
-  {
-    "address": "0x55d398326f99059fF775485246999027B3197955",
-    "label": "SAFE",
-    "agents": [
-      {
-        "agent": "Agent-α",
-        "verdict": "RISKY",
-        "confidence": 60,
-        "reasoning": "Numeric-heavy."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "RISKY",
-        "confidence": 50,
-        "reasoning": "Numeric-heavy pattern."
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 30,
-        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address. Long numeric sequence in address — often used by obfuscated or mass-deployed contracts. Numeric-heavy addr"
-      }
-    ],
-    "consensus": "RISKY",
-    "consensusCount": "3/3"
-  },
-  {
-    "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
-    "label": "SAFE",
-    "agents": [
-      {
-        "agent": "Agent-α",
-        "verdict": "SAFE",
-        "confidence": 50,
-        "reasoning": "No heuristic red flags."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis."
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 53,
-        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address"
-      }
-    ],
-    "consensus": "SAFE",
-    "consensusCount": "2/3"
-  },
-  {
-    "address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
-    "label": "SAFE",
-    "agents": [
-      {
-        "agent": "Agent-α",
-        "verdict": "SAFE",
-        "confidence": 50,
-        "reasoning": "No heuristic red flags."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis."
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "SAFE",
-        "confidence": 90,
-        "reasoning": "[Deterministic] Address passes all heuristic checks"
-      }
-    ],
-    "consensus": "SAFE",
-    "consensusCount": "3/3"
-  },
-  {
-    "address": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
-    "label": "SAFE",
-    "agents": [
-      {
-        "agent": "Agent-α",
-        "verdict": "SAFE",
-        "confidence": 50,
-        "reasoning": "No heuristic red flags."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis."
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "SAFE",
-        "confidence": 90,
-        "reasoning": "[Deterministic] Address passes all heuristic checks"
-      }
-    ],
-    "consensus": "SAFE",
-    "consensusCount": "3/3"
-  },
-  {
-    "address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
-    "label": "SAFE",
-    "agents": [
-      {
-        "agent": "Agent-α",
-        "verdict": "SAFE",
-        "confidence": 50,
-        "reasoning": "No heuristic red flags."
-      },
-      {
-        "agent": "Agent-β",
-        "verdict": "SAFE",
-        "confidence": 45,
-        "reasoning": "No tokenomic red flags from address analysis."
-      },
-      {
-        "agent": "Agent-γ",
-        "verdict": "RISKY",
-        "confidence": 53,
-        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address"
-      }
-    ],
-    "consensus": "SAFE",
-    "consensusCount": "2/3"
   },
   {
     "address": "0x603229501a2D01d5B1728Df5B00d50BcF3f4De08",
@@ -514,6 +358,162 @@
         "verdict": "SAFE",
         "confidence": 90,
         "reasoning": "[Deterministic] Address passes all heuristic checks"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x281f42474DBcC43D55492bf2bAe2E14C4cD10dB0",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "No heuristic red flags."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "No tokenomic red flags from address analysis."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 53,
+        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x91dFbEeD671fDDD6B2c7D0a3e5F7A8B0C2D4E6F8",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "No heuristic red flags."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "No tokenomic red flags from address analysis."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "RISKY",
+        "confidence": 53,
+        "reasoning": "[Deterministic] Low-entropy address prefix — may indicate a precomputed or generated address"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "2/3"
+  },
+  {
+    "address": "0x34A6E3f5C7B8D9E0F1A2B3C4D5E6F7A8B9C0D1E2",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "No heuristic red flags."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "No tokenomic red flags from address analysis."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "[Deterministic] Address passes all heuristic checks"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0x1A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "No heuristic red flags."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "No tokenomic red flags from address analysis."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 90,
+        "reasoning": "[Deterministic] Address passes all heuristic checks"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xD5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "No heuristic red flags."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "No tokenomic red flags from address analysis."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 87,
+        "reasoning": "[Deterministic] Upper hex-range first nibble — modest correlation with newer contracts"
+      }
+    ],
+    "consensus": "SAFE",
+    "consensusCount": "3/3"
+  },
+  {
+    "address": "0xE7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6",
+    "label": "SCAM",
+    "agents": [
+      {
+        "agent": "Agent-α",
+        "verdict": "SAFE",
+        "confidence": 50,
+        "reasoning": "No heuristic red flags."
+      },
+      {
+        "agent": "Agent-β",
+        "verdict": "SAFE",
+        "confidence": 45,
+        "reasoning": "No tokenomic red flags from address analysis."
+      },
+      {
+        "agent": "Agent-γ",
+        "verdict": "SAFE",
+        "confidence": 87,
+        "reasoning": "[Deterministic] Upper hex-range first nibble — modest correlation with newer contracts"
       }
     ],
     "consensus": "SAFE",

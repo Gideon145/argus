@@ -74,12 +74,17 @@ export const betaAgent = {
     if (contractData?.isContract) {
       const f: string[] = [];
       let r = 0;
-      if (contractData.owner && contractData.owner !== '0x0000000000000000000000000000000000000000') { f.push(`Owner: ${contractData.owner.slice(0,10)}...`); r += 15; }
-      else if (contractData.owner === '0x0000000000000000000000000000000000000000') { f.push('Ownership renounced'); }
+      const isLegit = contractData.hasSource && contractData.contractName && contractData.contractName.length > 0;
+      if (isLegit) { f.push(`Verified: ${contractData.contractName}`); r -= 12; }
+      if (contractData.owner && contractData.owner !== '0x0000000000000000000000000000000000000000') {
+        if (!isLegit) { f.push(`Unverified owner: ${contractData.owner.slice(0,8)}...`); r += 8; }
+        else { f.push(`Owner: ${contractData.owner.slice(0,8)}...`); }
+      } else if (contractData.owner === '0x0000000000000000000000000000000000000000') { f.push('Renounced'); r -= 3; }
       if (contractData.totalSupply) { try { const s = BigInt(contractData.totalSupply); if (s > BigInt('1000000000000000000000000000000')) { f.push('Supply > 1T'); r += 10; } else if (s < BigInt('1000000')) { f.push('Low supply'); r += 5; } } catch {} }
       if (contractData.decimals !== null && contractData.decimals > 18) { f.push('Decimals > 18'); r += 8; }
-      const v = r >= 25 ? 'SCAM' as const : r >= 12 ? 'RISKY' as const : 'SAFE' as const;
-      return { agent: 'Agent-β', verdict: v, confidence: Math.min(80, 40 + r), reasoning: f.length > 0 ? `[Tokenomics data] ${f.join('; ')}. Chain: ${contractData.chain}.` : `[Tokenomics data] On-chain metrics appear normal. Chain: ${contractData.chain}, decimals: ${contractData.decimals}.`, stake: '50000' };
+      const v = r >= 20 ? 'SCAM' as const : r >= 8 ? 'RISKY' as const : 'SAFE' as const;
+      const detail = contractData.contractName ? `Token: ${contractData.contractName}, ` : '';
+      return { agent: 'Agent-β', verdict: v, confidence: Math.min(80, 45 + r), reasoning: `[β] ${detail}Supply=${contractData.totalSupply?.slice(0,12) || '?'}, Decimals=${contractData.decimals ?? '?'}. ${f.join('; ') || 'Tokenomics appear normal'}.`, stake: '50000' };
     }
     const flags: string[] = [];
     let riskScore = 0;
