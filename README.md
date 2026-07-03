@@ -325,15 +325,10 @@ Most security tools are single-model wrappers. Argus:
 | **v0.9** | UI redesign, Case Files archive, shareable scan links, Gamma rework, evidence sources, agent contributions, risk scores | ✅ Shipped (Jun 24–25) |
 | **v0.10** | CLI tool (`npx argus-scan`), retention features, polish | ✅ Shipped (Jun 29) |
 | **v0.11** | Telegram bot (`t.me/argus_arc_bot`) — third surface, multi-platform reach | ✅ Shipped (Jul 1) |
-| **v0.12** | Scan history per user, agent accuracy trends, public ELO leaderboard | Next |
-| **v0.13** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Next |
-| **v0.14** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Next |
+| **v0.12** | Scan history per user, agent accuracy trends, public ELO leaderboard | Post-hackathon |
+| **v0.13** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
+| **v0.14** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
 | **v1.0** | Arc mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
-
-Circle primitive completion:
-- Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit ✅ (all 5/5)
-
-*"Building something that lasts past July 6 is the whole game."* — Lepton FAQ
 
 ---
 
