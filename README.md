@@ -34,7 +34,7 @@
 >
 > No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
 
-| **666 scans** | **$6.93 treasury** | **100+ users** | **5/5 Circle primitives** |
+| **806 scans** | **$7.93 treasury** | **125 users** | **5/5 Circle primitives** |
 |---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtube.com/shorts/GNrcgwZZx0Y](https://youtube.com/shorts/GNrcgwZZx0Y)
@@ -85,29 +85,29 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 ```mermaid
 flowchart TB
-    U[👤 User] -->|$0.01 USDC| GW[Gateway x402]
+    U[User] -->|$0.01 USDC| GW[Gateway x402]
     U -->|paste address| WEB[Web<br/>argusarc.xyz]
     U -->|npx| CLI[CLI<br/>npx argus-scan]
     U -->|/scan| TG[Telegram<br/>t.me/argus_arc_bot]
 
-    WEB --> O[🎯 Orchestrator]
+    WEB --> O[Orchestrator]
     CLI --> O
     TG --> O
 
-    O -->|fan out| A[🤖 Agent α<br/>DeepSeek-V3<br/>Contract logic]
-    O -->|fan out| B[🤖 Agent β<br/>Claude Sonnet 4.5<br/>Tokenomics]
-    O -->|fan out| G[🤖 Agent γ<br/>Rule Engine<br/>Deterministic]
+    O -->|fan out| A[Agent Alpha<br/>DeepSeek-V3<br/>Contract logic]
+    O -->|fan out| B[Agent Beta<br/>Claude Sonnet 4.5<br/>Tokenomics]
+    O -->|fan out| G[Agent Gamma<br/>Rule Engine<br/>Deterministic]
 
-    A -->|verdict + stake| C[⚖️ Consensus<br/>2/3 threshold]
+    A -->|verdict + stake| C[Consensus<br/>2/3 threshold]
     B -->|verdict + stake| C
     G -->|verdict + stake| C
 
-    C -->|SAFE / RISKY / SCAM| R[📋 Verdict]
-    C -->|dissenters pay winners| P[💰 Agent Payments<br/>0.0005 USDC each]
-    C -->|record verdict| ORA[⛓️ ArgusOracle<br/>on-chain]
+    C -->|SAFE / RISKY / SCAM| R[Verdict]
+    C -->|dissenters pay winners| P[Agent Payments<br/>0.0005 USDC each]
+    C -->|record verdict| ORA[ArgusOracle<br/>on-chain]
 
-    GW -->|$0.01 fee| TR[🏦 Treasury]
-    GW -->|fund wallets| W[💳 Circle Wallets]
+    GW -->|$0.01 fee| TR[Treasury]
+    GW -->|fund wallets| W[Circle Wallets]
 ```
 
 Arc's Malachite BFT consensus provides deterministic sub-second finality with zero reorg risk. Argus verdicts settle on the same finality guarantee — once a consensus result is recorded, it's immutable. No waiting for confirmations. No probabilistic uncertainty. The payment clears and the verdict stands.
@@ -338,10 +338,10 @@ Circle primitive completion:
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | 666 | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 635 (95%) | 3-agent pipeline live since Jun 16 |
-| **Users** | 100+ | Web · CLI · Telegram — three surfaces |
-| **Treasury balance** | $6.93 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Scans processed** | 806 | `/stats` endpoint · on-chain records |
+| **Consensus reached** | 759 (94%) | 3-agent pipeline live since Jun 16 |
+| **Users** | 125 | Web (114) · CLI (2) · Telegram (9) |
+| **Treasury balance** | $7.93 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 83% · γ 72% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
@@ -350,11 +350,11 @@ Circle primitive completion:
 ### Where Users Come From
 
 ```
-Web    ████████████████████████████████████████████████████ 113
+Web    ████████████████████████████████████████████████████ 114
 CLI    █ 2
-TG     ███ 6
+TG     ████ 9
        ─────────────────────────────────────────────────────
-       Total: 121 assigned wallets
+       Total: 125 assigned wallets
 ```
 
 Web is the primary surface. Telegram growing from the bot launch. CLI just launched — dev adoption starting.
@@ -380,6 +380,7 @@ Web is the primary surface. Telegram growing from the bot launch. CLI just launc
 | **Jun 29** | **100+** | **648** | **$5.80** | **CLI shipped to npm · `npx argus-scan` live · Discord + X posted** |
 | Jun 30 | 100+ | 664 | $6.85 | Shadow Float CitePay lifecycle closed · Why Arc section added |
 | **Jul 1** | **100+** | **666** | **$6.93** | **Telegram bot live · t.me/argus_arc_bot · three surfaces shipped** |
+| **Jul 2** | **125** | **806** | **$7.93** | **800+ scans · 125 users · Mermaid diagram · JUDGE_GUIDE · TOC** |
 
 ---
 

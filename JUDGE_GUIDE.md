@@ -141,10 +141,10 @@ bash verify.sh
 
 | Metric | Value |
 |--------|-------|
-| Scans processed | 728 |
-| Consensus reached | 689 (95%) |
-| Users | 100+ across web, CLI, Telegram |
-| Treasury | $7.01 USDC |
+| Scans processed | 806 |
+| Consensus reached | 759 (94%) |
+| Users | 125 across web (114), CLI (2), Telegram (9) |
+| Treasury | $7.93 USDC |
 | Agent-to-agent payments | 100+ (0.05 USDC volume) |
 | Circle primitives | 5/5 (Gateway x402, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit) |
 | Shadow Float V2 | 3 agents + CitePay, 4 lifecycles |
