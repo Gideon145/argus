@@ -1,11 +1,10 @@
 ﻿/**
- * Arc-Native Data Provider for Argus Agents
- * 
- * Fetches contract metadata from Arc testnet only.
- * Agents analyze Arc-native contracts. If a token isn't on Arc,
- * agents abstain (INSUFFICIENT_DATA) rather than guessing.
+ * Data Provider for Argus Agents
+ * Fetches contract metadata from Arc testnet + Etherscan mainnet.
+ * Rate-limited per Etherscan free tier (5 calls/sec, we use 250ms spacing + retry).
  */
 import { ethers } from 'ethers';
+import axios from 'axios';
 
 export interface ContractData {
   chain: string;
@@ -20,61 +19,60 @@ export interface ContractData {
 }
 
 const ARC_RPC = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
+const ETHERSCAN_KEY = process.env.ETHERSCAN_API_KEY || '';
+const ETHERSCAN_URL = 'https://api.etherscan.io/api';
 
-async function fetchArcFacts(address: string): Promise<{
-  isContract: boolean;
-  owner: string | null;
-  totalSupply: string | null;
-  decimals: number | null;
-}> {
-  // If RPC is unavailable (e.g., local dev without network), skip and return empty
-  if (process.env.SKIP_RPC === 'true') {
-    return { isContract: false, owner: null, totalSupply: null, decimals: null };
-  }
+let lastCall = 0;
+async function rateLimit() { const e = Date.now() - lastCall; if (e < 250) await new Promise(r => setTimeout(r, 250 - e)); lastCall = Date.now(); }
+
+async function fetchEtherscan(address: string): Promise<{ contractName: string; sourceCode: string } | null> {
+  if (!ETHERSCAN_KEY) return null;
+  await rateLimit();
   try {
-    const provider = new ethers.JsonRpcProvider(ARC_RPC, undefined, { staticNetwork: true });
-    provider.getCode(address).catch(() => {}); // warm up connection
-    const code = await Promise.race([
-      provider.getCode(address),
-      new Promise<null>((_, reject) => setTimeout(() => reject(new Error('RPC timeout')), 4000)),
-    ]);
-    const isContract = code !== null && code !== '0x';
-    if (!isContract) return { isContract: false, owner: null, totalSupply: null, decimals: null };
-    const erc20 = new ethers.Contract(
-      address,
-      ['function totalSupply() view returns (uint256)', 'function decimals() view returns (uint8)', 'function owner() view returns (address)'],
-      provider
-    );
-    let totalSupply: string | null = null;
-    let decimals: number | null = null;
-    let owner: string | null = null;
-    try { totalSupply = (await erc20.totalSupply()).toString(); } catch {}
-    try { decimals = Number(await erc20.decimals()); } catch {}
-    try { owner = (await erc20.owner()).toLowerCase(); } catch {}
-    return { isContract, owner, totalSupply, decimals };
-  } catch {
-    return { isContract: false, owner: null, totalSupply: null, decimals: null };
-  }
+    const { data } = await axios.get(ETHERSCAN_URL, { params: { module: 'contract', action: 'getsourcecode', address, apikey: ETHERSCAN_KEY }, timeout: 8000 });
+    if (data?.status === '1' && data.result?.[0]?.ContractName) {
+      return { contractName: data.result[0].ContractName, sourceCode: data.result[0].SourceCode || '' };
+    }
+  } catch { /* retry once */ try { await new Promise(r => setTimeout(r, 500)); const { data } = await axios.get(ETHERSCAN_URL, { params: { module: 'contract', action: 'getsourcecode', address, apikey: ETHERSCAN_KEY }, timeout: 8000 }); if (data?.status === '1' && data.result?.[0]) return { contractName: data.result[0].ContractName, sourceCode: data.result[0].SourceCode || '' }; } catch {} }
+  return null;
 }
 
 export async function fetchContractData(address: string): Promise<ContractData> {
-  const result: ContractData = {
-    chain: 'unknown', hasSource: false, sourceCode: null, contractName: null,
-    owner: null, totalSupply: null, decimals: null, isContract: false, flags: [],
-  };
-  const facts = await fetchArcFacts(address);
-  if (facts.isContract) {
-    result.chain = 'arc-testnet';
-    result.isContract = true;
-    result.owner = facts.owner;
-    result.totalSupply = facts.totalSupply;
-    result.decimals = facts.decimals;
-    result.flags.push('Contract deployed on Arc testnet');
-    if (result.owner) result.flags.push(`Owner: ${result.owner}`);
-    if (result.totalSupply) result.flags.push(`Total supply: ${result.totalSupply}`);
-    if (result.decimals !== null) result.flags.push(`Decimals: ${result.decimals}`);
-  } else {
-    result.flags.push('No deployed bytecode found on Arc testnet');
+  const result: ContractData = { chain: 'unknown', hasSource: false, sourceCode: null, contractName: null, owner: null, totalSupply: null, decimals: null, isContract: false, flags: [] };
+
+  // Try Arc RPC (fast skip if unavailable)
+  if (process.env.SKIP_RPC !== 'true') {
+    try {
+      const p = new ethers.JsonRpcProvider(ARC_RPC, undefined, { staticNetwork: true });
+      const code = await Promise.race([p.getCode(address), new Promise<null>((_, r) => setTimeout(() => r(null), 4000))]);
+      if (code && code !== '0x') {
+        result.chain = 'arc-testnet'; result.isContract = true;
+        result.flags.push('Arc testnet: contract deployed');
+        return result;
+      }
+    } catch {}
   }
+
+  // Try Etherscan mainnet
+  const src = await fetchEtherscan(address);
+  if (src) {
+    result.chain = 'ethereum-mainnet'; result.isContract = true; result.hasSource = true;
+    result.contractName = src.contractName; result.sourceCode = src.sourceCode;
+    result.flags.push(`Etherscan verified: ${src.contractName}`);
+    // Also try to get on-chain facts from the verified source
+    try {
+      const p2 = new ethers.JsonRpcProvider('https://ethereum-rpc.publicnode.com', undefined, { staticNetwork: true });
+      const erc20 = new ethers.Contract(address, ['function totalSupply() view returns (uint256)', 'function decimals() view returns (uint8)', 'function owner() view returns (address)'], p2);
+      const [ts, dec, own] = await Promise.allSettled([erc20.totalSupply(), erc20.decimals(), erc20.owner()]);
+      if (ts.status === 'fulfilled') result.totalSupply = ts.value.toString();
+      if (dec.status === 'fulfilled') result.decimals = Number(dec.value);
+      if (own.status === 'fulfilled') result.owner = own.value.toLowerCase();
+      if (result.owner) result.flags.push(`Owner: ${result.owner.slice(0, 10)}...`);
+      if (result.totalSupply) result.flags.push(`Supply: ${result.totalSupply}`);
+      if (result.decimals !== null) result.flags.push(`Decimals: ${result.decimals}`);
+    } catch {}
+  }
+
+  if (!result.isContract) result.flags.push('No contract data found on Arc or Etherscan');
   return result;
 }
