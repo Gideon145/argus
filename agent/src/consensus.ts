@@ -12,6 +12,7 @@ export interface ConsensusResult {
   agentVerdicts: Verdict[];
   receipts?: any[];
   settlementBatchId?: string;
+  eloTxHashes?: string[]; // real on-chain TX hashes from ArgusOracle ELO updates
 }
 
 export function runConsensus(verdicts: Verdict[], threshold: number = 2): ConsensusResult {

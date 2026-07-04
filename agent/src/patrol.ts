@@ -89,7 +89,7 @@ export async function runPatrolCycle(
       agentCount: result.totalAgents,
       winningAgents: result.winningAgents || [],
       losingAgents: result.losingAgents || [],
-      txHash: undefined, // settlementBatchId is a Circle batch, not an Arc TX — link to oracle contract instead
+      txHash: result.eloTxHashes?.[0] || undefined, // first ELO update TX — real on-chain hash
     };
 
     store.recordPatrol(record);

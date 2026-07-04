@@ -52,8 +52,9 @@ export function getEloStore() {
 export async function updateReputation(
   verdicts: Verdict[],
   result: ConsensusResult
-): Promise<void> {
-  if (!result.consensusReached) return;
+): Promise<string[]> {
+  const txHashes: string[] = [];
+  if (!result.consensusReached) return txHashes;
 
   // Compute pairwise expected scores vs other agents and apply averaged update
   const agents = Object.keys(eloStore);
@@ -83,10 +84,12 @@ export async function updateReputation(
 
     console.log(`[ELO] ${agent}: ${actualScore === 1.0 ? '+' : ''}${eloDelta} -> ${record.elo} (${record.wins}W/${record.losses}L)`);
 
-    // Write ELO to on-chain ArgusOracle (fire-and-forget)
-    writeEloToChain(agent, eloDelta).catch(() => {});
+    // Write ELO to on-chain ArgusOracle and capture the real TX hash
+    const txHash = await writeEloToChain(agent, eloDelta).catch(() => null);
+    if (txHash) txHashes.push(txHash);
   }
 
   // Persist store after update
   try { saveStore(eloStore); } catch (e) { /* already warned in saveStore */ }
+  return txHashes;
 }

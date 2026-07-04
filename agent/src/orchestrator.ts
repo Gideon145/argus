@@ -105,8 +105,9 @@ export class Orchestrator {
       this.consensusWins++;
     }
 
-    // Step 5: Update ELO reputation
-    await updateReputation(verdicts, result);
+    // Step 5: Update ELO reputation (returns real on-chain TX hashes)
+    const eloTxHashes = await updateReputation(verdicts, result);
+    result.eloTxHashes = eloTxHashes;
 
     // Step 6: Agent-to-agent nanopayments — confidence-weighted stakes (v0.12)
     if (result.consensusReached) {
