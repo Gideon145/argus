@@ -140,7 +140,7 @@ The patrol mirrors community activity: every 3rd scan picks a random address fro
 | What | Value |
 |------|-------|
 | Loop interval | Every 15 minutes (96 patrols/day) |
-| Watchlist | Arc-native USDC/WETH + mainnet USDC/WETH (sanity controls) + recent user-scanned addresses |
+| Watchlist | 8 base tokens (Arc-native + mainnet bluechips + DeFi staples) + recent user-scanned addresses |
 | Per patrol | Full 3-agent consensus + on-chain verdict + ELO update + agent payments |
 
 **Live patrol feed:** [argusarc.xyz/patrol](https://argusarc.xyz/patrol) — every autonomous scan with verdict, consensus breakdown, agent payments, and ArcScan TX link. The agents are provably alive. This is not a demo — it's a living, breathing agent economy.

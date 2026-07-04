@@ -21,6 +21,8 @@ interface PatrolStatus {
   running: boolean;
   patrolsCompleted: number;
   watchlistSize: number;
+  userHistoryPool: number;
+  effectiveCoverage: number;
   intervalMs: number;
 }
 
@@ -104,7 +106,7 @@ export default function PatrolPage() {
           {status && (
             <div className="flex flex-wrap gap-4 mt-4 text-xs text-slate-500">
               <span>Patrols: <b className="text-slate-300">{status.patrolsCompleted}</b></span>
-              <span>Watchlist: <b className="text-slate-300">{status.watchlistSize} tokens</b></span>
+              <span>Coverage: <b className="text-slate-300">{status.effectiveCoverage} tokens</b> <span className="text-slate-600">({status.watchlistSize} base + {status.userHistoryPool} user)</span></span>
               <span>Interval: <b className="text-slate-300">{Math.round(status.intervalMs / 60000)} min</b></span>
               {lastRefresh && (
                 <span>Updated: {lastRefresh.toLocaleTimeString()}</span>

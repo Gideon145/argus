@@ -19,6 +19,11 @@ const PATROL_WATCHLIST: string[] = [
   // Bluechip controls — sanity-check agents aren't drifting
   '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC (mainnet)
   '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH (mainnet)
+  // DeFi staples — widely used, interesting tokenomics to analyze
+  '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', // UNI (governance + fee switch)
+  '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0', // MATIC (L2 native)
+  '0x514910771AF9Ca656af840dff83E8264EcF986CA', // LINK (oracle)
+  '0x6B175474E89094C44Da98b954EedeAC495271d0F', // DAI (decentralized stablecoin)
 ];
 
 const PATROL_INTERVAL_MS = parseInt(process.env.PATROL_INTERVAL_MS || '900000'); // 15 min default
@@ -127,10 +132,13 @@ export function stopPatrol(): void {
 }
 
 export function getPatrolStatus() {
+  const userHistorySize = store.getHistory().length;
   return {
     running: patrolTimer !== null,
     patrolsCompleted: patrolCount,
     watchlistSize: PATROL_WATCHLIST.length,
+    userHistoryPool: userHistorySize, // every 3rd patrol pulls from this pool
+    effectiveCoverage: PATROL_WATCHLIST.length + Math.min(userHistorySize, 10),
     intervalMs: PATROL_INTERVAL_MS,
     nextIndex: patrolIndex % PATROL_WATCHLIST.length,
   };
