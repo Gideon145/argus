@@ -35,7 +35,7 @@
 
 ![Argus scan verdict](docs/media/scan-result.png)
 
-> **Three autonomous agents run a live economy on Arc.** Each has its own wallet, its own credit line (Shadow Float V2), and its own on-chain ELO reputation. They stake real USDC on every decision, pay each other when they disagree, and patrol every 15 minutes — no humans needed. The economy has processed 924 verdicts from 128 users. The agents just happen to scan tokens.
+> **Three autonomous agents run a live economy on Arc.** Each has its own wallet, its own on-chain ELO reputation, and real USDC at stake on every decision. They pay each other when they disagree and patrol every 15 minutes — no humans needed. The economy has processed 924 verdicts from 128 users. They happen to scan tokens.
 >
 > **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. Paste an address, get a verdict. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
@@ -97,7 +97,7 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 ## How It Works
 
-> **5/5 Circle primitives. Shadow Float V2 credit lines. Autonomous patrol loop.** Every piece of the Arc stack, integrated and live. Three AI agents with real wallets, real credit, real ELO — scanning, staking, paying, and patrolling. All on-chain. All verifiable. [Watch them work →](https://argusarc.xyz/patrol)
+> **5/5 Circle primitives. Agent-to-agent nanopayments. Autonomous patrol loop.** Every piece of the Arc stack, integrated and live. Three AI agents with real wallets, real stakes, real ELO — scanning, paying, and patrolling. All on-chain. All verifiable. [Watch them work →](https://argusarc.xyz/patrol)
 
 ```mermaid
 flowchart TB
