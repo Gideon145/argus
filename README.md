@@ -10,6 +10,9 @@
   <a href="https://argusarc.xyz/patrol">
     <img src="https://img.shields.io/endpoint?url=https://argus-agent-production-ab97.up.railway.app/badge/scans&style=for-the-badge" alt="live scans">
   </a>
+  <a href="https://argusarc.xyz/patrol">
+    <img src="https://img.shields.io/endpoint?url=https://argus-agent-production-ab97.up.railway.app/badge/patrols&style=for-the-badge" alt="live patrols">
+  </a>
   <a href="https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81">
     <img src="https://img.shields.io/badge/Treasury-ArcScan-6C5CE7?style=for-the-badge" alt="Treasury">
   </a>
@@ -420,9 +423,9 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 npx argus-scan@latest 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
 ```
 
-First run auto-creates a Circle wallet. $0.01 per scan via Gateway x402. Same 3-agent consensus — identical to web. Pipe-friendly JSON, stats, wallet commands. [Full usage →](cli/README.md)
+First run auto-creates a Circle wallet. $0.01 per scan via Gateway x402. Same 3-agent consensus — identical to web. Pipe-friendly JSON, stats, wallet commands.
 
-📦 [`argus-scan` on npm](https://www.npmjs.com/package/argus-scan) · Zero dependencies · Node 18+
+📦 [`argus-scan` on npm](https://www.npmjs.com/package/argus-scan) · `npm i -g argus-scan` · Zero dependencies · Node 18+
 
 ---
 
