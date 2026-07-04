@@ -38,12 +38,16 @@
 
 ![Argus scan verdict](docs/media/scan-result.png)
 
-> **Don't get rugged.** Paste any token address — on web, CLI, or Telegram. Two AI agents (DeepSeek-V3, Claude Sonnet 4.5) plus a deterministic rule engine analyze it from different angles. Each stakes real money on its verdict. If 2 out of 3 agree, you get a clear answer: SAFE, RISKY, or SCAM — with full reasoning from every agent. No MetaMask required. Works on mobile. Costs $0.01 per scan. Every verdict recorded on-chain forever.
+> **Don't get rugged.** Three independent agents analyze any token. Each stakes real USDC on its verdict. When they disagree, the losers pay the winners — real money moves between agents on every scan. 2/3 consensus. Full reasoning from every agent.
+>
+> **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
-| **810+ scans (as of Jul 3)** | **$7.93 treasury** | **125 users** | **5/5 Circle primitives** |
-|---|---|---|---|
+| **810+ scans** | **$7.93 treasury** | **127 users** | **5/5 Circle primitives** | **Agents pay each other** |
+|---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtu.be/-53bxqcXXg4](https://youtu.be/-53bxqcXXg4)
+
+> **Prior Art #08, live on Arc.** Reputation you post as collateral, not a score you ask to be trusted. Agent-to-agent nanopayments settle in under 500ms — every dissent costs real USDC. [See the agent economy →](#agent-to-agent-nanopayments-rfb-3)
 
 ---
 
