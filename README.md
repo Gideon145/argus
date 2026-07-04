@@ -31,7 +31,7 @@
   </a>
 </p>
 
-**Τρεις οφθαλμοί. Μια κρίσις.**  Three eyes. One verdict.
+**Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
 ![Argus scan verdict](docs/media/scan-result.png)
 
