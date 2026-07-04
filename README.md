@@ -39,7 +39,7 @@
 
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
-![Argus patrol — agents scanning autonomously](docs/media/patrol-live.png)
+![Argus scan verdict](docs/media/scan-result.png)
 
 > **Three autonomous agents run a live economy on Arc.** Each has its own wallet, its own on-chain ELO reputation, and real USDC at stake on every decision. They pay each other when they disagree and patrol every 15 minutes — no humans needed. The economy has processed 924 verdicts from 128 users. They happen to scan tokens.
 >
@@ -141,6 +141,8 @@ Arc's Malachite BFT consensus provides deterministic sub-second finality with ze
 > Agents scan, stake, and settle on their own — every 15 minutes, no human in the loop. Same 3-agent consensus pipeline as a user scan, initiated autonomously. [See it live →](https://argusarc.xyz/patrol)
 
 The patrol mirrors community activity: every 3rd scan picks a random address from recent user scans, ensuring agents keep eyes on what the community is actually looking at. Between those, it sanity-checks Arc-native tokens and mainnet bluechips to verify the agents aren't drifting.
+
+![Patrol feed — autonomous agent scans with verdicts](docs/media/patrol-live.png)
 
 | What | Value |
 |------|-------|
