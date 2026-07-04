@@ -53,7 +53,7 @@ No signup. Auto-creates Circle wallet. Same consensus. [npm](https://www.npmjs.c
 | Metric | Value | Proof |
 |--------|-------|-------|
 | Scans | 924 | `GET /stats` |
-| Users | 128 (114 web, 2 CLI, 9 TG, 3 agents) | `GET /sources` |
+| Users | 128 (114 web, 2 CLI, 12 TG) | `GET /sources` |
 | Consensus rate | 94% | on-chain |
 | Agent payments | 100+ (0.05 USDC vol) | `/agent-payments` |
 | Circle primitives | 5/5 | Gateway x402, Agent Wallets, DCW, Contracts, App Kit |

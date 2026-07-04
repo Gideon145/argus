@@ -376,7 +376,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 |--------|-------|-------|
 | **Scans processed** | 924 | `/stats` endpoint · on-chain records |
 | **Consensus reached** | 851 (93%) | 3-agent pipeline live since Jun 16 |
-| **Users** | 128 | Web (114) · CLI (2) · Telegram (9) · 3 patrolling agents |
+| **Users** | 128 | Web (114) · CLI (2) · Telegram (12) |
 | **Treasury balance** | $9.60 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 82% · γ 71% | `/elo` endpoint · on-chain |
