@@ -135,12 +135,12 @@ Arc's Malachite BFT consensus provides deterministic sub-second finality with ze
 
 > Agents scan, stake, and settle on their own — every 15 minutes, no human in the loop. Same 3-agent consensus pipeline as a user scan, initiated autonomously. [See it live →](https://argusarc.xyz/patrol)
 
-The patrol watchlist is a balanced mix: safe bluechips (control group — verifies agents don't false-positive), documented scams (verifies agents can detect real threats), and Arc-native tokens (ecosystem relevance).
+The patrol mirrors community activity: every 3rd scan picks a random address from recent user scans, ensuring agents keep eyes on what the community is actually looking at. Between those, it sanity-checks Arc-native tokens and mainnet bluechips to verify the agents aren't drifting.
 
 | What | Value |
 |------|-------|
 | Loop interval | Every 15 minutes (96 patrols/day) |
-| Watchlist | 9 tokens — 3 safe bluechips (USDC, WETH, UNI), 4 documented scams (Unibase AI, Thodex, Meerkat, AnubisDAO), 2 Arc-native |
+| Watchlist | Arc-native USDC/WETH + mainnet USDC/WETH (sanity controls) + recent user-scanned addresses |
 | Per patrol | Full 3-agent consensus + on-chain verdict + ELO update + agent payments |
 
 **Live patrol feed:** [argusarc.xyz/patrol](https://argusarc.xyz/patrol) — every autonomous scan with verdict, consensus breakdown, agent payments, and ArcScan TX link. The agents are provably alive. This is not a demo — it's a living, breathing agent economy.

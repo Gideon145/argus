@@ -9,23 +9,16 @@ import { Orchestrator, QueryRequest } from './orchestrator';
 import { Logger } from './logger';
 import { store } from './store';
 
-/** Tokens the patrol watches — balanced mix of safe, risky, and scam tokens.
- *  Control group (SAFE) verifies agents don't false-positive.
- *  Known scams verify agents can detect real threats.
- *  Arc-native tokens verify ecosystem relevance. */
+/** Tokens the patrol watches.
+ *  Priority: recent user-scanned addresses (mirrors community activity),
+ *  then Arc-native ecosystem tokens, then a few bluechip controls. */
 const PATROL_WATCHLIST: string[] = [
-  // Arc-native (ecosystem relevance)
+  // Arc-native ecosystem tokens
   '0x07865c6e87b9a5e213ae308ba4f8a9aadf7e2b0c', // USDC (Arc)
   '0xf25186a341a0b432a0e0f8a6ea1b1a4de1ea09a7', // WETH (Arc)
-  // Safe bluechips (control group — should always return SAFE)
+  // Bluechip controls — sanity-check agents aren't drifting
   '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC (mainnet)
   '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH (mainnet)
-  '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', // UNI (mainnet)
-  // Documented scams (should return SCAM or RISKY)
-  '0x6944e1df6bf5972305f9ab25df47ef10de01bcc8', // Unibase AI (proxy rug, source: TokenSniffer)
-  '0x603229501a2D01d5B1728Df5B00d50BcF3f4De08', // Thodex (exit scam, source: rekt.news)
-  '0xC8Cac7672f4669685817cF332a33Eb249Df04aC4', // Meerkat Finance ($31M rug, source: rekt.news)
-  '0x084FbB32d93AafE91468b8e323D733D38C1b4e0C', // AnubisDAO ($60M rug, source: rekt.news)
 ];
 
 const PATROL_INTERVAL_MS = parseInt(process.env.PATROL_INTERVAL_MS || '900000'); // 15 min default
@@ -47,6 +40,16 @@ let patrolCount = 0;
 let patrolTimer: ReturnType<typeof setInterval> | null = null;
 
 function pickNextAddress(): string {
+  // Every 3rd patrol, scan a recent user-scanned address (mirrors community activity)
+  if (patrolIndex % 3 === 0) {
+    const history = store.getHistory();
+    if (history.length > 0) {
+      // Pick a random address from recent scans (not the most recent — spread it out)
+      const idx = Math.floor(Math.random() * Math.min(history.length, 10));
+      return history[idx].address;
+    }
+  }
+  // Otherwise rotate through the base watchlist
   const addr = PATROL_WATCHLIST[patrolIndex % PATROL_WATCHLIST.length];
   patrolIndex++;
   return addr;
