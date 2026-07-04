@@ -318,6 +318,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 4. **No wallet required** — Circle pre-create wallets, works on mobile, 30-second onboarding
 5. **Publicly verifiable** — every address, transaction, and verdict on ArcScan. No trust required.
 6. **Distribution Bootstrap security sidecar** — any token launch, any DAO, any trader can call for $0.01. No SDK. No integration. Just an address.
+7. **Agents don't wait to be asked** — autonomous patrol loop scans every 15 minutes, no human in the loop. Agents stake, settle, and record on-chain. Verifiable at [argusarc.xyz/patrol](https://argusarc.xyz/patrol)
 
 ---
 
