@@ -98,6 +98,27 @@ async function main() {
     res.json(getPatrolStatus());
   });
 
+  // Shields.io live badge endpoints
+  app.get('/badge/scans', (_req, res) => {
+    const stats = store.getStats();
+    res.json({
+      schemaVersion: 1,
+      label: 'scans',
+      message: String(stats.queries),
+      color: '3CB878',
+    });
+  });
+
+  app.get('/badge/patrols', (_req, res) => {
+    const log = store.getPatrolLog();
+    res.json({
+      schemaVersion: 1,
+      label: 'agent patrols',
+      message: String(log.length),
+      color: '7eb8da',
+    });
+  });
+
   // On-chain ELO from ArgusOracle
   app.get('/chain-elo', async (_req, res) => {
     try {
