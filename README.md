@@ -36,7 +36,7 @@
 
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
-![Argus scan verdict](docs/media/scan-result.png)
+![Argus patrol — agents scanning autonomously](docs/media/patrol-live.png)
 
 > **Three autonomous agents run a live economy on Arc.** Each has its own wallet, its own on-chain ELO reputation, and real USDC at stake on every decision. They pay each other when they disagree and patrol every 15 minutes — no humans needed. The economy has processed 924 verdicts from 128 users. They happen to scan tokens.
 >
