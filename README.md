@@ -331,9 +331,10 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 | **v0.10** | CLI tool (`npx argus-scan`), retention features, polish | ✅ Shipped (Jun 29) |
 | **v0.11** | Telegram bot (`t.me/argus_arc_bot`) — third surface, multi-platform reach | ✅ Shipped (Jul 1) |
 | **v0.12** | Confidence-weighted staking — agents stake proportionally to certainty. Higher confidence = bigger stake at risk. Rewards accuracy, not bravado | ✅ Shipped (Jul 3) |
-| **v0.13** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
-| **v0.14** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
-| **v0.15** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
+| **v0.13** | Autonomous patrol loop — agents scan on their own every 15 min. No human asks. Staking, settlement, on-chain recording. Live at [argusarc.xyz/patrol](https://argusarc.xyz/patrol) | ✅ Shipped (Jul 4) |
+| **v0.14** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
+| **v0.15** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
+| **v0.16** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
 | **v1.0** | Arc mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
 
 ---
