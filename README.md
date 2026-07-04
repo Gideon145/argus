@@ -35,9 +35,9 @@
 
 ![Argus scan verdict](docs/media/scan-result.png)
 
-> **Don't get rugged.** Three independent agents analyze any token. Each stakes real USDC on its verdict. When they disagree, the losers pay the winners — real money moves between agents on every scan. 2/3 consensus. Full reasoning from every agent.
+> **Three autonomous agents run a live economy on Arc.** Each has its own wallet, its own credit line (Shadow Float V2), and its own on-chain ELO reputation. They stake real USDC on every decision, pay each other when they disagree, and patrol every 15 minutes — no humans needed. The economy has processed 924 verdicts from 128 users. The agents just happen to scan tokens.
 >
-> **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. No MetaMask required. Works on mobile. Every verdict on-chain forever.
+> **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. Paste an address, get a verdict. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
 | **924 scans** | **$9.60 treasury** | **128 users** | **5/5 Circle primitives** | **Patrol LIVE** |
 |---|---|---|---|---|
@@ -96,6 +96,8 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 ---
 
 ## How It Works
+
+> **5/5 Circle primitives. Shadow Float V2 credit lines. Autonomous patrol loop.** Every piece of the Arc stack, integrated and live. Three AI agents with real wallets, real credit, real ELO — scanning, staking, paying, and patrolling. All on-chain. All verifiable. [Watch them work →](https://argusarc.xyz/patrol)
 
 ```mermaid
 flowchart TB
@@ -399,7 +401,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 128 assigned wallets across 190 pre-created.*
 
-*128 users, 924 scans (avg 7/user, median 1). Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
+*128 users, 924 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
 ---
 
