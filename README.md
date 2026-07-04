@@ -361,7 +361,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 | Known (database-backed) | 40 | **100.0%** | 100.0% | 100.0% | 16/16 scams caught |
 | Held-out (no DB entries) | 14 | **85.7%** | **100.0%** | 50.0% | 10/10 safe, 2/4 scam caught |
 
-*10 legitimate tokens (all Etherscan-verified) + 4 documented real scam tokens (Thodex, Meerkat, Compounder, AnubisDAO — with rekt.news/rugdoc.io source URLs). 10/10 SAFE correctly classified (0 false positives). 2/4 SCAM caught. Inter-agent disagreement: 14.3%. Pre-flight verified against agent databases. Numbers from `benchmark/report.ts` — single source of truth.*
+*10 legitimate tokens (all Etherscan-verified) + 4 documented real scam tokens (Thodex, Meerkat, Compounder, AnubisDAO — with rekt.news/rugdoc.io source URLs). 10/10 SAFE correctly classified (0 false positives). 2/4 SCAM caught, 2 missed — both missed tokens lack verified Etherscan source code, so agents had no contract-level data to analyze. This is a data availability ceiling, not an agent accuracy ceiling. Inter-agent disagreement: 14.3%. Pre-flight verified against agent databases. Numbers from `benchmark/report.ts` — single source of truth.*
 
 ---
 
@@ -399,7 +399,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 128 assigned wallets across 190 pre-created.*
 
-*128 users, 924 scans (avg 7/user, median 1). Power users drive depth — they come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
+*128 users, 924 scans (avg 7/user, median 1). Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
 ---
 
