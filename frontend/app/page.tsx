@@ -45,7 +45,7 @@ export default function Home() {
   const [error, setError] = useState('');
   const [scanStep, setScanStep] = useState(-1);
   const [completedChecks, setCompletedChecks] = useState<Record<string, number>>({});
-  const [stats, setStats] = useState({ queries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0 });
+  const [stats, setStats] = useState({ queries: 0, patrolQueries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0 });
   const [recentVerdicts, setRecentVerdicts] = useState<{name:string;verdict:string;consensus:string;time:string;confidence:number}[]>(() => {
     if (typeof window === 'undefined') return [];
     try { const v = localStorage.getItem('argus_verdicts'); return v ? JSON.parse(v) : []; } catch { return []; }
@@ -612,7 +612,12 @@ export default function Home() {
                 <p className="text-[#8A92A6]/60 text-lg sm:text-xl max-w-lg mx-auto leading-relaxed px-2">
                   Three independent agents scan any token contract. You get a verdict — SAFE, RISKY, or SCAM. $0.01.
                 </p>
-                <a href="/patrol" className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full border border-[#3CB878]/20 bg-[#3CB878]/5 text-[#3CB878] text-sm font-mono hover:bg-[#3CB878]/10 hover:border-[#3CB878]/40 transition-colors">
+                <div className="flex items-center justify-center gap-4 mt-3 text-xs font-mono text-[#8A92A6]/40">
+                  <span>{stats.queries} user scans</span>
+                  <span className="text-[#8A92A6]/15">|</span>
+                  <span>{stats.patrolQueries} agent patrols</span>
+                </div>
+                <a href="/patrol" className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-full border border-[#3CB878]/20 bg-[#3CB878]/5 text-[#3CB878] text-sm font-mono hover:bg-[#3CB878]/10 hover:border-[#3CB878]/40 transition-colors">
                   <span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />
                   Agents on patrol — autonomous scans every 15 min
                 </a>

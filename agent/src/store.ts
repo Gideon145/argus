@@ -43,13 +43,14 @@ export interface PatrolRecord {
 }
 
 interface StoreData {
-  queries: number;
+  queries: number; // user-initiated scans
+  patrolQueries: number; // autonomous patrol scans
   consensusReached: number;
-  history: ScanRecord[];
-  distinctAddresses: string[]; // unique token addresses scanned
+  history: ScanRecord[]; // user scan history
+  distinctAddresses: string[];
   teamScansExcluded: number;
-  scansPerDay: Record<string, number>; // "YYYY-MM-DD" → count
-  patrolLog: PatrolRecord[]; // autonomous patrol scans
+  scansPerDay: Record<string, number>;
+  patrolLog: PatrolRecord[]; // autonomous patrol history
 }
 
 function read(): StoreData {
@@ -58,6 +59,7 @@ function read(): StoreData {
       const raw = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
       return {
         queries: raw.queries || 0,
+        patrolQueries: raw.patrolQueries || 0,
         consensusReached: raw.consensusReached || 0,
         history: raw.history || [],
         distinctAddresses: raw.distinctAddresses || [],
@@ -67,7 +69,7 @@ function read(): StoreData {
       };
     }
   } catch {}
-  return { queries: 0, consensusReached: 0, history: [], distinctAddresses: [], teamScansExcluded: 0, scansPerDay: {}, patrolLog: [] };
+  return { queries: 0, patrolQueries: 0, consensusReached: 0, history: [], distinctAddresses: [], teamScansExcluded: 0, scansPerDay: {}, patrolLog: [] };
 }
 
 function write(data: StoreData): void {
@@ -100,6 +102,7 @@ export const store = {
 
     return {
       queries: d.queries,
+      patrolQueries: d.patrolQueries || 0,
       consensusReached: d.consensusReached,
       onChainRecords: d.consensusReached,
       avgConfidence: d.history.length > 0
@@ -144,19 +147,15 @@ export const store = {
     write(d);
   },
 
-  /** Record an autonomous patrol scan */
+  /** Record an autonomous patrol scan — separate counters from user scans */
   recordPatrol(record: PatrolRecord): void {
     const d = read();
     d.patrolLog.unshift(record);
     if (d.patrolLog.length > 100) d.patrolLog = d.patrolLog.slice(0, 100);
-    // Also increment query count for stats
-    d.queries++;
+    d.patrolQueries = (d.patrolQueries || 0) + 1;
+    // Track patrol-scanned addresses separately (don't pollute user distinctAddresses)
     const day = record.time?.slice(0, 10) || new Date().toISOString().slice(0, 10);
     d.scansPerDay[day] = (d.scansPerDay[day] || 0) + 1;
-    const addr = record.address.toLowerCase();
-    if (!d.distinctAddresses.includes(addr)) {
-      d.distinctAddresses.push(addr);
-    }
     write(d);
   },
 
