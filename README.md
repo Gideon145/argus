@@ -8,7 +8,7 @@
     <img src="https://img.shields.io/badge/X-@Argus__arc-1DA1F2?style=for-the-badge&logo=x&logoColor=white" alt="X">
   </a>
   <a href="https://argusarc.xyz/patrol">
-    <img src="https://img.shields.io/endpoint?url=https://argus-agent-production-ab97.up.railway.app/badge/scans" alt="live scans">
+    <img src="https://img.shields.io/endpoint?url=https://argus-agent-production-ab97.up.railway.app/badge/scans&style=for-the-badge" alt="live scans">
   </a>
   <a href="https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81">
     <img src="https://img.shields.io/badge/Treasury-ArcScan-6C5CE7?style=for-the-badge" alt="Treasury">
