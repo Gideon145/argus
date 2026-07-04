@@ -1,5 +1,6 @@
 import { QueryRequest, Verdict } from '../orchestrator';
 import { lookupKnown } from './knownTokens';
+import { ContractData } from '../dataProvider';
 
 /**
  * Agent-γ (Gamma) — Deterministic rule engine (local, zero API cost)
