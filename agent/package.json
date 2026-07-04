@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx src/index.ts",
-    "build": "tsc --noEmit || true",
+    "build": "tsc",
     "start": "tsx src/index.ts"
   },
   "dependencies": {
