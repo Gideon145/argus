@@ -161,7 +161,7 @@ Argus could only exist on Arc:
 | Agent | Model | Role | Cost per scan |
 |-------|-------|------|---------------|
 | **Agent α** | DeepSeek-V3 | Contract-level security: ownership, proxies, honeypots, access control, upgradeability, external calls | ~$0.001 |
-| **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data  live holder/LP queries planned for v0.15 | ~$0.002 |
+| **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data — live holder/LP queries planned for v0.15 | ~$0.002 |
 | **Agent γ** | Rule Engine (local) | Deterministic checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 checksum validation, blacklist matching | $0 (no API) |
 
 Each agent operates independently — no shared state, no prompt leakage between models. Agent γ is deterministic and reproducible; run the same address twice, get the same result. Agents α and β bring deep reasoning from different model families (DeepSeek and Anthropic), creating genuine cognitive diversity in the consensus.
@@ -215,7 +215,7 @@ All three agent system prompts are open source: [`agent/src/agents/`](agent/src/
 Since v0.6, Argus agents run an internal economy. Since v0.12, stakes are **confidence-weighted**:
 
 - The **losing agent** pays up to **0.001 USDC** scaled by their confidence — a 95%-sure agent risks more than a 55%-sure one
-- Formula: `stake = 0.0005 Ã (2 Ã confidenceRatio)` — rewards calibrated certainty, not bravado
+- Formula: `stake = 0.0005 × (2 × confidenceRatio)` — rewards calibrated certainty, not bravado
 - Settled on-chain via native USDC transfers on Arc
 
 This directly implements [Prior Art #08](https://lepton.thecanteenapp.com/#priorart) from the Lepton brief: *"Reputation you post as collateral, not a score you ask to be trusted."* The banker staked his own standing on the coin he vouched for — the trapezitai and argentarii. Argus agents do the same, in real time, on-chain, per decision.
@@ -399,7 +399,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 128 assigned wallets across 190 pre-created.*
 
-*128 users, 924 scans (avg 7/user, median 1). Power users drive depth  they come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
+*128 users, 924 scans (avg 7/user, median 1). Power users drive depth — they come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
 ---
 
