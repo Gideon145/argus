@@ -84,7 +84,7 @@ export async function runPatrolCycle(
       agentCount: result.totalAgents,
       winningAgents: result.winningAgents || [],
       losingAgents: result.losingAgents || [],
-      txHash: result.settlementBatchId || undefined,
+      txHash: undefined, // settlementBatchId is a Circle batch, not an Arc TX — link to oracle contract instead
     };
 
     store.recordPatrol(record);

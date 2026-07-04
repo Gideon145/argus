@@ -186,19 +186,17 @@ export default function PatrolPage() {
                   </div>
                 </div>
 
-                {/* Time + TX */}
+                {/* Time + Oracle link */}
                 <div className="text-right shrink-0">
                   <div className="text-xs text-slate-600">{record.time?.slice(11, 19)}</div>
-                  {record.txHash && (
-                    <a
-                      href={`https://testnet.arcscan.app/tx/${record.txHash}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-500 hover:text-blue-400"
-                    >
-                      TX ↗
-                    </a>
-                  )}
+                  <a
+                    href="https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-blue-500 hover:text-blue-400"
+                  >
+                    Oracle ↗
+                  </a>
                 </div>
               </div>
             </motion.div>
