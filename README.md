@@ -26,9 +26,6 @@
   <a href="https://testnet.arcscan.app/address/0x1fa79f59abbada269de477b45ded38c75a6146de">
     <img src="https://img.shields.io/badge/Agent_Î³-ArcScan-b57ed8?style=flat-square" alt="Agent Î³">
   </a>
-  <a href="https://www.npmjs.com/package/argus-scan">
-    <img src="https://img.shields.io/npm/dw/argus-scan" alt="npm downloads">
-  </a>
   <a href="https://argus-agent-production-ab97.up.railway.app/health">
     <img src="https://img.shields.io/badge/API-health-3CB878?style=flat-square" alt="API health">
   </a>
@@ -42,7 +39,7 @@
 >
 > **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar â€” any creator, any DAO, any trader. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
-| **924 scans** | **$9.60 treasury** | **125+ users** | **5/5 Circle primitives** | **14 agent scans** |
+| **924 scans** | **$9.60 treasury** | **128 users** | **5/5 Circle primitives** | **Patrol LIVE** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) Â· **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) Â· **CLI:** `npx argus-scan@latest` Â· **X:** [@Argus_arc](https://x.com/Argus_arc) Â· **Demo:** [youtu.be/-53bxqcXXg4](https://youtu.be/-53bxqcXXg4)
@@ -164,7 +161,7 @@ Argus could only exist on Arc:
 | Agent | Model | Role | Cost per scan |
 |-------|-------|------|---------------|
 | **Agent Î±** | DeepSeek-V3 | Contract-level security: ownership, proxies, honeypots, access control, upgradeability, external calls | ~$0.001 |
-| **Agent Î²** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data â€” live holder/LP queries planned for v0.14 | ~$0.002 |
+| **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data — live holder/LP queries planned for v0.15 | ~$0.002 |
 | **Agent Î³** | Rule Engine (local) | Deterministic checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 checksum validation, blacklist matching | $0 (no API) |
 
 Each agent operates independently â€” no shared state, no prompt leakage between models. Agent Î³ is deterministic and reproducible; run the same address twice, get the same result. Agents Î± and Î² bring deep reasoning from different model families (DeepSeek and Anthropic), creating genuine cognitive diversity in the consensus.
@@ -402,7 +399,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps â€” 128 assigned wallets across 190 pre-created.*
 
-*128 users, 924 scans. That's 7+ verdicts per user â€” people don't just scan and leave. They come back. When a token moves, they check again. When a friend shills a new launch, they paste it in. Argus isn't a one-and-done audit â€” it's a habit.*
+*128 users, 924 scans (avg 7/user, median 1). Power users drive depth — they come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
 ---
 
