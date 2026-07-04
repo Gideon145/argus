@@ -570,6 +570,7 @@ export default function Home() {
             </motion.span>
             <a href="/stats" className="text-[#D4AF37]/50 text-xs sm:text-sm font-mono tracking-[0.1em] hover:text-[#D4AF37] transition-colors">Stats</a>
             <a href="/shame" className="text-[#E85555]/50 text-xs sm:text-sm font-mono tracking-[0.1em] hover:text-[#E85555] transition-colors">Shame</a>
+            <a href="/patrol" className="flex items-center gap-1.5 text-[#3CB878]/70 text-xs sm:text-sm font-mono tracking-[0.1em] hover:text-[#3CB878] transition-colors"><span className="w-1.5 h-1.5 rounded-full bg-[#3CB878] animate-pulse" />Patrol</a>
           </div>
           <div className="flex items-center gap-3 sm:gap-5 text-xs sm:text-sm font-mono text-[#8A92A6]/50 flex-wrap">
             <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#3CB878]" />3 agents online</span>
@@ -611,6 +612,10 @@ export default function Home() {
                 <p className="text-[#8A92A6]/60 text-lg sm:text-xl max-w-lg mx-auto leading-relaxed px-2">
                   Three independent agents scan any token contract. You get a verdict — SAFE, RISKY, or SCAM. $0.01.
                 </p>
+                <a href="/patrol" className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full border border-[#3CB878]/20 bg-[#3CB878]/5 text-[#3CB878] text-sm font-mono hover:bg-[#3CB878]/10 hover:border-[#3CB878]/40 transition-colors">
+                  <span className="w-2 h-2 rounded-full bg-[#3CB878] animate-pulse" />
+                  Agents on patrol — autonomous scans every 15 min
+                </a>
               </>
             )}
 

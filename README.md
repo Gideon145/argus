@@ -42,7 +42,7 @@
 >
 > **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
-| **810+ scans** | **$7.93 treasury** | **127 users** | **5/5 Circle primitives** | **Agents pay each other** |
+| **810+ scans** | **$7.93 treasury** | **127 users** | **5/5 Circle** | **Agents pay each other** | **Patrol LIVE** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtu.be/-53bxqcXXg4](https://youtu.be/-53bxqcXXg4)
@@ -55,7 +55,7 @@
 
 - [Why This Exists](#why-this-exists)
 - [How It Works](#how-it-works)
-- [Patrol — Autonomous Agent Monitoring](#patrol--autonomous-agent-monitoring)
+- [⚡ Autonomous Patrol — agents scan every 15 min, no humans needed](#patrol--autonomous-agent-monitoring)
 - [Why Arc](#why-arc)
 - [The Three Agents](#the-three-agents)
 - [Circle/Arc Stack](#circlearc-stack)
@@ -131,24 +131,22 @@ Arc's Malachite BFT consensus provides deterministic sub-second finality with ze
 
 ---
 
-## Patrol — Autonomous Agent Monitoring
+## ⚡ Autonomous Patrol — Agents Don't Wait for Humans
 
-> *Agents don't wait for humans. They patrol.*
+> **This is the feature that won Parry Protocol (35K+ TXs) and PROVUS (60K+ TXs) their hackathons.** Autonomous agents that write real on-chain transactions on a loop, building a verifiable TX count that proves the system is alive. No human asks. No user pays. The agents just work.
 
-Argus runs a **Patrol** loop every 15 minutes — autonomous scans triggered by the agents themselves, not by a user request. The server picks a token from a curated watchlist (12 tokens spanning Arc-native USDC, mainnet bluechips, and known scams), runs the full 3-agent consensus pipeline, and writes the verdict on-chain via ArgusOracle.
-
-**What makes Patrol different from a user scan:** The agent initiates it. No payment from a user wallet — the patrol wallet covers the gas. The agents stake, deliberate, settle, and record. Every patrol generates a real settlement batch on ArcScan.
+Every 15 minutes, Argus picks a token from a 12-token watchlist (Arc-native USDC, mainnet bluechips, known scams), runs the full 3-agent consensus pipeline, and writes the verdict on-chain via ArgusOracle. Same pipeline as a user scan — same agent stakes, same consensus, same settlement. The only difference: no human triggered it.
 
 | What | Value |
 |------|-------|
-| Interval | Every 15 minutes |
+| Loop interval | Every 15 minutes (96 patrols/day) |
 | Watchlist | 12 tokens (Arc-native + mainnet + known scams) |
-| Per patrol | Full 3-agent consensus + on-chain verdict + agent payments |
-| Pattern | Same as Parry Protocol (35K+ TXs) and PROVUS (60K+ TXs) — autonomous agent TX count proves the agents are alive |
+| Per patrol | Full 3-agent consensus + on-chain verdict + ELO update + agent payments |
+| TX pattern | Same as Parry Protocol (35K+ TXs) and PROVUS (60K+ TXs) — autonomous agent TX count compounds forever |
 
-**Live patrol feed:** [argusarc.xyz/patrol](https://argusarc.xyz/patrol) — see every autonomous scan with its verdict, consensus breakdown, and ArcScan TX link.
+**Live patrol feed:** [argusarc.xyz/patrol](https://argusarc.xyz/patrol) — every autonomous scan with verdict, consensus breakdown, agent payments, and ArcScan TX link.
 
-**Why this matters for a security oracle:** A security product that only works when a human remembers to check is broken. Patrol means the three agents are always watching, always settling, always recording. The patrol log builds a public audit trail of autonomous agent activity — proof that Argus is a living system, not a demo.
+**Why this wins hackathons:** Judges can verify the patrol log on ArcScan. Every 15 minutes, a new settlement batch appears on the ArgusOracle contract. The TX count grows. The agents are provably alive. This is not a demo — it's a living, breathing agent economy. [Watch it now →](https://argusarc.xyz/patrol)
 
 ---
 
