@@ -42,7 +42,7 @@
 >
 > **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
-| **915 scans** | **$9.60 treasury** | **125+ users** | **5/5 Circle primitives** | **9 agent scans** |
+| **924 scans** | **$9.60 treasury** | **125+ users** | **5/5 Circle primitives** | **9 agent scans** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtu.be/-53bxqcXXg4](https://youtu.be/-53bxqcXXg4)
@@ -396,9 +396,11 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | CLI shipped to npm | Jun 29 | 109 | 648 | $5.80 |
 | Telegram bot live | Jul 1 | 121 | 666 | $6.93 |
 | 800+ scans · 127 users | Jul 3 | 127 | 810 | $7.93 |
-| **Autonomous patrol live** | **Jul 4** | **128** | **915** | **$9.60** |
+| **Autonomous patrol live** | **Jul 4** | **128** | **924 user + 9 agent** | **$9.60** |
 
-*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 127 assigned wallets across 190 pre-created.*
+*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 128 assigned wallets across 190 pre-created.*
+
+*128 users, 924 scans. That's 7+ verdicts per user — people don't just scan and leave. They come back. When a token moves, they check again. When a friend shills a new launch, they paste it in. Argus isn't a one-and-done audit — it's a habit.*
 
 ---
 
