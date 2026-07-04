@@ -30,6 +30,18 @@ interface ScanRecord {
   time: string;
 }
 
+export interface PatrolRecord {
+  address: string;
+  verdict: string;
+  consensus: string;
+  confidence: number;
+  time: string;
+  agentCount: number;
+  winningAgents: string[];
+  losingAgents: string[];
+  txHash?: string;
+}
+
 interface StoreData {
   queries: number;
   consensusReached: number;
@@ -37,6 +49,7 @@ interface StoreData {
   distinctAddresses: string[]; // unique token addresses scanned
   teamScansExcluded: number;
   scansPerDay: Record<string, number>; // "YYYY-MM-DD" → count
+  patrolLog: PatrolRecord[]; // autonomous patrol scans
 }
 
 function read(): StoreData {
@@ -50,10 +63,11 @@ function read(): StoreData {
         distinctAddresses: raw.distinctAddresses || [],
         teamScansExcluded: raw.teamScansExcluded || 0,
         scansPerDay: raw.scansPerDay || {},
+        patrolLog: raw.patrolLog || [],
       };
     }
   } catch {}
-  return { queries: 0, consensusReached: 0, history: [], distinctAddresses: [], teamScansExcluded: 0, scansPerDay: {} };
+  return { queries: 0, consensusReached: 0, history: [], distinctAddresses: [], teamScansExcluded: 0, scansPerDay: {}, patrolLog: [] };
 }
 
 function write(data: StoreData): void {
@@ -128,5 +142,26 @@ export const store = {
     d.history.unshift(record);
     if (d.history.length > 50) d.history = d.history.slice(0, 50);
     write(d);
+  },
+
+  /** Record an autonomous patrol scan */
+  recordPatrol(record: PatrolRecord): void {
+    const d = read();
+    d.patrolLog.unshift(record);
+    if (d.patrolLog.length > 100) d.patrolLog = d.patrolLog.slice(0, 100);
+    // Also increment query count for stats
+    d.queries++;
+    const day = record.time?.slice(0, 10) || new Date().toISOString().slice(0, 10);
+    d.scansPerDay[day] = (d.scansPerDay[day] || 0) + 1;
+    const addr = record.address.toLowerCase();
+    if (!d.distinctAddresses.includes(addr)) {
+      d.distinctAddresses.push(addr);
+    }
+    write(d);
+  },
+
+  /** Get patrol log */
+  getPatrolLog(): PatrolRecord[] {
+    return read().patrolLog;
   },
 };

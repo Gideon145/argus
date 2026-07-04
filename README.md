@@ -55,6 +55,7 @@
 
 - [Why This Exists](#why-this-exists)
 - [How It Works](#how-it-works)
+- [Patrol — Autonomous Agent Monitoring](#patrol--autonomous-agent-monitoring)
 - [Why Arc](#why-arc)
 - [The Three Agents](#the-three-agents)
 - [Circle/Arc Stack](#circlearc-stack)
@@ -127,6 +128,27 @@ flowchart TB
 ```
 
 Arc's Malachite BFT consensus provides deterministic sub-second finality with zero reorg risk. Argus verdicts settle on the same finality guarantee — once a consensus result is recorded, it's immutable. No waiting for confirmations. No probabilistic uncertainty. The payment clears and the verdict stands.
+
+---
+
+## Patrol — Autonomous Agent Monitoring
+
+> *Agents don't wait for humans. They patrol.*
+
+Argus runs a **Patrol** loop every 15 minutes — autonomous scans triggered by the agents themselves, not by a user request. The server picks a token from a curated watchlist (12 tokens spanning Arc-native USDC, mainnet bluechips, and known scams), runs the full 3-agent consensus pipeline, and writes the verdict on-chain via ArgusOracle.
+
+**What makes Patrol different from a user scan:** The agent initiates it. No payment from a user wallet — the patrol wallet covers the gas. The agents stake, deliberate, settle, and record. Every patrol generates a real settlement batch on ArcScan.
+
+| What | Value |
+|------|-------|
+| Interval | Every 15 minutes |
+| Watchlist | 12 tokens (Arc-native + mainnet + known scams) |
+| Per patrol | Full 3-agent consensus + on-chain verdict + agent payments |
+| Pattern | Same as Parry Protocol (35K+ TXs) and PROVUS (60K+ TXs) — autonomous agent TX count proves the agents are alive |
+
+**Live patrol feed:** [argusarc.xyz/patrol](https://argusarc.xyz/patrol) — see every autonomous scan with its verdict, consensus breakdown, and ArcScan TX link.
+
+**Why this matters for a security oracle:** A security product that only works when a human remembers to check is broken. Patrol means the three agents are always watching, always settling, always recording. The patrol log builds a public audit trail of autonomous agent activity — proof that Argus is a living system, not a demo.
 
 ---
 

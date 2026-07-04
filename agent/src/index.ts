@@ -13,6 +13,7 @@ import { walletPool } from './wallets/precreate';
 import { getAgentPaymentStats } from './payments/agentPayments';
 import { getEloFromChain } from './payments/chainElo';
 import { getUnifiedBalance } from './payments/unifiedBalance';
+import { startPatrol, getPatrolStatus } from './patrol';
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -83,6 +84,18 @@ async function main() {
   // Agent-to-agent nanopayments — internal economy
   app.get('/agent-payments', (_req, res) => {
     res.json(getAgentPaymentStats());
+  });
+
+  // Patrol log — autonomous agent scans (no user request)
+  app.get('/patrol-log', (_req, res) => {
+    const limit = parseInt(_req.query.limit as string) || 20;
+    const log = store.getPatrolLog();
+    res.json(log.slice(0, limit));
+  });
+
+  // Patrol status — is the autonomous loop running?
+  app.get('/patrol-status', (_req, res) => {
+    res.json(getPatrolStatus());
   });
 
   // On-chain ELO from ArgusOracle
@@ -489,7 +502,11 @@ async function main() {
     logger.info(`  /scan — $0.01 USDC (Gateway x402)`);
     logger.info(`  /status — public status endpoint`);
     logger.info(`  /health — health check`);
+    logger.info(`  /patrol-log — autonomous agent patrol feed`);
   });
+
+  // --- Autonomous Patrol (agents scan on their own, every 15 min) ---
+  startPatrol(orchestrator, logger);
 
   // --- Main loop ---
   logger.info(`Main loop starting (${config.loopIntervalMs}ms interval)`);
