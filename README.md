@@ -261,7 +261,7 @@ MetaMask remains available as a secondary option. But the primary path requires 
 # Agent health
 curl https://argus-agent-production-ab97.up.railway.app/health
 
-# Current stats (648 scans, 95% consensus rate)
+# Current stats (924 scans, 93% consensus rate)
 curl https://argus-agent-production-ab97.up.railway.app/stats | jq .
 
 # ELO leaderboard
@@ -374,18 +374,18 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | 806 | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 759 (94%) | 3-agent pipeline live since Jun 16 |
-| **Users** | 125 | Web (114) · CLI (2) · Telegram (9) |
-| **Treasury balance** | $7.93 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Scans processed** | 924 | `/stats` endpoint · on-chain records |
+| **Consensus reached** | 851 (93%) | 3-agent pipeline live since Jun 16 |
+| **Users** | 128 | Web (114) · CLI (2) · Telegram (9) · 3 patrolling agents |
+| **Treasury balance** | $9.60 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
-| **ELO leaderboard** | α 91% · β 83% · γ 72% | `/elo` endpoint · on-chain |
+| **ELO leaderboard** | α 91% · β 82% · γ 71% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
+| **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
 
 ### How we count
 
-Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. True distinct token count: 40 distinct addresses across ~810 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token).
-| **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
+Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. True distinct token count: 18 distinct addresses across ~924 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token).
 
 ### User Growth
 
