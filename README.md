@@ -348,7 +348,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 | **v0.14** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
 | **v0.15** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
 | **v0.16** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
-| **v1.0** | Arc mainnet deployment — real USDC, real stakes, production oracle | Post-hackathon |
+| **v1.0** | Arc mainnet launch — Argus goes live alongside mainnet. Same agents, same stakes, real USDC, real value at risk. Every new token on Arc gets a verdict | When mainnet ships |
 
 ---
 
@@ -383,7 +383,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized
 
 ## Traction
 
-*Real usage on Arc testnet. Every number is verifiable on-chain.*
+*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be the first security infrastructure on the chain — 128 users and 924 scans of battle-testing behind them.*
 
 | Metric | Value | Proof |
 |--------|-------|-------|
