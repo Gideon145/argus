@@ -1,28 +1,25 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { QueryRequest, Verdict } from '../orchestrator';
 import { lookupKnown } from './knownTokens';
 import { ContractData } from '../dataProvider';
 
 const SYSTEM_PROMPT = `You are Agent-β (Beta) of Argus — a multi-agent security consensus oracle.
-Your specialty: ON-CHAIN DATA ANALYSIS AND TOKENOMICS.
+Your specialty: TOKENOMICS AND DISTRIBUTION ANALYSIS.
+You analyze holder concentration, liquidity depth, whale wallets, buy/sell taxes,
+trading volume patterns, and market manipulation risks.
 
-You receive contract metadata. Analyze it and return a verdict. Be decisive.
-If metadata is empty/unknown, that IS the signal — unverified unknown contracts are RISKY.
-
-Respond ONLY with JSON:
+Respond ONLY with a JSON object in this exact format:
 {
   "verdict": "SAFE" | "RISKY" | "SCAM",
   "confidence": <number 0-100>,
-  "reasoning": "<2-3 sentences>"
+  "reasoning": "<2-3 sentences explaining your analysis>"
 }
 
 Rules:
-- Verified contract + known name + reasonable supply + renounced/zero owner → SAFE
-- Unverified OR unknown name → RISKY. State: "Unverified contract, no source available on Etherscan."
-- Supply 0 or >1T or decimals > 18 → SCAM
-- If EVERY metadata field is empty/unknown → RISKY. "Contract data unavailable — this is an unverified or non-existent contract."
-- NEVER say "no metadata provided" — the absence of data IS the signal.
-- ALWAYS give a verdict. Never hedge. Never abstain.`;
+- SAFE: Fair distribution, sufficient liquidity, no manipulation patterns.
+- RISKY: Concentrated holdings or unusual trading patterns detected.
+- SCAM: Clear pump-and-dump structure or liquidity trap.
+- Prioritize protecting retail users from economic exploits.`;
 
 /**
  * Agent-β (Beta) — Tokenomics analysis via Claude Sonnet 4.5
@@ -32,27 +29,25 @@ export const betaAgent = {
   model: 'Claude Sonnet 4.5',
 
   async analyze(req: QueryRequest, contractData?: ContractData): Promise<Verdict> {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.DEEPSEEK_API_KEY;
     if (!apiKey || process.env.DEMO_MODE === 'true') {
       return this.fallbackAnalyze(req, contractData);
     }
 
     try {
-      const anthropic = new Anthropic({ apiKey });
+      const deepseek = new OpenAI({ apiKey, baseURL: 'https://api.deepseek.com' });
       const dataContext = contractData?.isContract
         ? `Chain: ${contractData.chain}\nContract name: ${contractData.contractName || 'unknown'}\nOwner: ${contractData.owner || 'unknown'}\nTotal supply: ${contractData.totalSupply || 'unknown'}\nDecimals: ${contractData.decimals ?? 'unknown'}\n\n`
         : '';
-      const result = await anthropic.messages.create({
-        model: 'claude-sonnet-4-5-20250929',
-        max_tokens: 512,
-        temperature: 0.3,
-        system: SYSTEM_PROMPT,
+      const result = await deepseek.chat.completions.create({
+        model: 'deepseek-chat', temperature: 0.3, max_tokens: 512,
         messages: [
-          { role: 'user', content: `Address: ${req.contractAddress}\n\n${dataContext}Give a confident verdict based on the metadata above.` },
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: `Analyze the tokenomics of this EVM contract:\n\nContract address: ${req.contractAddress}\n${dataContext}Focus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?` },
         ],
       });
 
-      const text = result.content[0]?.type === 'text' ? result.content[0].text : '';
+      const text = result.choices[0]?.message?.content || '';
       const jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const parsed = JSON.parse(jsonStr);
 
