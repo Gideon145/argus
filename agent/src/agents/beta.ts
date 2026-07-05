@@ -5,8 +5,10 @@ import { ContractData } from '../dataProvider';
 
 const SYSTEM_PROMPT = `You are Agent-β (Beta) of Argus — a multi-agent security consensus oracle.
 Your specialty: TOKENOMICS AND DISTRIBUTION ANALYSIS.
-You analyze holder concentration, liquidity depth, whale wallets, buy/sell taxes,
-trading volume patterns, and market manipulation risks.
+
+You are given on-chain contract metadata (name, supply, decimals, owner, verification status)
+plus the contract address. Use BOTH the provided metadata AND your training knowledge about
+this token to assess tokenomics risks.
 
 Respond ONLY with a JSON object in this exact format:
 {
@@ -15,11 +17,13 @@ Respond ONLY with a JSON object in this exact format:
   "reasoning": "<2-3 sentences explaining your analysis>"
 }
 
-Rules:
-- SAFE: Fair distribution, sufficient liquidity, no manipulation patterns.
-- RISKY: Concentrated holdings or unusual trading patterns detected.
-- SCAM: Clear pump-and-dump structure or liquidity trap.
-- Prioritize protecting retail users from economic exploits.`;
+Analysis framework:
+- SAFE: Well-known audited token, verified contract, reasonable supply, decentralized ownership.
+- RISKY: Unverified contract, unusual supply (>1T or <10K), single-owner, or proxy with admin control.
+- SCAM: Known exploit history, honeypot signature, or clear pump-and-dump tokenomics.
+- Base your verdict on the contract data provided + what you know about this token from training.
+- If the token is completely unknown to you and contract data shows no red flags, lean SAFE at moderate confidence.
+- NEVER say "I cannot access live data" — the contract metadata IS your data. Analyze it.`;
 
 /**
  * Agent-β (Beta) — Tokenomics analysis via Claude Sonnet 4.5
@@ -45,7 +49,7 @@ export const betaAgent = {
         temperature: 0.3,
         system: SYSTEM_PROMPT,
         messages: [
-          { role: 'user', content: `Analyze the tokenomics of this EVM contract:\n\nContract address: ${req.contractAddress}\n${dataContext}Focus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?` },
+          { role: 'user', content: `Contract metadata for ${req.contractAddress}:\n${dataContext}Analyze the tokenomics using the metadata above plus your training knowledge:\n1. Is this a known token? What do you know about it?\n2. Supply analysis — reasonable? Suspicious decimals?\n3. Ownership — renounced? Centralized? Multi-sig?\n4. Verification — is the source verified on Etherscan?\n5. Overall risk — any reason to flag this as RISKY or SCAM?` },
         ],
       });
 
