@@ -14,7 +14,7 @@ Real problems encountered during the Lepton Agents Hackathon build, and how we s
 ```
 expectedScore = average of 1/(1 + 10^((opponentElo - agentElo)/400)) across all other agents
 ```
-K-factor: 64 for agents with <30 queries (provisional), 32 for veterans (>30 queries). Persisted to disk at `data/elo_store.json` via Railway volume mount. Survives redeploys.
+K-factor: 64 for agents with <30 queries (provisional), 32 for veterans (>30 queries). Persisted to disk at `/argus-data/elo_store.json` via Railway volume mount. Survives redeploys.
 
 **Verification:**
 ```bash

@@ -276,7 +276,7 @@ MetaMask remains available as a secondary option. But the primary path requires 
 # Agent health
 curl https://argus-agent-production-ab97.up.railway.app/health
 
-# Current stats (924 scans, 93% consensus rate)
+# Current stats (1000+ scans, 93% consensus)
 curl https://argus-agent-production-ab97.up.railway.app/stats | jq .
 
 # ELO leaderboard
@@ -393,18 +393,18 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-opt
 
 ## Traction
 
-*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be the first security infrastructure on the chain — 128 users and 924 scans of battle-testing behind them.*
+*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be the first security infrastructure on the chain — 133+ users and 1000+ scans of battle-testing behind them.*
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-- **Scans processed** | 1000+ | `/stats` endpoint · on-chain records |
-- **Consensus reached** | 946 (93%) | 3-agent pipeline live since Jun 16 |
-- **Users** | 133+ | Web (120) · CLI (2) · Telegram (11) |
-- **Treasury balance** | $10+ USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Scans processed** | 1000+ | `/stats` endpoint · on-chain records |
+| **Consensus reached** | 946 (93%) | 3-agent pipeline live since Jun 16 |
+| **Users** | 133+ | Web (120) · CLI (2) · Telegram (11) |
+| **Treasury balance** | $10+ USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
-| **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
+| **Shadow Float V2** | 3 agents | 3 credit lifecycles closed · cross-protocol on Arc |
 
 ### How we count
 
@@ -423,7 +423,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | 800+ scans · 127 users | Jul 3 | 127 | 810 | $7.93 |
 | **Autonomous patrol live** | **Jul 5** | **133+** | **1000+ user + 100+ agent** | **$10+** |
 
-*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 128 assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
+*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 133+ assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
 *Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (16 members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
 
