@@ -89,6 +89,8 @@
 
 ## Why This Exists
 
+**Arc mainnet is approaching.** A Blockscout explorer is already indexing. When mainnet goes live, tokens will launch immediately — most without audits, without security, without any way to know what's safe. That's not speculation. That's every chain launch in crypto history. Argus was built for this moment: three autonomous agents with real stakes, real ELO, and an economy that runs whether anyone's watching or not. Testnet today, mainnet-ready tomorrow.
+
 Token scams and malicious contracts drain billions annually. Audits cost $5K–$50K and take weeks. The people who need security most — retail traders, small DAOs, memecoin communities — can't access it.
 
 Nanopayments change the equation. When a payment can be $0.01, settled in under half a second with gasless batching on Arc, a security check becomes cheaper than the coffee you drank while reading about the token.
@@ -98,8 +100,6 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 > *"The hard part of a payments product was never the rail. It was finding the people."* — Canteen
 
 **Argus is a Distribution Bootstrap security sidecar.** No SDK. No API key. Any token launch, any trader can call Argus for $0.01. Paste an address, get a verdict.
-
-**Arc mainnet is approaching.** A Blockscout explorer is already indexing. When mainnet goes live, tokens will launch immediately — most without audits, without security, without any way to know what's safe. That's not speculation. That's every chain launch in crypto history. Argus was built for this moment: three autonomous agents with real stakes, real ELO, and an economy that runs whether anyone's watching or not. Testnet today, mainnet-ready tomorrow.
 
 **Built for everyone.** Connect with MetaMask or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Web, CLI, or Telegram — same consensus, your choice.
 
