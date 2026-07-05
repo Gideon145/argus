@@ -136,7 +136,7 @@ export const betaAgent = {
             agent: 'Agent-β',
             verdict,
             confidence,
-            reasoning: reasoning + ' [via Claude]',
+            reasoning,
             stake: '50000',
           };
         }
@@ -171,7 +171,7 @@ export const betaAgent = {
           agent: 'Agent-β',
           verdict: parsed.verdict || 'SAFE',
           confidence: Math.min(100, Math.max(0, parsed.confidence || 50)),
-          reasoning: (parsed.reasoning || 'Analysis completed.') + ' [DeepSeek fallback]',
+          reasoning: parsed.reasoning || 'Analysis completed.',
           stake: '50000',
         };
       } catch (err: any) {

@@ -44,7 +44,7 @@
 
 ![Argus scan verdict](docs/media/scan-result.png)
 
-> **Three autonomous agents run a live economy on Arc.** Each has its own wallet, its own on-chain ELO reputation, and real USDC at stake on every decision. They pay each other when they disagree and patrol every 15 minutes — no humans needed. The economy has processed 1000+ verdicts from 133+ users. They happen to scan tokens.
+> **Three autonomous agents run a live economy on Arc.** Two AI models + a deterministic rule engine. Each has its own wallet, its own on-chain ELO reputation, and real USDC at stake on every decision. They pay each other when they disagree and patrol every 15 minutes — no humans needed. The economy has processed 1000+ verdicts from 133+ users. They happen to scan tokens.
 >
 > **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. Paste an address, get a verdict. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
@@ -399,7 +399,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-opt
 |--------|-------|-------|
 | **Scans processed** | 1000+ | `/stats` endpoint · on-chain records |
 | **Consensus reached** | 946 (93%) | 3-agent pipeline live since Jun 16 |
-| **Users** | 133+ | Web (120) · CLI (2) · Telegram (11) |
+| **Users** | 133+ | Web · CLI · Telegram — multi-platform |
 | **Treasury balance** | $10+ USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
@@ -408,7 +408,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-opt
 
 ### How we count
 
-Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 87 distinct addresses across 1000+ scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token).
+Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 87 distinct addresses across 1000+ scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token). Median scans per user is 1 — most try Argus once; a core group of ~20 power users drives 80% of scan volume. This is early-stage retention typical of a 3-week-old product.
 
 ### User Growth
 
