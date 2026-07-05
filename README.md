@@ -63,7 +63,7 @@
 - [How It Works](#how-it-works)
 - [Autonomous Patrol — agents scan every 15 min, no humans needed](#patrol--autonomous-agent-monitoring)
 - [Why Arc](#why-arc)
-- [The Three Agents](#the-three-agents)
+- [The Argus Council](#the-argus-council)
 - [Circle/Arc Stack](#circlearc-stack)
 - [Shadow Float V2](#shadow-float-v2--agent-credit-lines)
 - [Agent-to-Agent Nanopayments](#agent-to-agent-nanopayments-rfb-3)
@@ -172,17 +172,19 @@ Argus could only exist on Arc:
 
 ---
 
-## The Three Agents
+## The Argus Council
 
-| Agent | Model | Role | Cost per scan |
+Three independent AI agents form the Council. Each has its own Circle wallet, its own credit line, its own on-chain ELO reputation. They vote with real USDC — not opinions, stakes. 2/3 carries the verdict. Dissenters pay winners.
+
+| Council Member | Model | Role | Cost per scan |
 |-------|-------|------|---------------|
 | **Agent α** | DeepSeek-V3 | Contract-level security: ownership, proxies, honeypots, access control, upgradeability, external calls | ~$0.001 |
 | **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data — live holder/LP queries planned for v0.15 | ~$0.002 |
 | **Agent γ** | Rule Engine (local) | Deterministic checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 checksum validation, blacklist matching | $0 (no API) |
 
-Each agent operates independently — no shared state, no prompt leakage between models. Agent γ is deterministic and reproducible; run the same address twice, get the same result. Agents α and β bring deep reasoning from different model families (DeepSeek and Anthropic), creating genuine cognitive diversity in the consensus.
+Each council member operates independently — no shared state, no prompt leakage between models. Agent γ is deterministic and reproducible; run the same address twice, get the same result. Agents α and β bring deep reasoning from different model families (DeepSeek and Anthropic), creating genuine cognitive diversity.
 
-**Why three agents?** Because single-model security scanners are fundamentally trusting one API's opinion. Argus requires disagreement to surface. When Agent β (the tokenomics skeptic) and Agent γ (the pattern matcher) both flag a contract as RISKY while Agent α calls it SAFE, the consensus mechanism surfaces the split — and the user sees exactly why each agent voted the way it did, with full reasoning.
+**Why a council?** Because single-model security scanners trust one API's opinion. The Council requires agreement to surface truth. When Agent β (the tokenomics skeptic) and Agent γ (the pattern matcher) both flag a contract as RISKY while Agent α calls it SAFE, the Council surfaces the split — and the user sees exactly why each member voted the way it did, with full reasoning.
 
 ---
 
@@ -312,14 +314,22 @@ curl https://argus-agent-production-ab97.up.railway.app/balance/unified/0x0699a0
 
 Address: `0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8` on Arc testnet (chain 5042002)
 
-Immutable verdict log. Every consensus result is recorded with:
+Immutable verdict log + on-chain ELO reputation engine. Every Council verdict is recorded on-chain:
+
+```solidity
+function updateElo(string agentId, int256 eloDelta) external;
+function getElo(string agentId) external view returns (int256);
+function recordVerdict(address token, string verdict, uint8 agreementCount) external;
+```
+
 - Contract address analyzed
 - Final verdict (SAFE / RISKY / SCAM)
-- Consensus breakdown (which agents agreed/dissented)
+- Council breakdown (which members agreed/dissented)
 - Timestamp and query ID
 - Settlement batch reference
+- ELO deltas written per Council member after every verdict
 
-Deployed with Solidity 0.8.28 via IR pipeline. Minimal, auditable, gas-optimized for Arc's native USDC fee model.
+Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-optimized for Arc's native USDC model. [View on ArcScan →](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8)
 
 ---
 
