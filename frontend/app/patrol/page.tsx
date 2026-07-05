@@ -221,7 +221,7 @@ export default function PatrolPage() {
       <div className="max-w-3xl mx-auto px-4 pb-12">
         <div className="bg-[#0a0f1e] border border-slate-800 rounded-xl p-4 text-xs text-slate-500 space-y-1">
           <p>🛡️ <b className="text-slate-400">How patrol works:</b> Every 15 minutes, the server picks a token from the watchlist and runs the full 3-agent consensus pipeline. Agents stake real USDC. Losers pay winners. The verdict is written to the ArgusOracle contract on Arc — same as a user-paid scan, but initiated autonomously.</p>
-          <p>🔗 <b className="text-slate-400">On-chain proof:</b> Each patrol creates a settlement batch on the <a href="https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400">ArgusOracle contract</a>. TX count grows with every patrol — this is the same pattern that won Parry Protocol (35K+ TXs) and PROVUS (60K+ TXs) their hackathons.</p>
+          <p>🔗 <b className="text-slate-400">On-chain proof:</b> Each patrol writes a real ELO update transaction to the <a href="https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400">ArgusOracle contract</a> on Arc. Every TX link above goes to ArcScan — click to verify. 77 patrols and counting.</p>
         </div>
       </div>
     </div>
