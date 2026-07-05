@@ -48,7 +48,7 @@
 >
 > **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. Paste an address, get a verdict. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
-| **924 scans** | **$9.60 treasury** | **128 users** | **5/5 Circle primitives** | **Agents pay each other** |
+| **931 scans** | **$9.60 treasury** | **128 users** | **5/5 Circle primitives** | **Agents pay each other** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtu.be/-53bxqcXXg4](https://youtu.be/-53bxqcXXg4)
@@ -397,7 +397,7 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-opt
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | 924 | `/stats` endpoint · on-chain records |
+| **Scans processed** | 931 | `/stats` endpoint · on-chain records |
 | **Consensus reached** | 851 (93%) | 3-agent pipeline live since Jun 16 |
 | **Users** | 128 | Web (114) · CLI (2) · Telegram (12) |
 | **Treasury balance** | $9.60 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
@@ -421,13 +421,13 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | CLI shipped to npm | Jun 29 | 109 | 648 | $5.80 |
 | Telegram bot live | Jul 1 | 121 | 666 | $6.93 |
 | 800+ scans · 127 users | Jul 3 | 127 | 810 | $7.93 |
-| **Autonomous patrol live** | **Jul 4** | **128** | **924 user + 14 agent** | **$9.60** |
+| **Autonomous patrol live** | **Jul 5** | **128** | **931 user + 93 agent** | **$9.60** |
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 128 assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
 *Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (16 members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
 
-*128 users, 924 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
+*128 users, 931 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
 ---
 
