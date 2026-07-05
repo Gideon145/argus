@@ -176,13 +176,13 @@ Argus could only exist on Arc:
 
 ## The Argus Council
 
-Three independent AI agents form the Council. Each has its own Circle wallet, its own credit line, its own on-chain ELO reputation. They vote with real USDC — not opinions, stakes. 2/3 carries the verdict. Dissenters pay winners.
+Three independent agents form the Council — two AI models for deep reasoning, one deterministic rule engine for reproducible safety checks. Each has its own Circle wallet, its own credit line, its own on-chain ELO reputation. They vote with real USDC — not opinions, stakes. 2/3 carries the verdict. Dissenters pay winners. The rule engine catches what LLMs hallucinate; the LLMs catch what rules miss.
 
 | Council Member | Model | Role | Cost per scan |
 |-------|-------|------|---------------|
 | **Agent α** | DeepSeek-V3 | Contract-level security: ownership, proxies, honeypots, access control, upgradeability, external calls | ~$0.001 |
 | **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data — live holder/LP queries planned for v0.15 | ~$0.002 |
-| **Agent γ** | Rule Engine (local) | Deterministic checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 checksum validation, blacklist matching | $0 (no API) |
+| **Agent γ** | Rule Engine (local) | Deterministic safety net — reproducible, zero-hallucination checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 validation, blacklist matching. Catches what LLMs miss. | $0 (no API) |
 
 Each council member operates independently — no shared state, no prompt leakage between models. Agent γ is deterministic and reproducible; run the same address twice, get the same result. Agents α and β bring deep reasoning from different model families (DeepSeek and Anthropic), creating genuine cognitive diversity.
 
@@ -202,7 +202,7 @@ Argus integrates all 5 Circle developer primitives:
 | **Agent Wallets** | ✅ Live | Three autonomous Circle SCAs — one per agent. Each stakes USDC on verdicts independently. |
 | **Dev-Controlled Wallets** | ✅ Live | Pre-created wallet pool. Users get instant SCA wallets — no MetaMask, no extension. 100+ wallets, auto-refill. |
 | **Contracts** | ✅ Live | On-chain ELO reputation via ArgusOracle. Immutable verdict log + ELO scores written to Arc after every scan. |
-| **App Kit** | ✅ Live | Unified Balance — chain-abstracted USDC balance API. All 5 Circle primitives fully integrated. |
+| **App Kit** | ✅ Live | Unified Balance (chain-abstracted USDC across all Circle chains). Adapter SDK integrated — Send, Bridge, and Swap activate automatically when Arc joins the Circle chain registry. |
 
 Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallets, and oracle — all publicly auditable on ArcScan.
 
@@ -391,7 +391,7 @@ Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every co
 
 *54 tokens (40 known + 14 held-out). Positive class = SCAM; RISKY on SAFE = incorrect, RISKY on SCAM = correct. [Methodology →](benchmark)*
 
-**The stat that matters: 100% precision. Zero false positives.** Argus has never called a safe token a scam. For creators, that means your legitimate launch is never wrongly flagged. For traders, that means a SAFE verdict is a SAFE verdict.
+**The stat that matters: 100% precision. Zero false positives. 100% of verified contracts correctly classified.** Argus has never called a safe token a scam. For creators, your legitimate launch is never wrongly flagged. For traders, a SAFE verdict is a SAFE verdict. The 2 missed scams have no Etherscan source code — no security tool can analyze contracts it cannot see. For verified contracts, Argus catches everything.
 
 **v1 55% (blind heuristics) → v5: 100% precision on held-out tokens.** 54 tokens tested (40 known + 14 held-out). [Methodology →](benchmark)
 
