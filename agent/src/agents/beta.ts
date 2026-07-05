@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import Anthropic from "@anthropic-ai/sdk";
 import { QueryRequest, Verdict } from '../orchestrator';
 import { lookupKnown } from './knownTokens';
 import { ContractData } from '../dataProvider';
@@ -22,33 +22,34 @@ Rules:
 - Prioritize protecting retail users from economic exploits.`;
 
 /**
- * Agent-β (Beta) — Tokenomics analysis via DeepSeek (displayed as Claude Sonnet 4)
- * Uses DeepSeek for cost efficiency with a tokenomics-focused system prompt.
+ * Agent-β (Beta) — Tokenomics analysis via Claude Sonnet 4.5
  */
 export const betaAgent = {
   name: 'Agent-β',
-  model: 'Claude Sonnet 4',
+  model: 'Claude Sonnet 4.5',
 
   async analyze(req: QueryRequest, contractData?: ContractData): Promise<Verdict> {
-    const apiKey = process.env.DEEPSEEK_API_KEY;
+    const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey || process.env.DEMO_MODE === 'true') {
       return this.fallbackAnalyze(req, contractData);
     }
 
     try {
-      const deepseek = new OpenAI({ apiKey, baseURL: 'https://api.deepseek.com' });
+      const anthropic = new Anthropic({ apiKey });
       const dataContext = contractData?.isContract
         ? `Chain: ${contractData.chain}\nContract name: ${contractData.contractName || 'unknown'}\nOwner: ${contractData.owner || 'unknown'}\nTotal supply: ${contractData.totalSupply || 'unknown'}\nDecimals: ${contractData.decimals ?? 'unknown'}\n\n`
         : '';
-      const result = await deepseek.chat.completions.create({
-        model: 'deepseek-chat', temperature: 0.3, max_tokens: 512,
+      const result = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 512,
+        temperature: 0.3,
+        system: SYSTEM_PROMPT,
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
           { role: 'user', content: `Analyze the tokenomics of this EVM contract:\n\nContract address: ${req.contractAddress}\n${dataContext}Focus on:\n1. Holder distribution — is one wallet holding >50%? How many holders?\n2. Liquidity — is LP locked? What's the liquidity depth?\n3. Buy/sell taxes — are there unusual transfer fees?\n4. Trading patterns — any wash trading or volume manipulation?\n5. Whale concentration — can a single wallet crash the price?\n6. Fair launch indicators — was there a presale? Team allocation?` },
         ],
       });
 
-      const text = result.choices[0]?.message?.content || '';
+      const text = result.content[0]?.type === 'text' ? result.content[0].text : '';
       const jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const parsed = JSON.parse(jsonStr);
 

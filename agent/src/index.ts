@@ -267,8 +267,18 @@ async function main() {
     res.json(walletPool.stats());
   });
 
+  // --- Admin auth middleware ---
+  const ADMIN_KEY = process.env.ADMIN_API_KEY || 'argus-admin-secret';
+  const requireAdmin = (req: any, res: any, next: any) => {
+    const key = req.headers['x-admin-key'] || req.query.key;
+    if (key !== ADMIN_KEY) {
+      return res.status(401).json({ error: 'Admin key required' });
+    }
+    next();
+  };
+
   // Top up wallet pool (admin)
-  app.post('/admin/topup-wallets', async (req, res) => {
+  app.post('/admin/topup-wallets', requireAdmin, async (req, res) => {
     try {
       const { count } = req.body || {};
       const n = typeof count === 'number' && count > 0 ? count : 30;
@@ -387,7 +397,7 @@ async function main() {
   });
 
   // Admin: seed scan count (for restoring stats after deploy)
-  app.post('/admin/seed-stats', async (req, res) => {
+  app.post('/admin/seed-stats', requireAdmin, async (req, res) => {
     const { queries, consensus } = req.body || {};
     const REAL_ADDRESSES = [
       '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
