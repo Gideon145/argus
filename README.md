@@ -44,11 +44,11 @@
 
 ![Argus scan verdict](docs/media/scan-result.png)
 
-> **Three autonomous agents run a live economy on Arc.** Each has its own wallet, its own on-chain ELO reputation, and real USDC at stake on every decision. They pay each other when they disagree and patrol every 15 minutes — no humans needed. The economy has processed 924 verdicts from 128 users. They happen to scan tokens.
+> **Three autonomous agents run a live economy on Arc.** Each has its own wallet, its own on-chain ELO reputation, and real USDC at stake on every decision. They pay each other when they disagree and patrol every 15 minutes — no humans needed. The economy has processed 1017 verdicts from 133 users. They happen to scan tokens.
 >
 > **For creators.** Token launches need security. Audits cost $5K. Argus costs $0.01. A Distribution Bootstrap security sidecar — any creator, any DAO, any trader. Paste an address, get a verdict. No MetaMask required. Works on mobile. Every verdict on-chain forever.
 
-| **931 scans** | **$9.60 treasury** | **128 users** | **5/5 Circle primitives** | **Agents pay each other** |
+| **1017 scans** | **$10.53 treasury** | **133 users** | **5/5 Circle primitives** | **Agents pay each other** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [Web/CLI/TG walkthrough](https://youtu.be/-53bxqcXXg4) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
@@ -397,37 +397,37 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-opt
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | 931 | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 851 (93%) | 3-agent pipeline live since Jun 16 |
-| **Users** | 128 | Web (114) · CLI (2) · Telegram (12) |
-| **Treasury balance** | $9.60 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+- **Scans processed** | 1017 | `/stats` endpoint · on-chain records |
+- **Consensus reached** | 946 (93%) | 3-agent pipeline live since Jun 16 |
+- **Users** | 133 | Web (120) · CLI (2) · Telegram (11) |
+- **Treasury balance** | $10.53 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
-| **ELO leaderboard** | α 91% · β 82% · γ 71% | `/elo` endpoint · on-chain |
+| **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
 | **Shadow Float V2** | 3 agents + CitePay | 4 on-chain lifecycles closed · cross-protocol on Arc |
 
 ### How we count
 
-Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. True distinct token count: 18 distinct addresses across ~924 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token).
+Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 87 distinct addresses across ~1017 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token).
 
 ### User Growth
 
 | Milestone | Date | Users | Scans | Treasury |
 |-----------|------|-------|-------|----------|
 | 3-agent consensus live | Jun 16 | 0 | 5 | $0.00 |
-| argusarc.xyz live | Jun 18–20 | 0 | 45 | $0.00 |
+| argusarc.xyz live | Jun 18–20 | 0 | 45 (team tests) | $0.00 |
 | Circle wallet launch | Jun 21 | 10 | 340 | $0.22 |
-| Circle wallet growth | Jun 22–25 | 100 | 500+ | $3.00 |
+| Circle wallet growth | Jun 22–25 | 100 | 561 | $3.00 |
 | CLI shipped to npm | Jun 29 | 109 | 648 | $5.80 |
 | Telegram bot live | Jul 1 | 121 | 666 | $6.93 |
 | 800+ scans · 127 users | Jul 3 | 127 | 810 | $7.93 |
-| **Autonomous patrol live** | **Jul 5** | **128** | **931 user + 93 agent** | **$9.60** |
+| **Autonomous patrol live** | **Jul 5** | **133** | **1017 user + 100 agent** | **$10.53** |
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 128 assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
 *Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (16 members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
 
-*128 users, 931 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
+*133 users, 1017 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
 ---
 

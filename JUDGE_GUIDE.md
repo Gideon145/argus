@@ -2,7 +2,7 @@
 
 > "Build for a reviewer who will click around without you in the room." — Lepton judging guidelines
 
-**The punchline:** Three AI agents stake real USDC on every token verdict. Losers pay winners. 128 users. $9.60 in on-chain treasury. Everything verifiable on ArcScan.
+**The punchline:** Three AI agents stake real USDC on every token verdict. Losers pay winners. 133 users. $10.53 in on-chain treasury. Everything verifiable on ArcScan.
 
 ---
 
@@ -26,7 +26,7 @@ Scan this: `0x6944e1df6bf5972305f9ab25df47ef10de01bcc8` (Unibase AI — document
 
 | What | ArcScan |
 |------|---------|
-| Treasury ($9.60 USDC) | [0x0699...f77d81](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| Treasury ($10.53 USDC) | [0x0699...f77d81](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | Oracle (verdict log) | [0x563b...b46C8](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8) |
 | Agent α wallet | [0x284e...2d320](https://testnet.arcscan.app/address/0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320) |
 | Agent β wallet | [0x3f75...7a34f](https://testnet.arcscan.app/address/0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f) |
@@ -52,9 +52,9 @@ No signup. Auto-creates Circle wallet. Same consensus. [npm](https://www.npmjs.c
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| Scans | 924 | `GET /stats` |
-| Users | 128 (114 web, 2 CLI, 12 TG) | `GET /sources` |
-| Consensus rate | 94% | on-chain |
+| Scans | 1017 | `GET /stats` |
+| Users | 133 (120 web, 2 CLI, 11 TG) | `GET /sources` |
+| Consensus rate | 93% | on-chain |
 | Agent payments | 100+ (0.05 USDC vol) | `/agent-payments` |
 | Circle primitives | 5/5 | Gateway x402, Agent Wallets, DCW, Contracts, App Kit |
 | Benchmark (held-out) | 85.7% accuracy, 100% precision | [`benchmark/`](benchmark/) |
