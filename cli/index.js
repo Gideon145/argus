@@ -265,8 +265,8 @@ async function cmdScan(address, opts = {}) {
       console.log(`    ${C.bold}${vc}Agent ${short} — ${a.verdict}${C.reset}`);
       if (a.reasoning) {
         const lines = a.reasoning.split('\n').filter(Boolean);
-        for (const line of lines.slice(0, 4)) {
-          console.log(`      ${C.dim}${line.trim().slice(0, 100)}${C.reset}`);
+        for (const line of lines.slice(0, 10)) {
+          console.log(`      ${C.dim}${line.trim().slice(0, 200)}${C.reset}`);
         }
       }
       console.log();
