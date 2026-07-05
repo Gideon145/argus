@@ -51,7 +51,7 @@
 | **931 scans** | **$9.60 treasury** | **128 users** | **5/5 Circle primitives** | **Agents pay each other** |
 |---|---|---|---|---|
 
-**Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [youtu.be/-53bxqcXXg4](https://youtu.be/-53bxqcXXg4)
+**Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [Web/CLI/TG walkthrough](https://youtu.be/-53bxqcXXg4) · **Patrol:** [Agents scanning live](https://youtu.be/PATROL_VIDEO_ID)
 
 > **Prior Art #08, live on Arc.** Reputation you post as collateral, not a score you ask to be trusted. Agent-to-agent nanopayments settle in under 500ms — every dissent costs real USDC. [See the agent economy →](#agent-to-agent-nanopayments-rfb-3)
 
