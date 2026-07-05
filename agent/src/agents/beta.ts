@@ -40,7 +40,7 @@ export const betaAgent = {
         ? `Chain: ${contractData.chain}\nContract name: ${contractData.contractName || 'unknown'}\nOwner: ${contractData.owner || 'unknown'}\nTotal supply: ${contractData.totalSupply || 'unknown'}\nDecimals: ${contractData.decimals ?? 'unknown'}\n\n`
         : '';
       const result = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-5-20250915',
         max_tokens: 512,
         temperature: 0.3,
         system: SYSTEM_PROMPT,
