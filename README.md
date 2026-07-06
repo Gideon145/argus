@@ -73,6 +73,7 @@
 - [What Makes This Different](#what-makes-this-different)
 - [What's Next](#whats-next)
 - [Honest Limits](#honest-limits)
+- [Real-World Catches](#real-world-catches)
 - [Traction](#traction)
 - [Quick Start](#quick-start)
 - [Community](#community)
@@ -404,15 +405,37 @@ Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every co
 
 ---
 
+## Real-World Catches
+
+Argus isn't theoretical. These are real tokens, real scans, real consequences.
+
+### Unibase AI — "Scammers blocked us" (Jun 23)
+
+Our agents scanned a trending token called Unibase AI and found:
+- **Unlimited minting** — the deployer could print infinite tokens
+- **100% transfer fee** — no one could sell once they bought
+- **Wash trading** — fake volume to simulate activity
+- **Upgradeable proxy** — contract logic could change at any time
+- **Computer-generated addresses** — mass-deployed scam pattern
+
+2/3 agents voted **SCAM**. We posted the verdict on X. Within hours, **Unibase AI blocked us** — confirming they saw the post and wanted it silenced. Community members who saw our verdict avoided being rugged. [See the post →](https://x.com/Argus_arc)
+
+> *"Was worth the risk 👍"* — actual community response
+
+### $CZ token — 1.6K views in 24 hours (Jul 4)
+
+A token claiming association with CZ Binance started trending. Our agents flagged:
+- **Unverified contract** — no source code transparency
+- **Extreme holder concentration** — one wallet controlled majority supply
+- **Exploit pattern matches** — matched signatures of known rug pulls
+
+The scan thread reached **1.6K organic views in under 24 hours**, generated **38 replies, 247 likes, and 74 reposts**, and brought in **10+ new followers** in a single day. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc)
+
+---
+
 ## Traction
 
 *Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be the first security infrastructure on the chain — 133+ users and 1000+ scans of battle-testing behind them.*
-
-### Real-world catches
-
-**Unibase AI (Jun 23):** Argus agents flagged unlimited minting, 100% transfer fees (no one could sell), wash trading with fake volume, an upgradeable proxy, and computer-generated addresses — a mass-deployed scam pattern. 2/3 agents voted SCAM. **Unibase AI blocked us for proving it.** Community members who saw the verdict avoided being rugged. 493 views.
-
-**$CZ token (Jul 4):** A trending token claiming association with CZ Binance. Agents identified unverified contract structure, extreme holder concentration, and exploit patterns. **1.6K organic views in 24 hours.** 10+ new followers. The product working exactly as designed — three agents catching scams in the wild.
 
 ### Metrics
 
