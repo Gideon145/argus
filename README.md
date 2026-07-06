@@ -188,6 +188,8 @@ Each council member operates independently — no shared state, no prompt leakag
 
 **Why a council?** Because single-model security scanners trust one API's opinion. The Council requires agreement to surface truth. When Agent β (the tokenomics skeptic) and Agent γ (the pattern matcher) both flag a contract as RISKY while Agent α calls it SAFE, the Council surfaces the split — and the user sees exactly why each member voted the way it did, with full reasoning.
 
+All agent prompts are open source: [`agent/src/agents/`](agent/src/agents/). See [`AGENTS.md`](AGENTS.md) to plug any AI agent into Argus.
+
 ---
 
 ## Circle/Arc Stack
@@ -236,12 +238,6 @@ The scan reached **1.6K impressions in under 24 hours** and brought in **10+ new
 
 ---
 
-## Agent Prompts
-
-All three agent system prompts are open source: [`agent/src/agents/`](agent/src/agents/). See [`AGENTS.md`](AGENTS.md) for how to plug any AI agent into Argus.
-
----
-
 ## Agent-to-Agent Nanopayments (RFB 3)
 
 Since v0.6, Argus agents run an internal economy. Since v0.12, stakes are **confidence-weighted**:
@@ -262,11 +258,7 @@ Agent γ → Agent β: 0.0005 USDC ✔
 Total agent economy volume visible at /agent-payments
 ```
 
-> **[Prior Art #08](https://lepton.thecanteenapp.com/#priorart): Reputation you post as collateral, not a score you ask to be trusted.**
->
-> *"The banker staked his own standing on the coin he vouched for — the trapezitai and argentarii. A broker agent posts a USDC bond to stand behind a match, and if the provider underdelivers, the bond slashes automatically. Reputation becomes capital at risk rather than a number you have to believe, which is far harder to fake."*
->
-> Argus agents do exactly this — in real time, on-chain, per decision. Every dissent costs 0.0005 USDC. Every wrong verdict drops ELO. No trust required. The stakes are public. The slash is automatic. This is Prior Art #08, live on Arc.
+Argus agents do exactly this — in real time, on-chain, per decision. Every dissent costs 0.0005 USDC. Every wrong verdict drops ELO. No trust required. The stakes are public. The slash is automatic. This is Prior Art #08, live on Arc.
 
 ---
 
@@ -418,7 +410,7 @@ Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every co
 
 ## Traction
 
-*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be the first security infrastructure on the chain — 133+ users and 1000+ scans of battle-testing behind them.*
+*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 133+ users and 1000+ scans of battle-testing behind them.*
 
 ### Metrics
 
