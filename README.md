@@ -418,7 +418,7 @@ Our agents scanned a trending token called Unibase AI and found:
 - **Upgradeable proxy** — contract logic could change at any time
 - **Computer-generated addresses** — mass-deployed scam pattern
 
-2/3 agents voted **SCAM**. We posted the verdict on X. Within hours, **Unibase AI blocked us** — confirming they saw the post and wanted it silenced. Community members who saw our verdict avoided being rugged. [See the post →](https://x.com/Argus_arc)
+2/3 agents voted **SCAM**. We posted the verdict on X. Within hours, **Unibase AI blocked us** — confirming they saw the post and wanted it silenced. Community members who saw our verdict avoided being rugged. [See the post →](https://x.com/Argus_arc/status/2069576455051505943)
 
 > *"Was worth the risk 👍"* — actual community response
 
@@ -429,7 +429,7 @@ A token claiming association with CZ Binance started trending. Our agents flagge
 - **Extreme holder concentration** — one wallet controlled majority supply
 - **Exploit pattern matches** — matched signatures of known rug pulls
 
-The scan thread reached **1.6K organic views in under 24 hours**, generated **38 replies, 247 likes, and 74 reposts**, and brought in **10+ new followers** in a single day. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc)
+The scan thread reached **1.6K organic views in under 24 hours**, generated **38 replies, 247 likes, and 74 reposts**, and brought in **10+ new followers** in a single day. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc/status/2073592959363117523)
 
 ---
 
