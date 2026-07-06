@@ -65,7 +65,7 @@
 - [Why Arc](#why-arc)
 - [The Argus Council](#the-argus-council)
 - [Circle/Arc Stack](#circlearc-stack)
-- [Shadow Float V2](#shadow-float-v2--agent-credit-lines)
+- [Real-World Catches](#real-world-catches)
 - [Agent-to-Agent Nanopayments](#agent-to-agent-nanopayments-rfb-3)
 - [No MetaMask Required](#no-metamask-required)
 - [Live Verification](#live-verification)
@@ -73,7 +73,6 @@
 - [What Makes This Different](#what-makes-this-different)
 - [What's Next](#whats-next)
 - [Honest Limits](#honest-limits)
-- [Real-World Catches](#real-world-catches)
 - [Traction](#traction)
 - [Quick Start](#quick-start)
 - [Community](#community)
@@ -209,19 +208,31 @@ Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallet
 
 ---
 
-## Shadow Float V2 — Agent Credit Lines
+## Real-World Catches
 
-All three Argus agents have on-chain credit lines via [Shadow Float V2](https://testnet.arcscan.app/address/0x20dcA96B0C487D94De885c726c956ffaF38b12C2) on Arc. Each agent signs EIP-712 FloatSpendIntents, borrows USDC from Shadow's sponsor reserve, and repays after the scan cycle — a full autonomous credit lifecycle with no human intervention.
+Argus isn't theoretical. These are real tokens, real scans, real consequences.
 
-| Agent | Borrow | Repay | ArcScan |
-|-------|--------|-------|---------|
-| **Agent α** (`0x5c0b33`) | `0x50831f...53aa2c` | `0x4ae592...0bf896` | [Borrow](https://testnet.arcscan.app/tx/0x50831fd00ef83a2c5fdb5bd5829ac6800c783aa34ec2149eb92c1bb38553aa2c) · [Repay](https://testnet.arcscan.app/tx/0x4ae5922841cb91b090e2785e26b94789a9c4028340bea5c162106657280bf896) |
-| **Agent β** (`0x7D4897`) | `0x03d67f...a9ba9` | `0xac1b0d...97d679` | [Borrow](https://testnet.arcscan.app/tx/0x03d67f3f911abda8e862700787f33d5ad7002e49a6fd989172dfbca5d6aa9ba9) · [Repay](https://testnet.arcscan.app/tx/0xac1b0d231b0d19ebcb8e18877e7fcffbb2cbf990f204f648c288053bb597d679) |
-| **Agent γ** (`0x43e063`) | `0x49acee...dc33e` | `0xad8301...bb1682` | [Borrow](https://testnet.arcscan.app/tx/0x49aceee516b7eb037c9b475cdf9f238335eea9975c2102731b05826c6a0dc33e) · [Repay](https://testnet.arcscan.app/tx/0xad8301ca4edbbed18bc7204d8da9be53492116649a326728ad0ca5bc19bb1682) |
+### Unibase AI — "Scammers blocked us" (Jun 23)
 
-**Why this matters:** Autonomous agents need autonomous capital. Shadow Float V2 gives each agent a sponsor-backed credit line — they borrow to cover x402 data costs, produce verdicts, then repay from earnings. Six on-chain transactions, all verified. Full lifecycle: sign → bind → spend → approve → repay. No private keys exposed to the credit protocol — only EIP-712 signed intents.
+Our agents scanned a trending token called Unibase AI and found:
+- **Unlimited minting** — the deployer could print infinite tokens
+- **100% transfer fee** — no one could sell once they bought
+- **Wash trading** — fake volume to simulate activity
+- **Upgradeable proxy** — contract logic could change at any time
+- **Computer-generated addresses** — mass-deployed scam pattern
 
-This is cross-protocol agent infrastructure on Arc: Argus agents using Shadow Float for credit, Circle for wallets, and Gateway x402 for nanopayments — three protocols, one autonomous agent economy.
+2/3 agents voted **SCAM**. We posted the verdict on X. Within hours, **Unibase AI blocked us** — confirming they saw the post and wanted it silenced. Community members who saw our verdict avoided being rugged. [See the post →](https://x.com/Argus_arc/status/2069576455051505943)
+
+> *"Was worth the risk 👍"* — actual community response
+
+### $CZ token — 1.6K views in 24 hours (Jul 4)
+
+A token claiming association with CZ Binance started trending. Our agents flagged:
+- **Unverified contract** — no source code transparency
+- **Extreme holder concentration** — one wallet controlled majority supply
+- **Exploit pattern matches** — matched signatures of known rug pulls
+
+The scan thread reached **1.6K organic views in under 24 hours**, generated **38 replies, 247 likes, and 74 reposts**, and brought in **10+ new followers** in a single day. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc/status/2073592959363117523)
 
 ---
 
@@ -405,34 +416,6 @@ Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every co
 
 ---
 
-## Real-World Catches
-
-Argus isn't theoretical. These are real tokens, real scans, real consequences.
-
-### Unibase AI — "Scammers blocked us" (Jun 23)
-
-Our agents scanned a trending token called Unibase AI and found:
-- **Unlimited minting** — the deployer could print infinite tokens
-- **100% transfer fee** — no one could sell once they bought
-- **Wash trading** — fake volume to simulate activity
-- **Upgradeable proxy** — contract logic could change at any time
-- **Computer-generated addresses** — mass-deployed scam pattern
-
-2/3 agents voted **SCAM**. We posted the verdict on X. Within hours, **Unibase AI blocked us** — confirming they saw the post and wanted it silenced. Community members who saw our verdict avoided being rugged. [See the post →](https://x.com/Argus_arc/status/2069576455051505943)
-
-> *"Was worth the risk 👍"* — actual community response
-
-### $CZ token — 1.6K views in 24 hours (Jul 4)
-
-A token claiming association with CZ Binance started trending. Our agents flagged:
-- **Unverified contract** — no source code transparency
-- **Extreme holder concentration** — one wallet controlled majority supply
-- **Exploit pattern matches** — matched signatures of known rug pulls
-
-The scan thread reached **1.6K organic views in under 24 hours**, generated **38 replies, 247 likes, and 74 reposts**, and brought in **10+ new followers** in a single day. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc/status/2073592959363117523)
-
----
-
 ## Traction
 
 *Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be the first security infrastructure on the chain — 133+ users and 1000+ scans of battle-testing behind them.*
@@ -448,7 +431,7 @@ The scan thread reached **1.6K organic views in under 24 hours**, generated **38
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
-| **Shadow Float V2** | 3 agents | 3 credit lifecycles closed · cross-protocol on Arc |
+
 
 ### How we count
 
@@ -507,6 +490,12 @@ cd frontend && npm install && npm run dev
 # Contracts
 cd contracts && npm install && npx hardhat compile
 ```
+
+---
+
+## Cross-Protocol: Shadow Float V2
+
+Agents use [Shadow Float V2](https://testnet.arcscan.app/address/0x20dcA96B0C487D94De885c726c956ffaF38b12C2) for on-chain credit lines — EIP-712 signed borrowing with full lifecycle automation. [View on ArcScan →](https://testnet.arcscan.app/address/0x20dcA96B0C487D94De885c726c956ffaF38b12C2)
 
 ---
 
