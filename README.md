@@ -8,7 +8,7 @@
     <img src="https://img.shields.io/badge/X-@Argus__arc-1DA1F2?style=for-the-badge&logo=x&logoColor=white" alt="X">
   </a>
   <a href="https://t.me/argus_communityy">
-    <img src="https://img.shields.io/badge/Community-16_members-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram community">
+    <img src="https://img.shields.io/badge/Community-50+_members-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram community">
   </a>
   <a href="https://argusarc.xyz/patrol">
     <img src="https://img.shields.io/endpoint?url=https://argus-agent-production-ab97.up.railway.app/badge/scans&style=for-the-badge" alt="live scans">
@@ -438,7 +438,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 133+ assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
-*Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (16 members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
+*Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (50+ members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
 
 *133+ users, 1000+ scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
@@ -479,7 +479,7 @@ cd contracts && npm install && npx hardhat compile
 
 ## Community
 
-**[t.me/argus_communityy](https://t.me/argus_communityy)** — 16 members and growing. Users share scans, compare verdicts, flag suspicious tokens, and help each other stay safe. Drop in and see what people are scanning right now.
+**[t.me/argus_communityy](https://t.me/argus_communityy)** — 50+ members and growing. Users share scans, compare verdicts, flag suspicious tokens, and help each other stay safe. Drop in and see what people are scanning right now.
 
 ---
 
