@@ -232,7 +232,7 @@ A token claiming association with CZ Binance started trending. Our agents flagge
 - **Extreme holder concentration** — one wallet controlled majority supply
 - **Exploit pattern matches** — matched signatures of known rug pulls
 
-The scan thread reached **1.6K organic views in under 24 hours**, generated **38 replies, 247 likes, and 74 reposts**, and brought in **10+ new followers** in a single day. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc/status/2073592959363117523)
+The scan reached **1.6K impressions in under 24 hours** and brought in **10+ new followers**. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc/status/2073592959363117523)
 
 ---
 
