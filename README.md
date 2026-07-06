@@ -69,11 +69,15 @@
 - [Agent-to-Agent Nanopayments](#agent-to-agent-nanopayments-rfb-3)
 - [No MetaMask Required](#no-metamask-required)
 - [Live Verification](#live-verification)
+- [Why Argus, Not an Existing Scanner](#why-argus-not-an-existing-scanner)
 - [Smart Contracts](#smart-contracts)
 - [What Makes This Different](#what-makes-this-different)
 - [What's Next](#whats-next)
 - [Honest Limits](#honest-limits)
+- [Accuracy Evaluation](#accuracy-evaluation)
 - [Traction](#traction)
+- [Telegram Bot](#telegram-scan-from-any-chat)
+- [CLI Tool](#cli-scan-from-your-terminal)
 - [Quick Start](#quick-start)
 - [Community](#community)
 - [Team](#team)
@@ -202,7 +206,7 @@ Argus integrates all 5 Circle developer primitives:
 |-----------|--------|-------------------|
 | **Gateway x402** | ✅ Live | $0.01 USDC nanopayment paywall on every scan. Gasless batched settlement. |
 | **Agent Wallets** | ✅ Live | Three autonomous Circle SCAs — one per agent. Each stakes USDC on verdicts independently. |
-| **Dev-Controlled Wallets** | ✅ Live | Pre-created wallet pool. Users get instant SCA wallets — no MetaMask, no extension. 100+ wallets, auto-refill. |
+| **Dev-Controlled Wallets** | ✅ Live | Pre-created wallet pool. Users get instant SCA wallets — no MetaMask, no extension. 190-wallet pool, auto-refill. |
 | **Contracts** | ✅ Live | On-chain ELO reputation via ArgusOracle. Immutable verdict log + ELO scores written to Arc after every scan. |
 | **App Kit** | ✅ Live | Unified Balance (chain-abstracted USDC across all Circle chains). Adapter SDK integrated — Send, Bridge, and Swap activate automatically when Arc joins the Circle chain registry. |
 
