@@ -318,6 +318,14 @@ curl https://argus-agent-production-ab97.up.railway.app/balance/unified/0x0699a0
 
 ---
 
+## Why Argus, Not an Existing Scanner
+
+Token scanners exist. But none run on Arc. None settle through Gateway x402 with native USDC gas. None have on-chain ELO per agent. None pay each other when they disagree. None patrol autonomously.
+
+Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every component (Gateway, Agent Wallets, Contracts, App Kit, USDC gas) is built on Arc primitives. Every address, transaction, and verdict is verifiable on ArcScan. No other security tool can say that.
+
+---
+
 ## Smart Contracts
 
 ### ArgusOracle.sol
@@ -340,14 +348,6 @@ function recordVerdict(address token, string verdict, uint8 agreementCount) exte
 - ELO deltas written per Council member after every verdict
 
 Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-optimized for Arc's native USDC model. [View on ArcScan →](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8)
-
----
-
-## Why Argus, Not an Existing Scanner
-
-Token scanners exist. But none run on Arc. None settle through Gateway x402 with native USDC gas. None have on-chain ELO per agent. None pay each other when they disagree. None patrol autonomously.
-
-Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every component (Gateway, Agent Wallets, Contracts, App Kit, USDC gas) is built on Arc primitives. Every address, transaction, and verdict is verifiable on ArcScan. No other security tool can say that.
 
 ---
 
