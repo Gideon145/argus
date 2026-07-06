@@ -184,7 +184,7 @@ Three independent agents form the Council — two AI models for deep reasoning, 
 | **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data — live holder/LP queries planned for v0.15 | ~$0.002 |
 | **Agent γ** | Rule Engine (local) | Deterministic safety net — reproducible, zero-hallucination checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 validation, blacklist matching. Catches what LLMs miss. | $0 (no API) |
 
-Each council member operates independently — no shared state, no prompt leakage between models. Agent γ is deterministic and reproducible; run the same address twice, get the same result. Agents α and β bring deep reasoning from different model families (DeepSeek and Anthropic), creating genuine cognitive diversity.
+Each council member operates independently — no shared state, no prompt leakage between models. Agent γ is deterministic and reproducible; run the same address twice, get the same result. Agents α and β draw from different model families — DeepSeek-V3 and Anthropic Claude Sonnet 4.5 — with β defaulting to Claude and falling back to DeepSeek for reliability. This creates genuine cognitive diversity across the Council.
 
 **Why a council?** Because single-model security scanners trust one API's opinion. The Council requires agreement to surface truth. When Agent β (the tokenomics skeptic) and Agent γ (the pattern matcher) both flag a contract as RISKY while Agent α calls it SAFE, the Council surfaces the split — and the user sees exactly why each member voted the way it did, with full reasoning.
 
@@ -408,10 +408,18 @@ Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every co
 
 *Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be the first security infrastructure on the chain — 133+ users and 1000+ scans of battle-testing behind them.*
 
+### Real-world catches
+
+**Unibase AI (Jun 23):** Argus agents flagged unlimited minting, 100% transfer fees (no one could sell), wash trading with fake volume, an upgradeable proxy, and computer-generated addresses — a mass-deployed scam pattern. 2/3 agents voted SCAM. **Unibase AI blocked us for proving it.** Community members who saw the verdict avoided being rugged. 493 views.
+
+**$CZ token (Jul 4):** A trending token claiming association with CZ Binance. Agents identified unverified contract structure, extreme holder concentration, and exploit patterns. **1.6K organic views in 24 hours.** 10+ new followers. The product working exactly as designed — three agents catching scams in the wild.
+
+### Metrics
+
 | Metric | Value | Proof |
 |--------|-------|-------|
 | **Scans processed** | 1000+ | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 946 (93%) | 3-agent pipeline live since Jun 16 |
+| **Consensus reached** | 963 (93%) | 3-agent pipeline live since Jun 16 |
 | **Users** | 133+ | Web · CLI · Telegram — multi-platform |
 | **Treasury balance** | $10+ USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
@@ -421,7 +429,7 @@ Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every co
 
 ### How we count
 
-Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 87 distinct addresses across 1000+ scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token). Median scans per user is 1 — most try Argus once; a core group of ~20 power users drives 80% of scan volume. This is early-stage retention typical of a 3-week-old product.
+Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 89 distinct addresses across 1000+ scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token). Median scans per user is 2 — most try Argus once or twice; a core group of ~20 power users drives 80% of scan volume. This is early-stage retention typical of a 3-week-old product.
 
 ### User Growth
 
@@ -439,6 +447,8 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 133+ assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
 *Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (50+ members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
+
+*On X, @Argus_arc grew from 0 to 137 followers over 3 weeks, with 8.7K total impressions and a 5.7% engagement rate — well above crypto-twitter averages. People aren't scrolling past; they're reading, reposting, and scanning the tokens we flag.*
 
 *133+ users, 1000+ scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
