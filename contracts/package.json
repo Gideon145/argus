@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "compile": "hardhat compile",
+    "test": "hardhat test",
     "deploy:arc": "hardhat run scripts/deploy.ts --network arcTestnet",
     "deploy:arbitrum": "hardhat run scripts/deploy.ts --network arbitrumSepolia"
   },

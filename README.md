@@ -399,14 +399,16 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-opt
 
 *54 tokens (40 known + 14 held-out). Positive class = SCAM; RISKY on SAFE = incorrect, RISKY on SCAM = correct. [Methodology →](benchmark)*
 
-**The stat that matters: 100% precision. Zero false positives. 100% of verified contracts correctly classified.** Argus has never called a safe token a scam. For creators, your legitimate launch is never wrongly flagged. For traders, a SAFE verdict is a SAFE verdict. The 2 missed scams have no Etherscan source code — no security tool can analyze contracts it cannot see. For verified contracts, Argus catches everything.
+**100% precision. Zero false positives. Never flags safe tokens as scams.** On known contracts (Etherscan-verified source code available), Argus catches everything — 16/16 scams, 24/24 safe. On held-out tokens, recall drops to 50% (2/4 scams caught) when no verified source code is available. The 2 missed scams are unverified contracts with zero on-chain metadata — no security tool can analyze contracts it cannot see. Agent β's v0.15 upgrade (real-time balanceOf + holder queries) targets this gap directly.
+
+For creators: your legitimate launch is never wrongly flagged. For traders: a SAFE verdict is a SAFE verdict. For the 2 unknown scams missed: on-chain data queries shipping in v0.15.
 
 **v1 55% (blind heuristics) → v5: 100% precision on held-out tokens.** 54 tokens tested (40 known + 14 held-out). [Methodology →](benchmark)
 
 | Cohort | Tokens | Accuracy | Precision | Recall | Notes |
 |--------|--------|----------|-----------|--------|-------|
 | Known (database-backed) | 40 | **100%** | 100% | 100% | 16/16 scams caught, 24/24 safe |
-| Held-out (no DB entries) | 14 | **85.7%** | **100%** | 50%* | 10/10 safe (all correct), 2/4 scam caught |
+| Held-out (no DB entries) | 14 | 85.7% | **100%** | 50%* | 10/10 safe (all correct), 2/4 scam caught |
 
 *The 2 missed scams lack verified Etherscan source code — agents had no contract metadata to analyze. This is a data availability ceiling, not an accuracy ceiling. All 10 legitimate tokens correctly classified. Inter-agent disagreement: 14.3%. Reproduce: `cd benchmark && npx tsx report.ts`.*
 

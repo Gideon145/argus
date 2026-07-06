@@ -65,7 +65,7 @@ export async function fetchContractData(address: string): Promise<ContractData> 
     // Also try to get on-chain facts from the verified source
     try {
       const p2 = new ethers.JsonRpcProvider('https://ethereum-rpc.publicnode.com', undefined, { staticNetwork: true });
-      const erc20 = new ethers.Contract(address, ['function totalSupply() view returns (uint256)', 'function decimals() view returns (uint8)', 'function owner() view returns (address)'], p2);
+      const erc20 = new ethers.Contract(address, ['function totalSupply() view returns (uint256)', 'function decimals() view returns (uint8)', 'function owner() view returns (address)', 'function balanceOf(address) view returns (uint256)'], p2);
       const [ts, dec, own] = await Promise.allSettled([erc20.totalSupply(), erc20.decimals(), erc20.owner()]);
       if (ts.status === 'fulfilled') result.totalSupply = ts.value.toString();
       if (dec.status === 'fulfilled') result.decimals = Number(dec.value);
@@ -73,6 +73,20 @@ export async function fetchContractData(address: string): Promise<ContractData> 
       if (result.owner) result.flags.push(`Owner: ${result.owner.slice(0, 10)}...`);
       if (result.totalSupply) result.flags.push(`Supply: ${result.totalSupply}`);
       if (result.decimals !== null) result.flags.push(`Decimals: ${result.decimals}`);
+
+      // v0.15 groundwork: query owner's token balance for holder concentration signal
+      if (result.owner && result.totalSupply && ts.status === 'fulfilled') {
+        try {
+          const ownerBalance = await erc20.balanceOf(result.owner);
+          const totalSupply = BigInt(result.totalSupply);
+          if (totalSupply > 0n) {
+            const ownerPct = Number((ownerBalance * 10000n) / totalSupply) / 100;
+            result.flags.push(`Owner holds ${ownerPct}% of supply`);
+            if (ownerPct > 50) result.flags.push('⚠️ Owner holds majority supply');
+            if (ownerPct > 90) result.flags.push('🚨 Owner holds >90% supply — extreme concentration');
+          }
+        } catch { /* balanceOf failed — non-ERC20 contract, skip */ }
+      }
     } catch {}
   }
 
