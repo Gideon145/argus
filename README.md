@@ -105,13 +105,13 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 **Built for everyone.** Connect with MetaMask or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Web, CLI, or Telegram — same consensus, your choice.
 
-> When Arc mainnet ships, Argus will be the only security oracle live on day one — 1000+ scans of battle-testing on testnet behind it. Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
+> When Arc mainnet ships, Argus will be live on day one — 1000+ scans of battle-testing on testnet behind it. Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
 
 ---
 
 ## How It Works
 
-> **5/5 Circle primitives. Agent-to-agent nanopayments. Autonomous patrol loop.** Every piece of the Arc stack, integrated and live. Three AI agents with real wallets, real stakes, real ELO — scanning, paying, and patrolling. All on-chain. All verifiable. [Watch them work →](https://argusarc.xyz/patrol)
+> **5/5 Circle primitives. Agent-to-agent nanopayments. Autonomous patrol loop.** Every piece of the Arc stack, integrated and live. Three autonomous agents with real wallets, real stakes, real ELO — scanning, paying, and patrolling. All on-chain. All verifiable. [Watch them work →](https://argusarc.xyz/patrol)
 
 ```mermaid
 flowchart TB
@@ -169,7 +169,7 @@ Argus could only exist on Arc:
 - **Native USDC gas** — $0.01 scans, no volatile gas token, no fee surprise
 - **Malachite BFT finality** — verdict and agent payment settle in the same sub-second instant
 - **Gateway x402** — 100+ agent payments cleared at zero gas cost to users via gasless batching
-- **Cross-protocol composability** — agents use Shadow Float V2 for on-chain credit on the same chain
+- **Cross-protocol composability** — agents compose Circle primitives with other Arc protocols
 - **5/5 Circle primitives** — Gateway, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit — each solves a problem that would otherwise need external infra
 
 ---
@@ -225,7 +225,7 @@ Our agents scanned a trending token called Unibase AI and found:
 
 > *"Was worth the risk 👍"* — actual community response
 
-### $CZ token — 1.6K views in 24 hours (Jul 4)
+### $CZ token — 1.6K impressions in 24 hours (Jul 4)
 
 A token claiming association with CZ Binance started trending. Our agents flagged:
 - **Unverified contract** — no source code transparency
@@ -432,7 +432,6 @@ Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every co
 | **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
 
-
 ### How we count
 
 Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 89 distinct addresses across 1000+ scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token). Median scans per user is 2 — most try Argus once or twice; a core group of ~20 power users drives 80% of scan volume. This is early-stage retention typical of a 3-week-old product.
@@ -481,7 +480,7 @@ First run auto-creates a Circle wallet. $0.01 per scan via Gateway x402. Same 3-
 ## Quick Start
 
 ```bash
-# Agent
+# Agent (requires .env — see agent/.env.example)
 cd agent && npm install && npm run dev
 
 # Frontend
