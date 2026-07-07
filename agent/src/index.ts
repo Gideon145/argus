@@ -21,8 +21,17 @@ const SELLER_ADDRESS = process.env.TREASURY_ADDRESS || '0x933a2405f84c224be1ef37
 
 const logger: Logger = createLogger('Argus');
 
-/** Check if an address is a smart contract (has bytecode) or an EOA wallet. */
-async function checkIsContract(address: string, rpcUrl: string): Promise<{ isContract: boolean; bytecode: string }> {
+/** Check if an address is a smart contract (has bytecode) or an EOA wallet.
+ *  Uses the appropriate RPC for the chain. Falls open if no RPC available. */
+async function checkIsContract(address: string, chain: string): Promise<{ isContract: boolean; bytecode: string; skipped: boolean }> {
+  const rpcs: Record<string, string> = {
+    arc: process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com',
+    eth: process.env.ETH_RPC_URL || '',
+    xlayer: process.env.XLAYER_RPC_URL || '',
+  };
+  const rpcUrl = rpcs[chain];
+  if (!rpcUrl) return { isContract: true, bytecode: 'skipped', skipped: true }; // no RPC for this chain — fail open
+
   try {
     const resp = await fetch(rpcUrl, {
       method: 'POST',
@@ -32,10 +41,9 @@ async function checkIsContract(address: string, rpcUrl: string): Promise<{ isCon
     const data = await resp.json();
     const bytecode: string = data.result || '0x';
     const isContract = bytecode !== '0x' && bytecode !== '0x0';
-    return { isContract, bytecode };
+    return { isContract, bytecode, skipped: false };
   } catch {
-    // Fail open — if RPC is down, let the scan proceed
-    return { isContract: true, bytecode: 'unknown' };
+    return { isContract: true, bytecode: 'unknown', skipped: true }; // RPC down — fail open
   }
 }
 
@@ -363,8 +371,7 @@ async function main() {
       }
 
       // EOA check — reject wallet addresses before wasting agent calls
-      const arcRpc = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
-      const { isContract } = await checkIsContract(contractAddress, arcRpc);
+      const { isContract } = await checkIsContract(contractAddress, chain || 'arc');
       if (!isContract) {
         return res.status(400).json({
           error: 'not_a_contract',
@@ -466,8 +473,7 @@ async function main() {
       logger.info(`Debug scan: ${contractAddress} (no payment)`);
 
       // EOA check
-      const arcRpcDebug = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
-      const { isContract: isContractDebug } = await checkIsContract(contractAddress, arcRpcDebug);
+      const { isContract: isContractDebug } = await checkIsContract(contractAddress, chain || 'arc');
       if (!isContractDebug) {
         return res.status(400).json({
           error: 'not_a_contract', type: 'eoa_wallet',
@@ -521,8 +527,7 @@ async function main() {
       logger.info(`Paid scan: ${contractAddress} by ${payment?.payer} (${payment?.amount} USDC)`);
 
       // EOA check — reject before taking payment (gateway middleware already ran, but refund-free reject)
-      const arcRpcPaid = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
-      const { isContract: isContractPaid } = await checkIsContract(contractAddress, arcRpcPaid);
+      const { isContract: isContractPaid } = await checkIsContract(contractAddress, chain || 'arc');
       if (!isContractPaid) {
         return res.status(400).json({
           error: 'not_a_contract', type: 'eoa_wallet',
