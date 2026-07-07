@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { extractFindings, computeRiskScore, verdictColor, verdictBg, verdictBorder, verdictGlow, verdictLabel, AgentCard, ExpandedAnalysis, RiskFactorItem, sortFindingsBySeverity } from '@/components/ScanResults';
+import { extractFindings, computeRiskScore, verdictColor, verdictBg, verdictBorder, verdictGlow, verdictLabel, AgentCard, ExpandedAnalysis, RiskFactorItem, sortFindingsBySeverity, getKnownToken } from '@/components/ScanResults';
 
 const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'http://localhost:3001';
 
@@ -387,6 +387,12 @@ export default function Home() {
         });
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}));
+          if (errData.error === 'not_a_contract') {
+            setError(errData.message || 'This is a wallet address, not a token contract.');
+            setLoading(false);
+            if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+            return;
+          }
           throw new Error(errData.error || 'Scan failed');
         }
         data = await res.json();
@@ -460,6 +466,14 @@ export default function Home() {
       } else {
         data = await res.json();
       }
+
+        // Handle EOA wallet error from backend
+        if ((data as any).error === 'not_a_contract') {
+          setError((data as any).message || 'This is a wallet address, not a token contract.');
+          setLoading(false);
+          if (scanTimerRef.current) clearInterval(scanTimerRef.current);
+          return;
+        }
       } // end MetaMask else
       
       setResult(data);
@@ -509,6 +523,12 @@ export default function Home() {
   const riskScore = consensus ? computeRiskScore(consensus.verdict, agents) : 0;
   const allFindings = agents.flatMap(a => extractFindings(a.reasoning));
   const uniqueFindings = sortFindingsBySeverity([...new Set(allFindings)]).slice(0, 8);
+
+  // Known-token intelligence — separate expected vs actual risks
+  const knownToken = getKnownToken(address);
+  const expectedFindings = knownToken?.expectedFindings || [];
+  const actualRisks = uniqueFindings.filter(f => !expectedFindings.includes(f));
+  const expectedFeatures = uniqueFindings.filter(f => expectedFindings.includes(f));
   const vLabel = consensus ? verdictLabel(consensus.verdict) : null;
   const scanProgress = scanStep >= 0 && scanStep < 9;
   const verdictRef = useRef<HTMLDivElement>(null);
@@ -736,8 +756,11 @@ export default function Home() {
                     {consensus.settlementBatchId && (
                       <><span className="text-[#8A92A6]/20">|</span><span className="text-[#3CB878]/70">Verified on-chain</span></>
                     )}
-                    {uniqueFindings.length > 0 && (
-                      <><span className="text-[#8A92A6]/20">|</span><span className="text-[#E85555]/70">{uniqueFindings.length} risk factor{uniqueFindings.length > 1 ? 's' : ''}</span></>
+                    {actualRisks.length > 0 && (
+                      <><span className="text-[#8A92A6]/20">|</span><span className="text-[#E85555]/70">{actualRisks.length} risk factor{actualRisks.length > 1 ? 's' : ''}</span></>
+                    )}
+                    {expectedFeatures.length > 0 && (
+                      <><span className="text-[#8A92A6]/20">|</span><span className="text-[#3CB878]/70">{expectedFeatures.length} expected</span></>
                     )}
                   </div>
 
@@ -772,16 +795,39 @@ export default function Home() {
                 </div>
 
                 {/* ===== DECISION SUMMARY ===== */}
-                {uniqueFindings.length > 0 && (
-                  <div className="bg-[#0E1423] border border-[#D4AF37]/10 rounded-xl p-4 sm:p-5">
-                    <p className="font-mono text-sm text-[#8A92A6]/40 uppercase tracking-wider mb-3">
-                      Why this is {consensus.verdict.toLowerCase()}
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-3">
-                      {uniqueFindings.map((f, j) => (
-                        <RiskFactorItem key={j} factor={f} />
-                      ))}
+                {/* Known token banner */}
+                {knownToken && consensus && (
+                  <div className="bg-[#3CB878]/5 border border-[#3CB878]/20 rounded-xl p-4 mb-4">
+                    <p className="text-sm font-mono text-[#3CB878] font-bold mb-1">✓ Known token: {knownToken.name}</p>
+                    <p className="text-sm text-[#8A92A6]/60 leading-relaxed">{knownToken.context}</p>
+                  </div>
+                )}
+
+                {(actualRisks.length > 0 || expectedFeatures.length > 0) && (
+                <div className="bg-[#0E1423] border border-[#D4AF37]/10 rounded-xl p-4 sm:p-5">
+                  <p className="font-mono text-sm text-[#8A92A6]/40 uppercase tracking-wider mb-3">
+                    Why this is {consensus.verdict.toLowerCase()}
+                  </p>
+                  {actualRisks.length > 0 && (
+                    <div className="mb-4">
+                      {expectedFeatures.length > 0 && <p className="text-xs font-mono text-[#E85555]/50 uppercase tracking-wider mb-2">Risk Factors</p>}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-3">
+                        {actualRisks.map((f, j) => (
+                          <RiskFactorItem key={j} factor={f} expected={false} />
+                        ))}
+                      </div>
                     </div>
+                  )}
+                  {expectedFeatures.length > 0 && (
+                    <div>
+                      <p className="text-xs font-mono text-[#3CB878]/50 uppercase tracking-wider mb-2">Expected Features for {knownToken?.name || 'this token'}</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-3">
+                        {expectedFeatures.map((f, j) => (
+                          <RiskFactorItem key={`exp-${j}`} factor={f} expected={true} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   </div>
                 )}
 
