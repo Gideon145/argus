@@ -46,6 +46,11 @@ const KNOWN_TOKENS: Record<string, { name: string; expectedFindings: string[]; c
     expectedFindings: ['Upgradeable proxy', 'Blacklist function', 'Unlimited minting', 'Ownership not renounced'],
     context: 'Arc/X Layer testnet USDC. Used across OKX.AI marketplace for agent payments. Expected: proxy, minting, blacklist for compliance.',
   },
+  '0x07865c6e87b9a5e213ae308ba4f8a9aadf7e2b0c': {
+    name: 'USDC',
+    expectedFindings: ['Upgradeable proxy', 'Blacklist function', 'Unlimited minting', 'Ownership not renounced'],
+    context: 'Regulated stablecoin. Upgradeable proxy = security patches. Blacklist = compliance. These are safety features, not risks.',
+  },
 };
 
 /** Check if an address is a known safe token with expected "risk" features */

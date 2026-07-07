@@ -320,9 +320,21 @@ curl https://argus-agent-production-ab97.up.railway.app/balance/unified/0x0699a0
 
 ## Why Argus, Not an Existing Scanner
 
-Token scanners exist. But none run on Arc. None settle through Gateway x402 with native USDC gas. None have on-chain ELO per agent. None pay each other when they disagree. None patrol autonomously.
+Token scanners exist. Argus isn't one — it's a **multi-agent security oracle** with an internal economy, running autonomously on Arc.
 
-Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every component (Gateway, Agent Wallets, Contracts, App Kit, USDC gas) is built on Arc primitives. Every address, transaction, and verdict is verifiable on ArcScan. No other security tool can say that.
+| Capability | Typical Scanners | Argus |
+|---|---|---|
+| **Architecture** | Single API call | 3 independent agents (2 AI + 1 deterministic) vote with real stakes |
+| **Economic stakes** | None — free API, no skin in the game | Agents stake real USDC; dissenters pay winners; ELO drops on wrong calls |
+| **Payment rail** | Free or subscription fiat | $0.01 USDC via Gateway x402 — gasless, batched, on-chain |
+| **No wallet required** | Browser extension or signup | Circle pre-created wallets — works on mobile, 30s onboarding |
+| **On-chain verifiability** | Proprietary reports, no chain proof | Every verdict, payment, and ELO on ArcScan |
+| **Autonomous operation** | Only scans when asked | Patrol loop — agents scan every 15 min with zero human input |
+| **Chain-native** | Chain-agnostic (Ethereum focus) | Arc-native from the metal up — 5/5 Circle primitives, USDC gas |
+| **Multi-platform** | Web only | Web, CLI (`npx argus-scan`), and Telegram (`/scan`) |
+| **Reputation system** | Static scores or none | On-chain ELO per agent — proper pairwise math, updated after every scan |
+
+Argus isn't a scanner ported to Arc — it's Arc-native infrastructure. Every address, transaction, and verdict is verifiable on ArcScan. No other security tool can say that.
 
 ---
 
