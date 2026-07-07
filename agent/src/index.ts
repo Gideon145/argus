@@ -390,16 +390,6 @@ async function main() {
         logger.warn(`Circle scan payment failed (continuing): ${payErr.message?.slice(0, 80)}`);
       }
 
-      // EOA check — reject wallet addresses before wasting agent calls
-      const { isContract } = await checkIsContract(contractAddress, chain || 'arc');
-      if (!isContract) {
-        return res.status(400).json({
-          error: 'not_a_contract',
-          type: 'eoa_wallet',
-          message: `This is a wallet address (${contractAddress.slice(0, 8)}...), not a token contract. Paste a token contract address to scan it.`,
-        });
-      }
-
       // Run the scan
       const queryReq: QueryRequest = {
         contractAddress,
@@ -492,15 +482,6 @@ async function main() {
 
       logger.info(`Debug scan: ${contractAddress} (no payment)`);
 
-      // EOA check
-      const { isContract: isContractDebug } = await checkIsContract(contractAddress, chain || 'arc');
-      if (!isContractDebug) {
-        return res.status(400).json({
-          error: 'not_a_contract', type: 'eoa_wallet',
-          message: `This is a wallet address (${contractAddress.slice(0, 8)}...), not a token contract.`,
-        });
-      }
-
       const queryReq: QueryRequest = {
         contractAddress,
         chain: chain || 'arc',
@@ -545,15 +526,6 @@ async function main() {
 
       const payment = req.payment;
       logger.info(`Paid scan: ${contractAddress} by ${payment?.payer} (${payment?.amount} USDC)`);
-
-      // EOA check — reject before taking payment (gateway middleware already ran, but refund-free reject)
-      const { isContract: isContractPaid } = await checkIsContract(contractAddress, chain || 'arc');
-      if (!isContractPaid) {
-        return res.status(400).json({
-          error: 'not_a_contract', type: 'eoa_wallet',
-          message: `This is a wallet address (${contractAddress.slice(0, 8)}...), not a token contract.`,
-        });
-      }
 
       const queryReq: QueryRequest = {
         contractAddress,
