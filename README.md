@@ -42,7 +42,10 @@
 
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
-![Argus scan verdict](docs/media/scan-result.png)
+<p align="center">
+  <img src="docs/media/main-1.png" alt="Argus Dashboard — scan form, live activity feed, FAQ" width="48%" />
+  <img src="docs/media/main-2.png" alt="Argus Scan Result — 3-agent consensus verdict" width="48%" />
+</p>
 
 > **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,090+ verdicts from 146+ users, all on-chain. When Arc mainnet launches, Argus is already running.
 >
