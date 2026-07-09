@@ -44,16 +44,27 @@
 
 ![Argus scan verdict](docs/media/scan-result.png)
 
-> **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1000+ verdicts from 133+ users, all on-chain. When Arc mainnet launches, Argus is already running.
+> **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,090+ verdicts from 146+ users, all on-chain. When Arc mainnet launches, Argus is already running.
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.xyz)
 
-| **1000+ scans** | **$10+ treasury** | **133+ users** | **5/5 Circle primitives** | **Agents pay each other** |
+| **1,090+ scans** | **$10+ treasury** | **146+ users** | **5/5 Circle primitives** | **Agents pay each other** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [Web/CLI/TG walkthrough](https://youtu.be/-53bxqcXXg4) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
 
 > **Prior Art #08, live on Arc.** Reputation you post as collateral, not a score you ask to be trusted. Agent-to-agent nanopayments settle in under 500ms — every dissent costs real USDC. [See the agent economy →](#agent-to-agent-nanopayments-rfb-3)
+
+---
+
+## TL;DR — What a Judge Sees in 30 Seconds
+
+| Judging Criterion (Lepton) | Argus |
+|---|---|
+| **Agentic Sophistication (30%)** | 3 independent agents — DeepSeek-V3, Claude Sonnet 4.5, deterministic rule engine — vote with real stakes. Dissenters pay winners. Patrol runs every 15 min with zero human input. Agents decide, not automate. |
+| **Traction (30%)** | 146 users, 1,090+ scans, 454 autonomous patrols. Unibase AI caught live — scammers blocked us on X. $CZ token hit 1.6K impressions. 137 X followers, 5.7% engagement rate. 50+ Telegram community. |
+| **Circle Tool Usage (20%)** | 5/5 Circle primitives live on Arc: Gateway x402, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit Unified Balance. Every address verifiable on ArcScan. |
+| **Innovation (20%)** | No other security tool uses multi-model consensus with real economic stakes. Prior Art #08 implemented: reputation as collateral, not a score. Agent-to-agent nanopayments settle in <500ms. |
 
 ---
 
@@ -109,7 +120,21 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 **Built for everyone.** Connect with MetaMask or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Web, CLI, or Telegram — same consensus, your choice.
 
-> When Arc mainnet ships, Argus will be live on day one — 1000+ scans of battle-testing on testnet behind it. Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
+> When Arc mainnet ships, Argus will be live on day one — 1,090+ scans of battle-testing on testnet behind it. Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
+
+---
+
+## 🔴 Caught in the Wild
+
+### Unibase AI — Scammers blocked us (Jun 23)
+
+A trending token called Unibase AI. Our agents scanned it and found: unlimited minting, 100% transfer fee (no one could sell), wash trading for fake volume, upgradeable proxy, computer-generated deployer addresses. **2/3 agents voted SCAM.** We posted the verdict on X. Within hours, Unibase AI blocked us — confirming they saw it and wanted it silenced. Community members who saw our verdict **avoided being rugged.** [See the post →](https://x.com/Argus_arc/status/2069576455051505943)
+
+> *"Was worth the risk 👍"* — actual community response
+
+### $CZ token — 1.6K impressions in 24 hours (Jul 4)
+
+A token claiming CZ Binance affiliation started trending. Our agents flagged: unverified contract, extreme holder concentration (one wallet controlled majority supply), exploit pattern matches. The scan reached **1.6K impressions in under 24 hours** and brought in 10+ new followers. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc/status/2073592959363117523)
 
 ---
 
@@ -286,7 +311,7 @@ MetaMask remains available as a secondary option. But the primary path requires 
 # Agent health
 curl https://argus-agent-production-ab97.up.railway.app/health
 
-# Current stats (1000+ scans, 93% consensus)
+# Current stats (1,090+ scans, 93% consensus)
 curl https://argus-agent-production-ab97.up.railway.app/stats | jq .
 
 # ELO leaderboard
@@ -428,15 +453,15 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 
 ## Traction
 
-*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 133+ users and 1000+ scans of battle-testing behind them.*
+*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 146+ users and 1,090+ scans of battle-testing behind them.*
 
 ### Metrics
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | 1000+ | `/stats` endpoint · on-chain records |
-| **Consensus reached** | 963 (93%) | 3-agent pipeline live since Jun 16 |
-| **Users** | 133+ | Web · CLI · Telegram — multi-platform |
+| **Scans processed** | **1,090+** | /stats endpoint · on-chain records |
+| **Consensus reached** | **1,017 (93%)** | 3-agent pipeline live since Jun 16 |
+| **Users** | **146+** | Web · CLI · Telegram — multi-platform |
 | **Treasury balance** | $10+ USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
@@ -444,7 +469,7 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 
 ### How we count
 
-Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 89 distinct addresses across 1000+ scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token). Median scans per user is 2 — most try Argus once or twice; a core group of ~20 power users drives 80% of scan volume. This is early-stage retention typical of a 3-week-old product.
+Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 89 distinct addresses across 1,090+ scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token). Median scans per user is 1 — most try Argus once or twice; a core group of ~20 power users drives 80% of scan volume. This is early-stage retention typical of a 3-week-old product.
 
 ### User Growth
 
@@ -457,15 +482,15 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | CLI shipped to npm | Jun 29 | 109 | 648 | $5.80 |
 | Telegram bot live | Jul 1 | 121 | 666 | $6.93 |
 | 800+ scans · 127 users | Jul 3 | 127 | 810 | $7.93 |
-| **Autonomous patrol live** | **Jul 5** | **133+** | **1000+ user + 100+ agent** | **$10+** |
+| **Autonomous patrol live** | **Jul 5** | **146+** | **1,090+ user scans + 454 patrol** | **$10+** |
 
-*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 133+ assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
+*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 146+ assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
 *Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (50+ members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
 
 *On X, @Argus_arc grew from 0 to 137 followers over 3 weeks, with 8.7K total impressions and a 5.7% engagement rate — well above crypto-twitter averages. People aren't scrolling past; they're reading, reposting, and scanning the tokens we flag.*
 
-*133+ users, 1000+ scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
+*146+ users, 1,090+ scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
 ---
 

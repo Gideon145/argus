@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { extractFindings, computeRiskScore, verdictColor, verdictBg, verdictBorder, verdictGlow, verdictLabel, AgentCard, ExpandedAnalysis, RiskFactorItem, sortFindingsBySeverity, getKnownToken } from '@/components/ScanResults';
 
-const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'http://localhost:3001';
+const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'https://argus-agent-production-ab97.up.railway.app';
 
 interface AgentResult { name: string; verdict: string; confidence: number; reasoning: string; }
 interface ScanResult {
