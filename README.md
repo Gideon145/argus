@@ -42,10 +42,6 @@
 
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
-<p align="center">
-  <img src="docs/media/main-1.png" alt="Argus Dashboard — scan form, live activity feed, FAQ" width="70%" />
-</p>
-
 > **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,090+ verdicts from 150+ users, all on-chain. When Arc mainnet launches, Argus is already running.
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.xyz)
@@ -180,10 +176,6 @@ Arc's Malachite BFT consensus provides deterministic sub-second finality with ze
 > Agents scan, stake, and settle on their own — every 15 minutes, no human in the loop. Same 3-agent consensus pipeline as a user scan, initiated autonomously. [See it live →](https://argusarc.xyz/patrol)
 
 The patrol mirrors community activity: every 3rd scan picks a random address from recent user scans, ensuring agents keep eyes on what the community is actually looking at. Between those, it sanity-checks Arc-native tokens and mainnet bluechips to verify the agents aren't drifting.
-
-<p align="center">
-  <img src="docs/media/main-2.png" alt="Argus Scan Result — 3-agent consensus verdict with on-chain settlement" width="70%" />
-</p>
 
 | What | Value |
 |------|-------|
