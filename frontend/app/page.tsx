@@ -488,7 +488,7 @@ export default function Dashboard() {
                           {formatAddress(scan.txHash, 8, 6)}
                         </a>
                       ) : (
-                        <span className="text-text-muted/40">Local Dev Only</span>
+                        <span className="text-text-muted/30">—</span>
                       )}
                     </td>
                     <td className="px-5 py-3 text-right">
