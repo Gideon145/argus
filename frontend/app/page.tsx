@@ -455,8 +455,8 @@ export default function Dashboard() {
                 <th className="px-5 py-3 font-medium">Consensus Result</th>
                 <th className="px-5 py-3 font-medium">Agreement Votes</th>
                 <th className="px-5 py-3 font-medium">Confidence</th>
-                <th className="px-5 py-3 font-medium">Verification Hash</th>
                 <th className="px-5 py-3 font-medium text-right">Action</th>
+                <th className="px-5 py-3 font-medium">Verification Hash</th>
               </tr>
             </thead>
             <tbody>
@@ -477,6 +477,14 @@ export default function Dashboard() {
                     </td>
                     <td className="px-5 py-3 text-text-secondary">{scan.consensus}</td>
                     <td className="px-5 py-3 text-text-primary font-medium">{scan.confidence}%</td>
+                    <td className="px-5 py-3 text-right">
+                      <button
+                        onClick={() => router.push(`/scan/${scan.address}`)}
+                        className="text-accent hover:underline"
+                      >
+                        Inspect
+                      </button>
+                    </td>
                     <td className="px-5 py-3 text-text-muted">
                       {scan.txHash ? (
                         <a
@@ -490,14 +498,6 @@ export default function Dashboard() {
                       ) : (
                         <span className="text-[11px] text-text-muted/40 italic">Off-chain</span>
                       )}
-                    </td>
-                    <td className="px-5 py-3 text-right">
-                      <button
-                        onClick={() => router.push(`/scan/${scan.address}`)}
-                        className="text-accent hover:underline"
-                      >
-                        Inspect
-                      </button>
                     </td>
                   </tr>
                 ))
