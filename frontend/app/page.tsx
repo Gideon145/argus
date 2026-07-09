@@ -37,8 +37,9 @@ export default function Dashboard() {
     avgConfidence: 0,
   });
 
-  // Recent scans
+  // Recent scans + patrol (merged for audit log)
   const [recentScans, setRecentScans] = useState<RecentScan[]>([]);
+  const [patrolScans, setPatrolScans] = useState<RecentScan[]>([]);
   const [statsLoading, setStatsLoading] = useState(true);
   const [agentPayments, setAgentPayments] = useState<{ totalPayments: number; totalVolume: string; recent: { from: string; to: string; amount: string; txHash: string; reason: string }[] } | null>(null);
 
@@ -58,7 +59,12 @@ export default function Dashboard() {
           avgConfidence: statsData.avgConfidence || 0,
         });
 
-        const scans = await api.getRecentScans(8);
+        // Fetch patrol log (has real on-chain tx hashes) + recent user scans
+        const [scans, patrol] = await Promise.all([
+          api.getRecentScans(6),
+          api.getPatrolLog(6),
+        ]);
+
         setRecentScans(
           scans.map(s => ({
             address: s.address,
@@ -67,6 +73,17 @@ export default function Dashboard() {
             confidence: s.confidence || (s.consensusVotes === '2/3' ? 78 : 95),
             timestamp: s.timestamp,
             txHash: s.txHash,
+          }))
+        );
+
+        setPatrolScans(
+          (patrol as any[]).map((p: any) => ({
+            address: p.address,
+            verdict: p.verdict,
+            consensus: p.consensus || '3/3',
+            confidence: p.confidence || 75,
+            timestamp: p.time || p.timestamp,
+            txHash: p.txHash || null,
           }))
         );
 
@@ -83,7 +100,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 12000);
+    const interval = setInterval(fetchData, 15000);
     return () => clearInterval(interval);
   }, []);
 
@@ -445,15 +462,16 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Full recent scans table */}
-      <Card title="Recent Audits Log" subtitle="Comprehensive audit logs of all scanned tokens.">
+      {/* Full recent scans table — merged patrol (on-chain) + user scans */}
+      <Card title="Recent Audits Log" subtitle="Live patrol settlements + user-submitted scans. Auto-refreshes every 15s.">
         <div className="overflow-x-auto -mx-5">
           <table className="w-full text-left border-collapse text-xs font-mono">
             <thead>
               <tr className="border-b border-border text-text-muted">
                 <th className="px-5 py-3 font-medium">Contract Address</th>
+                <th className="px-5 py-3 font-medium">Source</th>
                 <th className="px-5 py-3 font-medium">Consensus Result</th>
-                <th className="px-5 py-3 font-medium">Agreement Votes</th>
+                <th className="px-5 py-3 font-medium">Agreement</th>
                 <th className="px-5 py-3 font-medium">Confidence</th>
                 <th className="px-5 py-3 font-medium text-right">Action</th>
                 <th className="px-5 py-3 font-medium">Verification Hash</th>
@@ -462,16 +480,23 @@ export default function Dashboard() {
             <tbody>
               {statsLoading ? (
                 <tr>
-                  <td colSpan={6} className="px-5 py-8 text-center text-text-muted">Loading audit log...</td>
+                  <td colSpan={7} className="px-5 py-8 text-center text-text-muted">Loading audit log...</td>
                 </tr>
-              ) : recentScans.length === 0 ? (
+              ) : ([...patrolScans, ...recentScans].length === 0) ? (
                 <tr>
-                  <td colSpan={6} className="px-5 py-8 text-center text-text-muted">No audit logs found.</td>
+                  <td colSpan={7} className="px-5 py-8 text-center text-text-muted">No audit logs found.</td>
                 </tr>
               ) : (
-                recentScans.map((scan, i) => (
-                  <tr key={i} className="border-b border-border/50 hover:bg-bg-secondary/40 transition-colors">
-                    <td className="px-5 py-3 text-text-secondary select-all">{scan.address}</td>
+                [...patrolScans, ...recentScans].slice(0, 12).map((scan, i) => {
+                  const isPatrol = patrolScans.includes(scan);
+                  return (
+                  <tr key={`${scan.address}-${i}`} className="border-b border-border/50 hover:bg-bg-secondary/40 transition-colors">
+                    <td className="px-5 py-3 text-text-secondary select-all font-semibold">{formatAddress(scan.address)}</td>
+                    <td className="px-5 py-3">
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${isPatrol ? 'bg-success/10 text-success border border-success/20' : 'bg-bg-tertiary/50 text-text-muted'}`}>
+                        {isPatrol ? 'Patrol' : 'User'}
+                      </span>
+                    </td>
                     <td className="px-5 py-3">
                       <Badge label={scan.verdict} variant="verdict" />
                     </td>
@@ -496,11 +521,11 @@ export default function Dashboard() {
                           {formatAddress(scan.txHash, 8, 6)}
                         </a>
                       ) : (
-                        <span className="text-[11px] text-text-muted/40 italic">Off-chain</span>
+                        <span className="text-[11px] text-text-muted/40 italic">—</span>
                       )}
                     </td>
                   </tr>
-                ))
+                )})
               )}
             </tbody>
           </table>
