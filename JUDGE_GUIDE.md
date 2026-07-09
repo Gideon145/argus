@@ -2,13 +2,15 @@
 
 > "Build for a reviewer who will click around without you in the room." — Lepton judging guidelines
 
-**The punchline:** Three AI agents stake real USDC on every token verdict. Losers pay winners. 133+ users. $10+ in on-chain treasury. Everything verifiable on ArcScan.
+**The punchline:** Three AI agents stake real USDC on every token verdict. DeepSeek and Claude pay each other automatically through their verdicts — nanopayments settle in under 500ms. 150+ users. 1,090+ scans. 100+ agent-to-agent payments. Everything verifiable on ArcScan.
 
 ---
 
 ## 1. See it work (60 seconds)
 
-Go to **[argusarc.xyz](https://argusarc.xyz)** → click **Get Started** (Circle wallet, instant).
+Go to **[argusarc.xyz](https://argusarc.xyz)** → paste an address → hit Scan. No signup needed.
+
+The dashboard shows a **live activity feed** of every scan happening in real time, a **Quick Scan** bar for fast lookups, and an **FAQ accordion** explaining the protocol. Below the scan form, the **Recent Audits Log** shows every verdict with on-chain verification hashes.
 
 Scan this: `0x07865c6e87b9a5e213ae308ba4f8a9aadf7e2b0c` (Arc-native USDC)
 → 🟢 **SAFE** · 3/3 consensus
@@ -16,11 +18,19 @@ Scan this: `0x07865c6e87b9a5e213ae308ba4f8a9aadf7e2b0c` (Arc-native USDC)
 Scan this: `0x6944e1df6bf5972305f9ab25df47ef10de01bcc8` (Unibase AI — documented proxy rug)
 → 🔴 **SCAM** · 2/3 consensus · agents show exact evidence
 
-**Every scan shows:** which agent voted what, their confidence, their full reasoning, and the on-chain settlement.
+**Every scan shows:** which agent voted what, their confidence, their full reasoning, and the on-chain settlement hash.
 
 ---
 
-## 2. Verify the agent economy on-chain (60 seconds)
+## 2. Autonomous Patrol — agents don't wait (60 seconds)
+
+Go to **[argusarc.xyz/patrol](https://argusarc.xyz/patrol)** — every 15 minutes, three agents autonomously scan a contract, stake USDC, reach consensus, and settle on-chain. Zero human input. 454+ patrol scans completed.
+
+This is not a cron job. Agents independently decide, stake, and pay each other. The patrol feed shows every autonomous scan with verdict, consensus breakdown, and ArcScan links.
+
+---
+
+## 3. Verify the agent economy on-chain (60 seconds)
 
 **This is not mock data.** Every dissent costs real USDC. Losers pay winners 0.0005 USDC, scaled by confidence. 100+ payments, all on ArcScan.
 
@@ -37,7 +47,7 @@ Scan this: `0x6944e1df6bf5972305f9ab25df47ef10de01bcc8` (Unibase AI — document
 
 ---
 
-## 3. CLI + Telegram (60 seconds)
+## 4. CLI + Telegram (30 seconds)
 
 ```bash
 npx argus-scan@latest 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
@@ -48,24 +58,25 @@ No signup. Auto-creates Circle wallet. Same consensus. [npm](https://www.npmjs.c
 
 ---
 
-## 4. Numbers you can verify
+## 5. Numbers you can verify
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| Scans | 1000+ | `GET /stats` |
-| Users | 133+ (web, CLI, Telegram) | `GET /sources` |
+| Scans | 1,090+ | `GET /stats` |
+| Patrol scans | 454+ | `GET /patrol-log` |
+| Users | 150+ (web, CLI, Telegram) | `GET /stats` |
 | Consensus rate | 93% | on-chain |
-| Agent payments | 100+ (0.05 USDC vol) | `/agent-payments` |
+| Agent-to-agent payments | 100+ | `/agent-payments` |
 | Circle primitives | 5/5 | Gateway x402, Agent Wallets, DCW, Contracts, App Kit |
 | Benchmark (held-out) | 85.7% accuracy, 100% precision | [`benchmark/`](benchmark/) |
 
 ---
 
-## 5. What makes this a Lepton project
+## 6. What makes this a Lepton project
 
-- **RFB 3** (Agent-to-Agent Nanopayments) — agents pay each other on dissent
-- **Prior Art #08** (Reputation as collateral) — agents stake real USDC, not a score
-- **Distribution Bootstrap** — security sidecar: no SDK, no integration, $0.01/scan
+- **RFB 3** (Agent-to-Agent Nanopayments) — DeepSeek and Claude pay each other automatically through their verdicts
+- **Prior Art #08** (Reputation as collateral) — agents stake real USDC, not a score. ELO updates on-chain
+- **Distribution Bootstrap** — security sidecar: no SDK, no integration, paste an address
 - **5/5 Circle primitives** — every piece of the Arc stack, integrated and live
 
 ---
