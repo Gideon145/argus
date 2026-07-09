@@ -488,7 +488,7 @@ export default function Dashboard() {
                           {formatAddress(scan.txHash, 8, 6)}
                         </a>
                       ) : (
-                        <span className="text-text-muted/30">—</span>
+                        <span className="text-[11px] text-text-muted/40 italic">Off-chain</span>
                       )}
                     </td>
                     <td className="px-5 py-3 text-right">
