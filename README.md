@@ -57,7 +57,7 @@
 
 ---
 
-## TL;DR — What a Judge Sees in 30 Seconds
+## Argus, Scored Against the Lepton Rubric
 
 | Judging Criterion (Lepton) | Argus |
 |---|---|
