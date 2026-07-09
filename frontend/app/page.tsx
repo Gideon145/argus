@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/Card';
 import { Terminal } from '@/components/ui/Terminal';
 import { StatusDot } from '@/components/ui/StatusDot';
 import { Badge } from '@/components/ui/Badge';
-import { Search, ShieldAlert, ShieldCheck, Zap, Activity, History, Server, FileText, ArrowRight, ExternalLink, Bot } from 'lucide-react';
+import { Search, ShieldAlert, ShieldCheck, Zap, Activity, History, Server, FileText, ArrowRight, ExternalLink, Bot, ChevronDown } from 'lucide-react';
 
 interface RecentScan {
   address: string;
@@ -42,6 +42,9 @@ export default function Dashboard() {
   const [patrolScans, setPatrolScans] = useState<RecentScan[]>([]);
   const [statsLoading, setStatsLoading] = useState(true);
   const [agentPayments, setAgentPayments] = useState<{ totalPayments: number; totalVolume: string; recent: { from: string; to: string; amount: string; txHash: string; reason: string }[] } | null>(null);
+
+  // FAQ accordion
+  const [openFaq, setOpenFaq] = useState<number>(0);
 
   // Terminal logs for scan progress
   const [logLines, setLogLines] = useState<{ timestamp?: string; level?: 'info' | 'warn' | 'error' | 'success' | 'debug'; message: string }[]>([]);
@@ -354,9 +357,124 @@ export default function Dashboard() {
               </button>
             </div>
           </Card>
+
+          {/* Live Activity Feed — fills the empty space in left panel */}
+          <Card title="Live Activity Feed" padding="sm" action={<span className="text-[11px] font-mono text-success flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" /> Auto-refresh 15s</span>}>
+            <div className="max-h-[340px] overflow-y-auto pr-1 space-y-0.5">
+              {statsLoading ? (
+                <div className="text-center py-8 text-sm text-text-muted font-mono">Loading activity...</div>
+              ) : (() => {
+                const timeline: { type: string; key: string; time: Date; content: React.ReactNode }[] = [];
+
+                (agentPayments?.recent || []).slice(0, 5).forEach(p => {
+                  timeline.push({
+                    type: 'payment', key: `pay-${p.txHash}`, time: new Date((p as any).timestamp || Date.now()),
+                    content: (
+                      <a href={`https://testnet.arcscan.app/tx/${p.txHash}`} target="_blank" rel="noopener noreferrer"
+                        className="flex items-center justify-between px-3 py-2 rounded hover:bg-bg-tertiary/40 border-l-2 border-l-warning/30 hover:border-l-warning transition-all text-[13px] w-full group">
+                        <span className="font-mono text-text-secondary min-w-0 truncate">
+                          <span className="text-warning font-medium">{p.from?.replace('Agent-','') || '?'}</span>
+                          <span className="text-text-muted/40 mx-1.5">→</span>
+                          <span className="text-success font-medium">{p.to?.replace('Agent-','') || '?'}</span>
+                        </span>
+                        <span className="font-mono text-warning/80 flex items-center gap-1 text-[12px] flex-shrink-0 ml-2">
+                          {parseFloat(p.amount).toFixed(4)} <span className="text-text-muted/60 text-[11px]">USDC</span>
+                          <ExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </span>
+                      </a>
+                    ),
+                  });
+                });
+
+                patrolScans.slice(0, 6).forEach(s => {
+                  timeline.push({
+                    type: 'patrol', key: `pat-${s.address}`, time: new Date(s.timestamp || Date.now()),
+                    content: (
+                      <div onClick={() => router.push(`/scan/${s.address}`)}
+                        className="flex items-center justify-between px-3 py-2 rounded hover:bg-bg-tertiary/40 border-l-2 border-l-success/20 hover:border-l-success/40 cursor-pointer transition-all">
+                        <span className="font-mono text-[13px] text-text-secondary min-w-0 truncate">{formatAddress(s.address)}</span>
+                        <span className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                          <span className="text-[11px] font-mono text-text-muted">{s.consensus}</span>
+                          <Badge label={s.verdict} variant="verdict" />
+                        </span>
+                      </div>
+                    ),
+                  });
+                });
+
+                recentScans.slice(0, 4).forEach(s => {
+                  timeline.push({
+                    type: 'scan', key: `usr-${s.address}`, time: new Date(s.timestamp || Date.now()),
+                    content: (
+                      <div onClick={() => router.push(`/scan/${s.address}`)}
+                        className="flex items-center justify-between px-3 py-2 rounded hover:bg-bg-tertiary/40 border-l-2 border-l-accent/15 hover:border-l-accent/30 cursor-pointer transition-all">
+                        <span className="font-mono text-[13px] text-text-secondary min-w-0 truncate">{formatAddress(s.address)}</span>
+                        <span className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                          <span className="text-[11px] font-mono text-text-muted">{s.consensus}</span>
+                          <Badge label={s.verdict} variant="verdict" />
+                        </span>
+                      </div>
+                    ),
+                  });
+                });
+
+                timeline.sort((a, b) => b.time.getTime() - a.time.getTime());
+
+                if (timeline.length === 0) {
+                  return <div className="text-center py-8 text-sm text-text-muted font-mono">No activity yet. Connect a wallet and run a scan.</div>;
+                }
+
+                return (
+                  <>
+                    <div className="flex items-center justify-between px-3 py-2 mb-1 border-b border-border/30 text-[12px] font-mono">
+                      <span className="text-text-muted">
+                        {agentPayments ? `${agentPayments.totalPayments} payments · $${parseFloat(agentPayments.totalVolume || '0').toFixed(3)} vol` : 'Loading payments...'}
+                      </span>
+                      <span className="text-success/70">{timeline.length} events</span>
+                    </div>
+                    {timeline.slice(0, 12).map((item, i) => (
+                      <div key={item.key} className="group">
+                        {item.content}
+                        <span className="block text-[11px] text-text-muted/40 font-mono px-3 pb-1">{formatTimestamp(item.time.toISOString())}</span>
+                      </div>
+                    ))}
+                  </>
+                );
+              })()}
+            </div>
+          </Card>
+
+          {/* FAQ — fills remaining space */}
+          <Card title="Frequently Asked Questions" subtitle="Everything you need to know about Argus." padding="md">
+            <div className="space-y-5 text-[15px] leading-relaxed">
+              {[
+                { q: 'What is Argus?', a: 'Argus is a multi-agent security oracle. Three autonomous agents — two AI models (DeepSeek + Claude) and a deterministic rule engine — independently audit any smart contract. Each agent stakes real USDC on its verdict. Consensus determines the truth.' },
+                { q: 'How does the consensus work?', a: 'All three agents analyze the contract simultaneously. If at least 2 out of 3 agree on a verdict (Safe, Risky, or Scam), consensus is reached. Dissenting agents pay the winners in USDC — creating a financial incentive for accuracy.' },
+                { q: 'Who pays for scans?', a: 'Each scan costs $0.01 USDC, paid on Arc Testnet. The fee is distributed to the winning agents as a reward for accurate analysis. You can use MetaMask or a pre-funded Circle wallet to pay.' },
+                { q: 'What happens when agents disagree?', a: 'When agents reach different conclusions, the losing agent(s) must pay the winning agent(s) in USDC. This "loser pays" model ensures agents only stake on verdicts they genuinely believe in.' },
+                { q: 'Can I trust the results?', a: 'Yes. The game-theoretic design means agents lose real money for wrong calls. Agent performance is tracked publicly via ELO ratings. Over 1,000 scans have been settled on-chain with transparent audit trails.' },
+                { q: 'How do I scan a contract?', a: 'Paste any ERC-20 contract address into the search bar above, click Scan Contract, and watch the terminal as all three agents analyze it in real-time. You\'ll get a full report with risk scores and findings.' },
+              ].map((item, i) => (
+                  <div key={i} className="border-b border-border/40 pb-4 last:border-b-0 last:pb-0">
+                    <button
+                      onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
+                      className="w-full flex items-center justify-between gap-3 text-left hover:text-text-primary transition-colors group"
+                    >
+                      <span className="font-semibold text-text-primary">{item.q}</span>
+                      <ChevronDown size={16} className={`text-text-muted flex-shrink-0 transition-transform duration-200 ${openFaq === i ? 'rotate-180' : ''}`} />
+                    </button>
+                    {openFaq === i && (
+                      <p className="text-text-secondary text-[15px] mt-3 leading-relaxed animate-fade-in">
+                        {item.a}
+                      </p>
+                    )}
+                  </div>
+                ))}
+            </div>
+          </Card>
         </div>
 
-        {/* Sidebar panels */}
+        {/* Right column */}
         <div className="space-y-6">
           <Card title="Consensus Model" padding="sm">
             <div className="space-y-4 text-xs">
@@ -380,7 +498,6 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          {/* Agent Wallets — On-Chain Identity */}
           <Card title="Agent Wallets" subtitle="On-chain identities with real USDC stakes." padding="sm">
             <div className="space-y-2">
               {[
@@ -401,7 +518,6 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          {/* Agent Economy — Real USDC Payments Between Agents */}
           <Card title="Agent Economy" subtitle="Losers pay winners. Every dissent costs real USDC." padding="sm">
             {agentPayments && agentPayments.recent?.length > 0 ? (
               <div className="space-y-2">
