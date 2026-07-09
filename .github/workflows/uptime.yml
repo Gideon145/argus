@@ -1,6 +1,8 @@
 name: Uptime Health Check
 
 on:
+  push:
+    branches: [master]
   schedule:
     - cron: '*/15 * * * *'  # every 15 minutes
   workflow_dispatch:  # manual trigger
