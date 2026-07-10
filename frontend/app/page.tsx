@@ -125,6 +125,10 @@ export default function Dashboard() {
   };
 
   const handleScanSubmit = async () => {
+    if (!isConnected) {
+      setError('Connect Get Started or MetaMask to scan. $0.01 per audit.');
+      return;
+    }
     const cleanAddress = inputAddress.trim().toLowerCase();
     if (!isValidAddress(cleanAddress)) {
       setError('Invalid contract address format.');
@@ -140,23 +144,21 @@ export default function Dashboard() {
     addLog(`Target contract: ${cleanAddress}`, 'debug');
     
     try {
-      let txHash = null;
+      let txHash: string | null = null;
 
-      if (isConnected && !isCircle) {
-        addLog('Requesting security fee payment from MetaMask ($0.01 USDC)...', 'info');
+      if (!isCircle) {
+        addLog('Processing $0.01 USDC security fee via MetaMask...', 'info');
         try {
           txHash = await sendPayment();
-          addLog(`Payment transaction confirmed. Hash: ${formatAddress(txHash)}`, 'success');
+          addLog(`Payment confirmed: ${formatAddress(txHash)}`, 'success');
         } catch (payErr: any) {
-          addLog(`Payment cancelled or failed: ${payErr.message || payErr}`, 'error');
+          addLog(`Payment failed: ${payErr.message || payErr}`, 'error');
           setLoading(false);
           return;
         }
-      } else if (isCircle) {
-        addLog('Processing Circle pre-funded API payment token...', 'info');
-        await new Promise(r => setTimeout(r, 600));
       } else {
-        addLog('Running free security scan (no wallet connected)...', 'info');
+        addLog('Processing Circle pre-funded payment...', 'info');
+        await new Promise(r => setTimeout(r, 600));
       }
 
       addLog('Contacting Multi-Agent Consensus Orchestrator...', 'info');
@@ -168,19 +170,25 @@ export default function Dashboard() {
       await new Promise(r => setTimeout(r, 500));
       addLog('Computing final security consensus score...', 'info');
 
-      // Trigger actual scan
+      // Trigger actual scan — MetaMask uses scanWithPayment (attaches real tx proof),
+      // Circle uses /scan/circle (payment handled server-side).
       let scanResponse;
       if (isCircle && circleUserId) {
         scanResponse = await api.scanCircle(circleUserId, cleanAddress);
       } else {
-        // MetaMask: payment already sent via sendPayment(), use debug scan
-        scanResponse = await api.debugScan(cleanAddress);
+        // txHash is guaranteed non-null here (MetaMask path only reaches here after payment)
+        scanResponse = await api.scanWithPayment(cleanAddress, txHash!);
       }
 
       addLog(`Consensus formed: ${scanResponse.result.verdict} (${scanResponse.result.agreementCount}/${scanResponse.result.totalAgents} agents)`, 'success');
       
       if (scanResponse.result.settlementBatchId) {
         addLog(`On-chain state settled in batch: ${formatAddress(scanResponse.result.settlementBatchId)}`, 'success');
+      }
+      if (scanResponse.payment?.txHash) {
+        addLog(`Payment settled on-chain: ${formatAddress(scanResponse.payment.txHash)}`, 'success');
+        // Cache txHash so the result page can show the real settlement link
+        sessionStorage.setItem(`argus_payment_${cleanAddress}`, scanResponse.payment.txHash);
       }
 
       addLog('Redirecting to full vulnerability analysis report...', 'info');

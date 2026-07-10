@@ -2,15 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Clock, Shield, Menu, X, ShieldAlert, TrendingUp, Settings } from 'lucide-react';
+import { LayoutDashboard, Shield, Menu, X, ShieldAlert, TrendingUp, Settings, Clock } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 
 const NAV_ITEMS: { label: string; href: string; icon: ReactNode }[] = [
-  { label: 'Dashboard',  href: '/',        icon: <LayoutDashboard size={18} /> },
-  { label: 'Stats',      href: '/stats',   icon: <TrendingUp size={18} /> },
-  { label: 'Shame',      href: '/shame',   icon: <ShieldAlert size={18} /> },
-  { label: 'Patrol',     href: '/patrol',   icon: <Shield size={18} /> },
+  { label: 'Dashboard',  href: '/',         icon: <LayoutDashboard size={18} /> },
   { label: 'History',    href: '/history',  icon: <Clock size={18} /> },
+  { label: 'Stats',      href: '/stats',    icon: <TrendingUp size={18} /> },
+  { label: 'Shame',      href: '/shame',    icon: <ShieldAlert size={18} /> },
+  { label: 'Patrol',     href: '/patrol',   icon: <Shield size={18} /> },
   { label: 'Settings',   href: '/settings', icon: <Settings size={18} /> },
 ];
 

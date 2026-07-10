@@ -76,6 +76,8 @@ export default function ScanReportPage() {
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<ScanData | null>(null);
   const [error, setError] = useState('');
+  // Payment txHash cached from the scan flow (MetaMask payment proof)
+  const [paymentTxHash, setPaymentTxHash] = useState<string | null>(null);
   
   // Tab/expanded states
   const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
@@ -90,9 +92,13 @@ export default function ScanReportPage() {
       return;
     }
 
+    // Retrieve the MetaMask payment txHash if user just paid and was redirected here
+    const cachedTx = sessionStorage.getItem(`argus_payment_${address}`);
+    if (cachedTx) setPaymentTxHash(cachedTx);
+
     const fetchScanReport = async () => {
       try {
-        // Fetch via debug scan first which returns or runs the scan cached/freely
+        // Fetch via debug scan (cached/freely, real scan was already triggered on payment)
         const data = await api.debugScan(address);
         setResult(data as any);
       } catch (err: any) {
@@ -252,19 +258,23 @@ export default function ScanReportPage() {
             <Share2 size={12} />
             {copiedLink ? 'Link Copied' : 'Share Audit'}
           </button>
-          {consensus.settlementBatchId && (
-            <a
-              href={result.payment?.txHash
-                ? `https://testnet.arcscan.app/tx/${result.payment.txHash}`
-                : `https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-success/20 bg-success/5 hover:bg-success/10 transition-all text-xs font-medium text-success"
-            >
-              <ExternalLink size={12} />
-              {result.payment?.txHash ? 'View Settlement' : 'View on Oracle'}
-            </a>
-          )}
+          {consensus.settlementBatchId && (() => {
+            // Priority: cached MetaMask tx > scan response tx > oracle contract fallback
+            const settlementTx = paymentTxHash || result.payment?.txHash || null;
+            return (
+              <a
+                href={settlementTx
+                  ? `https://testnet.arcscan.app/tx/${settlementTx}`
+                  : `https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-success/20 bg-success/5 hover:bg-success/10 transition-all text-xs font-medium text-success"
+              >
+                <ExternalLink size={12} />
+                {settlementTx ? 'View Settlement' : 'View on Oracle'}
+              </a>
+            );
+          })()}
         </div>
       </div>
 

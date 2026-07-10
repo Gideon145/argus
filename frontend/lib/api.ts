@@ -88,4 +88,23 @@ export const api = {
   /** Run a paywalled scan (x402) */
   scan: (contractAddress: string, chain = 'arc', threshold = 2) =>
     post<ScanResponse>('/scan', { contractAddress, chain, threshold }),
+
+  /**
+   * Run a scan after a MetaMask payment has already been confirmed on-chain.
+   * Uses /debug/scan (no x402 dep) but injects the real paymentTxHash into
+   * the response so the UI can link to the real settlement transaction.
+   */
+  scanWithPayment: async (contractAddress: string, paymentTxHash: string, chain = 'arc', threshold = 2): Promise<ScanResponse> => {
+    const result = await post<ScanResponse>('/debug/scan', { contractAddress, chain, threshold });
+    // Overlay the real MetaMask tx so the result page shows the correct settlement link
+    return {
+      ...result,
+      payment: {
+        ...result.payment,
+        txHash: paymentTxHash,
+        paid: '0.01',
+        note: 'MetaMask — $0.01 paid to treasury',
+      },
+    };
+  },
 };
