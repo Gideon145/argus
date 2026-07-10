@@ -306,8 +306,8 @@ export default function ScanReportPage() {
                 return displayed.map((f, i) => {
                   const proportional = totalRaw > 0 ? Math.round(riskScore * rawWeights[i] / totalRaw) : Math.round(riskScore / displayed.length);
                   return (
-                    <div key={i} className="flex justify-between text-[10px] font-mono">
-                      <span className="text-text-secondary truncate mr-2">{f}</span>
+                    <div key={i} className="flex justify-between gap-2 text-[10px] font-mono">
+                      <span className="text-text-secondary leading-relaxed">{f}</span>
                       <span className="text-text-muted flex-shrink-0">+{proportional}</span>
                     </div>
                   );
