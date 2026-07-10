@@ -241,6 +241,16 @@ Argus integrates all 5 Circle developer primitives:
 
 Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallets, and oracle — all publicly auditable on ArcScan.
 
+**File path map — verify every primitive in 30 seconds:**
+
+| Primitive | File | What it does |
+|---|---|---|
+| **Gateway x402** | [`agent/src/gateway.ts`](agent/src/gateway.ts) | $0.01 USDC paywall per scan — gasless batched settlement |
+| **Agent Wallets (SCA)** | [`agent/src/wallets/funding.ts`](agent/src/wallets/funding.ts) | 3 wallets, one per agent — hold and stake USDC independently |
+| **Dev-Controlled Wallets** | [`agent/src/wallets/precreate.ts`](agent/src/wallets/precreate.ts) | 190-wallet pool, assigned to new users on arrival — no MetaMask needed |
+| **Contracts** | [`contracts/contracts/ArgusOracle.sol`](contracts/contracts/ArgusOracle.sol) | Immutable on-chain verdict log + ELO reputation scores |
+| **App Kit Unified Balance** | [`frontend/lib/wallet-context.tsx`](frontend/lib/wallet-context.tsx) | Chain-abstracted USDC balance display for Circle + MetaMask users |
+
 ---
 
 ## Real-World Catches
