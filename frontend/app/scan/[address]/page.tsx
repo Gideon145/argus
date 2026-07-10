@@ -252,15 +252,17 @@ export default function ScanReportPage() {
             <Share2 size={12} />
             {copiedLink ? 'Link Copied' : 'Share Audit'}
           </button>
-          {(result.payment?.txHash || consensus.settlementBatchId) && (
+          {consensus.settlementBatchId && (
             <a
-              href={`https://testnet.arcscan.app/tx/${result.payment?.txHash || consensus.settlementBatchId}`}
+              href={result.payment?.txHash
+                ? `https://testnet.arcscan.app/tx/${result.payment.txHash}`
+                : `https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-success/20 bg-success/5 hover:bg-success/10 transition-all text-xs font-medium text-success"
             >
               <ExternalLink size={12} />
-              View Settlement
+              {result.payment?.txHash ? 'View Settlement' : 'View on Oracle'}
             </a>
           )}
         </div>
