@@ -142,6 +142,15 @@ export default function HistoryPage() {
                         >
                           {formatAddress(scan.txHash, 6, 4)} <ExternalLink size={10} />
                         </a>
+                      ) : scan.verdict !== 'NO_CONSENSUS' ? (
+                        <a
+                          href={`https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-text-muted hover:text-accent inline-flex items-center gap-1 transition-colors text-[10px]"
+                        >
+                          Oracle <ExternalLink size={10} />
+                        </a>
                       ) : (
                         <span className="text-text-muted/30">—</span>
                       )}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argus Demo — Voiceover</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .player {
+      background: #12121a;
+      border: 1px solid #1e1e2e;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 32px;
+    }
+    audio {
+      width: 100%;
+      margin-bottom: 24px;
+      border-radius: 8px;
+    }
+    .script {
+      text-align: left;
+      background: #0d0d16;
+      border: 1px solid #1e1e2e;
+      border-radius: 10px;
+      padding: 20px 24px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #aaa;
+      white-space: pre-line;
+    }
+    .script::-webkit-scrollbar { width: 4px; }
+    .script::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+    .tip {
+      margin-top: 20px;
+      font-size: 11px;
+      color: #555;
+    }
+    .tip span { color: #7EB8DA; }
+  </style>
+</head>
+<body>
+  <div class="player">
+    <h1>🎙️ Argus Demo Voiceover</h1>
+    <p>Play this while recording your screen. Voice: GuyNeural</p>
+    
+    <audio controls autoplay>
+      <source src="demo-voiceover.mp3" type="audio/mpeg">
+      Your browser doesn't support audio playback.
+    </audio>
+
+    <div class="script">
+Welcome to Argus — Arc's first multi-agent security oracle. Three autonomous AI agents stake real USDC on every verdict. DeepSeek, Claude, and a deterministic rule engine reach consensus, and the losers pay the winners. Every result is settled on-chain forever.
+
+Let me show you how it works.
+
+Head to argusarc.xyz. No signup. No wallet needed. Just paste any contract address and hit scan.
+
+I am scanning a known scam token. Watch what happens. Three agents run independently. Each one analyzes the contract and stakes USDC on its verdict. Two agents flagged it as a scam, one dissented. The dissenter paid the winners. The verdict and payment are both on-chain, verifiable on ArcScan.
+
+Now let me show you the risk evaluation. Every scan gets a composite threat score, broken down by individual findings. Click to expand and you see exactly which patterns triggered the score.
+
+The consensus card shows each agent's vote with confidence bars. Purple is the rule engine, gold is Claude, blue is DeepSeek. Two agreed on scam, one disagreed. The dissenter paid.
+
+Now the coolest part — the autonomous patrol. Go to the patrol page. Every fifteen minutes, with zero human input, these agents pick a contract, scan it, stake USDC, reach consensus, and settle on-chain. This is not a cron job. This is three AI agents with real wallets making real economic decisions. Over five hundred patrol scans completed.
+
+You can watch the live feed. Every patrol shows the verdict, the consensus breakdown, the agent payments, and the ArcScan transaction link. Everything is verifiable.
+
+Finally, the history page. Clean, simple. Time, contract, verdict, and on-chain proof. No fake numbers, no filler. Just real scans with real settlement hashes.
+
+We built Argus for everyone — the degen aping memecoins at 2am, the developer shipping their first contract, the normie just trying not to get rugged. One thousand one hundred scans from over one hundred fifty users. Five out of five Circle primitives. Agent-to-agent nanopayments settle in under five hundred milliseconds.
+
+When Arc mainnet launches, Argus is already running. Try it now at argusarc.xyz.
+    </div>
+
+    <div class="tip">
+      <span>Tip:</span> Open <strong>argusarc.xyz</strong> in another tab and click through the pages as the voiceover plays.
+    </div>
+  </div>
+</body>
+</html>
