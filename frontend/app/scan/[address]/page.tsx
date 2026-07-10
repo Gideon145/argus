@@ -289,16 +289,30 @@ export default function ScanReportPage() {
             {/* Risk Score Composition */}
             <div className="mt-3 pt-3 border-t border-border space-y-1.5">
               <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-1">Risk Composition</p>
-              {uniqueFindings.slice(0, 6).map((f, i) => {
-                const sev = classifyFindingSeverity(f);
-                const weight = sev === 'CRITICAL' ? 18 : sev === 'HIGH' ? 12 : sev === 'MEDIUM' ? 8 : 4;
-                return (
-                  <div key={i} className="flex justify-between text-[10px] font-mono">
-                    <span className="text-text-secondary truncate mr-2">{f}</span>
-                    <span className="text-text-muted flex-shrink-0">+{weight}</span>
-                  </div>
-                );
-              })}
+              {(() => {
+                const displayed = uniqueFindings.slice(0, 6);
+                if (displayed.length === 0) {
+                  return (
+                    <div className="text-[10px] font-mono text-text-muted italic py-2">
+                      Score derived from {consensus.agreementCount}/{consensus.totalAgents} agent consensus at {Math.round(agents.reduce((s, a) => s + a.confidence, 0) / Math.max(1, agents.length))}% avg confidence
+                    </div>
+                  );
+                }
+                const rawWeights = displayed.map(f => {
+                  const sev = classifyFindingSeverity(f);
+                  return sev === 'CRITICAL' ? 18 : sev === 'HIGH' ? 12 : sev === 'MEDIUM' ? 8 : 4;
+                });
+                const totalRaw = rawWeights.reduce((s, w) => s + w, 0);
+                return displayed.map((f, i) => {
+                  const proportional = totalRaw > 0 ? Math.round(riskScore * rawWeights[i] / totalRaw) : Math.round(riskScore / displayed.length);
+                  return (
+                    <div key={i} className="flex justify-between text-[10px] font-mono">
+                      <span className="text-text-secondary truncate mr-2">{f}</span>
+                      <span className="text-text-muted flex-shrink-0">+{proportional}</span>
+                    </div>
+                  );
+                });
+              })()}
               <div className="flex justify-between text-[10px] font-mono pt-1 border-t border-border/50">
                 <span className="text-text-primary font-semibold">Final Score</span>
                 <span className="font-bold" style={{ color: verdictColor(consensus.verdict) }}>{riskScore}/100</span>
