@@ -17,4 +17,4 @@ RUN chmod +x start.sh
 
 WORKDIR /app
 EXPOSE 3001
-CMD ["sh", "-c", "cd /app/agent && node dist/index.js & node bot.js & wait"]
+CMD ["sh", "-c", "cd /app/agent && npm start"]

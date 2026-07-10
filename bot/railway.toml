@@ -2,4 +2,5 @@
 builder = "dockerfile"
 
 [deploy]
+startCommand = "node bot.js"
 restartPolicyType = "on_failure"
