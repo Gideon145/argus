@@ -21,16 +21,48 @@ export default function HistoryPage() {
   const fetchHistory = async () => {
     try {
       setLoading(true);
-      const data = await api.getRecentScans(50);
-      const ordered = [...data].reverse();
-      setScans(
-        ordered.map(s => ({
+      const [userScans, patrolScans] = await Promise.all([
+        api.getRecentScans(50),
+        api.getPatrolLog(50),
+      ]);
+
+      // Build a map of address+time → txHash from patrol data
+      const txMap = new Map<string, string>();
+      (patrolScans || []).forEach((p: any) => {
+        const key = `${(p.address || '').toLowerCase()}|${p.time || p.timestamp || ''}`;
+        if (p.txHash) txMap.set(key, p.txHash);
+      });
+
+      // Merge: prefer patrol txHash, fallback to scan's own txHash
+      const merged = [...(userScans || [])].map((s: any) => {
+        const key = `${(s.address || '').toLowerCase()}|${s.timestamp || ''}`;
+        return {
           address: s.address,
           verdict: s.verdict,
           timestamp: s.timestamp,
-          txHash: s.txHash,
-        }))
-      );
+          txHash: txMap.get(key) || s.txHash || null,
+        };
+      });
+
+      // Also add patrol scans that aren't duplicates
+      (patrolScans || []).forEach((p: any) => {
+        const exists = merged.some(m =>
+          m.address.toLowerCase() === (p.address || '').toLowerCase() &&
+          m.timestamp === (p.time || p.timestamp || '')
+        );
+        if (!exists) {
+          merged.push({
+            address: p.address,
+            verdict: p.verdict,
+            timestamp: p.time || p.timestamp,
+            txHash: p.txHash || null,
+          });
+        }
+      });
+
+      // Sort by time descending
+      merged.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      setScans(merged.slice(0, 50));
     } catch (err) {
       console.error('Failed to load scan history:', err);
     } finally {
