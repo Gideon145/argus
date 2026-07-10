@@ -12,7 +12,7 @@ interface ScanRecord {
   address: string;
   verdict: string;
   consensus: string;
-  confidence: number;
+  confidence: number | null;
   timestamp: string;
   txHash: string | null;
 }
@@ -35,7 +35,7 @@ export default function HistoryPage() {
           address: s.address,
           verdict: s.verdict,
           consensus: s.consensusVotes || s.consensus || '3/3',
-          confidence: s.confidence || (s.consensusVotes === '2/3' ? 78 : 95),
+          confidence: s.confidence ?? null,
           timestamp: s.timestamp,
           txHash: s.txHash,
         }))
@@ -147,7 +147,7 @@ export default function HistoryPage() {
                       {scan.consensus}
                     </td>
                     <td className="px-5 py-3.5 text-text-primary font-medium">
-                      {scan.confidence}%
+                      {scan.confidence != null ? `${scan.confidence}%` : <span className="text-text-muted/40">—</span>}
                     </td>
                     <td className="px-5 py-3.5 text-text-muted">
                       {scan.txHash ? (
@@ -160,7 +160,7 @@ export default function HistoryPage() {
                           {formatAddress(scan.txHash, 8, 6)} <ExternalLink size={10} />
                         </a>
                       ) : (
-                        <span className="text-text-muted/40">Local Dev</span>
+                        <span className="text-text-muted/40">Off-chain</span>
                       )}
                     </td>
                     <td className="px-5 py-3.5 text-right">
