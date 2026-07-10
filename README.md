@@ -50,10 +50,6 @@
   <sub>🎥 <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">Watch the demo (3 min)</a> — New UI, real-time patrol, Unibase AI caught live</sub>
 </p>
 
-<p align="center">
-  <img src="docs/media/main.png" alt="Argus Dashboard" width="70%" />
-</p>
-
 > **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,090+ verdicts from 150+ users, all on-chain. When Arc mainnet launches, Argus is already running.
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.xyz)
@@ -61,7 +57,7 @@
 | **1,090+ scans** | **$10+ treasury** | **150+ users** | **5/5 Circle primitives** | **Agents pay each other** |
 |---|---|---|---|---|
 
-**Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Demo:** [Web/CLI/TG walkthrough](https://youtu.be/-53bxqcXXg4) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
+**Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
 
 > **Prior Art #08, live on Arc.** Reputation you post as collateral, not a score you ask to be trusted. Agent-to-agent nanopayments settle in under 500ms — every dissent costs real USDC. [See the agent economy →](#agent-to-agent-nanopayments-rfb-3)
 
