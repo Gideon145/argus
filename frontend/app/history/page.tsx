@@ -22,29 +22,32 @@ export default function HistoryPage() {
     try {
       setLoading(true);
       const [userScans, patrolScans] = await Promise.all([
-        api.getRecentScans(50),
+        api.getHistory().catch(() => []),
         api.getPatrolLog(50),
       ]);
 
-      // Build a map of address+time → txHash from patrol data
+      // Normalize user scans from /history
+      const userData = (Array.isArray(userScans) ? userScans : []).map((s: any) => ({
+        address: s.address,
+        verdict: s.verdict,
+        timestamp: s.time || s.timestamp,
+        txHash: s.txHash || null,
+      }));
+
+      // Build txHash lookup from patrol data
       const txMap = new Map<string, string>();
       (patrolScans || []).forEach((p: any) => {
         const key = `${(p.address || '').toLowerCase()}|${p.time || p.timestamp || ''}`;
         if (p.txHash) txMap.set(key, p.txHash);
       });
 
-      // Merge: prefer patrol txHash, fallback to scan's own txHash
-      const merged = [...(userScans || [])].map((s: any) => {
+      // Merge user scans with patrol tx hashes
+      const merged = userData.map((s: any) => {
         const key = `${(s.address || '').toLowerCase()}|${s.timestamp || ''}`;
-        return {
-          address: s.address,
-          verdict: s.verdict,
-          timestamp: s.timestamp,
-          txHash: txMap.get(key) || s.txHash || null,
-        };
+        return { ...s, txHash: txMap.get(key) || s.txHash || null };
       });
 
-      // Also add patrol scans that aren't duplicates
+      // Add patrol scans not already in user data
       (patrolScans || []).forEach((p: any) => {
         const exists = merged.some(m =>
           m.address.toLowerCase() === (p.address || '').toLowerCase() &&
