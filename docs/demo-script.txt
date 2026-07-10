@@ -1,0 +1,21 @@
+Welcome to Argus — Arc's first multi-agent security oracle. Three autonomous AI agents stake real USDC on every verdict. DeepSeek, Claude, and a deterministic rule engine reach consensus, and the losers pay the winners. Every result is settled on-chain forever.
+
+Let me show you how it works.
+
+Head to argusarc.xyz. No signup. No wallet needed. Just paste any contract address and hit scan.
+
+I am scanning a known scam token. Watch what happens. Three agents run independently. Each one analyzes the contract and stakes USDC on its verdict. Two agents flagged it as a scam, one dissented. The dissenter paid the winners. The verdict and payment are both on-chain, verifiable on ArcScan.
+
+Now let me show you the risk evaluation. Every scan gets a composite threat score, broken down by individual findings. Click to expand and you see exactly which patterns triggered the score.
+
+The consensus card shows each agent's vote with confidence bars. Purple is the rule engine, gold is Claude, blue is DeepSeek. Two agreed on scam, one disagreed. The dissenter paid.
+
+Now the coolest part — the autonomous patrol. Go to the patrol page. Every fifteen minutes, with zero human input, these agents pick a contract, scan it, stake USDC, reach consensus, and settle on-chain. This is not a cron job. This is three AI agents with real wallets making real economic decisions. Over five hundred patrol scans completed.
+
+You can watch the live feed. Every patrol shows the verdict, the consensus breakdown, the agent payments, and the ArcScan transaction link. Everything is verifiable.
+
+Finally, the history page. Clean, simple. Time, contract, verdict, and on-chain proof. No fake numbers, no filler. Just real scans with real settlement hashes.
+
+We built Argus for everyone — the degen aping memecoins at 2am, the developer shipping their first contract, the normie just trying not to get rugged. One thousand one hundred scans from over one hundred fifty users. Five out of five Circle primitives. Agent-to-agent nanopayments settle in under five hundred milliseconds.
+
+When Arc mainnet launches, Argus is already running. Try it now at argusarc.xyz.
