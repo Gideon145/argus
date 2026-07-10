@@ -47,7 +47,7 @@
     <img src="https://img.youtube.com/vi/sHgjJe5jx6s/maxresdefault.jpg" alt="Argus Demo Video — Updated Jul 10" width="70%" style="border-radius:8px;border:1px solid #333" />
   </a>
   <br/>
-  <sub>🎥 <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">Watch the demo (3 min)</a> — New UI, real-time patrol, Unibase AI caught live</sub>
+  <strong>🎥 <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">Watch the demo (3 min)</a> — New UI, real-time patrol, Unibase AI caught live</strong>
 </p>
 
 > **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,090+ verdicts from 150+ users, all on-chain. When Arc mainnet launches, Argus is already running.
