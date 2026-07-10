@@ -125,10 +125,6 @@ export default function Dashboard() {
   };
 
   const handleScanSubmit = async () => {
-    if (!isConnected) {
-      setError('Please connect wallet or get started first.');
-      return;
-    }
     const cleanAddress = inputAddress.trim().toLowerCase();
     if (!isValidAddress(cleanAddress)) {
       setError('Invalid contract address format.');
@@ -146,7 +142,7 @@ export default function Dashboard() {
     try {
       let txHash = null;
 
-      if (!isCircle) {
+      if (isConnected && !isCircle) {
         addLog('Requesting security fee payment from MetaMask ($0.01 USDC)...', 'info');
         try {
           txHash = await sendPayment();
@@ -156,9 +152,11 @@ export default function Dashboard() {
           setLoading(false);
           return;
         }
-      } else {
+      } else if (isCircle) {
         addLog('Processing Circle pre-funded API payment token...', 'info');
         await new Promise(r => setTimeout(r, 600));
+      } else {
+        addLog('Running free security scan (no wallet connected)...', 'info');
       }
 
       addLog('Contacting Multi-Agent Consensus Orchestrator...', 'info');
@@ -175,8 +173,8 @@ export default function Dashboard() {
       if (isCircle && circleUserId) {
         scanResponse = await api.scanCircle(circleUserId, cleanAddress);
       } else {
-        // If metamask, call scan
-        scanResponse = await api.scan(cleanAddress);
+        // MetaMask: payment already sent via sendPayment(), use debug scan
+        scanResponse = await api.debugScan(cleanAddress);
       }
 
       addLog(`Consensus formed: ${scanResponse.result.verdict} (${scanResponse.result.agreementCount}/${scanResponse.result.totalAgents} agents)`, 'success');
