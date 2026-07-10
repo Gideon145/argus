@@ -72,6 +72,8 @@ export default function HistoryPage() {
 
   useEffect(() => {
     fetchHistory();
+    const interval = setInterval(fetchHistory, 15000); // refresh every 15s
+    return () => clearInterval(interval);
   }, []);
 
   return (
