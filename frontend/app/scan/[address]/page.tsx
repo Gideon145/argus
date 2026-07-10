@@ -76,6 +76,7 @@ export default function ScanReportPage() {
   const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
   const [expandedFinding, setExpandedFinding] = useState<number | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [expandedRisk, setExpandedRisk] = useState(false);
 
   useEffect(() => {
     if (!address || !isValidAddress(address)) {
@@ -273,7 +274,7 @@ export default function ScanReportPage() {
 
       {/* Grid of core metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Risk score radial/metric card */}
+        {/* Risk score — collapsible composition */}
         <Card padding="md" className="flex flex-col justify-between">
           <div>
             <h3 className="text-sm font-medium text-text-muted uppercase">Platform Risk Evaluation</h3>
@@ -284,40 +285,48 @@ export default function ScanReportPage() {
               <span className="text-text-muted text-sm">/ 100</span>
             </div>
             <p className="text-[13px] text-text-muted mt-2">
-              Composite threat indicator calculated from agent stakes and voting confidence.
+              Composite threat indicator from agent stakes and voting confidence.
             </p>
-            {/* Risk Score Composition */}
-            <div className="mt-3 pt-3 border-t border-border space-y-1.5">
-              <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-1">Risk Composition</p>
-              {(() => {
-                const displayed = uniqueFindings.slice(0, 6);
-                if (displayed.length === 0) {
-                  return (
-                    <div className="text-[10px] font-mono text-text-muted italic py-2">
-                      Score derived from {consensus.agreementCount}/{consensus.totalAgents} agent consensus at {Math.round(agents.reduce((s, a) => s + a.confidence, 0) / Math.max(1, agents.length))}% avg confidence
-                    </div>
-                  );
-                }
-                const rawWeights = displayed.map(f => {
-                  const sev = classifyFindingSeverity(f);
-                  return sev === 'CRITICAL' ? 18 : sev === 'HIGH' ? 12 : sev === 'MEDIUM' ? 8 : 4;
-                });
-                const totalRaw = rawWeights.reduce((s, w) => s + w, 0);
-                return displayed.map((f, i) => {
-                  const proportional = totalRaw > 0 ? Math.round(riskScore * rawWeights[i] / totalRaw) : Math.round(riskScore / displayed.length);
-                  return (
-                    <div key={i} className="flex justify-between gap-2 text-[10px] font-mono">
-                      <span className="text-text-secondary leading-relaxed">{f}</span>
-                      <span className="text-text-muted flex-shrink-0">+{proportional}</span>
-                    </div>
-                  );
-                });
-              })()}
-              <div className="flex justify-between text-[10px] font-mono pt-1 border-t border-border/50">
-                <span className="text-text-primary font-semibold">Final Score</span>
-                <span className="font-bold" style={{ color: verdictColor(consensus.verdict) }}>{riskScore}/100</span>
+            {/* Collapsible Risk Composition */}
+            <button
+              onClick={() => setExpandedRisk(!expandedRisk)}
+              className="mt-3 pt-3 border-t border-border w-full flex items-center justify-between text-[10px] font-mono text-text-muted uppercase tracking-wider hover:text-text-primary transition-colors"
+            >
+              <span>Risk Composition</span>
+              <ChevronDown size={14} className={`transition-transform duration-200 ${expandedRisk ? 'rotate-180' : ''}`} />
+            </button>
+            {expandedRisk && (
+              <div className="mt-2 space-y-1.5 animate-fade-in">
+                {(() => {
+                  const displayed = uniqueFindings.slice(0, 6);
+                  if (displayed.length === 0) {
+                    return (
+                      <div className="text-[10px] font-mono text-text-muted italic py-2">
+                        Score derived from {consensus.agreementCount}/{consensus.totalAgents} agent consensus at {Math.round(agents.reduce((s, a) => s + a.confidence, 0) / Math.max(1, agents.length))}% avg confidence
+                      </div>
+                    );
+                  }
+                  const rawWeights = displayed.map(f => {
+                    const sev = classifyFindingSeverity(f);
+                    return sev === 'CRITICAL' ? 18 : sev === 'HIGH' ? 12 : sev === 'MEDIUM' ? 8 : 4;
+                  });
+                  const totalRaw = rawWeights.reduce((s, w) => s + w, 0);
+                  return displayed.map((f, i) => {
+                    const proportional = totalRaw > 0 ? Math.round(riskScore * rawWeights[i] / totalRaw) : Math.round(riskScore / displayed.length);
+                    return (
+                      <div key={i} className="flex justify-between gap-2 text-[10px] font-mono">
+                        <span className="text-text-secondary leading-relaxed">{f}</span>
+                        <span className="text-text-muted flex-shrink-0">+{proportional}</span>
+                      </div>
+                    );
+                  });
+                })()}
+                <div className="flex justify-between text-[10px] font-mono pt-1 border-t border-border/50">
+                  <span className="text-text-primary font-semibold">Final Score</span>
+                  <span className="font-bold" style={{ color: verdictColor(consensus.verdict) }}>{riskScore}/100</span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
             <span className="text-xs text-text-muted">Security Verdict:</span>
@@ -325,7 +334,7 @@ export default function ScanReportPage() {
           </div>
         </Card>
 
-        {/* Consensus metric card */}
+        {/* Consensus — agent-by-agent breakdown */}
         <Card padding="md" className="flex flex-col justify-between">
           <div>
             <h3 className="text-xs font-medium text-text-muted uppercase">Consensus Verification</h3>
@@ -336,8 +345,31 @@ export default function ScanReportPage() {
               </span>
             </div>
             <p className="text-xs text-text-muted mt-2">
-              Number of AI agents agreeing on the security threat classification profile.
+              {consensus.agreementCount === 3 ? 'Full consensus — all agents independently reached the same verdict.' :
+               consensus.agreementCount === 2 ? 'Majority consensus — two agents agreed, one dissented.' :
+               'Split consensus — agents could not reach agreement.'}
             </p>
+            {/* Mini agent vote bar */}
+            <div className="mt-4 space-y-2">
+              {agents.map((a, i) => {
+                const meta = AGENT_META[a.name as keyof typeof AGENT_META];
+                const isMajority = a.verdict === consensus.verdict;
+                return (
+                  <div key={i} className="flex items-center gap-2 text-[11px]">
+                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: verdictColor(a.verdict) }} />
+                    <span className="text-text-secondary w-16 flex-shrink-0 truncate">{a.name}</span>
+                    <div className="flex-1 h-1.5 bg-bg-primary rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all" style={{
+                        width: `${a.confidence}%`,
+                        backgroundColor: isMajority ? verdictColor(consensus.verdict) : '#666',
+                        opacity: isMajority ? 1 : 0.5,
+                      }} />
+                    </div>
+                    <span className="text-text-muted w-8 text-right flex-shrink-0">{a.confidence}%</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
           <div className="mt-4 pt-4 border-t border-border flex items-center justify-between text-xs font-mono">
             <span className="text-text-muted">Status:</span>
@@ -347,7 +379,7 @@ export default function ScanReportPage() {
           </div>
         </Card>
 
-        {/* Audit Details Summary */}
+        {/* Vulnerability Profile — severity distribution */}
         <Card padding="md" className="flex flex-col justify-between">
           <div>
             <h3 className="text-sm font-medium text-text-muted uppercase">Vulnerability Profile</h3>
@@ -367,6 +399,28 @@ export default function ScanReportPage() {
               <div className="p-3 bg-bg-primary rounded border border-border">
                 <span className="text-success font-bold text-2xl block">{severityCounts.LOW}</span>
                 <span className="text-[12px] text-text-muted uppercase mt-0.5">Low</span>
+              </div>
+            </div>
+            {/* Severity distribution bar */}
+            <div className="mt-4">
+              <div className="flex h-2 rounded-full overflow-hidden bg-bg-primary">
+                {severityCounts.CRITICAL > 0 && (
+                  <div className="bg-critical h-full" style={{ width: `${Math.max(5, (severityCounts.CRITICAL / Math.max(1, uniqueFindings.length)) * 100)}%` }} />
+                )}
+                {severityCounts.HIGH > 0 && (
+                  <div className="bg-warning h-full" style={{ width: `${Math.max(5, (severityCounts.HIGH / Math.max(1, uniqueFindings.length)) * 100)}%` }} />
+                )}
+                {severityCounts.MEDIUM > 0 && (
+                  <div className="bg-yellow-500 h-full" style={{ width: `${Math.max(5, (severityCounts.MEDIUM / Math.max(1, uniqueFindings.length)) * 100)}%` }} />
+                )}
+                {severityCounts.LOW > 0 && (
+                  <div className="bg-success h-full" style={{ width: `${Math.max(5, (severityCounts.LOW / Math.max(1, uniqueFindings.length)) * 100)}%` }} />
+                )}
+              </div>
+              <div className="flex justify-between text-[10px] font-mono text-text-muted mt-1">
+                <span>Critical</span>
+                <span>Distribution</span>
+                <span>Low</span>
               </div>
             </div>
           </div>
