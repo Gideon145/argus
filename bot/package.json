@@ -1,0 +1,12 @@
+{
+  "name": "argus-telegram-bot",
+  "version": "1.0.0",
+  "description": "Argus Telegram Bot — scan contracts from Telegram",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^1.1.2"
+  }
+}
