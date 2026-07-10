@@ -2,6 +2,8 @@
 
 > "Build for a reviewer who will click around without you in the room." — Lepton judging guidelines
 
+**🎥 [Watch the 3-min demo](https://www.youtube.com/watch?v=sHgjJe5jx6s) — Updated Jul 10 with the new UI**
+
 **The punchline:** Three AI agents stake real USDC on every token verdict. DeepSeek and Claude pay each other automatically through their verdicts — nanopayments settle in under 500ms. 150+ users. 1,090+ scans. 100+ agent-to-agent payments. Everything verifiable on ArcScan.
 
 ---

@@ -43,6 +43,14 @@
 **Τρεις οφθαλμοί. Μια κρίσις.** — Three eyes. One verdict.
 
 <p align="center">
+  <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">
+    <img src="https://img.youtube.com/vi/sHgjJe5jx6s/maxresdefault.jpg" alt="Argus Demo Video — Updated Jul 10" width="70%" style="border-radius:8px;border:1px solid #333" />
+  </a>
+  <br/>
+  <sub>🎥 <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">Watch the demo (3 min)</a> — New UI, real-time patrol, Unibase AI caught live</sub>
+</p>
+
+<p align="center">
   <img src="docs/media/main.png" alt="Argus Dashboard" width="70%" />
 </p>
 
