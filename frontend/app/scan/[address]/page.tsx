@@ -60,6 +60,11 @@ interface ScanData {
     settlementBatchId: string;
     agents: AgentResult[];
   };
+  payment?: {
+    txHash?: string | null;
+    paid?: string;
+    note?: string;
+  };
   error?: string;
 }
 
@@ -247,9 +252,9 @@ export default function ScanReportPage() {
             <Share2 size={12} />
             {copiedLink ? 'Link Copied' : 'Share Audit'}
           </button>
-          {consensus.settlementBatchId && (
+          {(result.payment?.txHash || consensus.settlementBatchId) && (
             <a
-              href={`https://testnet.arcscan.app/tx/${consensus.settlementBatchId}`}
+              href={`https://testnet.arcscan.app/tx/${result.payment?.txHash || consensus.settlementBatchId}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-success/20 bg-success/5 hover:bg-success/10 transition-all text-xs font-medium text-success"
