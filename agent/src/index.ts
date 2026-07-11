@@ -517,6 +517,50 @@ async function main() {
     }
   });
 
+  // OKX Marketplace endpoint — full 3-agent consensus, payment handled by OKX.AI
+  app.post('/okx/scan', async (req, res) => {
+    try {
+      const { contractAddress, chain, threshold } = req.body || {};
+      if (!contractAddress) {
+        return res.status(400).json({ error: 'contractAddress required' });
+      }
+
+      logger.info(`OKX scan: ${contractAddress} (via OKX marketplace)`);
+
+      const queryReq: QueryRequest = {
+        contractAddress,
+        chain: chain || 'arc',
+        user: '0xOKXMarketplace000000000000000000000000000000',
+      };
+
+      const result = await orchestrator.processQuery(queryReq, threshold || 2);
+
+      res.json({
+        query: { contractAddress, chain: chain || 'arc' },
+        result: {
+          verdict: result.finalVerdict,
+          confidence: result.agreementCount === 3 ? 'high' : result.agreementCount === 2 ? 'medium' : 'none',
+          consensus: result.details,
+          agreementCount: result.agreementCount,
+          totalAgents: result.totalAgents,
+          winningAgents: result.winningAgents,
+          losingAgents: result.losingAgents,
+          settlementBatchId: result.settlementBatchId,
+          agents: result.agentVerdicts.map(v => ({
+            name: v.agent,
+            verdict: v.verdict,
+            confidence: v.confidence,
+            reasoning: v.reasoning,
+          })),
+        },
+        payment: { note: 'OKX marketplace — payment handled by OKX.AI' },
+      });
+    } catch (err: any) {
+      logger.error('OKX scan error:', err.message);
+      res.status(500).json({ error: 'Scan failed', detail: err.message });
+    }
+  });
+
   // Paywalled scan endpoint — $0.01 USDC per query
   app.post('/scan', gateway.require('$0.01'), async (req: any, res) => {
     try {
