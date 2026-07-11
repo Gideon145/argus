@@ -136,7 +136,8 @@ async function main() {
   app.get('/patrol-log', (_req, res) => {
     const limit = parseInt(_req.query.limit as string) || 20;
     const log = store.getPatrolLog();
-    res.json({ total: log.length, records: log.slice(0, limit) });
+    const stats = store.getStats();
+    res.json({ total: stats.patrolQueries, records: log.slice(0, limit) });
   });
 
   // Patrol status — is the autonomous loop running?
