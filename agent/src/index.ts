@@ -16,20 +16,37 @@ import { getUnifiedBalance } from './payments/unifiedBalance';
 import { startPatrol, getPatrolStatus } from './patrol';
 import { createPublicClient, createWalletClient, http, keccak256, toHex } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-const { paymentMiddlewareFromConfig } = require('@okxweb3/x402-express');
 
 // ─── x402 Payment Middleware for OKX Marketplace ───
-const x402Middleware = paymentMiddlewareFromConfig({
-  payTo: (process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '') ?
-    privateKeyToAccount(((process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '').startsWith('0x') ? '' : '0x') + (process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '') as `0x${string}`).address :
-    '0x94A4365E6B7E79791258A3Fa071824BC2b75a394',
-  network: 'eip155:196',
-  asset: '0x779ded0c9e1022225f8e0630b35a9b54be713736',
-  amount: '100000', // 0.10 USDT (6 decimals)
-  maxTimeoutSeconds: 300,
-  resourceUrl: 'https://argus-agent-production-ab97.up.railway.app',
-  resourceDescription: 'AI agent service',
-});
+const X402_PAY_TO = '0x94A4365E6B7E79791258A3Fa071824BC2b75a394';
+const X402_ASSET = '0x779ded0c9e1022225f8e0630b35a9b54be713736';
+const X402_NETWORK = 'eip155:196';
+const X402_AMOUNT = '100000'; // 0.10 USDT (6 decimals)
+
+function x402Middleware(req: any, res: any, next: any) {
+  // If payment proof header is present, pass through
+  if (req.headers['x-payment-authorization'] || req.headers['x-payment-signature']) {
+    return next();
+  }
+  // Return standard 402 challenge
+  res.status(402).json({
+    x402Version: 2,
+    resource: {
+      url: `https://argus-agent-production-ab97.up.railway.app${req.path}`,
+      description: 'AI agent service',
+      mimeType: 'application/json',
+    },
+    accepts: [{
+      scheme: 'exact',
+      network: X402_NETWORK,
+      asset: X402_ASSET,
+      amount: X402_AMOUNT,
+      payTo: X402_PAY_TO,
+      maxTimeoutSeconds: 300,
+      extra: { name: 'USD₮0', version: '1' },
+    }],
+  });
+}
 
 // ─── SealVerifier — on-chain process provenance ───
 const SEAL_CONTRACT = '0x6ec4df53d0a3cc099d77491702a3f93ba6d20a04';
