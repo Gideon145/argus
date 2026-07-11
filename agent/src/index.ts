@@ -16,7 +16,7 @@ import { getUnifiedBalance } from './payments/unifiedBalance';
 import { startPatrol, getPatrolStatus } from './patrol';
 import { createPublicClient, createWalletClient, http, keccak256, toHex } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import { paymentMiddlewareFromConfig } from '@okxweb3/x402-express';
+const { paymentMiddlewareFromConfig } = require('@okxweb3/x402-express');
 
 // ─── x402 Payment Middleware for OKX Marketplace ───
 const x402Middleware = paymentMiddlewareFromConfig({
