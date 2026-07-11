@@ -16,6 +16,7 @@ type VerdictFilter = (typeof VERDICT_FILTERS)[number];
 export default function HistoryPage() {
   const router = useRouter();
   const [records, setRecords] = useState<PatrolRecord[]>([]);
+  const [totalPatrols, setTotalPatrols] = useState(0);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<VerdictFilter>('ALL');
@@ -28,7 +29,8 @@ export default function HistoryPage() {
       // Patrol log is the ONLY source with real on-chain txHashes.
       // User debug scans do NOT generate individual txHashes.
       const data = await api.getPatrolLog(100);
-      setRecords(data);
+      setRecords(data.records);
+      setTotalPatrols(data.total);
       setLastUpdated(new Date());
     } catch (err) {
       console.error('Failed to fetch patrol log:', err);
@@ -86,7 +88,7 @@ export default function HistoryPage() {
       {/* Stats bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: 'Total Patrols', value: records.length, color: 'text-text-primary' },
+          { label: 'Total Patrols', value: totalPatrols, color: 'text-text-primary' },
           { label: 'Safe', value: verdictCounts['SAFE'] || 0, color: 'text-success' },
           { label: 'Risky', value: verdictCounts['RISKY'] || 0, color: 'text-warning' },
           { label: 'Scam', value: verdictCounts['SCAM'] || 0, color: 'text-critical' },
@@ -113,7 +115,7 @@ export default function HistoryPage() {
                 : 'border-border text-text-muted hover:text-text-secondary hover:border-border-active'
             }`}
           >
-            {v === 'ALL' ? `All (${records.length})` : `${v} (${verdictCounts[v] || 0})`}
+            {v === 'ALL' ? `All (${totalPatrols})` : `${v} (${verdictCounts[v] || 0})`}
           </button>
         ))}
         <span className="ml-auto flex items-center gap-1.5 text-[11px] font-mono text-success">

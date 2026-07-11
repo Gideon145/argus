@@ -38,7 +38,7 @@ export const api = {
   getRecentScans: (limit = 10) => get<RecentScan[]>(`/recent-scans?limit=${limit}`),
 
   /** Patrol scan log */
-  getPatrolLog: (limit = 20) => get<PatrolRecord[]>(`/patrol-log?limit=${limit}`),
+  getPatrolLog: (limit = 20) => get<{ total: number; records: PatrolRecord[] }>(`/patrol-log?limit=${limit}`),
 
   /** Patrol status */
   getPatrolStatus: () => get<PatrolStatus>('/patrol-status'),
