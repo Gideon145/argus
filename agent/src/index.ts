@@ -62,10 +62,13 @@ const SEAL_ABI = [
   }
 ] as const;
 const SEAL_RPC = 'https://testrpc.xlayer.tech';
-const SEAL_PRIVATE_KEY = (process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '') as `0x${string}`;
-const sealAccount = SEAL_PRIVATE_KEY ? privateKeyToAccount(SEAL_PRIVATE_KEY) : null;
 const sealPublicClient = createPublicClient({ transport: http(SEAL_RPC) });
-const sealWalletClient = sealAccount ? createWalletClient({ transport: http(SEAL_RPC), account: sealAccount }) : null;
+function getSealAccount() {
+  const raw = (process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '');
+  if (!raw || raw.length < 64) return null;
+  const key = (raw.startsWith('0x') ? raw : '0x' + raw) as `0x${string}`;
+  try { return privateKeyToAccount(key); } catch { return null; }
+}
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -626,13 +629,14 @@ async function main() {
       const outputHash = keccak256(toHex(typeof output === 'string' ? output : JSON.stringify(output)));
       const processId = keccak256(toHex(inputHash + outputHash + Date.now().toString()));
 
-      if (!sealWalletClient) {
+      if (!getSealAccount()) {
         return res.json({ processId, modelId: model, inputHash, outputHash, onChain: false,
           note: 'Seal private key not configured — proof generated but not anchored' });
       }
 
       logger.info(`Sealing process ${processId.slice(0, 10)}...`);
-      const txHash = await sealWalletClient.writeContract({
+      const wc = createWalletClient({ transport: http(SEAL_RPC), account: getSealAccount()! });
+      const txHash = await wc.writeContract({
         address: SEAL_CONTRACT, abi: SEAL_ABI, functionName: 'seal',
         args: [processId, model, inputHash, outputHash], chain: null,
       });
