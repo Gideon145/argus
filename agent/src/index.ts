@@ -16,6 +16,20 @@ import { getUnifiedBalance } from './payments/unifiedBalance';
 import { startPatrol, getPatrolStatus } from './patrol';
 import { createPublicClient, createWalletClient, http, keccak256, toHex } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { paymentMiddlewareFromConfig } from '@okxweb3/x402-express';
+
+// ─── x402 Payment Middleware for OKX Marketplace ───
+const x402Middleware = paymentMiddlewareFromConfig({
+  payTo: (process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '') ?
+    privateKeyToAccount(((process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '').startsWith('0x') ? '' : '0x') + (process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '') as `0x${string}`).address :
+    '0x94A4365E6B7E79791258A3Fa071824BC2b75a394',
+  network: 'eip155:196',
+  asset: '0x779ded0c9e1022225f8e0630b35a9b54be713736',
+  amount: '100000', // 0.10 USDT (6 decimals)
+  maxTimeoutSeconds: 300,
+  resourceUrl: 'https://argus-agent-production-ab97.up.railway.app',
+  resourceDescription: 'AI agent service',
+});
 
 // ─── SealVerifier — on-chain process provenance ───
 const SEAL_CONTRACT = '0x6ec4df53d0a3cc099d77491702a3f93ba6d20a04';
@@ -573,7 +587,7 @@ async function main() {
   });
 
   // OKX Marketplace endpoint — full 3-agent consensus, payment handled by OKX.AI
-  app.post('/okx/scan', async (req, res) => {
+  app.post('/okx/scan', x402Middleware, async (req, res) => {
     try {
       const { contractAddress, chain, threshold } = req.body || {};
       if (!contractAddress) {
@@ -618,7 +632,7 @@ async function main() {
 
   // ─── Seal — on-chain process provenance ───
 
-  app.post('/seal', async (req, res) => {
+  app.post('/seal', x402Middleware, async (req, res) => {
     try {
       const { input, output, modelId } = req.body || {};
       if (!input || !output) {
@@ -675,7 +689,7 @@ async function main() {
   });
 
   // ─── EntityForge — OKX marketplace endpoint ───
-  app.post('/entityforge/form', async (req, res) => {
+  app.post('/entityforge/form', x402Middleware, async (req, res) => {
     try {
       const { description } = req.body || {};
       if (!description || description.length < 5) {
