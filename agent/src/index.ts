@@ -821,6 +821,19 @@ Return ONLY valid JSON with these fields: businessName, purpose (one sentence), 
     logger.info(`  /patrol-log — autonomous agent patrol feed`);
   });
 
+  // Catch-all x402 — return 402 for unmatched paths (OKX marketplace probes)
+  app.all('*', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-payment-authorization, x-payment-signature');
+    if (req.method === 'OPTIONS') { res.status(204).end(); return; }
+    res.status(402).json({
+      x402Version: 2,
+      resource: { url: `https://argus-agent-production-ab97.up.railway.app${req.path}`, description: 'Argus Multi-Agent Security Oracle', mimeType: 'application/json' },
+      accepts: [{ scheme: 'exact', network: 'eip155:196', asset: '0x779ded0c9e1022225f8e0630b35a9b54be713736', amount: '100000', payTo: '0x94A4365E6B7E79791258A3Fa071824BC2b75a394', maxTimeoutSeconds: 300, extra: { name: 'USD₮0', version: '1' } }],
+    });
+  });
+
   // --- Autonomous Patrol (agents scan on their own, every 15 min) ---
   startPatrol(orchestrator, logger);
 
