@@ -14,6 +14,58 @@ import { getAgentPaymentStats } from './payments/agentPayments';
 import { getEloFromChain } from './payments/chainElo';
 import { getUnifiedBalance } from './payments/unifiedBalance';
 import { startPatrol, getPatrolStatus } from './patrol';
+import { createPublicClient, createWalletClient, http, keccak256, toHex } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+
+// ─── SealVerifier — on-chain process provenance ───
+const SEAL_CONTRACT = '0x6ec4df53d0a3cc099d77491702a3f93ba6d20a04';
+const SEAL_ABI = [
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "_processId", "type": "bytes32" },
+      { "internalType": "string", "name": "_modelId", "type": "string" },
+      { "internalType": "bytes32", "name": "_inputHash", "type": "bytes32" },
+      { "internalType": "bytes32", "name": "_outputHash", "type": "bytes32" }
+    ],
+    "name": "seal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "_processId", "type": "bytes32" }],
+    "name": "verify",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "agent", "type": "address" },
+          { "internalType": "string", "name": "modelId", "type": "string" },
+          { "internalType": "bytes32", "name": "inputHash", "type": "bytes32" },
+          { "internalType": "bytes32", "name": "outputHash", "type": "bytes32" },
+          { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+          { "internalType": "bytes32", "name": "pipelineHash", "type": "bytes32" }
+        ],
+        "internalType": "struct SealVerifier.ProcessRecord",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalSeals",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  }
+] as const;
+const SEAL_RPC = 'https://testrpc.xlayer.tech';
+const SEAL_PRIVATE_KEY = (process.env.SEAL_PRIVATE_KEY || process.env.PRIVATE_KEY || '') as `0x${string}`;
+const sealAccount = SEAL_PRIVATE_KEY ? privateKeyToAccount(SEAL_PRIVATE_KEY) : null;
+const sealPublicClient = createPublicClient({ transport: http(SEAL_RPC) });
+const sealWalletClient = sealAccount ? createWalletClient({ transport: http(SEAL_RPC), account: sealAccount }) : null;
 
 const STATUS_PORT = parseInt(process.env.PORT || process.env.STATUS_PORT || '3001');
 const LOOP_INTERVAL_MS = parseInt(process.env.LOOP_INTERVAL_MS || '15000');
@@ -558,6 +610,63 @@ async function main() {
     } catch (err: any) {
       logger.error('OKX scan error:', err.message);
       res.status(500).json({ error: 'Scan failed', detail: err.message });
+    }
+  });
+
+  // ─── Seal — on-chain process provenance ───
+
+  app.post('/seal', async (req, res) => {
+    try {
+      const { input, output, modelId } = req.body || {};
+      if (!input || !output) {
+        return res.status(400).json({ error: 'input and output required' });
+      }
+      const model = modelId || 'seal-v1';
+      const inputHash = keccak256(toHex(typeof input === 'string' ? input : JSON.stringify(input)));
+      const outputHash = keccak256(toHex(typeof output === 'string' ? output : JSON.stringify(output)));
+      const processId = keccak256(toHex(inputHash + outputHash + Date.now().toString()));
+
+      if (!sealWalletClient) {
+        return res.json({ processId, modelId: model, inputHash, outputHash, onChain: false,
+          note: 'Seal private key not configured — proof generated but not anchored' });
+      }
+
+      logger.info(`Sealing process ${processId.slice(0, 10)}...`);
+      const txHash = await sealWalletClient.writeContract({
+        address: SEAL_CONTRACT, abi: SEAL_ABI, functionName: 'seal',
+        args: [processId, model, inputHash, outputHash], chain: null,
+      });
+      await sealPublicClient.waitForTransactionReceipt({ hash: txHash, timeout: 60_000 });
+      logger.info(`Sealed: ${processId.slice(0, 10)}... (tx: ${txHash.slice(0, 10)}...)`);
+      res.json({ processId, modelId: model, inputHash, outputHash, onChain: true, txHash, contract: SEAL_CONTRACT });
+    } catch (err: any) {
+      logger.error('Seal error:', err.message);
+      res.status(500).json({ error: 'Seal failed', detail: err.message });
+    }
+  });
+
+  app.get('/seal/verify/:processId', async (req, res) => {
+    try {
+      const { processId } = req.params;
+      const record = await sealPublicClient.readContract({
+        address: SEAL_CONTRACT, abi: SEAL_ABI, functionName: 'verify', args: [processId as `0x${string}`],
+      });
+      res.json({ processId, agent: record.agent, modelId: record.modelId, inputHash: record.inputHash,
+        outputHash: record.outputHash, timestamp: Number(record.timestamp), pipelineHash: record.pipelineHash,
+        verified: true, contract: SEAL_CONTRACT });
+    } catch (err: any) {
+      res.status(404).json({ error: 'Process not found', detail: err.message });
+    }
+  });
+
+  app.get('/seal/stats', async (_req, res) => {
+    try {
+      const total = await sealPublicClient.readContract({
+        address: SEAL_CONTRACT, abi: SEAL_ABI, functionName: 'totalSeals',
+      });
+      res.json({ totalSeals: Number(total), contract: SEAL_CONTRACT });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Failed to read stats', detail: err.message });
     }
   });
 
