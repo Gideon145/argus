@@ -80,7 +80,7 @@ export default function Dashboard() {
         );
 
         setPatrolScans(
-          (patrol as any[]).map((p: any) => ({
+          ((patrol as any).records ?? (patrol as any[])).map((p: any) => ({
             address: p.address,
             verdict: p.verdict,
             consensus: p.consensus || '3/3',
