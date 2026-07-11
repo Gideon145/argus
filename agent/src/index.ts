@@ -674,6 +674,56 @@ async function main() {
     }
   });
 
+  // ─── EntityForge — OKX marketplace endpoint ───
+  app.post('/entityforge/form', async (req, res) => {
+    try {
+      const { description } = req.body || {};
+      if (!description || description.length < 5) {
+        return res.status(400).json({ error: 'description required — describe your business idea in 1-5 sentences' });
+      }
+      logger.info(`EntityForge: forming business from "${description.slice(0, 60)}..."`);
+
+      // Generate constitution + governance structure using AI
+      const API_KEY = process.env.DEEPSEEK_API_KEY || process.env.ANTHROPIC_API_KEY || '';
+      const useDeepSeek = !!process.env.DEEPSEEK_API_KEY;
+
+      const prompt = `You are EntityForge, an AI that creates on-chain autonomous businesses. Given a business idea, generate a draft constitution with: name, purpose, governance model, treasury rules, and membership criteria. Output as JSON.
+
+Business idea: ${description}
+
+Return ONLY valid JSON with these fields: businessName, purpose (one sentence), governanceModel, treasuryRules, membershipCriteria, initialActions (array of 3 first steps). No markdown, no explanation.`;
+
+      let result: any;
+      if (useDeepSeek) {
+        const r = await fetch('https://api.deepseek.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEY}` },
+          body: JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: prompt }], temperature: 0.7, max_tokens: 800 }),
+        });
+        const d = await r.json();
+        result = JSON.parse(d.choices[0].message.content.replace(/```json|```/g, '').trim());
+      } else {
+        const r = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01' },
+          body: JSON.stringify({ model: 'claude-sonnet-4-5-20250929', max_tokens: 800, messages: [{ role: 'user', content: prompt }] }),
+        });
+        const d = await r.json();
+        result = JSON.parse(d.content[0].text.replace(/```json|```/g, '').trim());
+      }
+
+      res.json({
+        business: result,
+        entityId: `entity-${Date.now().toString(36)}`,
+        note: 'EntityForge via OKX marketplace — payment handled by OKX.AI',
+        nextSteps: ['Deploy governance contract', 'Set up treasury', 'Invite members'],
+      });
+    } catch (err: any) {
+      logger.error('EntityForge error:', err.message);
+      res.status(500).json({ error: 'EntityForge service unavailable', detail: err.message });
+    }
+  });
+
   // Paywalled scan endpoint — $0.01 USDC per query
   app.post('/scan', gateway.require('$0.01'), async (req: any, res) => {
     try {
