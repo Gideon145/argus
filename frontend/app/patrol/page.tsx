@@ -33,6 +33,7 @@ interface PatrolStatus {
 export default function PatrolPage() {
   const router = useRouter();
   const [log, setLog] = useState<PatrolRecord[]>([]);
+  const [totalPatrols, setTotalPatrols] = useState(0);
   const [status, setStatus] = useState<PatrolStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +45,8 @@ export default function PatrolPage() {
         api.getPatrolLog(20),
         api.getPatrolStatus(),
       ]);
-      setLog(logData as any);
+      setLog(logData.records);
+      setTotalPatrols(logData.total);
       setStatus(statusData);
       setLastRefresh(new Date());
       setError(null);
@@ -103,7 +105,7 @@ export default function PatrolPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Card padding="sm">
             <span className="text-[12px] uppercase font-mono text-text-muted">Total Patrols</span>
-            <span className="text-2xl font-bold block mt-1 font-mono">{status.patrolsCompleted}</span>
+            <span className="text-2xl font-bold block mt-1 font-mono">{totalPatrols}</span>
           </Card>
           <Card padding="sm">
             <span className="text-[12px] uppercase font-mono text-text-muted">Coverage Pool</span>
