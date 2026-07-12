@@ -473,9 +473,9 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | **1,255+** | /stats endpoint · on-chain records |
+| **Scans processed** | **1,255** | /stats endpoint · on-chain records |
 | **Consensus reached** | **1,149 (91.5%)** | 3-agent pipeline live since Jun 16 |
-| **Users** | **176+** | Web · CLI · Telegram — multi-platform |
+| **Users** | **176** | Web · CLI · Telegram — multi-platform |
 | **Treasury balance** | $13.40 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
@@ -487,6 +487,8 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 ### User Growth
 
+**Pre-hackathon (Jun 16 – Jul 6)**
+
 | Milestone | Date | Users | Scans | Treasury |
 |-----------|------|-------|-------|----------|
 | 3-agent consensus live | Jun 16 | 0 | 5 | $0.00 |
@@ -495,11 +497,16 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | Circle wallet growth | Jun 22–25 | 100 | 561 | $3.00 |
 | CLI shipped to npm | Jun 29 | 109 | 648 | $5.80 |
 | Telegram bot live | Jul 1 | 121 | 666 | $6.93 |
-| 800+ scans · 127 users | Jul 3 | 127 | 810 | $7.93 |
-| **Autonomous patrol live** | **Jul 5** | **150+** | **1,090+ user scans + 454 patrol** | **$10+** |
-| Telegram + X growth | Jul 9 | 160+ | 1,150+ | $11.50 |
-| **1,200+ scans · 176 users** | **Jul 12** | **176** | **1,255+ user scans + 763 patrol** | **$13.40** |
-| **Post-hackathon** | **Jul 17+** | **—** | **—** | **—** |
+| 800 scans · 127 users | Jul 3 | 127 | 810 | $7.93 |
+| **Autonomous patrol live** | **Jul 5** | **150** | **1,090 + 454 patrol** | **$10.00** |
+
+**Post-hackathon (Jul 7 – present)**
+
+| Milestone | Date | Users | Scans | Treasury |
+|-----------|------|-------|-------|----------|
+| Telegram + X growth | Jul 9 | 160 | 1,150 | $11.50 |
+| **Current** | **Jul 12** | **176** | **1,255 + 763 patrol** | **$13.40** |
+| *Continuing...* | *Jul 17+* | *—* | *—* | *—* |
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 150+ assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
