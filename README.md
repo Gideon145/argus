@@ -54,7 +54,7 @@
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.xyz)
 
-| **1,289 scans** | **$13.80 treasury** | **204 users** | **5/5 Circle primitives** | **Agents pay each other** |
+| **1,289+ scans** | **$13.80+ treasury** | **204+ users** | **5/5 Circle primitives** | **Agents pay each other** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
