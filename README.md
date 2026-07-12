@@ -487,7 +487,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 ### User Growth
 
-**Pre-hackathon (Jun 16 – Jul 6)**
+**During hackathon (Jun 16 – Jul 6)**
 
 | Milestone | Date | Users | Scans | Treasury |
 |-----------|------|-------|-------|----------|
