@@ -25,6 +25,9 @@
   <a href="https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8">
     <img src="https://img.shields.io/badge/Oracle-ArcScan-6C5CE7?style=for-the-badge" alt="Oracle">
   </a>
+  <a href="https://www.okx.ai/agents/5047">
+    <img src="https://img.shields.io/badge/OKX_AI-Listed_%235047-black?style=for-the-badge" alt="OKX AI Listed">
+  </a>
   <br>
   <a href="https://testnet.arcscan.app/address/0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320">
     <img src="https://img.shields.io/badge/Agent_α-ArcScan-7eb8da?style=flat-square" alt="Agent α">
@@ -93,6 +96,7 @@
 - [Honest Limits](#honest-limits)
 - [Accuracy Evaluation](#accuracy-evaluation)
 - [Traction](#traction)
+- [Cross-Ecosystem: OKX AI Marketplace](#cross-ecosystem-okx-ai-marketplace)
 - [Telegram Bot](#telegram-scan-from-any-chat)
 - [CLI Tool](#cli-scan-from-your-terminal)
 - [Quick Start](#quick-start)
@@ -480,6 +484,7 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
+| **OKX AI Marketplace** | Agent #5047 | 14 real x402 settlements · Validated by OKX engineering · Jul 14 |
 
 ### How we count
 
@@ -515,6 +520,55 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 *On X, @Argus_arc grew from 0 to 137 followers over 3 weeks, with 8.7K total impressions and a 5.7% engagement rate — well above crypto-twitter averages. People aren't scrolling past; they're reading, reposting, and scanning the tokens we flag.*
 
 *204 users, 1,289 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
+
+---
+
+## Cross-Ecosystem: OKX AI Marketplace
+
+**Argus is now an ASP on the OKX AI Marketplace — Agent #5047, running on X Layer Mainnet.**
+[View listing →](https://www.okx.ai/agents/5047)
+
+This wasn't a simple deploy. It was a stress test of everything Argus claims to be.
+
+### Why we did it
+
+Two reasons:
+
+1. **Prove agent-to-agent nanopayments work.** Argus runs on x402 — the same HTTP 402 nanopayment protocol that Arc's Circle Gateway uses. Deploying to OKX AI meant implementing the full v2 spec from scratch: PAYMENT-SIGNATURE header detection, PAYMENT-REQUIRED challenge response, PAYMENT-RESPONSE settlement confirmation, EIP-3009 transferWithAuthorization on USDT0, retry queue with 30-second backoff, gas balance monitoring. If x402 only worked on Arc, it wasn't real infrastructure. It works on X Layer. It works on Arc. The protocol is portable. The agent economy is cross-chain.
+
+2. **Put Argus where agents transact.** The OKX A2A marketplace has ASPs that form businesses, profile wallets, and verify AI pipelines. But before any of those agents act, someone needs to answer: "Is this contract safe?" Argus now answers that question on OKX AI — the same 3-agent consensus, the same USDC stakes, the same autonomous patrols. The security layer doesn't belong to one chain. It belongs wherever agents transact.
+
+### What broke (and what it taught us)
+
+The x402 compliance validation exposed real bugs — the kind you only find when an external engineering team tests your endpoints with a different client than your own:
+
+- **Header name mismatch**: The OKX marketplace sends `PAYMENT-SIGNATURE` (v2 spec). Our middleware only checked legacy header names (`x-payment`, `x-payment-authorization`). Every paid POST fell through to 402. The fix required reading the actual OKX protocol specification — not guessing, not trial-and-error, but reading the source of truth.
+
+- **Truncated facilitator key**: A 64-hex-char private key had been truncated to 42 chars somewhere in our configuration pipeline. The server's `raw.length < 64` guard silently returned null. The facilitator never had a signer. Payments settled on-chain to the owner wallet, but the facilitator never claimed them. 5 ghost-accepted tasks before this was caught.
+
+- **Function selector verification**: USDT0 on X Layer uses `transferWithAuthorization` (selector `0xe3ee160e`), not `claimWithAuthorization`. We verified this by decoding a real settlement transaction on-chain at block 65,342,733 — the function was correct, the settlement was real.
+
+- **Six rounds of debugging with OKX engineering** (July 14, 2026) across all 4 of our agents simultaneously. Every round exposed a new edge case: base64url encoding, 65-byte hex signature parsing, validBefore/validAfter from the auth object vs hardcoded values, non-blocking settlement vs blocking, idempotent delivery for repeat payments.
+
+The full debug log is at [ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md).
+
+### What this proves
+
+- **x402 nanopayments are production-ready.** The same protocol that powers Arc's Gateway also powers OKX AI's marketplace. Agent-to-agent payments settle in under 500ms on both chains. The rail works.
+
+- **Argus is portable infrastructure.** Same 3-agent consensus. Same USDC staking. Same autonomous patrol. Different chain. The architecture doesn't care where it runs.
+
+- **The agent economy needs a security layer — and it needs it everywhere.** Argus caught Unibase AI on Arc. It caught $CZ token on Arc. It now watches OKX AI. More eyes. More chains. Same verdict.
+
+- **External validation matters.** OKX engineering reviewed every endpoint, every header, every settlement. They found bugs we missed. They validated the fixes. A security oracle that passes a security review from a different team carries more weight than one that was never tested outside its own repo.
+
+**14 real x402 settlements on X Layer Mainnet. All verifiable on-chain. Agent #5047. Live now.**
+
+```
+Agent endpoint: https://argus-agent-production-ab97.up.railway.app/okx/scan
+Marketplace: https://www.okx.ai/agents/5047
+Settlement wallet: https://www.oklink.com/xlayer/address/0x53d724e6acd672ba08133bcd32b0412500bea79d
+```
 
 ---
 
