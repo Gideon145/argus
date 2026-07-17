@@ -28,6 +28,9 @@
   <a href="https://www.okx.ai/agents/5047">
     <img src="https://img.shields.io/badge/OKX_AI-Listed_%235047-black?style=for-the-badge" alt="OKX AI Listed">
   </a>
+  <a href="docs/chain-gpt-audit.md">
+    <img src="https://img.shields.io/badge/ChainGPT-Audited_Jul_2026-6C5CE7?style=for-the-badge" alt="ChainGPT Audited">
+  </a>
   <br>
   <a href="https://testnet.arcscan.app/address/0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320">
     <img src="https://img.shields.io/badge/Agent_α-ArcScan-7eb8da?style=flat-square" alt="Agent α">
@@ -403,6 +406,8 @@ function recordVerdict(address token, string verdict, uint8 agreementCount) exte
 - ELO deltas written per Council member after every verdict
 
 Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-optimized for Arc's native USDC model. [View on ArcScan →](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8)
+
+> **🛡️ Audited by ChainGPT** — July 2026. Zero critical vulnerabilities. Zero exploits. One design consideration: open access to `recordQuery`/`updateElo` is intentional for transparency on testnet; mainnet deployment will add orchestrator-gated write access. [Full report →](docs/chain-gpt-audit.md)
 
 ---
 
