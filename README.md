@@ -409,6 +409,18 @@ Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-opt
 
 > **🛡️ Audited by ChainGPT** — July 2026. Zero critical vulnerabilities. Zero exploits. One design consideration: open access to `recordQuery`/`updateElo` is intentional for transparency on testnet; mainnet deployment will add orchestrator-gated write access. [Full report →](docs/chain-gpt-audit.md)
 
+### Why We Audited
+
+Argus scans everyone else's contracts. The obvious question: **who audits Argus?**
+
+We put our own oracle through ChainGPT before Arc mainnet. Not because we expected to find anything — the contract is 100 lines of Solidity, deliberately minimal, no dependencies — but because a security product that doesn't scrutinize its own foundation has no business scrutinizing anyone else's.
+
+Zero criticals. Zero exploits. The one thing they flagged — open write access — is intentional. ArgusOracle is a transparency layer, not a gated registry. Anyone can verify the verdict log independently. On mainnet, we'll gate writes to the orchestrator as defense-in-depth while keeping reads fully public.
+
+An AI audit doesn't replace a manual one. It's a first pass. But for a 100-line contract built to be verifiable by design, it confirms what the architecture already enforces: the simplest possible surface area, the fewest possible attack vectors.
+
+**Eat your own dogfood.** Every contract Argus scans from now on — your token, your DAO, your bridge — goes through a system whose own contract passed audit first.
+
 ---
 
 ## What Makes This Different
