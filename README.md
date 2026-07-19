@@ -528,8 +528,8 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | Milestone | Date | Users | Scans | Treasury |
 |-----------|------|-------|-------|----------|
 | Telegram + X growth | Jul 9 | 160 | 1,150 | $11.50 |
-| **Current** | **Jul 16** | **210** | **1,382 + 1,144 patrol** | **$14.38** |
-| *Continuing...* | *Jul 17+* | *—* | *—* | *—* |
+| ChainGPT audit passed | Jul 17 | 210 | 1,382 + 1,144 patrol | $14.38 |
+| **OKX AI Marketplace · Current** | **Jul 18** | **250+** | **1,421 + 1,412 patrol** | **$15.14** |
 
 *User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 150+ assigned wallets across 190 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
@@ -537,7 +537,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 *On X, @Argus_arc grew from 0 to 137 followers over 3 weeks, with 8.7K total impressions and a 5.7% engagement rate — well above crypto-twitter averages. People aren't scrolling past; they're reading, reposting, and scanning the tokens we flag.*
 
-*210 users, 1,382 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
+*250+ users, 1,421 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
 ---
 
