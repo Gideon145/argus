@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argus — ChainGPT Audit Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'EB Garamond', serif;
+    color: #c9b37e;
+  }
+
+  .card {
+    width: 1200px;
+    height: 628px;
+    background: radial-gradient(ellipse at 50% 30%, #1a1a2e 0%, #0a0a0f 70%);
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(201,179,126,0.015) 2px, rgba(201,179,126,0.015) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(201,179,126,0.02) 40px, rgba(201,179,126,0.02) 41px);
+    pointer-events: none;
+  }
+
+  .meander-top, .meander-bottom {
+    position: absolute;
+    left: 0; right: 0;
+    height: 6px;
+    opacity: 0.3;
+    background: repeating-linear-gradient(90deg, #c9b37e 0px, #c9b37e 2px, transparent 2px, transparent 8px, #c9b37e 8px, #c9b37e 16px, transparent 16px, transparent 20px);
+  }
+  .meander-top { top: 0; }
+  .meander-bottom { bottom: 0; }
+
+  .brand {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 8px;
+    color: #8b7640;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  .shield {
+    width: 120px;
+    height: 140px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .shield-body {
+    position: absolute;
+    inset: 0;
+    background: rgba(60, 200, 120, 0.08);
+    border: 3px solid rgba(60, 200, 120, 0.5);
+    clip-path: polygon(50% 0%, 95% 15%, 95% 55%, 50% 100%, 5% 55%, 5% 15%);
+    box-shadow: 0 0 40px rgba(60, 200, 120, 0.1);
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 28px;
+    height: 52px;
+    border-right: 5px solid rgba(60, 200, 120, 0.9);
+    border-bottom: 5px solid rgba(60, 200, 120, 0.9);
+  }
+
+  .result-text {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    letter-spacing: 6px;
+    color: #3cc878;
+    z-index: 2;
+    text-shadow: 0 0 30px rgba(60, 200, 120, 0.3);
+  }
+
+  .findings {
+    display: flex;
+    gap: 40px;
+    z-index: 2;
+  }
+
+  .finding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .finding-num {
+    font-family: 'Cinzel', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: #c9b37e;
+  }
+
+  .finding-num.green { color: #3cc878; }
+  .finding-num.amber { color: #d4a030; }
+  .finding-num.muted { color: rgba(201,179,126,0.6); }
+
+  .finding-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #8b7640;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .meta {
+    display: flex;
+    gap: 30px;
+    z-index: 2;
+  }
+
+  .meta-item {
+    font-family: 'EB Garamond', serif;
+    font-size: 13px;
+    color: rgba(201,179,126,0.5);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .meta-item strong {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #8b7640;
+    font-weight: 400;
+  }
+
+  .contract {
+    font-family: monospace;
+    font-size: 11px;
+    color: rgba(201,179,126,0.4);
+    z-index: 2;
+    letter-spacing: 1px;
+  }
+
+  .corner-mark {
+    position: absolute;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: rgba(139,118,64,0.4);
+    z-index: 2;
+  }
+  .corner-tl { top: 24px; left: 40px; }
+  .corner-tr { top: 24px; right: 40px; }
+  .corner-bl { bottom: 24px; left: 40px; }
+  .corner-br { bottom: 24px; right: 40px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+
+  <div class="corner-mark corner-tl">CHAIN GPT · JUL 2026</div>
+  <div class="corner-mark corner-tr">EVALUATED</div>
+  <div class="corner-mark corner-bl">0x563b...46C8</div>
+  <div class="corner-mark corner-br">ARC · SOLIDITY 0.8.28</div>
+
+  <div class="brand">ARGUS ORACLE — SECURITY AUDIT</div>
+
+  <div class="shield">
+    <div class="shield-body"></div>
+    <div class="checkmark"></div>
+  </div>
+
+  <div class="result-text">PASSED — ZERO CRITICALS</div>
+
+  <div class="findings">
+    <div class="finding">
+      <div class="finding-num green">0</div>
+      <div class="finding-label">Critical</div>
+    </div>
+    <div class="finding">
+      <div class="finding-num green">0</div>
+      <div class="finding-label">Exploits</div>
+    </div>
+    <div class="finding">
+      <div class="finding-num amber">1</div>
+      <div class="finding-label">Design<br>Trade-off</div>
+    </div>
+    <div class="finding">
+      <div class="finding-num muted">3</div>
+      <div class="finding-label">Minor<br>Notes</div>
+    </div>
+  </div>
+
+  <div class="meta">
+    <div class="meta-item"><strong>Auditor</strong> ChainGPT AI</div>
+    <div class="meta-item"><strong>Network</strong> Arc Testnet</div>
+    <div class="meta-item"><strong>Contract</strong> ArgusOracle.sol</div>
+    <div class="meta-item"><strong>Repo</strong> github.com/Gideon145/argus</div>
+  </div>
+</div>
+
+</body>
+</html>
