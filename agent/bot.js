@@ -9,22 +9,31 @@ const { TelegramBot } = require('node-telegram-bot-api');
 const https = require('https');
 const crypto = require('crypto');
 
-const TOKEN = 'REDACTED_TELEGRAM_TOKEN';
+const TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const API = 'argus-agent-production-ab97.up.railway.app';
 
 let bot;
-try {
-  bot = new TelegramBot(TOKEN, { polling: true });
-  console.log('🤖 Telegram bot polling started');
-} catch (e) {
-  console.error('Telegram bot init failed:', e.message);
-  // Don't crash — create a dummy bot that logs errors
+if (!TOKEN) {
+  console.error('TELEGRAM_BOT_TOKEN not set — bot disabled');
   bot = {
     onText: () => {},
     on: () => {},
     sendMessage: () => Promise.resolve(),
     editMessageText: () => Promise.resolve(),
   };
+} else {
+  try {
+    bot = new TelegramBot(TOKEN, { polling: true });
+    console.log('🤖 Telegram bot polling started');
+  } catch (e) {
+    console.error('Telegram bot init failed:', e.message);
+    bot = {
+      onText: () => {},
+      on: () => {},
+      sendMessage: () => Promise.resolve(),
+      editMessageText: () => Promise.resolve(),
+    };
+  }
 }
 
 // ─── User wallet store (chatId → { userId, walletAddress, walletId, createdAt }) ──
