@@ -56,11 +56,11 @@
   <strong>🎥 <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">Watch the demo (3 min)</a> — New UI, real-time patrol, Unibase AI caught live</strong>
 </p>
 
-> **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,382 verdicts from 210 users, all on-chain. When Arc mainnet launches, Argus is already running.
+> **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,421 verdicts from 250+ users, all on-chain. When Arc mainnet launches, Argus is already running.
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.xyz)
 
-| **1,382+ scans** | **$14.38+ treasury** | **210+ users** | **5/5 Circle primitives** | **Agents pay each other** |
+| **1,421+ scans** | **$15.14+ treasury** | **250+ users** | **14 OKX sales** | **5/5 Circle primitives** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
@@ -488,7 +488,7 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 
 ## Traction
 
-*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 258 users and 1,421 scans of battle-testing behind them.*
+*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 250+ users and 1,421 scans of battle-testing behind them.*
 
 ### Metrics
 
@@ -496,7 +496,7 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 |--------|-------|-------|
 | **Scans processed** | **1,421** | /stats endpoint · on-chain records |
 | **Consensus reached** | **1,281 (90.1%)** | 3-agent pipeline live since Jun 16 |
-| **Users** | **258** | Web · CLI · Telegram — multi-platform |
+| **Users** | **250+** | Web · CLI · Telegram — multi-platform |
 | **Treasury balance** | $15.14 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Autonomous patrol scans** | **1,412** | 15-min loop, zero human input since launch |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
