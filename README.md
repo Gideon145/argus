@@ -488,24 +488,25 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 
 ## Traction
 
-*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 210 users and 1,382 scans of battle-testing behind them.*
+*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 258 users and 1,421 scans of battle-testing behind them.*
 
 ### Metrics
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | **1,382** | /stats endpoint · on-chain records |
-| **Consensus reached** | **1,248 (90.3%)** | 3-agent pipeline live since Jun 16 |
-| **Users** | **210** | Web · CLI · Telegram — multi-platform |
-| **Treasury balance** | $14.38 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Scans processed** | **1,421** | /stats endpoint · on-chain records |
+| **Consensus reached** | **1,281 (90.1%)** | 3-agent pipeline live since Jun 16 |
+| **Users** | **258** | Web · CLI · Telegram — multi-platform |
+| **Treasury balance** | $15.14 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Autonomous patrol scans** | **1,412** | 15-min loop, zero human input since launch |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
-| **ELO leaderboard** | α 91% · β 82% · γ 70% | `/elo` endpoint · on-chain |
+| **ELO leaderboard** | γ 10,560 · α 10,477 · β 10,184 | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
-| **OKX AI Marketplace** | Agent #5047 | 14 real x402 settlements · Validated by OKX engineering · Jul 14 |
+| **OKX AI Marketplace** | Agent #5047 | 14 sold in 4 days · Validated by OKX engineering · 3.75★ |
 
 ### How we count
 
-Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 273 distinct addresses across 1,382 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token). Median scans per user is 1 — most try Argus once or twice; a core group of ~20 power users drives 80% of scan volume. This is early-stage retention typical of a 3-week-old product.
+Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 293 distinct addresses across 1,421 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1–2 scans per token). Median scans per user is 1 — most try Argus once or twice; a core group of ~25 power users drives 80% of scan volume. This is early-stage retention typical of a 4-week-old product.
 
 ### User Growth
 
