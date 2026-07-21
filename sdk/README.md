@@ -1,4 +1,4 @@
-# @argus/sdk
+# argus-sdk
 
 TypeScript SDK for [Argus](https://argusarc.xyz) — Arc's multi-agent security consensus oracle.
 
@@ -7,13 +7,13 @@ Three AI agents (DeepSeek-V3, Claude Sonnet 4.5, and a deterministic rules engin
 ## Install
 
 ```bash
-npm install @argus/sdk
+npm install argus-sdk
 ```
 
 ## Quick Start
 
 ```ts
-import { scan, getStats, getElo } from '@argus/sdk';
+import { scan, getStats, getElo } from 'argus-sdk';
 
 // Scan a contract — three agents vote, consensus recorded on-chain
 const { result } = await scan('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48');

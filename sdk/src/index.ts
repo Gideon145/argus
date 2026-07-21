@@ -1,11 +1,11 @@
 /**
  * Argus SDK — Multi-Agent Security Oracle Client
  *
- * Install: npm install @argus/sdk
+ * Install: npm install argus-sdk
  *
  * @example
  * ```ts
- * import { scan, getStats, getElo } from '@argus/sdk';
+ * import { scan, getStats, getElo } from 'argus-sdk';
  *
  * // Scan a contract
  * const result = await scan('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48');

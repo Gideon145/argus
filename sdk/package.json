@@ -1,5 +1,5 @@
 {
-  "name": "@argus/sdk",
+  "name": "argus-sdk",
   "version": "1.0.0",
   "description": "TypeScript SDK for the Argus multi-agent security consensus oracle on Arc",
   "license": "MIT",
