@@ -1,0 +1,47 @@
+{
+  "name": "@argus/sdk",
+  "version": "1.0.0",
+  "description": "TypeScript SDK for the Argus multi-agent security consensus oracle on Arc",
+  "license": "MIT",
+  "author": "Gideon145",
+  "repository": "github:Gideon145/argus",
+  "keywords": [
+    "arc",
+    "circle",
+    "security",
+    "oracle",
+    "smart-contract",
+    "audit",
+    "multi-agent",
+    "consensus",
+    "usdc",
+    "nanopayments",
+    "x402",
+    "web3"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
