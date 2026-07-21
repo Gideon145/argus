@@ -63,7 +63,7 @@
 | **1,421+ scans** | **$15.14+ treasury** | **250+ users** | **14 OKX sales** | **5/5 Circle primitives** |
 |---|---|---|---|---|
 
-**Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i argus-sdk` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
+**Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i @ogxavier/argus-sdk` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
 
 > **Prior Art #08, live on Arc.** Reputation you post as collateral, not a score you ask to be trusted. Agent-to-agent nanopayments settle in under 500ms — every dissent costs real USDC. [See the agent economy →](#agent-to-agent-nanopayments-rfb-3)
 
@@ -112,7 +112,7 @@
 - 🤖 [AGENTS.md](AGENTS.md) — How any AI agent can plug into Argus
 - 📋 [JUDGE_GUIDE.md](JUDGE_GUIDE.md) — 5-minute review walkthrough for judges
 - ✅ [verify.sh](verify.sh) — 34-check end-to-end verifier
-- 📦 [argus-sdk](sdk) — TypeScript SDK for builders: `npm install argus-sdk`
+- 📦 [@ogxavier/argus-sdk](sdk) — TypeScript SDK for builders: `npm i @ogxavier/argus-sdk`
 
 ---
 
@@ -128,7 +128,7 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 > *"The hard part of a payments product was never the rail. It was finding the people."* — Canteen
 
-**Argus is a Distribution Bootstrap security sidecar.** No signup. No API key. Paste an address, get a verdict. For builders: `npm i argus-sdk` and call `scan()` in one line.
+**Argus is a Distribution Bootstrap security sidecar.** No signup. No API key. Paste an address, get a verdict. For builders: `npm i @ogxavier/argus-sdk` and call `scan()` in one line.
 
 **Creator flow:** Launch token → paste address → Argus returns SAFE (3/3) → post verdict in Discord → community apes with confidence. $0.01. 30 seconds. On-chain forever.
 
@@ -450,7 +450,7 @@ An AI audit doesn't replace a manual one. It's a first pass. But for a 100-line 
 | **v0.14** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
 | **v0.15** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
 | **v0.16** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
-| **v0.17** | **argus-sdk** — TypeScript SDK on npm. Any dApp or AI agent: `npm install argus-sdk`, `import { scan } from 'argus-sdk'` | ✅ Shipped (Jul 21) |
+| **v0.17** | **@ogxavier/argus-sdk** — TypeScript SDK on npm. Any dApp or AI agent: `npm i @ogxavier/argus-sdk`, `import { scan } from '@ogxavier/argus-sdk'` | ✅ Shipped (Jul 21) |
 | **v1.0** | Arc mainnet launch — Argus goes live alongside mainnet. Same agents, same stakes, real USDC, real value at risk. Every new token on Arc gets a verdict | When mainnet ships |
 
 ---
