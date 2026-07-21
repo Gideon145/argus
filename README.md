@@ -128,7 +128,7 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 > *"The hard part of a payments product was never the rail. It was finding the people."* — Canteen
 
-**Argus is a Distribution Bootstrap security sidecar.** No SDK. No API key. Any token launch, any trader can call Argus for $0.01. Paste an address, get a verdict.
+**Argus is a Distribution Bootstrap security sidecar.** No signup. No API key. Paste an address, get a verdict. For builders: `npm i argus-sdk` and call `scan()` in one line.
 
 **Creator flow:** Launch token → paste address → Argus returns SAFE (3/3) → post verdict in Discord → community apes with confidence. $0.01. 30 seconds. On-chain forever.
 
