@@ -1,6 +1,6 @@
 {
   "name": "@ogxavier/argus-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TypeScript SDK for the Argus multi-agent security consensus oracle on Arc",
   "license": "MIT",
   "author": "Gideon145",
@@ -20,11 +20,9 @@
     "web3"
   ],
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
       "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
