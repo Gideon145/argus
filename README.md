@@ -74,7 +74,7 @@
 | Judging Criterion (Lepton) | Argus |
 |---|---|
 | **Agentic Sophistication (30%)** | 3 independent agents — DeepSeek-V3, Claude Sonnet 4.5, deterministic rule engine — vote with real stakes. Dissenters pay winners. Patrol runs every 15 min with zero human input. Agents decide, not automate. |
-| **Traction (30%)** | 300+ users, 1,483 scans, 1,772 autonomous patrols. 319 OKX sales at 4.95★. Unibase AI caught live — scammers blocked us on X. $CZ token hit 1.6K impressions. 50+ Telegram community. |
+| **Traction (30%)** | 300+ users, 1,483 scans, 1,772 autonomous patrols. 319 OKX sales at 4.95★. Unibase AI caught live — scammers blocked us on X. @Argus_arc: 150 followers, 15K impressions. |
 | **Circle Tool Usage (20%)** | 5/5 Circle primitives live on Arc: Gateway x402, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit Unified Balance. Every address verifiable on ArcScan. |
 | **Innovation (20%)** | No other security tool uses multi-model consensus with real economic stakes. Prior Art #08 implemented: reputation as collateral, not a score. Agent-to-agent nanopayments settle in <500ms. |
 
@@ -432,7 +432,7 @@ An AI audit doesn't replace a manual one. It's a first pass. But for a 100-line 
 4. **Ships real payments** — $0.01 USDC through Gateway x402, treasury verifiable on-chain, agent-to-agent economy live
 5. **No wallet required** — Circle pre-create wallets, works on mobile, 30-second onboarding
 6. **Publicly verifiable** — every address, transaction, and verdict on ArcScan. No trust required.
-7. **Distribution Bootstrap security sidecar** — any token launch, any DAO, any trader can call for $0.01. No SDK. No integration. Just an address.
+7. **Distribution Bootstrap security sidecar** — any token launch, any DAO, any trader can call for $0.01 via Web, CLI, Telegram, npm, or OKX Marketplace. No signup required. Just an address.
 8. **Agents don't wait to be asked** — autonomous patrol loop scans every 15 minutes, no human in the loop. Agents stake, settle, and record on-chain. [Live →](https://argusarc.xyz/patrol)
 
 ---
@@ -447,10 +447,10 @@ An AI audit doesn't replace a manual one. It's a first pass. But for a 100-line 
 | **v0.11** | Telegram bot (`t.me/argus_arc_bot`) — third surface, multi-platform reach | ✅ Shipped (Jul 1) |
 | **v0.12** | Confidence-weighted staking — agents stake proportionally to certainty. Higher confidence = bigger stake at risk. Rewards accuracy, not bravado | ✅ Shipped (Jul 3) |
 | **v0.13** | Autonomous patrol loop — agents scan on their own every 15 min. No human asks. Staking, settlement, on-chain recording. Live at [argusarc.xyz/patrol](https://argusarc.xyz/patrol) | ✅ Shipped (Jul 4) |
-| **v0.14** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
-| **v0.15** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
-| **v0.16** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
-| **v0.17** | **@ogxavier/argus-sdk** — TypeScript SDK on npm. Any dApp or AI agent: `npm i @ogxavier/argus-sdk`, `import { scan } from '@ogxavier/argus-sdk'` | ✅ Shipped (Jul 21) |
+| **v0.14** | **@ogxavier/argus-sdk** — TypeScript SDK on npm. Any dApp or AI agent: `npm i @ogxavier/argus-sdk`, `import { scan } from '@ogxavier/argus-sdk'` | ✅ Shipped (Jul 21) |
+| **v0.15** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
+| **v0.16** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
+| **v0.17** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
 | **v1.0** | Arc mainnet launch — Argus goes live alongside mainnet. Same agents, same stakes, real USDC, real value at risk. Every new token on Arc gets a verdict | When mainnet ships |
 
 ---
@@ -537,7 +537,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 *Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (50+ members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
 
-*On X, @Argus_arc grew from 0 to 137 followers over 3 weeks, with 8.7K total impressions and a 5.7% engagement rate — well above crypto-twitter averages. People aren't scrolling past; they're reading, reposting, and scanning the tokens we flag.*
+*On X, @Argus_arc grew from 0 to 150 followers over 5 weeks, with 15K total impressions and a 5.7% engagement rate — well above crypto-twitter averages. Growth accelerated this week with new users discovering Argus through the OKX AI Marketplace. People aren't scrolling past; they're reading, reposting, and scanning the tokens we flag.*
 
 *300+ users, 1,483 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.*
 
