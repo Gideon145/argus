@@ -533,7 +533,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 | ChainGPT audit passed | Jul 17 | 210 | 1,382 + 1,144 patrol | $14.38 |
 | **OKX AI Marketplace · Current** | **Jul 22** | **300+** | **1,483 + 1,772 patrol** | **$15.76** |
 
-*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 323 assigned wallets across 330 pre-created. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
+*User counts = distinct funded wallets, verifiable on-chain via Funding Wallet (0x4Dd5...) outflows. Measured from wallet_pool.json assignedAt timestamps — 323 assigned wallets across 430 total. Users acquired organically through crypto communities and word of mouth. No paid acquisition.*
 
 *Most users discover Argus through the [Telegram community](https://t.me/argus_communityy) (50+ members) — a group chat where people share scan results, flag suspicious tokens, and help each other stay safe. The community is the distribution channel. Drop in and see what people are scanning right now.*
 
@@ -582,7 +582,7 @@ The full debug log is at [ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md).
 
 - **External validation matters.** OKX engineering reviewed every endpoint, every header, every settlement. They found bugs we missed. They validated the fixes. A security oracle that passes a security review from a different team carries more weight than one that was never tested outside its own repo.
 
-**14 real x402 settlements on X Layer Mainnet. All verifiable on-chain. Agent #5047. Live now.**
+**319 sold on OKX AI Marketplace. 103 reviews. 4.95★. All verifiable on-chain. Agent #5047. Live now.**
 
 ```
 Agent endpoint: https://argus-agent-production-ab97.up.railway.app/okx/scan
