@@ -131,6 +131,23 @@ export const walletPool = {
     return pool.filter((w) => !w.assigned).length;
   },
 
+  /** Append externally-created wallets to the pool */
+  appendWallets(wallets: Array<{ walletId: string; address: string }>): number {
+    const pool = loadPool();
+    for (const w of wallets) {
+      pool.push({
+        walletId: w.walletId,
+        address: w.address,
+        assigned: false,
+        refId: null,
+        assignedAt: null,
+      });
+    }
+    savePool(pool);
+    console.log(`[WalletPool] Appended ${wallets.length} wallets — total now ${pool.length}`);
+    return pool.length;
+  },
+
   /** Stats about the pool */
   stats() {
     const pool = loadPool();

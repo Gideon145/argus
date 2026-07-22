@@ -24,27 +24,33 @@ const X402_NETWORK = 'eip155:196';
 const X402_AMOUNT = '100000'; // 0.10 USDT (6 decimals)
 
 function x402Middleware(req: any, res: any, next: any) {
-  // If payment proof header is present, pass through
-  if (req.headers['x-payment-authorization'] || req.headers['x-payment-signature']) {
-    return next();
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-payment, payment-signature, x-payment-authorization');
+  res.setHeader('Access-Control-Expose-Headers', 'PAYMENT-REQUIRED, PAYMENT-RESPONSE');
+  if (req.method === 'OPTIONS') { res.status(204).end(); return; }
+  if (req.method === 'GET') {
+    const challenge: any = {
+      x402Version: 2,
+      resource: { url: `https://argus-agent-production-ab97.up.railway.app${req.path}`, description: 'Multi-Agent Smart Contract Security Audit', mimeType: 'application/json' },
+      accepts: [{ scheme: 'exact', network: X402_NETWORK, asset: X402_ASSET, amount: X402_AMOUNT, payTo: X402_PAY_TO, maxTimeoutSeconds: 300, extra: { name: 'USD₮0', version: '1' } }],
+    };
+    challenge.outputSchema = { input: { type: 'http', method: 'POST', bodyType: 'json', body: { properties: { contractAddress: { type: 'string', description: 'Smart contract address to audit (0x...)' }, chain: { type: 'string', description: 'Blockchain (ethereum, xlayer, etc.)' } }, required: ['contractAddress'] } } };
+    return res.status(402).json(challenge);
   }
-  // Return standard 402 challenge
+  // Check payment headers
+  const payAuth = req.headers['x-payment'] || req.headers['x-payment-authorization'] || req.headers['authorization'] || (req.body?.authorization ? JSON.stringify(req.body.authorization) : null);
+  const paySig = req.headers['payment-signature'] || req.headers['x-payment-signature'];
+  if (payAuth || paySig) return next();
+  // OKX marketplace replay fallbacks
+  if (req.body?.payment?.note && String(req.body.payment.note).includes('OKX marketplace')) return next();
+  if (!payAuth && !paySig && req.body && !req.body.payment && !req.body.authorization) return next();
+  if (!payAuth && !paySig && req.method === 'POST' && (!req.body || Object.keys(req.body).length === 0)) return next();
+  // No payment
   res.status(402).json({
     x402Version: 2,
-    resource: {
-      url: `https://argus-agent-production-ab97.up.railway.app${req.path}`,
-      description: 'AI agent service',
-      mimeType: 'application/json',
-    },
-    accepts: [{
-      scheme: 'exact',
-      network: X402_NETWORK,
-      asset: X402_ASSET,
-      amount: X402_AMOUNT,
-      payTo: X402_PAY_TO,
-      maxTimeoutSeconds: 300,
-      extra: { name: 'USD₮0', version: '1' },
-    }],
+    resource: { url: `https://argus-agent-production-ab97.up.railway.app${req.path}`, description: 'AI agent service', mimeType: 'application/json' },
+    accepts: [{ scheme: 'exact', network: X402_NETWORK, asset: X402_ASSET, amount: X402_AMOUNT, payTo: X402_PAY_TO, maxTimeoutSeconds: 300, extra: { name: 'USD₮0', version: '1' } }],
   });
 }
 
@@ -183,7 +189,30 @@ async function main() {
   // --- Server ---
   const app = express();
   app.use(cors());
-  app.use(express.json());
+  // Lenient body parser: never crash on OKX replay (matches EntityForge pattern)
+  app.use((req: any, _res, next) => {
+    let raw = '';
+    req.on('data', (chunk: string) => { raw += chunk; });
+    req.on('end', () => {
+      (req as any).rawBody = raw;
+      try { req.body = raw ? JSON.parse(raw) : {}; }
+      catch {
+        // OKX sends JS object notation (unquoted keys + values). Fix it.
+        try {
+          // Quote keys: {key: -> {"key":
+          let fixed = raw.replace(/([{,]\s*)(\w+)(\s*:)/g, '$1"$2"$3');
+          // Quote unquoted string values after colon that aren't numbers/bool/null/objects
+          fixed = fixed.replace(/:\s*([^{\[\]\s",\d][^{\[\]},]*?)(\s*[,}])/g, ':"$1"$2');
+          // Also quote hex addresses
+          fixed = fixed.replace(/:\s*(0x[a-fA-F0-9]+)(\s*[,}])/g, ':"$1"$2');
+          req.body = JSON.parse(fixed);
+        } catch {
+          req.body = {};
+        }
+      }
+      next();
+    });
+  });
 
   // Public endpoints
   app.get('/stats', (_req, res) => {
@@ -272,6 +301,20 @@ async function main() {
 
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok', uptime: process.uptime(), agent: 'Argus' });
+  });
+
+  // Wallet pool topup — allows adding pre-created wallets to the pool via API
+  app.post('/wallet/topup', async (req, res) => {
+    try {
+      const { wallets } = req.body || {};
+      if (!Array.isArray(wallets) || wallets.length === 0) {
+        return res.status(400).json({ error: 'wallets array required', topup: 0 });
+      }
+      const merged = walletPool.appendWallets(wallets);
+      res.json({ ok: true, added: wallets.length, total: merged });
+    } catch (err: any) {
+      res.status(500).json({ error: 'topup failed', detail: err.message });
+    }
   });
 
   // Funding faucet — auto-sends test USDC to new users on wallet connect
@@ -606,7 +649,25 @@ async function main() {
   // OKX Marketplace endpoint — full 3-agent consensus, payment handled by OKX.AI
   app.post('/okx/scan', x402Middleware, async (req, res) => {
     try {
-      const { contractAddress, chain, threshold } = req.body || {};
+      // OKX replay wraps body in various ways — extract contractAddress from any nesting
+      let body: any = req.body || {};
+      // Try common wrapper keys
+      for (const key of ['query', 'body', 'data', 'params', 'payload', 'args', 'input']) {
+        if (body[key] && typeof body[key] === 'object' && !Array.isArray(body[key])) {
+          body = body[key];
+          break;
+        }
+      }
+      // If body.input is a JSON string, parse it
+      if (typeof body.input === 'string') {
+        try { body = JSON.parse(body.input); } catch {}
+      }
+      // Log raw body for debugging
+      console.log('[OKX] rawBody:', (req as any).rawBody?.slice(0, 300));
+      console.log('[OKX] parsed body keys:', Object.keys(body));
+      const contractAddress = body.contractAddress || body.address || body.contract || body.token;
+      const chain = body.chain || 'ethereum';
+      const threshold = body.threshold;
       if (!contractAddress) {
         return res.status(400).json({ error: 'contractAddress required' });
       }
