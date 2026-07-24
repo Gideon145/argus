@@ -60,7 +60,7 @@
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.xyz)
 
-| **1,483+ scans** | **$15.76+ treasury** | **300+ users** | **319 OKX sales** | **5/5 Circle primitives** |
+| **1,483+ scans** | **$15.76+ treasury** | **300+ users** | **534 OKX sales** | **5/5 Circle primitives** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i @ogxavier/argus-sdk` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
@@ -74,7 +74,7 @@
 | Judging Criterion (Lepton) | Argus |
 |---|---|
 | **Agentic Sophistication (30%)** | 3 independent agents — DeepSeek-V3, Claude Sonnet 4.5, deterministic rule engine — vote with real stakes. Dissenters pay winners. Patrol runs every 15 min with zero human input. Agents decide, not automate. |
-| **Traction (30%)** | 300+ users, 1,483 scans, 1,772 autonomous patrols. 319 OKX sales at 4.95★. Unibase AI caught live — scammers blocked us on X. @Argus_arc: 150 followers, 15K impressions. |
+| **Traction (30%)** | 300+ users, 1,483 scans, 1,772 autonomous patrols. 534 OKX sales at 4.91★. Unibase AI caught live — scammers blocked us on X. @Argus_arc: 150 followers, 15K impressions. |
 | **Circle Tool Usage (20%)** | 5/5 Circle primitives live on Arc: Gateway x402, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit Unified Balance. Every address verifiable on ArcScan. |
 | **Innovation (20%)** | No other security tool uses multi-model consensus with real economic stakes. Prior Art #08 implemented: reputation as collateral, not a score. Agent-to-agent nanopayments settle in <500ms. |
 
@@ -504,7 +504,7 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | γ 10,560 · α 10,477 · β 10,184 | `/elo` endpoint · on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 · Agent Wallets · Dev-Controlled Wallets · Contracts · App Kit |
-| **OKX AI Marketplace** | Agent #5047 | 319 sold · 103 reviews · 4.95★ |
+| **OKX AI Marketplace** | Agent #5047 | 534 sold · 147 reviews · 4.91★ |
 
 ### How we count
 
@@ -582,7 +582,7 @@ The full debug log is at [ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md).
 
 - **External validation matters.** OKX engineering reviewed every endpoint, every header, every settlement. They found bugs we missed. They validated the fixes. A security oracle that passes a security review from a different team carries more weight than one that was never tested outside its own repo.
 
-**319 sold on OKX AI Marketplace. 103 reviews. 4.95★. All verifiable on-chain. Agent #5047. Live now.**
+**534 sold on OKX AI Marketplace. 147 reviews. 4.91★. All verifiable on-chain. Agent #5047. Live now.**
 
 ```
 Agent endpoint: https://argus-agent-production-ab97.up.railway.app/okx/scan

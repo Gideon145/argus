@@ -4,7 +4,7 @@
 
 **🎥 [Watch the 3-min demo](https://www.youtube.com/watch?v=sHgjJe5jx6s) — Updated Jul 10 with the new UI**
 
-**The punchline:** Three AI agents stake real USDC on every token verdict. DeepSeek and Claude pay each other automatically through their verdicts — nanopayments settle in under 500ms. 300+ users. 1,483 scans. 319 OKX sales at 4.95★. 100+ agent-to-agent payments. Everything verifiable on ArcScan.
+**The punchline:** Three AI agents stake real USDC on every token verdict. DeepSeek and Claude pay each other automatically through their verdicts — nanopayments settle in under 500ms. 300+ users. 1,483 scans. 534 OKX sales at 4.91★. 147 reviews. 100+ agent-to-agent payments. Everything verifiable on ArcScan.
 
 ---
 
@@ -69,7 +69,7 @@ No signup. Auto-creates Circle wallet. Same consensus. [npm](https://www.npmjs.c
 | Scans | 1,483 | `GET /stats` |
 | Patrol scans | 1,772 | `GET /patrol-log` |
 | Users | 300+ (web, CLI, Telegram, npm, OKX) | `GET /stats` |
-| OKX Marketplace | 319 sold · 4.95★ · 103 reviews | okx.ai/agents/5047 |
+| OKX Marketplace | 534 sold · 4.91★ · 147 reviews | okx.ai/agents/5047 |
 | Consensus rate | 89.6% | on-chain |
 | Agent-to-agent payments | 100+ | `/agent-payments` |
 | Circle primitives | 5/5 | Gateway x402, Agent Wallets, DCW, Contracts, App Kit |
