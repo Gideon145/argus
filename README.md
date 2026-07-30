@@ -4,6 +4,9 @@
   <a href="https://argusarc.xyz">
     <img src="https://img.shields.io/badge/LIVE-argusarc.xyz-3CB878?style=for-the-badge" alt="Live">
   </a>
+  <a href="https://frontend-six-jet-16.vercel.app">
+    <img src="https://img.shields.io/badge/ALT_URL-frontend--six--jet--16.vercel.app-8B5CF6?style=for-the-badge" alt="Alternative URL">
+  </a>
   <a href="https://x.com/Argus_arc">
     <img src="https://img.shields.io/badge/X-@Argus__arc-1DA1F2?style=for-the-badge&logo=x&logoColor=white" alt="X">
   </a>
@@ -63,7 +66,7 @@
 | **1,500+ scans** | **$15.86+ treasury** | **300+ users** | **4.6K OKX sales** | **5/5 Circle primitives** |
 |---|---|---|---|---|
 
-**Live:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i @ogxavier/argus-sdk` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
+**Live:** [argusarc.xyz](https://argusarc.xyz) · **Alt:** [frontend-six-jet-16.vercel.app](https://frontend-six-jet-16.vercel.app) · **Telegram:** [t.me/argus_arc_bot](https://t.me/argus_arc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i @ogxavier/argus-sdk` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
 
 > **Prior Art #08, live on Arc.** Reputation you post as collateral, not a score you ask to be trusted. Agent-to-agent nanopayments settle in under 500ms — every dissent costs real USDC. [See the agent economy →](#agent-to-agent-nanopayments-rfb-3)
 
@@ -655,5 +658,5 @@ MIT
 
 <p align="center">
   <b>Building in public — follow along</b><br>
-  <a href="https://x.com/Argus_arc">x.com/Argus_arc</a> · <a href="https://argusarc.xyz">argusarc.xyz</a> · <a href="https://github.com/Gideon145/argus">github.com/Gideon145/argus</a>
+  <a href="https://x.com/Argus_arc">x.com/Argus_arc</a> · <a href="https://argusarc.xyz">argusarc.xyz</a> · <a href="https://frontend-six-jet-16.vercel.app">alt: vercel.app</a> · <a href="https://github.com/Gideon145/argus">github.com/Gideon145/argus</a>
 </p>

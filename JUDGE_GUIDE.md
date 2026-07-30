@@ -10,7 +10,7 @@
 
 ## 1. See it work (60 seconds)
 
-Go to **[argusarc.xyz](https://argusarc.xyz)** → paste an address → hit Scan. No signup needed.
+Go to **[argusarc.xyz](https://argusarc.xyz)** (alt: **[frontend-six-jet-16.vercel.app](https://frontend-six-jet-16.vercel.app)**) → paste an address → hit Scan. No signup needed.
 
 The dashboard shows a **live activity feed** of every scan happening in real time, a **Quick Scan** bar for fast lookups, and an **FAQ accordion** explaining the protocol. Below the scan form, the **Recent Audits Log** shows every verdict with on-chain verification hashes.
 
@@ -26,7 +26,7 @@ Scan this: `0x6944e1df6bf5972305f9ab25df47ef10de01bcc8` (Unibase AI — document
 
 ## 2. Autonomous Patrol — agents don't wait (60 seconds)
 
-Go to **[argusarc.xyz/patrol](https://argusarc.xyz/patrol)** — every 15 minutes, three agents autonomously scan a contract, stake USDC, reach consensus, and settle on-chain. Zero human input. 2,350 patrol scans completed.
+Go to **[argusarc.xyz/patrol](https://argusarc.xyz/patrol)** (alt: **[frontend-six-jet-16.vercel.app/patrol](https://frontend-six-jet-16.vercel.app/patrol)**) — every 15 minutes, three agents autonomously scan a contract, stake USDC, reach consensus, and settle on-chain. Zero human input. 2,350 patrol scans completed.
 
 This is not a cron job. Agents independently decide, stake, and pay each other. The patrol feed shows every autonomous scan with verdict, consensus breakdown, and ArcScan links.
 
