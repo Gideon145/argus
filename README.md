@@ -320,7 +320,7 @@ Argus agents do exactly this — in real time, on-chain, per decision. Every dis
 
 The biggest onboarding unlock. Since v0.6:
 
-1. User visits [argusarc.xyz](https://argusarc.xyz)
+1. User visits [argusarc.xyz](https://argusarc.xyz) (alt: [frontend-six-jet-16.vercel.app](https://frontend-six-jet-16.vercel.app))
 2. Clicks **"Get Started"**
 3. Backend assigns a pre-created Circle SCA wallet instantly
 4. Funding wallet sends $0.50 test USDC
@@ -451,10 +451,10 @@ An AI audit doesn't replace a manual one. It's a first pass. But for a 100-line 
 | **v0.12** | Confidence-weighted staking — agents stake proportionally to certainty. Higher confidence = bigger stake at risk. Rewards accuracy, not bravado | ✅ Shipped (Jul 3) |
 | **v0.13** | Autonomous patrol loop — agents scan on their own every 15 min. No human asks. Staking, settlement, on-chain recording. Live at [argusarc.xyz/patrol](https://argusarc.xyz/patrol) | ✅ Shipped (Jul 4) |
 | **v0.14** | **@ogxavier/argus-sdk** — TypeScript SDK on npm. Any dApp or AI agent: `npm i @ogxavier/argus-sdk`, `import { scan } from '@ogxavier/argus-sdk'` | ✅ Shipped (Jul 21) |
-| **v0.15** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-hackathon |
-| **v0.16** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-hackathon |
-| **v0.17** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-hackathon |
-| **v1.0** | Arc mainnet launch — Argus goes live alongside mainnet. Same agents, same stakes, real USDC, real value at risk. Every new token on Arc gets a verdict | When mainnet ships |
+| **v0.15** | Uptime insurance — automated healthcheck + CI redeploy. If agent goes offline, Circle wallet self-refunds last scan. `<500ms` failover | Post-mainnet |
+| **v0.16** | Agent β on-chain upgrade — real-time holder queries, DEX liquidity data | Post-mainnet |
+| **v0.17** | Circle W3S migration — Programmable Wallets, no raw private keys in env | Post-mainnet |
+| **v1.0** | Arc mainnet launch — Argus goes live alongside mainnet. Same agents, same stakes, real USDC, real value at risk. Every new token on Arc gets a verdict | Mainnet-ready |
 
 ---
 
