@@ -314,6 +314,13 @@ Total agent economy volume visible at /agent-payments
 
 Argus agents do exactly this — in real time, on-chain, per decision. Every dissent costs 0.0005 USDC. Every wrong verdict drops ELO. No trust required. The stakes are public. The slash is automatic. This is Prior Art #08, live on Arc.
 
+> **Why 20 USDC per agent?** Agents are judges, not banks. Each holds a flat 20 USDC stake — enough to cover 40,000 dissents at 0.0005 USDC each. Their balances stay stable because stakes are tiny by design. The real money flows elsewhere: the **treasury** holds $15.86 USDC from accumulated scan fees. Two pools, two purposes — agents hold collateral for verdicts, the treasury holds revenue from scans. Both verifiable on-chain.
+>
+> | Pool | Balance | Purpose | ArcScan |
+> |------|---------|---------|---------|
+> | Agent wallets (3) | 20 USDC each | Staking collateral | α · β · γ |
+> | Treasury | $15.86 USDC | Scan fee accumulation | View |
+
 ---
 
 ## No MetaMask Required
