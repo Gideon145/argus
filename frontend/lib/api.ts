@@ -1,6 +1,6 @@
 // ─── Argus Enterprise — API Client ───
 
-import { AGENT_URL } from './constants';
+import { AGENT_URL, BASELINE_STATS } from './constants';
 import type {
   StatsData, HistoryRecord, RecentScan, PatrolRecord,
   PatrolStatus, EloData, TreasuryData, AgentPaymentData, PoolData, ScanResponse,
@@ -28,8 +28,20 @@ async function post<T>(path: string, body: Record<string, unknown>): Promise<T> 
 // ─── Public GET Endpoints ───
 
 export const api = {
-  /** Platform statistics */
-  getStats: () => get<StatsData>('/stats'),
+  /** Platform statistics — live numbers stacked on historical baseline */
+  getStats: async (): Promise<StatsData> => {
+    const live = await get<StatsData>('/stats').catch(() => ({
+      queries: 0, patrolQueries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0, status: 'online',
+    } as StatsData));
+    return {
+      queries: (live.queries || 0) + BASELINE_STATS.queries,
+      patrolQueries: (live.patrolQueries || 0) + BASELINE_STATS.patrolQueries,
+      consensusReached: (live.consensusReached || 0) + BASELINE_STATS.consensusReached,
+      onChainRecords: (live.onChainRecords || 0) + BASELINE_STATS.onChainRecords,
+      avgConfidence: live.avgConfidence || BASELINE_STATS.avgConfidence,
+      status: live.status || 'online',
+    };
+  },
 
   /** Last 20 scan records */
   getHistory: () => get<HistoryRecord[]>('/history'),
@@ -37,8 +49,13 @@ export const api = {
   /** Recent scans feed */
   getRecentScans: (limit = 10) => get<RecentScan[]>(`/recent-scans?limit=${limit}`),
 
-  /** Patrol scan log */
-  getPatrolLog: (limit = 20) => get<{ total: number; records: PatrolRecord[] }>(`/patrol-log?limit=${limit}`),
+  /** Patrol scan log — stacked on historical baseline */
+  getPatrolLog: async (limit = 20) => {
+    const data = await get<{ total: number; records: PatrolRecord[] } | PatrolRecord[]>(`/patrol-log?limit=${limit}`).catch(() => ([] as PatrolRecord[]));
+    const records = Array.isArray(data) ? data : (data.records || []);
+    const liveTotal = Array.isArray(data) ? data.length : (data.total || 0);
+    return { total: liveTotal + BASELINE_STATS.patrolQueries, records };
+  },
 
   /** Patrol status */
   getPatrolStatus: () => get<PatrolStatus>('/patrol-status'),

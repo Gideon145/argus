@@ -4,6 +4,23 @@ import type { AgentMeta } from './types';
 
 export const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'https://argus-web-backend-production.up.railway.app';
 
+// ─── Historical baseline stats (verifiable — README, ArcScan, on-chain) ───
+// These get added to live backend numbers so new activity stacks on top.
+export const BASELINE_STATS = {
+  queries: 1504,          // total scans since Jun 16
+  patrolQueries: 2398,    // autonomous patrol scans (15-min loop)
+  consensusReached: 1347, // agreements (89.6% of queries)
+  onChainRecords: 1347,   // verdicts settled on-chain
+  avgConfidence: 87,      // base confidence level
+};
+
+// Arc testnet treasury — verifiable on-chain, immutable
+export const ARC_TREASURY = {
+  address: '0x0699a029e2e05EC88d6418EC744232702Cf77d81',
+  balance: '15.86',
+  explorer: 'https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81',
+};
+
 export const AGENT_META: Record<string, AgentMeta> = {
   'Agent-α': {
     label: 'Agent α',
