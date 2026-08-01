@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argus — Arc Mainnet Advisory</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 628px;
+    background: #040d14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'EB Garamond', serif;
+    overflow: hidden;
+  }
+
+  .card {
+    width: 1160px;
+    height: 588px;
+    background: linear-gradient(160deg, #06121c 0%, #0a1a2e 30%, #0d1f35 60%, #061520 100%);
+    border: 1px solid rgba(0, 180, 200, 0.18);
+    border-radius: 16px;
+    position: relative;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,180,200,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,200,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    border-radius: 16px;
+    pointer-events: none;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    top: -140px;
+    right: -100px;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(0,180,200,0.08) 0%, rgba(0,140,160,0.04) 40%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Argus three-dot logo */
+  .argus-logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 0;
+  }
+
+  .argus-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+  }
+
+  .argus-dot.blue  { background: #4A90D9; }
+  .argus-dot.amber { background: #D4A853; }
+  .argus-dot.purple { background: #7B5EA7; }
+
+  /* Arc logo */
+  .arc-logo svg { width: 30px; height: 30px; display: block; }
+
+  .logo-divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(0,180,200,0.2);
+    margin: 0 2px;
+  }
+
+  .logo-text {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #d0e8f0;
+    letter-spacing: 2px;
+  }
+
+  .tag {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: #0ab8d0;
+    border: 1px solid rgba(0,180,200,0.25);
+    border-radius: 5px;
+    padding: 5px 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0,180,200,0.35), rgba(0,180,200,0.04));
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .content {
+    display: flex;
+    gap: 34px;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .left-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .right-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    justify-content: center;
+  }
+
+  .headline {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 25px;
+    color: #e8f4f8;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+
+  .headline span { color: #0ab8d0; }
+
+  .subtitle {
+    font-size: 16px;
+    color: #6b95a8;
+    line-height: 1.4;
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .fact-box, .fud-box {
+    background: rgba(0,180,200,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 9px;
+    padding: 14px 16px;
+  }
+
+  .fact-box {
+    border-left: 3px solid #2ecc71;
+    margin-bottom: 10px;
+  }
+
+  .fud-box {
+    border-left: 3px solid #e17055;
+  }
+
+  .box-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 7px;
+  }
+
+  .fact-box .box-label { color: #2ecc71; }
+  .fud-box .box-label  { color: #e17055; }
+
+  .box-item {
+    font-size: 14px;
+    color: #8ab0c0;
+    line-height: 1.45;
+    padding: 2px 0 2px 14px;
+    position: relative;
+  }
+
+  .box-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .fact-box .box-item::before { background: rgba(46,204,113,0.45); }
+  .fud-box .box-item::before  { background: rgba(225,112,85,0.45); }
+
+  .stat-row {
+    display: flex;
+    gap: 18px;
+    margin-top: auto;
+  }
+
+  .stat {
+    text-align: center;
+    flex: 1;
+  }
+
+  .stat-num {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: #d8f0f8;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: #0ab8d0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1px;
+    font-family: 'Cinzel', serif;
+  }
+
+  .quote-box {
+    background: rgba(0,180,200,0.05);
+    border: 1px solid rgba(0,180,200,0.12);
+    border-radius: 9px;
+    padding: 16px 18px;
+    position: relative;
+  }
+
+  .quote-mark {
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    font-size: 36px;
+    color: rgba(0,180,200,0.15);
+    font-family: 'Cinzel', serif;
+    line-height: 1;
+  }
+
+  .quote-text {
+    font-size: 14px;
+    color: #a0cddb;
+    line-height: 1.55;
+    font-style: italic;
+    padding-left: 12px;
+  }
+
+  .quote-author {
+    font-size: 11px;
+    color: #0ab8d0;
+    margin-top: 7px;
+    padding-left: 12px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.5px;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .greek {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    color: #0ab8d0;
+    letter-spacing: 1px;
+  }
+
+  .urls {
+    display: flex;
+    gap: 18px;
+    font-size: 11px;
+    color: #3d6b7a;
+    font-family: 'Cinzel', serif;
+  }
+
+  .urls span { color: #5a90a5; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <div class="logo-area">
+      <div class="argus-logo">
+        <span class="argus-dot blue"></span>
+        <span class="argus-dot amber"></span>
+        <span class="argus-dot purple"></span>
+      </div>
+      <div class="arc-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2L4 28H9L16 12L22 28H28L16 2Z" fill="none" stroke="#0ab8d0" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M10 22H22" stroke="#0ab8d0" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-divider"></div>
+      <div class="logo-text">ARGUS</div>
+    </div>
+    <div class="tag">Arc Mainnet Advisory</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="content">
+    <div class="left-col">
+      <div>
+        <div class="headline">Mainnet is <span>NOT</span> public yet.</div>
+        <div class="subtitle">Separating fact from FUD on Arc.</div>
+      </div>
+
+      <div class="fact-box">
+        <div class="box-label">FACT</div>
+        <div class="box-item">Unified Balance Kit deep-dive published — Arc is the primary chain</div>
+        <div class="box-item">CCTP not live. Gateway domain 26 not enabled.</div>
+        <div class="box-item">$362K USDC queued across 2,516 transfers from 11 chains</div>
+      </div>
+
+      <div class="fud-box">
+        <div class="box-label">NOT FACT</div>
+        <div class="box-item">"The chain is down" — there is no public mainnet to be down</div>
+        <div class="box-item">"If you bridged today you're cooked" — you literally cannot bridge yet</div>
+        <div class="box-item">"Buy USDC OTC for Arc" — anyone selling you this is scamming</div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="quote-box">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">Mainnet is not public. Anyone trying to tell you that you can access mainnet is probably scamming you.</div>
+        <div class="quote-author">— Tim B., Circle</div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num">1,500+</div>
+          <div class="stat-label">Scans</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2,400+</div>
+          <div class="stat-label">Patrols</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">$15.86</div>
+          <div class="stat-label">Treasury</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">6 wks</div>
+          <div class="stat-label">Live</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-bottom:0; margin-top:18px;"></div>
+
+  <div class="footer">
+    <div class="greek">Τρεις οφθαλμοί. Μια κρίσις.</div>
+    <div class="urls">
+      <span>argusarc.xyz</span>
+      <span>npx argus-scan</span>
+      <span>t.me/argus_arc_bot</span>
+      <span>npm i @ogxavier/argus-sdk</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

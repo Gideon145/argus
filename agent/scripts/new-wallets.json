@@ -1,0 +1,702 @@
+[
+  {
+    "walletId": "238e916e-26b2-51c7-99b5-09ba1db4a85e",
+    "address": "0x1d81f211d6b6bc8bf8cd4488ca003dcf574b4ceb",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "ff44bf41-af3d-53d0-8079-a03f935ae34a",
+    "address": "0x54568105e29db9d0f2c1072ac7871b8108aa04fb",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "471f7cfa-4d99-596b-95bd-63f2164fa32b",
+    "address": "0x2d983751637b0165319d62d56d7fa8e6769de586",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "6ccd861a-390b-5d83-aa2a-8ef6ec2c7d5b",
+    "address": "0x9930be60187b0bb16c3cb5b3bd0a5a81ccdc68cb",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "743826b6-889c-52cf-aa58-39352ccdc882",
+    "address": "0xec58ca99f3f2c94c36f859bcb1543ad706b9ffcb",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "0a24e991-a5bc-55c7-b2d3-6e4215ba9f33",
+    "address": "0x2e15772ba21d28e8c2b09d86c6bf0dc342dd66e0",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "4a6cdf14-b540-520f-b56f-1c1afd0e48b1",
+    "address": "0xd8fbb10a911579640f641ae7a71125718dc3072b",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "b0fc0600-a5e5-57e8-bf7e-1e3798d40853",
+    "address": "0x342e9a94fcbc0524851f255f5e4e92a8ccf8674d",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "dc67d035-e290-553e-86b8-8a35220a263e",
+    "address": "0x81240baf8288516df72882f2c81bafcb847fadef",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "747b9bad-d730-5ba7-b8cb-71519aea87d5",
+    "address": "0x6052b4aaf184c05440ae10272d4a29201598a462",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "122f0cac-84ce-5b3e-a3cb-03f171b3776b",
+    "address": "0xd66d309c4c81854c8cc784df9ca585413d39c0a6",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "e5eddbf7-b376-524c-bd0a-389122c39c54",
+    "address": "0x13cd2f3a3c67caa863da6997418b7cdf7247a768",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "798da0b3-f71d-567f-9bd7-46b9687b69fe",
+    "address": "0xa1cb8076725b4f9e9f46301b85b4025d0c8fb42c",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "ca541e7b-2947-5632-bad8-ac589de1d218",
+    "address": "0xdcfa60c3aa980ece7026f27b8be7ed94b7a1f6e6",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "5a7aca66-78ec-53f6-a8c0-0098e71d05d8",
+    "address": "0xe5f668606fa3c4d98bbf77d0df42a9e92856db3a",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "109c4548-507b-5a53-99f3-8bf9665d9bb5",
+    "address": "0x5297ad9cafd2dead1c62dcb0f2cda42bd280cb42",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "ce1916e5-7644-54a1-ba5d-1d6dcf6660cb",
+    "address": "0x0d83911e42d087715d9e922648ad88259bb96b34",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "9f091153-e515-58ab-a825-88e0a1ff29b4",
+    "address": "0x39fb7c2a6170229b5bae57113cf0c68e233b15ba",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "fb09b502-faed-5e92-a230-eb84ab771c96",
+    "address": "0x092446d26b85dc396db91b75d79b1769c23c00dd",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "dd0ec1d0-3b35-5c32-b7e6-770dd612d1e7",
+    "address": "0x230fdae4791561790e45922ed2cf50d05a979084",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "4c2dfea0-bb31-54d8-aeb3-db22211d5186",
+    "address": "0x57def3378ab34370c8bba7ebf76ebf0e87625cd7",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "3e2306ad-5922-5d5c-aa3e-dcde664e507f",
+    "address": "0xb19f4d2ecdc89a9746d280851c0b594ff6c7b42d",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "08012448-d30d-5a90-be41-b11f05038516",
+    "address": "0xcade31b2dbd1d6f06c1cb6a881993e445b2a09e5",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "6d9057e3-30c3-57c6-9f42-2acec06ac9c6",
+    "address": "0x3aaf130ea599c83aecab6a9da06e6be822494aa9",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "61ab8622-2b0a-5c0d-ae96-0ba52dc992f8",
+    "address": "0x2ae8b53f2aa5bd232df9af75d845a2e934561ce7",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "fb2050f0-9867-516b-840c-6339c5baa706",
+    "address": "0x81ddf15da24e06df7dfffe05dc794e09319e3b06",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "e9985513-0347-53d0-bdca-d86ff4f7f2c6",
+    "address": "0x1509f0fa57e3dde54e97dca72a77ff3d7c99102e",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "7ef534f6-f7fa-5a6b-bd66-89b345101fab",
+    "address": "0x8ec9116d74134993e86d5b225b64449ea2fd2a8f",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "3056bfe0-5002-5183-85b8-f7396e684557",
+    "address": "0x3fd4c370568708ee907937c836065f7bf6d5131c",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "b5bd552f-d659-55c1-ad4b-03690869f709",
+    "address": "0x2c936d38866e200182e3fcb2d980d0ddbfee0780",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "1bf7139b-1fb0-593d-813d-17a4e9106470",
+    "address": "0xdd2fba74cc0a9495cf4bfa9e66dcc0ba47f67817",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "a57418e8-4872-5320-abb3-f440935a812a",
+    "address": "0xb4941377f4ee64fb39f28669175db227a1399bce",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "45fd6da7-ec7a-5ddc-8a31-a1581659f43c",
+    "address": "0xb44af134d5dc1961a233a844a03a06912a6d8086",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "788636e0-2913-5a06-b827-b5a2bd3b07a0",
+    "address": "0x79c94de843e47bed681ddd44606a62eb323556be",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "84996cf7-19e1-5554-a1a8-9c44c6ecc2b0",
+    "address": "0x80a09c5bd84010dd45bbc77aab02797150c28cce",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "e47848bc-e175-5e3a-9c0c-04a51a671556",
+    "address": "0x3a41cda9fed7e9b016d6a3f96d99b4a598de18cb",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "72bc8358-35fd-50e2-9620-c23b4a0ad59d",
+    "address": "0x1066d0a43f6f21c2c672546d5c5239500c32c227",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "79621f94-7670-51d0-8313-ed2674a40c73",
+    "address": "0x08abc9c51f15fd2b8ae95760ed028ddd5046069b",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "f086cde1-e40a-527e-b2bb-7462258ee3d7",
+    "address": "0x5e0505a843ae62a6bff4450b6a23c1103ac45100",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "7c48fd25-587a-51c0-b965-e729b5ac1dc9",
+    "address": "0x9727b027c19fa8f9c0c47c59cc11932e02de9cdf",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "77c4ca82-14db-5518-8334-488fcbde5f74",
+    "address": "0x669e7d36c99fbbc195c485f229fb18c3a548b1da",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "663349ae-1d43-5c38-bd81-65a100c8e56f",
+    "address": "0x851597b3492903f71c12d815fda68bfdd74b8298",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "4bbaaa06-a90d-5ce5-8492-9f0216fded5f",
+    "address": "0xd990f62230892e99af0b893c2fcec68f314cc4cc",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "9824baef-0a88-53ce-a96a-7ba4a1ee6415",
+    "address": "0x9a15debee43069d6eda497e410b61d63a7b30a7f",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "ea62a6b3-de0d-5b18-bf28-330c31cb7c2f",
+    "address": "0x19887e7a5c870c00a64025d6afb1f67bbcf97c6e",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "eb2417bb-63c5-53dc-81a2-3c1b85336f9f",
+    "address": "0x3bdbd21348cd48f84723929a20c692144f163558",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "e3d552e2-e146-5817-a720-934765c832db",
+    "address": "0xe910b75547f416ceeac2ae61ef799de5e72d49e1",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "a38b2650-e963-5d65-aa3d-5ebedf5a4447",
+    "address": "0x01b98867da911ce77bdaeecaed5fe531ff88b844",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "ecfcc5b3-6335-5ab4-868d-ea8c1146b6f6",
+    "address": "0x57bf13aa01b7879c7e20169607b5f0662aff0cd5",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "f247469c-9301-540b-ba06-cb216420d549",
+    "address": "0x9bdb0217d02a9178ca57ce4bbff699db5079bf9b",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "f7e54b06-0271-5b4b-8b22-9046013c385c",
+    "address": "0x5d75c91c0ee4d5f63183e161751b3c7bde6c2c40",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "5a2bb62e-6d53-59b6-8fcd-3756a83d6a33",
+    "address": "0x8caa1a95c28d3e1a3a3f2a3d932bfa061ae6ed3f",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "6235438f-06d3-5356-98ff-2217a1d260a8",
+    "address": "0x428c5026d3e182161814793bb70e6ff2e7c59a38",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "64a8d849-9c3c-5529-bfaf-53f9f09f7a46",
+    "address": "0xb462e475723756bda5d9070f663af0e3a510d2be",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "5856447d-56e5-5658-a601-e40a2d167ef1",
+    "address": "0x42dbc4085e8d6ab59d7624503d1491eba70ecdb2",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "371db126-d7ab-581e-b5d1-b5711ac50bc3",
+    "address": "0xebe1e8e753f040127c5f58a0d3f1b90d42c56281",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "29a19244-c7b3-5ded-93af-8920f6071963",
+    "address": "0x8fb1409ccaccf8958b7f3a3a872a45ac9a3ebb5d",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "0845df1f-dd5c-5872-bf2c-f169389bc1d4",
+    "address": "0x88407945576c0a0e08669509b6b859eaa03e824a",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "db0fce94-5434-5e16-8a0c-cd201028c6d9",
+    "address": "0xf79b13c94cd55cc51de8f38e412c3f792adf58ae",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "befc213e-c94c-541d-949b-afa970c06c30",
+    "address": "0x9125978c0ce215969620655344afaf7164966200",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "3d930448-7487-5d8d-a39a-a830aca0c74d",
+    "address": "0xe94f975676f9ca5e5b7510248a3bf0700fadab84",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "75229a7e-afef-5962-8166-c9903700c96b",
+    "address": "0xd5c65fb32fe2e301c97fb1afb43b367dec0eb693",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "8eb6c0e3-1e43-530a-af97-93f5558d7044",
+    "address": "0xa84ba89e3f21a7d56c1dbb7f0d29ee7d20a85814",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "879965c4-ed41-579e-b24d-2c77f512d994",
+    "address": "0xd841ead405aabafcedcd0ab357e3fee2135b9515",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "86a38fb3-250e-5291-a894-91e1b0df890b",
+    "address": "0xf5ab1a556d7d2fd189e6cb5858d1094a198309f1",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "d314799d-2fc0-5166-a817-338bbb172d7c",
+    "address": "0x3d60ccb6bde6194ce823a1a481bf689a46bd0948",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "0285335d-acd9-5a80-b66a-d8e93b4094c0",
+    "address": "0xcf1c7550f020a905cb213fc8bd86a10bb7004d84",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "f20645c1-e4c6-524f-bbce-36f0916c9eaf",
+    "address": "0x3259647dcf28d3575cc5792b01a5ff558eac8ad6",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "74e56f3c-4900-5e32-b9d4-82f7b6ca59d1",
+    "address": "0x68c577c05b1b9d3253aced362acd0eb41f42f359",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "19092701-2ef1-5e5f-b6d4-66aede956acb",
+    "address": "0xc9639079598df45deecb8cc9f27b1104d3928bd3",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "d96022ae-2b80-548f-920e-3eabf5454d40",
+    "address": "0x6548b4050969aa5775e29add1ef61a63e00116e3",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "b3dcaa56-6ddf-5906-be7c-c67df8bcdadc",
+    "address": "0x09e0f1126f633a9794463ab36520195e3a8ffa10",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "e6580465-8d75-5ce0-9073-e1e574243451",
+    "address": "0xde9ffdf19635ed06e0f199bf3e7fd32ac4ba5925",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "28964b22-6170-5b64-9020-e389cb533c04",
+    "address": "0x0ee1430c8527fcd090c1583b6469d2370bd80f74",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "227890db-31a3-5cfa-b848-8a036e64bede",
+    "address": "0xc2d56afc8a60082e03fb292f273e8de1d4b2b43d",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "9c2363a4-7f27-504a-9a68-bc443d14d3f2",
+    "address": "0xdbf2638c7e49e3e8682a6388b96cd03d5346696c",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "7245b4f6-1543-586a-b17a-d7ade1adf05e",
+    "address": "0x3e22336134f271eacf42541fe0d2e3f6724e87e7",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "6803018a-1b71-59f3-ab0c-458a17043577",
+    "address": "0x8a1b242b1d84da20202b4b7e0282ebe503ab82fd",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "5968ed96-820e-59cd-92d0-a1ba697a5a1b",
+    "address": "0x9f4ae69c6f1a5337ba6c4f308965ef6b4ee662ea",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "b43a817b-bc43-5166-ba20-d7a3848f90cf",
+    "address": "0xcbd206df58f7980b2061ce0585184a128bdd8d21",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "df1914f0-5248-598b-855a-242940849256",
+    "address": "0x79550e6da35133bb6c6ed03a1efd5b2861678757",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "6254d90f-7e74-5bb7-8135-8709f6708f2e",
+    "address": "0xa7b84caaaf5e3d63d3318319418a592b12640178",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "5b840651-2eea-5ce9-94c1-c98f9a2dddce",
+    "address": "0xfc22cdf151cfadcb7e1504407be6abd0075f9a80",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "096647cb-bbce-513b-af27-1b4eb7de66e3",
+    "address": "0x9e04ec815eaef57dbe2e11ed465a7e0fa3ee2670",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "8043cbd4-67e6-5030-80ae-bd2af8532418",
+    "address": "0xd5182f07c5c99f61161215dd9dd33a44ca92a23d",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "03fcf6bf-5deb-5e87-b647-87cf517ba94d",
+    "address": "0x4666c7f9c3f5b0e545f4ce66c622a0c3867fef2a",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "2b4f2626-aa15-5567-9fd6-ce2fed87a320",
+    "address": "0xb5980c8bbe4e4376c6f65ff73d75b77b1b6a8bb5",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "0fc4f7f6-0cfb-5afb-9dcb-6f62376e6dd8",
+    "address": "0xfab55934cc83fd971b462125191ed3a3dba9540b",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "3a2f58cc-d82d-524f-af5c-4b79024e23cb",
+    "address": "0x6c8d6cfaa43ba1a591a285963ca1bd912f0465cb",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "19bef092-bdd2-5c23-aa56-7d666e0ed2e8",
+    "address": "0xe7b4d24f1b24a0ee2cf307864959117a31c3132a",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "4e0c7278-4a95-557d-aa59-b5169f278bfa",
+    "address": "0x09664852ae06c66b2eb50cb038841ed6498d8831",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "fda07826-ffa6-5a76-9541-04d7518cb8e0",
+    "address": "0x0cac93d39a69e588576644a6490650d5b48ff7a0",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "00fd3486-5318-57ab-b542-87b9ac1b8bcf",
+    "address": "0xedaaa6cf203c26dca61fd1fbb6c50dd4790ac2a7",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "055b4a84-e9c2-57fb-80a0-bdc170c1d80d",
+    "address": "0x6fc413dad39eb60f2154b66a95abe7cbe15133d6",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "0fdd0285-8d8b-5192-81e9-d63e66cb9496",
+    "address": "0x799bae2301950572d711dd3e88bb8e60b2eec114",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "483907f7-1976-5aa8-abd3-96e38613d21b",
+    "address": "0x6caaa296e1c8a2ba5e211c3087ce4cb51aa30b90",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "6b19a401-95d4-5375-89bf-587ddef6d896",
+    "address": "0x9276bcb5f1b30eb15ef9d842cdffe8c1514c12ff",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "e265d8de-46c3-5156-84d7-7e2b2d0e9351",
+    "address": "0xb9fc4b52e42a3ef5206802f583a08322bce90d75",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "35bd71fa-1b46-5d26-b769-98108c030ab0",
+    "address": "0x4219bf514a1fba19f7229c6eed63e82817b10227",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  },
+  {
+    "walletId": "467fa9ca-1ad1-5a90-868d-6bb06a3c96a5",
+    "address": "0xbbb319ba4ca33bd5d0ba79e364e0d42980b1b084",
+    "assigned": false,
+    "refId": null,
+    "assignedAt": null
+  }
+]
