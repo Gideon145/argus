@@ -104,6 +104,7 @@ function buildScanResponse(contractAddress: string): ScanResponse {
   const settlementBatchId = '0x' + Array.from({length:64}, () => Math.floor(Math.random()*16).toString(16)).join('');
 
   return {
+    query: { contractAddress, chain: 'arc' },
     result: {
       verdict: finalVerdict,
       confidence: String(Math.round(confidences.reduce((a,b)=>a+b,0)/3)),
