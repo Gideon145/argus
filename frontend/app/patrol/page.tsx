@@ -45,8 +45,10 @@ export default function PatrolPage() {
         api.getPatrolLog(20),
         api.getPatrolStatus(),
       ]);
-      setLog(logData.records);
-      setTotalPatrols(logData.total);
+      const records = Array.isArray(logData) ? logData : (logData.records || []);
+      const total = Array.isArray(logData) ? logData.length : (logData.total || 0);
+      setLog(records);
+      setTotalPatrols(total);
       setStatus(statusData);
       setLastRefresh(new Date());
       setError(null);
