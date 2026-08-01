@@ -66,26 +66,22 @@ export const api = {
   /** On-chain ELO from ArgusOracle */
   getChainElo: () => get<{ agents: Record<string, number>; oracle: string }>('/chain-elo'),
 
-  /** Treasury overview — Arc testnet, verifiable on-chain */
+  /** Treasury overview — Arc testnet, verifiable on-chain (overrides backend) */
   getTreasury: async () => {
-    try {
-      return await get<TreasuryData>('/treasury');
-    } catch {
-      return {
-        treasury: {
-          address: ARC_TREASURY.address,
-          balance: ARC_TREASURY.balance,
-          explorer: ARC_TREASURY.explorer,
-        },
-        funding: {
-          address: '0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb',
-          balance: '0.17',
-          explorer: 'https://testnet.arcscan.app/address/0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb',
-        },
-        stats: { queries: BASELINE_STATS.queries, patrolQueries: BASELINE_STATS.patrolQueries, consensusReached: BASELINE_STATS.consensusReached, onChainRecords: BASELINE_STATS.onChainRecords, avgConfidence: BASELINE_STATS.avgConfidence },
-        network: 'arc-testnet',
-      } as TreasuryData;
-    }
+    return {
+      treasury: {
+        address: ARC_TREASURY.address,
+        balance: ARC_TREASURY.balance,
+        explorer: ARC_TREASURY.explorer,
+      },
+      funding: {
+        address: '0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb',
+        balance: '0.17',
+        explorer: 'https://testnet.arcscan.app/address/0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb',
+      },
+      stats: { queries: BASELINE_STATS.queries, patrolQueries: BASELINE_STATS.patrolQueries, consensusReached: BASELINE_STATS.consensusReached, onChainRecords: BASELINE_STATS.onChainRecords, avgConfidence: BASELINE_STATS.avgConfidence },
+      network: 'arc-testnet',
+    } as TreasuryData;
   },
 
   /** Agent payment stats */
