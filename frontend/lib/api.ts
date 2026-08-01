@@ -233,28 +233,20 @@ export const api = {
   },
 
   /** Run a scan via Circle wallet */
-  scanCircle: async (userId: string, contractAddress: string, chain = 'arc', threshold = 2) => {
-    try { return await post<ScanResponse>('/scan/circle', { userId, contractAddress, chain, threshold }); }
-    catch { return buildScanResponse(contractAddress); }
-  },
+  scanCircle: (userId: string, contractAddress: string, chain = 'arc', threshold = 2) =>
+    post<ScanResponse>('/scan/circle', { userId, contractAddress, chain, threshold }),
 
-  /** Run a debug scan (no payment) */
-  debugScan: async (contractAddress: string, chain = 'arc', threshold = 2) => {
-    try { return await post<ScanResponse>('/scan', { contractAddress, chain, threshold }); }
-    catch { return buildScanResponse(contractAddress); }
-  },
+  /** Run a debug scan */
+  debugScan: (contractAddress: string, chain = 'arc', threshold = 2) =>
+    post<ScanResponse>('/scan', { contractAddress, chain, threshold }),
 
-  /** Run a paywalled scan (x402) */
-  scan: async (contractAddress: string, chain = 'arc', threshold = 2) => {
-    try { return await post<ScanResponse>('/scan', { contractAddress, chain, threshold }); }
-    catch { return buildScanResponse(contractAddress); }
-  },
+  /** Run a paywalled scan */
+  scan: (contractAddress: string, chain = 'arc', threshold = 2) =>
+    post<ScanResponse>('/scan', { contractAddress, chain, threshold }),
 
-  /** Run a scan after a MetaMask payment */
+  /** Run a scan after MetaMask payment */
   scanWithPayment: async (contractAddress: string, paymentTxHash: string, chain = 'arc', threshold = 2): Promise<ScanResponse> => {
-    let result: ScanResponse;
-    try { result = await post<ScanResponse>('/scan', { contractAddress, chain, threshold }); }
-    catch { result = buildScanResponse(contractAddress); }
+    const result = await post<ScanResponse>('/scan', { contractAddress, chain, threshold });
     return { ...result, payment: { ...result.payment, txHash: paymentTxHash, paid: '0.01', note: 'MetaMask — $0.01 paid to treasury' } };
   },
 };
