@@ -29,8 +29,10 @@ export default function HistoryPage() {
       // Patrol log is the ONLY source with real on-chain txHashes.
       // User debug scans do NOT generate individual txHashes.
       const data = await api.getPatrolLog(100);
-      setRecords(data.records);
-      setTotalPatrols(data.total);
+      const records = Array.isArray(data) ? data : (data.records || []);
+      const total = Array.isArray(data) ? data.length : (data.total || 0);
+      setRecords(records);
+      setTotalPatrols(total);
       setLastUpdated(new Date());
     } catch (err) {
       console.error('Failed to fetch patrol log:', err);

@@ -83,7 +83,7 @@ export const api = {
 
   /** Run a debug scan (no payment) */
   debugScan: (contractAddress: string, chain = 'arc', threshold = 2) =>
-    post<ScanResponse>('/debug/scan', { contractAddress, chain, threshold }),
+    post<ScanResponse>('/scan', { contractAddress, chain, threshold }),
 
   /** Run a paywalled scan (x402) */
   scan: (contractAddress: string, chain = 'arc', threshold = 2) =>
@@ -95,7 +95,7 @@ export const api = {
    * the response so the UI can link to the real settlement transaction.
    */
   scanWithPayment: async (contractAddress: string, paymentTxHash: string, chain = 'arc', threshold = 2): Promise<ScanResponse> => {
-    const result = await post<ScanResponse>('/debug/scan', { contractAddress, chain, threshold });
+    const result = await post<ScanResponse>('/scan', { contractAddress, chain, threshold });
     // Overlay the real MetaMask tx so the result page shows the correct settlement link
     return {
       ...result,

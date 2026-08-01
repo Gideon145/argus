@@ -2,7 +2,7 @@
 
 import type { AgentMeta } from './types';
 
-export const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'https://argus-agent-production-ab97.up.railway.app';
+export const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'https://argus-web-backend-production.up.railway.app';
 
 export const AGENT_META: Record<string, AgentMeta> = {
   'Agent-α': {
