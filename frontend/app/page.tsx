@@ -69,7 +69,7 @@ export default function Dashboard() {
         ]);
 
         setRecentScans(
-          scans.map(s => ({
+          scans.filter((s: any) => s.address && s.address !== '0xUnknown').map((s: any) => ({
             address: s.address,
             verdict: s.verdict,
             consensus: s.consensusVotes || s.consensus || '3/3',
