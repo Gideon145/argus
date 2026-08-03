@@ -110,12 +110,12 @@
 - [Team](#team)
 
 **Supplemental docs:**
-- ?? [ARCHITECTURE.md](ARCHITECTURE.md) — Full system design, data flows, payment architecture
-- ?? [ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md) — 6 real bugs encountered and solved
-- ?? [AGENTS.md](AGENTS.md) — How any AI agent can plug into Argus
-- ?? [JUDGE_GUIDE.md](JUDGE_GUIDE.md) — 5-minute review walkthrough for judges
+- 🔗 [ARCHITECTURE.md](ARCHITECTURE.md) — Full system design, data flows, payment architecture
+- 🔧 [ENGINEERING_DEBUG_LOG.md](ENGINEERING_DEBUG_LOG.md) — 6 real bugs encountered and solved
+- 🤖 [AGENTS.md](AGENTS.md) — How any AI agent can plug into Argus
+- ⚖️ [JUDGE_GUIDE.md](JUDGE_GUIDE.md) — 5-minute review walkthrough for judges
 - 🔍 [verify.sh](verify.sh) — 34-check end-to-end verifier
-- ?? [@ogxavier/argus-sdk](sdk) — TypeScript SDK for builders: `npm i @ogxavier/argus-sdk`
+- 📦 [@ogxavier/argus-sdk](sdk) — TypeScript SDK for builders: `npm i @ogxavier/argus-sdk`
 
 ---
 
@@ -141,17 +141,17 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 ---
 
-## ?? Caught in the Wild
+## 🔍 Caught in the Wild
 
 ### Unibase AI — Scammers blocked us (Jun 23)
 
-A trending token called Unibase AI. Our agents scanned it and found: unlimited minting, 100% transfer fee (no one could sell), wash trading for fake volume, upgradeable proxy, computer-generated deployer addresses. **2/3 agents voted SCAM.** We posted the verdict on X. Within hours, Unibase AI blocked us — confirming they saw it and wanted it silenced. Community members who saw our verdict **avoided being rugged.** [See the post ?](https://x.com/Argus_arc/status/2069576455051505943)
+A trending token called Unibase AI. Our agents scanned it and found: unlimited minting, 100% transfer fee (no one could sell), wash trading for fake volume, upgradeable proxy, computer-generated deployer addresses. **2/3 agents voted SCAM.** We posted the verdict on X. Within hours, Unibase AI blocked us — confirming they saw it and wanted it silenced. Community members who saw our verdict **avoided being rugged.** [See the post →](https://x.com/Argus_arc/status/2069576455051505943)
 
-> *"Was worth the risk ??"* — actual community response
+> *"Was worth the risk 😂😂"* — actual community response
 
 ### $CZ token — 1.6K impressions in 24 hours (Jul 4)
 
-A token claiming CZ Binance affiliation started trending. Our agents flagged: unverified contract, extreme holder concentration (one wallet controlled majority supply), exploit pattern matches. The scan reached **1.6K impressions in under 24 hours** and brought in 10+ new followers. Real traders using real tools to avoid real scams — in real time. [See the thread ?](https://x.com/Argus_arc/status/2073592959363117523)
+A token claiming CZ Binance affiliation started trending. Our agents flagged: unverified contract, extreme holder concentration (one wallet controlled majority supply), exploit pattern matches. The scan reached **1.6K impressions in under 24 hours** and brought in 10+ new followers. Real traders using real tools to avoid real scams — in real time. [See the thread →](https://x.com/Argus_arc/status/2073592959363117523)
 
 ---
 
@@ -277,9 +277,9 @@ Our agents scanned a trending token called Unibase AI and found:
 - **Upgradeable proxy** — contract logic could change at any time
 - **Computer-generated addresses** — mass-deployed scam pattern
 
-2/3 agents voted **SCAM**. We posted the verdict on X. Within hours, **Unibase AI blocked us** — confirming they saw the post and wanted it silenced. Community members who saw our verdict avoided being rugged. [See the post ?](https://x.com/Argus_arc/status/2069576455051505943)
+2/3 agents voted **SCAM**. We posted the verdict on X. Within hours, **Unibase AI blocked us** — confirming they saw the post and wanted it silenced. Community members who saw our verdict avoided being rugged. [See the post →](https://x.com/Argus_arc/status/2069576455051505943)
 
-> *"Was worth the risk ??"* — actual community response
+> *"Was worth the risk 😂😂"* — actual community response
 
 ### $CZ token — 1.6K impressions in 24 hours (Jul 4)
 
@@ -416,9 +416,9 @@ function recordVerdict(address token, string verdict, uint8 agreementCount) exte
 - Settlement batch reference
 - ELO deltas written per Council member after every verdict
 
-Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-optimized for Arc's native USDC model. [View on ArcScan ?](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8)
+Deployed with Solidity 0.8.28 via IR pipeline. Minimal, dependency-free, gas-optimized for Arc's native USDC model. [View on ArcScan →](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8)
 
-> **??? Audited by ChainGPT** — July 2026. Zero critical vulnerabilities. Zero exploits. One design consideration: open access to `recordQuery`/`updateElo` is intentional for transparency on testnet; mainnet deployment will add orchestrator-gated write access. [Full report ?](docs/chain-gpt-audit.md)
+> **🔒 Audited by ChainGPT** — July 2026. Zero critical vulnerabilities. Zero exploits. One design consideration: open access to `recordQuery`/`updateElo` is intentional for transparency on testnet; mainnet deployment will add orchestrator-gated write access. [Full report →](docs/chain-gpt-audit.md)
 
 ### Why We Audited
 
