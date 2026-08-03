@@ -66,13 +66,13 @@ export const alphaAgent = {
     try {
       const deepseek = new OpenAI({ apiKey, baseURL: 'https://api.deepseek.com' });
       const dataContext = contractData?.isContract
-        ? `Chain: ${contractData.chain}\nContract name: ${contractData.contractName || 'unknown'}\nOwner: ${contractData.owner || 'unknown'}\nTotal supply: ${contractData.totalSupply || 'unknown'}\nDecimals: ${contractData.decimals ?? 'unknown'}\n\n`
+        ? `Token: ${contractData.tokenName || contractData.contractName || 'unknown'}${contractData.tokenSymbol ? ` (${contractData.tokenSymbol})` : ''}\nChain: ${contractData.chain}\nOwner: ${contractData.owner || 'unknown'}\nTotal supply: ${contractData.totalSupply || 'unknown'}\nDecimals: ${contractData.decimals ?? 'unknown'}\nProxy: ${contractData.isProxy ? `YES — ${contractData.proxyType || 'upgradeable'} (IMPLEMENTATION CAN CHANGE)` : 'No proxy detected'}\n\n`
         : '';
       const result = await deepseek.chat.completions.create({
         model: 'deepseek-chat', temperature: 0.3, max_tokens: 512,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: `Analyze this EVM token contract for security vulnerabilities:\n\nContract address: ${req.contractAddress}\n${dataContext}Focus on:\n1. Proxy patterns — can the implementation be upgraded maliciously?\n2. Ownership — is the contract renounced? Who controls it?\n3. Mint/burn functions — can tokens be minted arbitrarily?\n4. External calls — are there unchecked external calls?\n5. Honeypot signatures — can buyers sell? Are there transfer restrictions?\n6. Access control — are admin functions properly gated?` },
+          { role: 'user', content: `Analyze this EVM token contract for security vulnerabilities:\n\nContract address: ${req.contractAddress}\n${dataContext}${contractData?.isProxy ? '⚠️ CRITICAL: This is a PROXY CONTRACT. The implementation can be UPGRADED at any time. Past behavior does NOT guarantee future safety.\n\n' : ''}Focus on:\n1.${contractData?.isProxy ? ' PROXY RISK (HIGHEST PRIORITY) — this is upgradeable, what could the admin change?' : ''}\n2. Ownership — is the contract renounced? Who controls it?\n3. Mint/burn functions — can tokens be minted arbitrarily?\n4. External calls — are there unchecked external calls?\n5. Honeypot signatures — can buyers sell? Are there transfer restrictions?\n6. Access control — are admin functions properly gated?` },
         ],
       });
 
