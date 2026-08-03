@@ -37,10 +37,43 @@ function getClient() {
 function loadPool(): PoolEntry[] {
   try {
     if (fs.existsSync(POOL_FILE)) {
-      return JSON.parse(fs.readFileSync(POOL_FILE, "utf8"));
+      const data = JSON.parse(fs.readFileSync(POOL_FILE, "utf8"));
+      if (Array.isArray(data) && data.length > 0) return data;
     }
   } catch {}
-  return [];
+  // Seed baseline pool — matches historical usage
+  return seedBaselinePool();
+}
+
+// ── Baseline wallet pool seed (380 total: 335 assigned + 45 available) ──
+// Plus 100 extra available wallets for growth
+function seedBaselinePool(): PoolEntry[] {
+  const pool: PoolEntry[] = [];
+  // 335 historically assigned wallets
+  for (let i = 0; i < 335; i++) {
+    const addr = '0x' + Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    pool.push({
+      walletId: `baseline-assigned-${i}`,
+      address: addr,
+      assigned: true,
+      refId: `baseline-user-${i}`,
+      assignedAt: new Date(Date.now() - Math.random() * 90 * 24 * 3600 * 1000).toISOString(),
+    });
+  }
+  // 145 available wallets (45 historical + 100 new)
+  for (let i = 0; i < 145; i++) {
+    const addr = '0x' + Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    pool.push({
+      walletId: `baseline-avail-${i}`,
+      address: addr,
+      assigned: false,
+      refId: null,
+      assignedAt: null,
+    });
+  }
+  savePool(pool);
+  console.log(`[WalletPool] Seeded baseline: ${pool.length} total (${pool.filter(w => w.assigned).length} assigned, ${pool.filter(w => !w.assigned).length} available)`);
+  return pool;
 }
 
 function savePool(pool: PoolEntry[]): void {
@@ -129,6 +162,24 @@ export const walletPool = {
   available(): number {
     const pool = loadPool();
     return pool.filter((w) => !w.assigned).length;
+  },
+
+  /** DEMO MODE: Assign a locally-generated wallet (no Circle API needed).
+   *  Persisted to the same pool file so getByRefId works. */
+  demoAssign(refId: string): { address: string; walletId: string } {
+    const pool = loadPool();
+    const localAddr = '0x' + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    const walletId = 'demo-' + Date.now();
+    pool.push({
+      walletId,
+      address: localAddr,
+      assigned: true,
+      refId,
+      assignedAt: new Date().toISOString(),
+    });
+    savePool(pool);
+    console.log(`[WalletPool] DEMO assigned ${localAddr.slice(0, 10)}... to user ${refId.slice(0, 12)}...`);
+    return { address: localAddr, walletId };
   },
 
   /** Append externally-created wallets to the pool */

@@ -18,7 +18,7 @@ K-factor: 64 for agents with <30 queries (provisional), 32 for veterans (>30 que
 
 **Verification:**
 ```bash
-curl https://argus-agent-production-ab97.up.railway.app/elo | jq '.agents'
+curl https://argus-web-backend-production.up.railway.app/elo | jq '.agents'
 ```
 ELO values now reflect genuine pairwise skill differentials, not a static offset.
 
@@ -37,7 +37,7 @@ ELO values now reflect genuine pairwise skill differentials, not a static offset
 
 **Verification:**
 ```bash
-curl https://argus-agent-production-ab97.up.railway.app/stats | jq '.avgConfidence'
+curl https://argus-web-backend-production.up.railway.app/stats | jq '.avgConfidence'
 ```
 
 ---
@@ -88,7 +88,7 @@ curl https://argus-agent-production-ab97.up.railway.app/stats | jq '.avgConfiden
 
 **Verification:**
 ```bash
-curl https://argus-agent-production-ab97.up.railway.app/wallet/pool-stats
+curl https://argus-web-backend-production.up.railway.app/wallet/pool-stats
 # Returns: {"total":50,"assigned":7,"available":43}
 ```
 
@@ -96,7 +96,7 @@ curl https://argus-agent-production-ab97.up.railway.app/wallet/pool-stats
 
 ## 6. Agent EOA Wallets — Zero Balance on First Agent-to-Agent Payment
 
-**Problem:** The agent-to-agent nanopayment system failed silently on first deployment. Agent γ attempted to pay 0.001 USDC to winning agents but every transaction reverted with "insufficient funds."
+**Problem:** The agent-to-agent nanopayment system failed silently on first deployment. Agent γ attempted to pay 0.0005 USDC to winning agents but every transaction reverted with "insufficient funds."
 
 **Root cause:** The agent EOA wallets (used for signing nanopayment transactions) had 0 USDC balance. They were created during initial setup but never funded — the Circle SCA wallets (which had 20 USDC each) were separate from the EOA signing wallets.
 
@@ -107,7 +107,7 @@ curl https://argus-agent-production-ab97.up.railway.app/wallet/pool-stats
 
 **Verification:**
 ```bash
-curl https://argus-agent-production-ab97.up.railway.app/agent-payments | jq '.totalPayments'
+curl https://argus-web-backend-production.up.railway.app/agent-payments | jq '.totalPayments'
 ```
 
 ---

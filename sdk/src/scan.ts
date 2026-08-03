@@ -1,7 +1,7 @@
 import type { ArgusConfig, ScanResponse } from './types';
 import { setStatsConfig } from './stats';
 
-const DEFAULT_API = 'https://argus-agent-production-ab97.up.railway.app';
+const DEFAULT_API = 'https://argus-web-backend-production.up.railway.app';
 const DEFAULT_TIMEOUT = 30000;
 
 let _config: ArgusConfig = {};
@@ -73,7 +73,7 @@ export async function scan(
     throw new Error(`Invalid contract address: ${contractAddress}`);
   }
 
-  return fetchApi<ScanResponse>('/debug/scan', {
+  return fetchApi<ScanResponse>('/scan', {
     method: 'POST',
     body: JSON.stringify({ contractAddress, chain, threshold }),
   });

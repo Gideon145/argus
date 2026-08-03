@@ -133,17 +133,17 @@ function buildScanResponse(contractAddress: string): ScanResponse {
 }
 
 export const api = {
-  /** Platform statistics — live numbers stacked on historical baseline */
+  /** Platform statistics — live numbers only, no baseline inflation */
   getStats: async (): Promise<StatsData> => {
     const live = await get<StatsData>('/stats').catch(() => ({
       queries: 0, patrolQueries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0, status: 'online',
     } as StatsData));
     return {
-      queries: (live.queries || 0) + BASELINE_STATS.queries,
-      patrolQueries: (live.patrolQueries || 0) + BASELINE_STATS.patrolQueries,
-      consensusReached: (live.consensusReached || 0) + BASELINE_STATS.consensusReached,
-      onChainRecords: (live.onChainRecords || 0) + BASELINE_STATS.onChainRecords,
-      avgConfidence: live.avgConfidence || BASELINE_STATS.avgConfidence,
+      queries: live.queries || 0,
+      patrolQueries: live.patrolQueries || 0,
+      consensusReached: live.consensusReached || 0,
+      onChainRecords: live.onChainRecords || 0,
+      avgConfidence: live.avgConfidence || 0,
       status: live.status || 'online',
     };
   },
@@ -154,12 +154,12 @@ export const api = {
   /** Recent scans feed */
   getRecentScans: (limit = 10) => get<RecentScan[]>(`/recent-scans?limit=${limit}`),
 
-  /** Patrol scan log — stacked on historical baseline */
+  /** Patrol scan log — live data only */
   getPatrolLog: async (limit = 20) => {
     const data = await get<{ total: number; records: PatrolRecord[] } | PatrolRecord[]>(`/patrol-log?limit=${limit}`).catch(() => ([] as PatrolRecord[]));
     const records = Array.isArray(data) ? data : (data.records || []);
     const liveTotal = Array.isArray(data) ? data.length : (data.total || 0);
-    return { total: liveTotal + BASELINE_STATS.patrolQueries, records };
+    return { total: liveTotal, records };
   },
 
   /** Patrol status */
@@ -175,14 +175,12 @@ export const api = {
   getTreasury: async () => {
     try {
       const data = await get<TreasuryData>('/treasury');
-      // If backend returns XLayer data, override with Arc
-      if (data.network !== 'arc-testnet') throw new Error('not arc');
       return data;
     } catch {
       return {
-        treasury: { address: ARC_TREASURY.address, balance: ARC_TREASURY.balance, explorer: ARC_TREASURY.explorer },
-        funding: { address: '0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb', balance: '0.17', explorer: 'https://testnet.arcscan.app/address/0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb' },
-        stats: { queries: BASELINE_STATS.queries, patrolQueries: BASELINE_STATS.patrolQueries, consensusReached: BASELINE_STATS.consensusReached, onChainRecords: BASELINE_STATS.onChainRecords, avgConfidence: BASELINE_STATS.avgConfidence },
+        treasury: { address: ARC_TREASURY.address, balance: '0', explorer: ARC_TREASURY.explorer },
+        funding: { address: '0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb', balance: '0', explorer: 'https://testnet.arcscan.app/address/0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb' },
+        stats: { queries: 0, patrolQueries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0 },
         network: 'arc-testnet',
       } as TreasuryData;
     }
@@ -191,22 +189,21 @@ export const api = {
   /** Agent payment stats */
   getAgentPayments: () => get<AgentPaymentData>('/agent-payments'),
 
-  /** Wallet pool stats — includes historical user count */
+  /** Wallet pool stats — live data only */
   getPoolStats: async () => {
     const live = await get<PoolData>('/wallet/pool-stats').catch(() => ({ total: 0, assigned: 0, available: 0 } as PoolData));
     return {
-      total: (live.total || 0) + 380,     // 380 baseline pool + live
-      assigned: (live.assigned || 0) + 335, // 335 historical users + live
-      available: (live.available || 0) + 45, // ~45 left from historical allocation
+      total: live.total || 0,
+      assigned: live.assigned || 0,
+      available: live.available || 0,
     };
   },
 
-  /** USDC balance (Arc testnet, 0.10 USDC seed) */
+  /** USDC balance — live from chain */
   getBalance: async (wallet: string) => {
     try {
       const data = await get<{ wallet: string; balance: string }>(`/balance/${wallet}`);
-      // Backend returns inflated balances — cap at 0.10 for testnet
-      return { wallet: data.wallet || wallet, balance: '0.10' };
+      return { wallet: data.wallet || wallet, balance: data.balance || '0' };
     } catch {
       return { wallet, balance: '0.10' };
     }

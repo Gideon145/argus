@@ -1,8 +1,8 @@
 [build]
-builder = "dockerfile"
+builder = "nixpacks"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "npm run start-web"
 healthcheckPath = "/health"
 
 [service]

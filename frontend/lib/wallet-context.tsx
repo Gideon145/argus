@@ -31,20 +31,22 @@ export function useWallet(): WalletContextType {
   return ctx;
 }
 
-/** Wait for MetaMask injection (up to 3s) */
+/** Wait for MetaMask injection (up to 5s) */
 async function getEthereum(): Promise<any> {
   const w = window as any;
-  if (w.ethereum) return w.ethereum;
+  // Check for MetaMask specifically (some browsers inject other ethereum providers)
+  if (w.ethereum?.isMetaMask) return w.ethereum;
   if (w.ethereum?.providers?.length) {
     const mm = w.ethereum.providers.find((p: any) => p.isMetaMask);
-    return mm || w.ethereum.providers[0];
+    if (mm) return mm;
   }
-  for (let i = 0; i < 30; i++) {
+  // Wait for late injection
+  for (let i = 0; i < 50; i++) {
     await new Promise(r => setTimeout(r, 100));
-    if (w.ethereum) return w.ethereum;
+    if (w.ethereum?.isMetaMask) return w.ethereum;
     if (w.ethereum?.providers?.length) {
       const mm = w.ethereum.providers.find((p: any) => p.isMetaMask);
-      return mm || w.ethereum.providers[0];
+      if (mm) return mm;
     }
   }
   return null;
@@ -113,21 +115,25 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     if (!eth) {
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       if (isMobile) {
-        const ok = confirm('To connect your wallet, open this site in the MetaMask app.\n\nTap OK to open MetaMask now.');
+        const ok = confirm('Open this site in the MetaMask app to connect your wallet.\n\nTap OK to open MetaMask.');
         if (ok) window.location.href = 'https://metamask.app.link/dapp/argusarc.xyz';
       } else {
-        alert('No wallet found. Install MetaMask or Rainbow to use Argus.');
+        alert('MetaMask not detected. Please install MetaMask (metamask.io) and refresh the page.');
       }
       return;
     }
 
     try {
+      // This triggers the MetaMask popup if not yet authorized.
+      // If already authorized, returns accounts silently — that's normal MetaMask behavior.
       const accounts = await eth.request({ method: 'eth_requestAccounts' });
-      if (!accounts?.[0]) { alert('No account selected.'); return; }
+      if (!accounts?.[0]) { alert('No account selected in MetaMask.'); return; }
       const addr = accounts[0].toLowerCase();
       setAddress(addr);
       setIsCircle(false);
+      setCircleUserId(null);
       localStorage.setItem('argus_wallet_type', 'metamask');
+      localStorage.removeItem('argus_circle_uid');
 
       // Ensure Arc testnet
       const currentChain = await eth.request({ method: 'eth_chainId' });
@@ -151,10 +157,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       }
 
       await fetchBalance(addr);
+      // Auto-fund only if balance is below threshold (funding.ts handles this)
       await autoFund(addr);
     } catch (e: any) {
-      if (e.code === 4001) alert('Connection rejected.');
-      else if (e.code === -32002) alert('MetaMask is already processing a request.');
+      if (e.code === 4001) alert('Connection rejected in MetaMask.');
+      else if (e.code === -32002) alert('MetaMask is already processing a request. Check the MetaMask extension.');
       else alert('Wallet connection failed: ' + (e.message || 'Unknown error'));
     }
   }, [fetchBalance, autoFund]);

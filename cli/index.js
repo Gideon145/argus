@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const crypto = require('crypto');
-const API = 'argus-agent-production-ab97.up.railway.app';
+const API = process.env.ARGUS_API_URL || 'argus-web-backend-production.up.railway.app';
 
 // ─── Config ──────────────────────────────────────────────
 
@@ -65,7 +65,7 @@ async function ensureWallet() {
   saveConfig(cfg);
 
   process.stderr.write(`  Wallet created: ${wallet.address.slice(0, 10)}...\n`);
-  process.stderr.write(`  Funded with 0.50 test USDC (one-time)\n\n`);
+  process.stderr.write(`  Funded with 0.10 test USDC (one-time)\n\n`);
 
   return cfg;
 }

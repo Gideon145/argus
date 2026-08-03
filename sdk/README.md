@@ -1,6 +1,6 @@
 # @ogxavier/argus-sdk
 
-TypeScript SDK for [Argus](https://argusarc.xyz) — Arc's multi-agent security consensus oracle.
+TypeScript SDK for [Argus](https://argusarc.dev) — Arc's multi-agent security consensus oracle.
 
 Three AI agents (DeepSeek-V3, Claude Sonnet 4.5, and a deterministic rules engine) independently audit smart contracts and stake real USDC on every verdict. This SDK lets any TypeScript/JavaScript app call Argus in one line.
 
@@ -23,7 +23,7 @@ console.log(result.agents);          // per-agent reasoning + confidence
 
 // Get live stats
 const stats = await getStats();
-console.log(stats.queries);  // 1421
+console.log(stats.queries);  // 1504
 
 // Get ELO leaderboard
 const { agents } = await getElo();

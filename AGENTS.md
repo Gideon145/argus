@@ -39,7 +39,7 @@ bash verify.sh
 | `agent/src/payments/agentPayments.ts` | Agent-to-agent nanopayments (RFB 3) |
 | `agent/src/payments/chainElo.ts` | On-chain ELO via ArgusOracle.sol |
 | `agent/src/payments/unifiedBalance.ts` | App Kit Unified Balance (Circle SDK) |
-| `agent/src/wallets/funding.ts` | Auto-funding wallet — sends $0.50 test USDC on connect |
+| `agent/src/wallets/funding.ts` | Auto-funding wallet — sends $0.10 test USDC on connect |
 | `agent/src/wallets/precreate.ts` | Circle pre-create wallet pool — instant onboarding |
 | `agent/src/gateway.ts` | Gateway x402 payment processing |
 | `frontend/app/page.tsx` | Main scan UI |
@@ -54,18 +54,18 @@ bash verify.sh
 
 ```bash
 # Scan a token (free debug endpoint)
-curl -X POST https://argus-agent-production-ab97.up.railway.app/debug/scan \
+curl -X POST https://argus-web-backend-production.up.railway.app/debug/scan \
   -H "Content-Type: application/json" \
   -d '{"contractAddress":"0xADDRESS","chain":"arc","threshold":2}'
 
 # Check ELO reputation
-curl https://argus-agent-production-ab97.up.railway.app/elo
+curl https://argus-web-backend-production.up.railway.app/elo
 
 # View agent payment history
-curl https://argus-agent-production-ab97.up.railway.app/agent-payments
+curl https://argus-web-backend-production.up.railway.app/agent-payments
 
 # Get live stats
-curl https://argus-agent-production-ab97.up.railway.app/stats
+curl https://argus-web-backend-production.up.railway.app/stats
 ```
 
 ### Add a new agent
@@ -125,7 +125,7 @@ bash verify.sh
 
 ## Deploying
 
-- **Agent (Railway):** `npx railway up --service argus-agent` from repo root. Uses Dockerfile.
+- **Agent (Railway):** `cd agent && npx railway up --service argus-web-backend`. Uses Nixpacks builder.
 - **Frontend (Vercel):** Auto-deploys on push to `master`. Force deploy: `cd frontend && npx vercel --prod --yes`
 
 ---

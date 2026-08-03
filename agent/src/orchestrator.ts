@@ -9,8 +9,50 @@ import { processPayment } from './gateway';
 import { store } from './store';
 import { Logger } from './logger';
 import { ContractData } from './dataProvider';
+import { createWalletClient, http, parseEther } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
 
 export { ConsensusResult } from './consensus';
+
+/** Send $0.01 USDC to treasury on-chain for every scan */
+async function sendScanPaymentToTreasury(
+  _user: string,
+  queryId: string,
+  logger: Logger
+): Promise<string | null> {
+  const fundingKey = process.env.FUNDING_WALLET_PRIVATE_KEY;
+  if (!fundingKey || fundingKey === '0x') {
+    // No funding key — return demo settlement ID
+    return null;
+  }
+  try {
+    const account = privateKeyToAccount(fundingKey as `0x${string}`);
+    const treasuryAddr = (process.env.TREASURY_ADDRESS || '0x0699a029e2e05EC88d6418EC744232702Cf77d81') as `0x${string}`;
+    const rpcUrl = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc.network';
+    
+    const walletClient = createWalletClient({
+      account,
+      chain: {
+        id: 5042002,
+        name: 'Arc Testnet',
+        nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+        rpcUrls: { default: { http: [rpcUrl] } },
+      },
+      transport: http(rpcUrl),
+    });
+
+    const txHash = await walletClient.sendTransaction({
+      to: treasuryAddr,
+      value: parseEther('0.01'), // 0.01 USDC native transfer on Arc
+    });
+    
+    logger.info(`[Treasury] $0.01 USDC → treasury (${txHash.slice(0,12)}...) for ${queryId}`);
+    return txHash;
+  } catch (e: any) {
+    logger.warn(`[Treasury] Payment failed: ${e.message?.slice(0,80)}`);
+    return null;
+  }
+}
 
 export interface AgentConfig {
   arcRpc: string;
@@ -22,6 +64,7 @@ export interface QueryRequest {
   contractAddress: string;
   chain: string;
   user: `0x${string}`;
+  isPatrol?: boolean; // when true, skip recordScan (patrol handles its own recording)
 }
 
 export interface Verdict {
@@ -29,6 +72,8 @@ export interface Verdict {
   verdict: 'SAFE' | 'RISKY' | 'SCAM' | 'INSUFFICIENT_DATA';
   confidence: number;
   reasoning: string;
+  riskScore?: number;
+  riskBreakdown?: string;
   stake: string; // USDC in microusd
 }
 
@@ -60,10 +105,26 @@ export class Orchestrator {
     const queryId = `query-${Date.now()}-${this.queryCount}`;
 
     // Cache check — same address, instant return, zero API cost
+    // BUT still record a history entry so every scan is tracked (user scans only)
     const cacheKey = `${req.contractAddress.toLowerCase()}:${consensusThreshold}`;
     if (this.scanCache.has(cacheKey)) {
       this.logger.info(`Cache hit for ${cacheKey} — returning cached result`);
-      return this.scanCache.get(cacheKey)!;
+      const cached = this.scanCache.get(cacheKey)!;
+      if (!req.isPatrol) {
+        store.recordScan({
+          address: req.contractAddress,
+          verdict: cached.finalVerdict,
+          consensus: `${cached.agreementCount}/${cached.totalAgents}`,
+          confidence: Math.round(cached.agentVerdicts.reduce((s, v) => s + v.confidence, 0) / cached.agentVerdicts.length),
+          time: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        }, cached.consensusReached);
+        store.recordRevenue('0.01', queryId);
+        // Send real $0.01 to treasury even on cache hit — every scan settles on-chain
+        const paymentTx = await sendScanPaymentToTreasury(req.user, queryId, this.logger);
+        if (paymentTx) cached.settlementBatchId = paymentTx;
+      }
+      this.queryCount++;
+      return cached;
     }
 
     // Step 1: Process payment ($0.01 USDC)
@@ -105,6 +166,12 @@ export class Orchestrator {
       this.consensusWins++;
     }
 
+    // Step 4.5: Send $0.01 USDC to treasury (real on-chain transfer, every scan)
+    const userPaymentTx = await sendScanPaymentToTreasury(req.user, queryId, this.logger);
+    if (userPaymentTx) {
+      result.settlementBatchId = userPaymentTx; // Replace batch ID with real TX hash
+    }
+
     // Step 5: Update ELO reputation (returns real on-chain TX hashes)
     const eloTxHashes = await updateReputation(verdicts, result);
     result.eloTxHashes = eloTxHashes;
@@ -132,15 +199,19 @@ export class Orchestrator {
     // Cache result to avoid repeat API costs
     this.scanCache.set(cacheKey, result);
 
-    // Persist to file store
+    // Persist to file store (skip for patrol — patrol.ts handles its own recording)
     const avgConf = Math.round(result.agentVerdicts.reduce((sum, v) => sum + v.confidence, 0) / result.agentVerdicts.length);
-    store.recordScan({
-      address: req.contractAddress,
-      verdict: result.finalVerdict,
-      consensus: `${result.agreementCount}/${result.totalAgents}`,
-      confidence: avgConf,
-      time: new Date().toISOString().replace('T', ' ').slice(0, 19),
-    }, result.consensusReached);
+    if (!req.isPatrol) {
+      store.recordScan({
+        address: req.contractAddress,
+        verdict: result.finalVerdict,
+        consensus: `${result.agreementCount}/${result.totalAgents}`,
+        confidence: avgConf,
+        time: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      }, result.consensusReached);
+      // Track scan revenue: $0.01 per scan (user scans only, not patrol)
+      store.recordRevenue('0.01', queryId);
+    }
 
     return result;
   }

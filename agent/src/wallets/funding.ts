@@ -11,8 +11,10 @@
  * Use eth_getBalance and native transfers, NOT ERC-20 contract calls.
  */
 
-import { createWalletClient, createPublicClient, http, parseEther, formatEther } from 'viem';
+import { createWalletClient, http, parseEther, formatEther } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // ── Config ──────────────────────────────────────────────────────────────────
 const ARC_TESTNET_CHAIN_ID = 5042002;
@@ -22,8 +24,11 @@ function getRpcUrl(): string {
 }
 
 const FUNDING_KEY = process.env.FUNDING_WALLET_PRIVATE_KEY || '';
-const FUNDING_AMOUNT = '0.5'; // $0.50 test USDC per new user (50 scans at $0.01 each)
+const FUNDING_AMOUNT = '0.10'; // $0.10 test USDC per new user (10 scans at $0.01 each)
 const MIN_BALANCE_THRESHOLD = '0.01'; // Only fund if user has < $0.01 USDC
+
+const DATA_DIR = process.env.ARGUS_DATA_DIR || path.join(process.cwd(), 'data');
+const FUNDED_FILE = path.join(DATA_DIR, 'funded_wallets.json');
 
 const chain = {
   id: ARC_TESTNET_CHAIN_ID,
@@ -31,6 +36,52 @@ const chain = {
   nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
   rpcUrls: { default: { http: [getRpcUrl()] } },
 } as const;
+
+// ── Funded-wallet tracking (prevents double-claims) ────────────────────────
+interface FundedRecord {
+  wallet: string;
+  amount: string;
+  txHash: string;
+  timestamp: string;
+  status: 'pending' | 'confirmed' | 'failed';
+}
+
+function loadFundedWallets(): FundedRecord[] {
+  try {
+    if (fs.existsSync(FUNDED_FILE)) {
+      return JSON.parse(fs.readFileSync(FUNDED_FILE, 'utf8'));
+    }
+  } catch {}
+  return [];
+}
+
+function saveFundedWallets(records: FundedRecord[]): void {
+  const dir = path.dirname(FUNDED_FILE);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(FUNDED_FILE, JSON.stringify(records, null, 2), 'utf8');
+}
+
+export function getFundedWallets(): FundedRecord[] {
+  return loadFundedWallets();
+}
+
+export function isWalletAlreadyFunded(wallet: string): boolean {
+  const records = loadFundedWallets();
+  return records.some(r => r.wallet.toLowerCase() === wallet.toLowerCase() && r.status !== 'failed');
+}
+
+export function recordFunding(wallet: string, amount: string, txHash: string, status: 'pending' | 'confirmed' | 'failed'): void {
+  const records = loadFundedWallets();
+  records.push({
+    wallet: wallet.toLowerCase(),
+    amount,
+    txHash,
+    timestamp: new Date().toISOString(),
+    status,
+  });
+  saveFundedWallets(records);
+  console.log(`[Funding] Recorded ${status}: ${wallet.slice(0, 10)}... ${amount} USDC — ${txHash}`);
+}
 
 /**
  * Get native USDC balance for an address (Arc native gas token = USDC, 18 decimals)
@@ -70,12 +121,26 @@ export async function getUSDCBalance(address: `0x${string}`): Promise<string> {
 }
 
 /**
+ * Get live funding wallet balance from chain.
+ */
+export async function getFundingWalletBalance(): Promise<string> {
+  const addr = getFundingWalletAddress();
+  if (addr === 'not-configured' || addr === 'invalid-key') return '0';
+  try {
+    return await getUSDCBalance(addr as `0x${string}`);
+  } catch {
+    return '0';
+  }
+}
+
+/**
  * Send test USDC to a user if their balance is below threshold.
  * Uses native transfer (Arc USDC = native gas token, no ERC-20 contract).
+ * Tracks funded wallets to prevent duplicate claims.
  */
 export async function fundUserIfNeeded(
   userAddress: `0x${string}`
-): Promise<{ funded: boolean; txHash?: string; reason?: string }> {
+): Promise<{ funded: boolean; txHash?: string; reason?: string; amount?: string }> {
   // ── Validate funding wallet ──────────────────────────────────────────────
   if (!FUNDING_KEY || FUNDING_KEY === '0x') {
     return { funded: false, reason: 'Funding wallet not configured (set FUNDING_WALLET_PRIVATE_KEY)' };
@@ -84,9 +149,15 @@ export async function fundUserIfNeeded(
   const fundingAccount = privateKeyToAccount(FUNDING_KEY as `0x${string}`);
   const fundingAddress = fundingAccount.address;
 
+  // ── Check if already funded ──────────────────────────────────────────────
+  if (isWalletAlreadyFunded(userAddress)) {
+    console.log(`[Funding] ${userAddress.slice(0, 10)}... already funded — skipping`);
+    return { funded: false, reason: 'Wallet already received onboarding funds. Each wallet gets funded once.' };
+  }
+
   // ── Check user's current USDC balance ────────────────────────────────────
   const userBalance = await getUSDCBalance(userAddress);
-  console.log(`[Funding] User ${userAddress.slice(0, 8)}... balance: $${parseFloat(userBalance).toFixed(2)} USDC`);
+  console.log(`[Funding] User ${userAddress.slice(0, 8)}... balance: $${parseFloat(userBalance).toFixed(4)} USDC`);
 
   if (parseFloat(userBalance) >= parseFloat(MIN_BALANCE_THRESHOLD)) {
     return { funded: false, reason: `User already has $${parseFloat(userBalance).toFixed(2)} USDC (threshold: $${MIN_BALANCE_THRESHOLD})` };
@@ -112,17 +183,25 @@ export async function fundUserIfNeeded(
     });
 
     console.log(`[Funding] Sent $${FUNDING_AMOUNT} USDC to ${userAddress.slice(0, 8)}... — ${txHash}`);
-    return { funded: true, txHash };
+    recordFunding(userAddress, FUNDING_AMOUNT, txHash, 'confirmed');
+    return { funded: true, txHash, amount: FUNDING_AMOUNT };
   } catch (e: any) {
     console.error('[Funding] Transfer failed:', e.message);
+    recordFunding(userAddress, FUNDING_AMOUNT, 'failed', 'failed');
     return { funded: false, reason: `Transfer failed: ${e.message}` };
   }
 }
 
 /**
- * Get funding wallet address (for display/admin)
+ * Get funding wallet address (for display/admin).
+ * Uses FUNDING_WALLET_ADDRESS env var if set (display-only, no private key needed),
+ * otherwise derives from FUNDING_WALLET_PRIVATE_KEY.
  */
 export function getFundingWalletAddress(): string {
+  // Explicit address override (for display when private key is not available)
+  if (process.env.FUNDING_WALLET_ADDRESS && /^0x[a-fA-F0-9]{40}$/.test(process.env.FUNDING_WALLET_ADDRESS)) {
+    return process.env.FUNDING_WALLET_ADDRESS;
+  }
   if (!FUNDING_KEY || FUNDING_KEY === '0x') return 'not-configured';
   try {
     return privateKeyToAccount(FUNDING_KEY as `0x${string}`).address;

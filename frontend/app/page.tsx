@@ -22,7 +22,7 @@ interface RecentScan {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { isConnected, address: walletAddress, isCircle, circleUserId, sendPayment } = useWallet();
+  const { isConnected, address: walletAddress, balance, isCircle, circleUserId, sendPayment } = useWallet();
 
   const [inputAddress, setInputAddress] = useState('');
   const [error, setError] = useState('');
@@ -147,14 +147,22 @@ export default function Dashboard() {
       let txHash: string | null = null;
 
       if (!isCircle) {
-        addLog('Processing $0.01 USDC security fee via MetaMask...', 'info');
-        try {
-          txHash = await sendPayment();
-          addLog(`Payment confirmed: ${formatAddress(txHash)}`, 'success');
-        } catch (payErr: any) {
-          addLog(`Payment failed: ${payErr.message || payErr}`, 'error');
-          setLoading(false);
-          return;
+        // MetaMask user — try to pay, but fall back to server-side if no balance
+        const hasBalance = parseFloat(balance) >= 0.01;
+        if (hasBalance) {
+          addLog('Processing $0.01 USDC security fee via MetaMask...', 'info');
+          try {
+            txHash = await sendPayment();
+            addLog(`Payment confirmed: ${formatAddress(txHash)}`, 'success');
+          } catch (payErr: any) {
+            addLog(`Payment failed: ${payErr.message || payErr}`, 'error');
+            setLoading(false);
+            return;
+          }
+        } else {
+          // No USDC balance — use server-side payment (Circle fallback)
+          addLog('Balance too low for MetaMask payment — using server-side payment...', 'info');
+          txHash = 'server-side';
         }
       } else {
         addLog('Processing Circle pre-funded payment...', 'info');
@@ -170,13 +178,14 @@ export default function Dashboard() {
       await new Promise(r => setTimeout(r, 500));
       addLog('Computing final security consensus score...', 'info');
 
-      // Trigger actual scan — MetaMask uses scanWithPayment (attaches real tx proof),
-      // Circle uses /scan/circle (payment handled server-side).
+      // Trigger actual scan
       let scanResponse;
       if (isCircle && circleUserId) {
         scanResponse = await api.scanCircle(circleUserId, cleanAddress);
+      } else if (!isCircle && txHash === 'server-side') {
+        // MetaMask user without balance — use generic scan endpoint
+        scanResponse = await api.scan(cleanAddress);
       } else {
-        // txHash is guaranteed non-null here (MetaMask path only reaches here after payment)
         scanResponse = await api.scanWithPayment(cleanAddress, txHash!);
       }
 

@@ -1,6 +1,6 @@
 import type { EloAgent, StatsData, TreasuryData, AgentPaymentData, PatrolRecord, PatrolStatus } from './types';
 
-const DEFAULT_API = 'https://argus-agent-production-ab97.up.railway.app';
+const DEFAULT_API = 'https://argus-web-backend-production.up.railway.app';
 const DEFAULT_TIMEOUT = 30000;
 
 // Shared with scan.ts — set via configure() from scan.ts

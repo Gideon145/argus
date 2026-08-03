@@ -43,7 +43,7 @@ flowchart TB
 
 ### 1. Frontend (`frontend/`)
 - **Framework:** Next.js 15, deployed on Vercel
-- **Domain:** argusarc.xyz (custom domain + SSL)
+- **Domain:** argusarc.dev (primary) + argusarc.xyz (alt), both with SSL
 - **Key features:**
   - Dark-themed premium UI with Framer Motion animations
   - Real-time scan progress with per-agent check indicators
@@ -228,7 +228,7 @@ Fire-and-forget — doesn't block scan response.
 
 | Component | Platform | URL |
 |-----------|----------|-----|
-| Frontend | Vercel | https://argusarc.xyz |
-| Agent | Railway | https://argus-agent-production-ab97.up.railway.app |
+| Frontend | Vercel | https://argusarc.dev |
+| Agent | Railway | https://argus-web-backend-production.up.railway.app |
 | Contracts | Arc Testnet | Chain 5042002 |
 | Volume | Railway | /argus-data (4.9 GB) |

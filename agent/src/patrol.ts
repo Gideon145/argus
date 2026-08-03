@@ -45,18 +45,17 @@ let patrolCount = 0;
 let patrolTimer: ReturnType<typeof setInterval> | null = null;
 
 function pickNextAddress(): string {
+  patrolIndex++;
   // Every 3rd patrol, scan a recent user-scanned address (mirrors community activity)
   if (patrolIndex % 3 === 0) {
     const history = store.getHistory();
     if (history.length > 0) {
-      // Pick a random address from recent scans (not the most recent — spread it out)
       const idx = Math.floor(Math.random() * Math.min(history.length, 10));
       return history[idx].address;
     }
   }
   // Otherwise rotate through the base watchlist
   const addr = PATROL_WATCHLIST[patrolIndex % PATROL_WATCHLIST.length];
-  patrolIndex++;
   return addr;
 }
 
@@ -74,6 +73,7 @@ export async function runPatrolCycle(
       contractAddress: address,
       chain: 'eip155:5042002', // Arc testnet
       user: (process.env.PATROL_WALLET || process.env.TREASURY_ADDRESS || '0x0699a029e2e05EC88d6418EC744232702Cf77d81') as `0x${string}`,
+      isPatrol: true, // Don't double-count in user scan stats
     };
 
     const result = await orchestrator.processQuery(req, 2);
@@ -115,13 +115,25 @@ export function startPatrol(
 
   logger.info(`[Patrol] Starting autonomous patrol every ${Math.round(intervalMs / 1000)}s`);
 
-  // Run first patrol after 30s (let the server settle), then on interval
-  setTimeout(() => {
-    runPatrolCycle(orchestrator, logger);
+  // Seed patrol log: scan ALL watchlist addresses on startup (5s apart)
+  const seedPatrol = async () => {
+    logger.info(`[Patrol] Seeding patrol log with ${PATROL_WATCHLIST.length} watchlist addresses...`);
+    for (let i = 0; i < PATROL_WATCHLIST.length; i++) {
+      await runPatrolCycle(orchestrator, logger);
+      if (i < PATROL_WATCHLIST.length - 1) {
+        await new Promise(r => setTimeout(r, 5000)); // 5s gap between scans
+      }
+    }
+    logger.info(`[Patrol] Seed complete — ${PATROL_WATCHLIST.length} addresses scanned`);
+  };
+
+  // Run seed after 10s (let the server settle), then start regular interval
+  setTimeout(async () => {
+    await seedPatrol();
     patrolTimer = setInterval(() => {
       runPatrolCycle(orchestrator, logger);
     }, intervalMs);
-  }, 30_000);
+  }, 10_000);
 }
 
 export function stopPatrol(): void {

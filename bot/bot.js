@@ -10,7 +10,7 @@ const https = require('https');
 const crypto = require('crypto');
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
-const API = 'argus-agent-production-ab97.up.railway.app';
+const API = 'argus-web-backend-production.up.railway.app';
 
 let bot;
 if (!TOKEN) {

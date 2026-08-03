@@ -6,7 +6,7 @@
 
 set -e
 
-AGENT_URL="${ARGUS_AGENT_URL:-https://argus-agent-production-ab97.up.railway.app}"
+AGENT_URL="${ARGUS_AGENT_URL:-https://argus-web-backend-production.up.railway.app}"
 PASS=0
 FAIL=0
 TOTAL=0
