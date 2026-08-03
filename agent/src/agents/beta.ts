@@ -184,8 +184,17 @@ export const betaAgent = {
   },
 
   fallbackAnalyze(req: QueryRequest, contractData?: ContractData): Verdict {
+    const cd = contractData; // local ref for null safety
     const address = req.contractAddress.toLowerCase();
     const known = lookupKnown(address);
+    
+    // ── Build token identity ──
+    const tokenLabel = cd?.tokenName
+      ? `${cd.tokenName}${cd.tokenSymbol ? ` (${cd.tokenSymbol})` : ''}`
+      : known?.note
+        ? `Known: ${known.note}`
+        : `Contract ${address.slice(0, 10)}...`;
+    
     if (known) {
       const riskScore = known.verdict === 'SCAM' ? 80 : known.verdict === 'RISKY' ? 50 : 12;
       return {
@@ -196,52 +205,102 @@ export const betaAgent = {
         riskBreakdown: `holder:${known.verdict === 'SCAM' ? 25 : 10}, liquidity:${known.verdict === 'RISKY' ? 20 : 5}, volume:${known.verdict === 'SCAM' ? 20 : 2}, tax:${known.verdict === 'SCAM' ? 15 : 0}, manipulation:${known.verdict === 'RISKY' ? 10 : 0}`,
         reasoning: [
           `EXECUTIVE SUMMARY:`,
-          `Recognized token: ${known.note}. Tokenomics analysis based on known distribution and market data.`,
+          `Agent-β (tokenomics) analyzed ${tokenLabel}. ${known.verdict === 'SAFE' ? 'Tokenomics are sound with no manipulation indicators.' : known.verdict === 'RISKY' ? 'Tokenomics show moderate risk — verify liquidity and distribution.' : 'CRITICAL tokenomics red flags — likely value extraction scheme.'}`,
           ``,
           `RISK SCORE BREAKDOWN:`,
           `• Holder Concentration: +${known.verdict === 'SCAM' ? 25 : 10}/100 — ${known.verdict === 'SCAM' ? 'Extreme whale concentration' : 'Relatively distributed holdings'}`,
           `• Liquidity Depth: +${known.verdict === 'RISKY' ? 20 : 5}/100 — ${known.verdict === 'RISKY' ? 'Liquidity may not be fully locked' : 'Adequate on-chain liquidity'}`,
           `• Volume Patterns: +${known.verdict === 'SCAM' ? 20 : 2}/100 — ${known.verdict === 'SCAM' ? 'Suspicious trading volume patterns' : 'Organic trading patterns'}`,
-          `• Buy/Sell Tax Analysis: +${known.verdict === 'SCAM' ? 15 : 0}/100 — ${known.verdict === 'SCAM' ? 'Hidden transfer taxes detected' : 'Standard transfer mechanism'}`,
-          `• Market Manipulation Risk: +${known.verdict === 'RISKY' ? 10 : 0}/100 — ${known.verdict === 'RISKY' ? 'Possible manipulation indicators' : 'No manipulation patterns'}`,
+          `• Buy/Sell Tax: +${known.verdict === 'SCAM' ? 15 : 0}/100 — ${known.verdict === 'SCAM' ? 'Hidden transfer taxes detected' : 'Standard transfer mechanism'}`,
+          `• Market Manipulation: +${known.verdict === 'RISKY' ? 10 : 0}/100 — ${known.verdict === 'RISKY' ? 'Possible manipulation indicators' : 'No manipulation patterns'}`,
           `Total: ${riskScore}/100`,
           ``,
           `TECHNICAL FINDINGS:`,
+          `• Token: ${tokenLabel} (verified in database)`,
           `• Holder Distribution: ${known.verdict === 'SAFE' ? 'Well-distributed across many wallets' : 'Concentrated — few wallets control large percentage'}`,
-          `• Liquidity Analysis: ${known.verdict === 'RISKY' ? 'Verify LP lock status on DEX' : 'Liquidity pool confirmed on DEX'}`,
-          `• Trading Volume: ${known.verdict !== 'SAFE' ? 'Unusual volume spikes or wash trading patterns' : 'Organic, consistent volume'}`,
-          `• Whale Activity: ${known.verdict === 'SCAM' ? 'Whale wallets control majority of supply' : 'No single entity controls >5% supply'}`,
-          `• Fair Launch: ${known.verdict === 'SAFE' ? 'Fair distribution, no presale manipulation' : 'Distribution patterns raise concerns'}`,
+          `• Liquidity: ${known.verdict === 'RISKY' ? 'Verify LP lock status on DEX' : 'Liquidity pool confirmed on DEX'}`,
+          `• Trading: ${known.verdict !== 'SAFE' ? 'Unusual volume spikes or wash trading patterns' : 'Organic, consistent volume'}`,
+          `• Whale Risk: ${known.verdict === 'SCAM' ? 'Whale wallets control majority of supply' : 'No single entity controls >5% supply'}`,
+          `• Launch Fairness: ${known.verdict === 'SAFE' ? 'Fair distribution, no presale manipulation' : 'Distribution patterns raise concerns'}`,
           ``,
           `RECOMMENDATION:`,
-          known.verdict === 'SAFE' ? 'Tokenomics appear sound. Standard due diligence applies.' : known.verdict === 'RISKY' ? 'Economic risks present. Verify liquidity lock and holder distribution before trading.' : 'Severe tokenomics red flags. Do not buy — high probability of value extraction.',
+          known.verdict === 'SAFE' ? `${tokenLabel} tokenomics appear sound. Standard due diligence applies.` : known.verdict === 'RISKY' ? `${tokenLabel} has economic risks. Verify liquidity lock and holder distribution before trading.` : `${tokenLabel} has severe tokenomics red flags. Do not buy — high probability of value extraction.`,
         ].join('\n'),
         stake: '50000',
       };
     }
-    if (contractData?.isContract) {
-      const f: string[] = [];
-      let r = 0;
-      const isLegit = contractData.hasSource && contractData.contractName && contractData.contractName.length > 0;
-      if (isLegit) { f.push(`Verified: ${contractData.contractName}`); r -= 12; }
-      if (contractData.owner && contractData.owner !== '0x0000000000000000000000000000000000000000') {
-        if (!isLegit) { f.push(`Unverified owner: ${contractData.owner.slice(0,8)}...`); r += 8; }
-        else { f.push(`Owner: ${contractData.owner.slice(0,8)}...`); }
-      } else if (contractData.owner === '0x0000000000000000000000000000000000000000') { f.push('Renounced'); r -= 3; }
-      if (contractData.totalSupply) { try { const s = BigInt(contractData.totalSupply); if (s > BigInt('1000000000000000000000000000000')) { f.push('Supply > 1T'); r += 10; } else if (s < BigInt('1000000')) { f.push('Low supply'); r += 5; } } catch {} }
-      if (contractData.decimals !== null && contractData.decimals > 18) { f.push('Decimals > 18'); r += 8; }
-      const v = r >= 20 ? 'SCAM' as const : r >= 8 ? 'RISKY' as const : 'SAFE' as const;
-      const detail = contractData.contractName ? `Token: ${contractData.contractName}, ` : '';
-      return { agent: 'Agent-β', verdict: v, confidence: Math.min(80, 45 + r), reasoning: `[β] ${detail}Supply=${contractData.totalSupply?.slice(0,12) || '?'}, Decimals=${contractData.decimals ?? '?'}. ${f.join('; ') || 'Tokenomics appear normal'}.`, stake: '50000' };
+    
+    // ── On-chain data enrichment ──
+    let holderScore = 5, liquidityScore = 5, volumeScore = 0, taxScore = 0, manipScore = 0;
+    const finds: string[] = [];
+    
+    if (contractData?.isProxy) {
+      finds.push('⚠️ Proxy contract — tokenomics can change via upgrade');
+      manipScore += 15;
     }
-    const flags: string[] = [];
-    let riskScore = 0;
+    if (contractData?.owner && contractData.owner !== '0x0000000000000000000000000000000000000000') {
+      holderScore += 5;
+      const concFlag = contractData.flags.find(f => f.includes('>90%') || f.includes('majority'));
+      if (concFlag) { holderScore += 20; finds.push(concFlag); }
+    } else if (contractData?.owner === '0x0000000000000000000000000000000000000000') {
+      holderScore -= 3; finds.push('Ownership renounced (positive for tokenomics)');
+    }
+    if (contractData?.totalSupply) {
+      try {
+        const s = BigInt(contractData.totalSupply);
+        if (s > BigInt('1000000000000000000000000000000')) { finds.push('Supply > 1T — likely meme token'); holderScore += 8; }
+        else if (s < BigInt('1000000')) { finds.push('Very low supply — illiquid risk'); liquidityScore += 10; }
+      } catch {}
+    }
+    if (cd?.decimals !== null && cd!.decimals > 18) {
+      finds.push('Decimals > 18 — unusual tokenomics'); taxScore += 5;
+    }
+
+    // Address heuristics
     const hexBody = address.slice(2);
     const uniqueChars = new Set(hexBody.slice(0, 20).split('')).size;
-    if (uniqueChars <= 5) { flags.push('Extremely low entropy'); riskScore += 25; }
     const digitCount = hexBody.slice(0, 20).split('').filter((c: string) => '0123456789'.includes(c)).length;
-    if (digitCount > 14) { flags.push('Numeric-heavy pattern'); riskScore += 20; }
-    const verdict = riskScore >= 35 ? 'SCAM' as const : riskScore >= 18 ? 'RISKY' as const : 'SAFE' as const;
-    return { agent: 'Agent-β', verdict, confidence: Math.min(80, 35 + (flags.length > 0 ? 15 : 10)), reasoning: flags.length > 0 ? `${flags.join('; ')}.` : 'No tokenomic red flags from address analysis.', stake: '50000' };
+    if (uniqueChars <= 5) { finds.push('Extremely low entropy address — auto-generated token'); manipScore += 18; }
+    if (digitCount > 14) { finds.push('Numeric-heavy address — factory-deployed pattern'); manipScore += 15; }
+
+    const riskScore = Math.min(100, holderScore + liquidityScore + volumeScore + taxScore + manipScore);
+    const verdict = riskScore >= 40 ? 'SCAM' as const : riskScore >= 18 ? 'RISKY' as const : 'SAFE' as const;
+
+    return {
+      agent: 'Agent-β',
+      verdict,
+      confidence: Math.min(85, 35 + (finds.length > 0 ? 20 : 10)),
+      riskScore,
+      riskBreakdown: `holder:${holderScore}, liquidity:${liquidityScore}, volume:${volumeScore}, tax:${taxScore}, manipulation:${manipScore}`,
+      reasoning: [
+        `EXECUTIVE SUMMARY:`,
+        `Agent-β (tokenomics specialist) analyzed ${tokenLabel}. ${finds.length > 0 ? `${finds.length} tokenomic concerns identified.` : 'No tokenomic red flags from available data.'}${contractData?.isProxy ? ' ⚠️ This is a proxy — tokenomics can be altered by admin.' : ''}`,
+        ``,
+        `RISK SCORE BREAKDOWN:`,
+        `• Holder Concentration: +${holderScore}/100 — ${contractData?.owner && contractData.owner !== '0x0000000000000000000000000000000000000000' ? `Owned by ${contractData.owner.slice(0, 12)}...` : contractData?.owner === '0x0000000000000000000000000000000000000000' ? 'Ownership renounced' : 'Unknown'}${contractData?.totalSupply ? ` — Supply: ${contractData.totalSupply}` : ''}`,
+        `• Liquidity Depth: +${liquidityScore}/100 — ${contractData?.isContract ? 'On-chain contract confirmed; check DEX for LP lock' : 'Verify DEX liquidity independently'}`,
+        `• Volume Patterns: +${volumeScore}/100 — ${volumeScore > 5 ? 'Suspicious patterns possible' : 'No suspicious volume indicators'}`,
+        `• Buy/Sell Tax: +${taxScore}/100 — ${taxScore > 5 ? 'Unusual tokenomics parameters' : 'Standard tokenomics structure'}`,
+        `• Market Manipulation: +${manipScore}/100 — ${manipScore > 10 ? 'Address pattern + proxy risk suggest caution' : 'No manipulation patterns detected'}`,
+        `Total: ${riskScore}/100`,
+        ``,
+        `TECHNICAL FINDINGS:`,
+        `• Token identity: ${tokenLabel}${cd?.decimals !== null ? ` (${cd!.decimals} decimals)` : ''}`,
+        `• Contract type: ${cd?.isProxy ? `⚠️ PROXY (${cd!.proxyType || 'upgradeable'})` : cd?.isContract ? 'Standard contract' : 'Unknown'}`,
+        `• Ownership: ${cd?.owner && cd!.owner !== '0x0000000000000000000000000000000000000000' ? `Controlled by ${cd!.owner.slice(0, 12)}...` : cd?.owner === '0x0000000000000000000000000000000000000000' ? 'Renounced' : 'Unknown'}`,
+        `• Supply: ${cd?.totalSupply || 'Unknown'} — ${cd?.totalSupply ? (BigInt(cd!.totalSupply) > BigInt('1000000000000000000000000000000') ? 'Very large (meme-style)' : BigInt(cd!.totalSupply) < BigInt('1000000') ? 'Very small (illiquid risk)' : 'Normal range') : 'Not available'}`,
+        `• Address entropy: ${uniqueChars} unique hex chars (${uniqueChars <= 5 ? 'LOW — suspicious' : 'Normal'})`,
+        ``,
+        `RECOMMENDATION:`,
+        contractData?.isProxy
+          ? `⚠️ ${tokenLabel} is upgradeable. Tokenomics can be changed by proxy admin. Do not assume current distribution is permanent.`
+          : verdict === 'SAFE'
+            ? `${tokenLabel} tokenomics appear standard. Verify DEX liquidity lock before trading.`
+            : verdict === 'RISKY'
+              ? `${tokenLabel} has ${finds.length} tokenomic concerns. Verify holder distribution and LP lock.`
+              : `${tokenLabel} has severe tokenomic red flags. Avoid trading — high risk of value loss.`,
+      ].join('\n'),
+      stake: '50000',
+    };
   },
 };

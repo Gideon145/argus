@@ -197,6 +197,7 @@ app.post('/wallet/assign', async (req, res) => {
     // Try Circle wallet pool first
     try {
       const entry = await walletPool.assign(userId);
+      if (!entry) return res.status(500).json({ error: 'No wallets available in pool' });
       return res.json({ address: entry.address, walletId: entry.walletId, note: 'assigned' });
     } catch (circleErr: any) {
       // Fallback: use demo wallet pool that persists to file (no Circle API needed)

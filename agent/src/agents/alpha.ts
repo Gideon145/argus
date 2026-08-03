@@ -94,6 +94,7 @@ export const alphaAgent = {
   },
 
   fallbackAnalyze(req: QueryRequest, contractData?: ContractData): Verdict {
+    const cd = contractData; // local ref for null safety
     const address = req.contractAddress.toLowerCase();
     const known = lookupKnown(address);
     if (known) {
@@ -190,46 +191,77 @@ export const alphaAgent = {
         stake: '50000',
       };
     }
-    // No data — heuristic fallback
+    // No data — heuristic fallback with contract data enrichment
     const flags: string[] = [];
     let riskScore = 0;
+    let ownershipScore = 0, mintScore = 0, proxyScore = 0, liquidityScore = 0;
+
+    // ── On-chain data enrichment (always available, even without Etherscan) ──
+    const tokenLabel = contractData?.tokenName
+      ? `${contractData.tokenName}${contractData.tokenSymbol ? ` (${contractData.tokenSymbol})` : ''}`
+      : `Contract ${address.slice(0, 10)}...`;
+    const isOnChain = contractData?.isContract || false;
+
+    // Proxy detection from on-chain
+    if (contractData?.isProxy) {
+      flags.push(`⚠️ PROXY CONTRACT: ${contractData.proxyType || 'upgradeable'}`);
+      riskScore += 30;
+      proxyScore = 30;
+    }
+
+    // Owner concentration
+    if (contractData?.owner && contractData.owner !== '0x0000000000000000000000000000000000000000') {
+      ownershipScore += 8;
+      const concFlag = contractData.flags.find(f => f.includes('>90%') || f.includes('majority'));
+      if (concFlag) { riskScore += 20; ownershipScore += 15; }
+    }
+
+    // Address heuristics
     const hexBody = address.slice(2);
     const uniqueChars = new Set(hexBody.slice(0, 20).split('')).size;
     const digitCount = hexBody.slice(0, 20).split('').filter((c: string) => '0123456789'.includes(c)).length;
     let entropyScore = 0, numericScore = 0;
-    if (uniqueChars <= 6) { flags.push('Low entropy address prefix'); riskScore += 20; entropyScore += 20; }
-    if (digitCount > 14) { flags.push('Numeric-heavy address'); riskScore += 25; numericScore += 25; }
-    const verdict = riskScore >= 40 ? 'SCAM' as const : riskScore >= 20 ? 'RISKY' as const : 'SAFE' as const;
+    if (uniqueChars <= 6) { flags.push('Low entropy address prefix — likely auto-generated'); riskScore += 20; entropyScore += 20; }
+    if (digitCount > 14) { flags.push('Numeric-heavy address — common in factory-deployed contracts'); riskScore += 25; numericScore += 25; }
+
+    const verdict = riskScore >= 50 ? 'SCAM' as const : riskScore >= 20 ? 'RISKY' as const : 'SAFE' as const;
+    const confBase = isOnChain ? 15 : 0; // More confident when we have on-chain data
+
     return {
       agent: 'Agent-α',
       verdict,
-      confidence: Math.min(85, 40 + (flags.length > 0 ? 20 : 10)),
+      confidence: Math.min(85, 40 + confBase + (flags.length > 0 ? 20 : 10)),
       riskScore,
-      riskBreakdown: `ownership:${entropyScore > 0 ? 12 : 5}, mint:${numericScore > 0 ? 15 : 5}, proxy:0, liquidity:0, tax:0, blacklist:0`,
+      riskBreakdown: `ownership:${ownershipScore}, mint:${mintScore}, proxy:${proxyScore}, liquidity:${liquidityScore}, tax:0, blacklist:0`,
       reasoning: [
         `EXECUTIVE SUMMARY:`,
-        `Heuristic address analysis performed. ${flags.length > 0 ? `${flags.length} risk indicators found.` : 'No heuristic red flags detected.'}`,
+        `Agent-α (contract logic) analyzed ${tokenLabel}. ${flags.length > 0 ? `${flags.length} risk indicators found.` : 'No red flags detected in available data.'}${contractData?.isProxy ? ' ⚠️ CRITICAL: This is a proxy contract — implementation can be changed by admin.' : ''}`,
         ``,
         `RISK SCORE BREAKDOWN:`,
-        `• Ownership: +${entropyScore > 0 ? 12 : 5}/100 — ${entropyScore > 0 ? 'Low-entropy address suggests auto-generation' : 'Standard address pattern'}`,
-        `• Mint Capability: +${numericScore > 0 ? 15 : 5}/100 — ${numericScore > 0 ? 'Numeric-heavy pattern common in factory-deployed contracts' : 'Normal address distribution'}`,
-        `• Proxy/Upgradeability: +0/100 — Not determinable from address alone`,
-        `• Liquidity Risk: +0/100 — Not determinable from address alone`,
-        `• Tax/Transfer Restrictions: +0/100 — Not determinable from address alone`,
-        `• Blacklist/Freeze: +0/100 — Not determinable from address alone`,
+        `• Ownership: +${ownershipScore}/100 — ${contractData?.owner && contractData.owner !== '0x0000000000000000000000000000000000000000' ? `Owned by ${contractData.owner.slice(0, 12)}...` : contractData?.owner === '0x0000000000000000000000000000000000000000' ? 'Renounced' : 'Unknown'}`,
+        `• Mint Capability: +${mintScore}/100 — ${mintScore > 10 ? 'Mint function potentially active' : 'No mint function detected'}`,
+        `• Proxy/Upgradeability: +${proxyScore}/100 — ${contractData?.isProxy ? `⚠️ ${contractData.proxyType} — logic can be replaced by admin` : 'No proxy pattern detected'}`,
+        `• Liquidity Risk: +${liquidityScore}/100 — ${isOnChain ? 'On-chain contract verified; check DEX LP lock' : 'Not determinable without on-chain data'}`,
+        `• Tax/Transfer Restrictions: +0/100 — Not determinable without source`,
+        `• Blacklist/Freeze: +0/100 — Not determinable without source`,
         `Total: ${riskScore}/100`,
         ``,
         `TECHNICAL FINDINGS:`,
-        `• Functions detected: Not available (no source verification)`,
-        `• Ownership analysis: Unknown — contract not verified on explorer`,
-        `• Proxy analysis: Not determinable without source`,
-        `• Mint analysis: Not determinable without source`,
-        `• Blacklist analysis: Not determinable without source`,
-        `• Liquidity analysis: Check DEX for liquidity pools`,
-        `• Tax analysis: Not determinable without source`,
+        `• Token: ${tokenLabel}${cd?.decimals !== null ? ` (${cd!.decimals} decimals)` : ''}${cd?.totalSupply ? ` — Supply: ${cd!.totalSupply}` : ''}`,
+        `• Contract type: ${isOnChain ? 'On-chain contract confirmed' : 'Unknown'}`,
+        `• Proxy status: ${cd?.isProxy ? `⚠️ PROXY (${cd!.proxyType}) — UPGRADEABLE` : 'Likely immutable (no EIP-1967 slot)'}`,
+        `• Address entropy: ${uniqueChars} unique hex chars (${uniqueChars <= 6 ? 'LOW — auto-generated pattern' : 'Normal'})`,
+        `• Numeric density: ${digitCount}/20 chars are digits (${digitCount > 14 ? 'HIGH — suspicious' : 'Normal'})`,
+        `• ${isOnChain ? 'On-chain data available — analysis based on live contract state' : 'No on-chain data — heuristic analysis only'}`,
         ``,
         `RECOMMENDATION:`,
-        verdict === 'SAFE' ? 'Address passes heuristic checks. Verify contract on explorer before interacting.' : verdict === 'RISKY' ? 'Heuristic flags detected. Verify contract source and ownership before interacting.' : 'Address pattern suggests high risk. Do not interact without thorough verification.',
+        contractData?.isProxy
+          ? `⚠️ PROXY RISK: ${tokenLabel} is upgradeable. The implementation can change at any time. Verify the proxy admin and check the current implementation before interacting.`
+          : verdict === 'SAFE'
+            ? `${tokenLabel} passes available checks. Verify on explorer before interacting.`
+            : verdict === 'RISKY'
+              ? `${tokenLabel} shows ${flags.length} risk indicators. Verify contract source and ownership.`
+              : `${tokenLabel} has multiple high-risk flags. Do not interact without thorough verification.`,
       ].join('\n'),
       stake: '50000',
     };

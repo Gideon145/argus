@@ -8,6 +8,7 @@
 import { Orchestrator, QueryRequest } from './orchestrator';
 import { Logger } from './logger';
 import { store } from './store';
+import { fetchContractData } from './dataProvider';
 
 /** Tokens the patrol watches.
  *  Priority: recent user-scanned addresses (mirrors community activity),
@@ -76,7 +77,10 @@ export async function runPatrolCycle(
       isPatrol: true, // Don't double-count in user scan stats
     };
 
-    const result = await orchestrator.processQuery(req, 2);
+    const result = await (async () => {
+      const contractData = await fetchContractData(address).catch(() => null);
+      return orchestrator.processQuery(req, 2, contractData || undefined);
+    })();
 
     const record: PatrolRecord = {
       address,
