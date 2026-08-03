@@ -27,6 +27,14 @@ const ARC_RPC = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecant
 const ETHERSCAN_KEY = process.env.ETHERSCAN_API_KEY || '';
 const ETHERSCAN_URL = 'https://api.etherscan.io/v2/api';
 
+// Multi-chain RPC endpoints — tried in order until one connects and finds the contract
+const RPC_ENDPOINTS: { name: string; url: string; chainId: number }[] = [
+  { name: 'Arc Testnet', url: ARC_RPC, chainId: 5042002 },
+  { name: 'Ethereum Mainnet', url: 'https://ethereum-rpc.publicnode.com', chainId: 1 },
+  { name: 'Ethereum Fallback', url: 'https://rpc.ankr.com/eth', chainId: 1 },
+  { name: 'BSC Mainnet', url: 'https://bsc-dataseed.binance.org', chainId: 56 },
+];
+
 let lastCall = 0;
 async function rateLimit() { const e = Date.now() - lastCall; if (e < 250) await new Promise(r => setTimeout(r, 250 - e)); lastCall = Date.now(); }
 
@@ -81,16 +89,13 @@ async function fetchEtherscan(address: string): Promise<{ contractName: string; 
 
 async function detectProxy(provider: ethers.JsonRpcProvider, address: string): Promise<{ isProxy: boolean; proxyType: string | null }> {
   try {
-    // Check EIP-1967 implementation slot
     const implSlot = await Promise.race([
       provider.getStorage(address, PROXY_SLOTS.implementation),
       new Promise<string>((_, r) => setTimeout(() => r('0x0000000000000000000000000000000000000000000000000000000000000000'), 3000))
     ]);
     if (implSlot && implSlot !== '0x0000000000000000000000000000000000000000000000000000000000000000') {
-      // Extract address from slot (last 20 bytes)
       const implAddr = '0x' + implSlot.slice(-40);
       if (implAddr !== '0x0000000000000000000000000000000000000000') {
-        // Check if admin slot also has a value (confirms EIP-1967)
         const adminSlot = await Promise.race([
           provider.getStorage(address, PROXY_SLOTS.admin),
           new Promise<string>((_, r) => setTimeout(() => r('0x'), 2000))
@@ -99,7 +104,6 @@ async function detectProxy(provider: ethers.JsonRpcProvider, address: string): P
         return { isProxy: true, proxyType: hasAdmin ? 'EIP-1967 Transparent' : 'EIP-1967 UUPS' };
       }
     }
-    // Check beacon slot
     const beaconSlot = await Promise.race([
       provider.getStorage(address, PROXY_SLOTS.beacon),
       new Promise<string>((_, r) => setTimeout(() => r('0x'), 2000))
@@ -111,114 +115,102 @@ async function detectProxy(provider: ethers.JsonRpcProvider, address: string): P
   return { isProxy: false, proxyType: null };
 }
 
+// ─── Query a single RPC for full contract metadata ───
+async function queryRpc(address: string, rpcUrl: string, chainName: string): Promise<ContractData | null> {
+  try {
+    const provider = new ethers.JsonRpcProvider(rpcUrl, undefined, { staticNetwork: true });
+    const code = await Promise.race([
+      provider.getCode(address),
+      new Promise<null>((_, r) => setTimeout(() => r(null), 4000))
+    ]);
+    if (!code || code === '0x') return null; // Not a contract on this chain
+
+    const result: ContractData = {
+      chain: chainName, hasSource: false, sourceCode: null, contractName: null,
+      tokenName: null, tokenSymbol: null, owner: null, totalSupply: null,
+      decimals: null, isContract: true, isProxy: false, proxyType: null,
+      hasMintFunction: false, flags: [`${chainName}: contract deployed`],
+    };
+
+    // Fetch ERC-20 metadata
+    try {
+      const erc20 = new ethers.Contract(address, ERC20_ABI, provider);
+      const [nameR, symR, decR, tsR, ownR] = await Promise.allSettled([
+        Promise.race([erc20.name(), new Promise<string>((_, r2) => setTimeout(() => r2(''), 3000))]),
+        Promise.race([erc20.symbol(), new Promise<string>((_, r2) => setTimeout(() => r2(''), 3000))]),
+        Promise.race([erc20.decimals(), new Promise<bigint>((_, r2) => setTimeout(() => r2(18n), 3000))]),
+        Promise.race([erc20.totalSupply(), new Promise<bigint>((_, r2) => setTimeout(() => r2(0n), 3000))]),
+        Promise.race([erc20.owner(), new Promise<string>((_, r2) => setTimeout(() => r2(''), 3000))]),
+      ]);
+      if (nameR.status === 'fulfilled' && nameR.value) result.tokenName = nameR.value;
+      if (symR.status === 'fulfilled' && symR.value) result.tokenSymbol = symR.value;
+      if (decR.status === 'fulfilled') result.decimals = Number(decR.value);
+      if (tsR.status === 'fulfilled') result.totalSupply = tsR.value.toString();
+      if (ownR.status === 'fulfilled' && ownR.value && ownR.value !== '0x0000000000000000000000000000000000000000') {
+        result.owner = ownR.value.toLowerCase();
+      }
+
+      if (result.tokenName) result.flags.push(`Token: ${result.tokenName}${result.tokenSymbol ? ` (${result.tokenSymbol})` : ''}`);
+      if (result.totalSupply) result.flags.push(`Supply: ${result.totalSupply}`);
+      if (result.decimals !== null) result.flags.push(`Decimals: ${result.decimals}`);
+      if (result.owner) result.flags.push(`Owner: ${result.owner.slice(0, 10)}...`);
+
+      // Holder concentration
+      if (result.owner && result.totalSupply && tsR.status === 'fulfilled') {
+        try {
+          const ownerBal = await Promise.race([erc20.balanceOf(result.owner), new Promise<bigint>((_, r2) => setTimeout(() => r2(0n), 3000))]);
+          const ts = BigInt(result.totalSupply);
+          if (ts > 0n && ownerBal > 0n) {
+            const pct = Number((ownerBal * 10000n) / ts) / 100;
+            result.flags.push(`Owner holds ${pct}% of supply`);
+            if (pct > 50) result.flags.push('Owner holds majority supply');
+            if (pct > 90) result.flags.push('Owner holds >90% supply — extreme concentration');
+          }
+        } catch {}
+      }
+    } catch {}
+
+    // Detect proxy
+    try {
+      const proxyInfo = await detectProxy(provider, address);
+      result.isProxy = proxyInfo.isProxy;
+      result.proxyType = proxyInfo.proxyType;
+      if (proxyInfo.isProxy) {
+        result.flags.push(`Proxy detected: ${proxyInfo.proxyType}`);
+      }
+    } catch {}
+
+    return result;
+  } catch { return null; }
+}
+
 export async function fetchContractData(address: string): Promise<ContractData> {
-  const result: ContractData = {
+  const empty: ContractData = {
     chain: 'unknown', hasSource: false, sourceCode: null, contractName: null,
     tokenName: null, tokenSymbol: null, owner: null, totalSupply: null,
     decimals: null, isContract: false, isProxy: false, proxyType: null,
     hasMintFunction: false, flags: [],
   };
 
-  let provider: ethers.JsonRpcProvider | null = null;
+  if (process.env.SKIP_RPC === 'true') return empty;
 
-  // ── Step 1: Try Arc RPC for basic contract detection ──
-  if (process.env.SKIP_RPC !== 'true') {
-    try {
-      provider = new ethers.JsonRpcProvider(ARC_RPC, undefined, { staticNetwork: true });
-      const code = await Promise.race([provider.getCode(address), new Promise<null>((_, r) => setTimeout(() => r(null), 4000))]);
-      if (code && code !== '0x') {
-        result.chain = 'arc-testnet';
-        result.isContract = true;
-        result.flags.push('Arc testnet: contract deployed');
-
-        // ── Step 2: Fetch ERC-20 metadata (name, symbol) on-chain ──
-        if (provider) {
-          try {
-            const erc20 = new ethers.Contract(address, ERC20_ABI, provider);
-            const [nameR, symR, decR, tsR, ownR] = await Promise.allSettled([
-              Promise.race([erc20.name(), new Promise<string>((_, r2) => setTimeout(() => r2(''), 3000))]),
-              Promise.race([erc20.symbol(), new Promise<string>((_, r2) => setTimeout(() => r2(''), 3000))]),
-              Promise.race([erc20.decimals(), new Promise<bigint>((_, r2) => setTimeout(() => r2(18n), 3000))]),
-              Promise.race([erc20.totalSupply(), new Promise<bigint>((_, r2) => setTimeout(() => r2(0n), 3000))]),
-              Promise.race([erc20.owner(), new Promise<string>((_, r2) => setTimeout(() => r2(''), 3000))]),
-            ]);
-            if (nameR.status === 'fulfilled' && nameR.value && nameR.value.length > 0) result.tokenName = nameR.value;
-            if (symR.status === 'fulfilled' && symR.value && symR.value.length > 0) result.tokenSymbol = symR.value;
-            if (decR.status === 'fulfilled') result.decimals = Number(decR.value);
-            if (tsR.status === 'fulfilled') result.totalSupply = tsR.value.toString();
-            if (ownR.status === 'fulfilled' && ownR.value && ownR.value !== '0x0000000000000000000000000000000000000000') {
-              result.owner = ownR.value.toLowerCase();
-              result.flags.push(`Owner: ${ownR.value.toLowerCase().slice(0, 10)}...`);
-            }
-
-            if (result.tokenName) result.flags.push(`Token: ${result.tokenName}${result.tokenSymbol ? ` (${result.tokenSymbol})` : ''}`);
-            if (result.totalSupply) result.flags.push(`Supply: ${result.totalSupply}`);
-            if (result.decimals !== null) result.flags.push(`Decimals: ${result.decimals}`);
-
-            // Holder concentration check
-            if (result.owner && result.totalSupply && tsR.status === 'fulfilled') {
-              try {
-                const ownerBalance = await Promise.race([
-                  erc20.balanceOf(result.owner),
-                  new Promise<bigint>((_, r2) => setTimeout(() => r2(0n), 3000))
-                ]);
-                const totalSupply = BigInt(result.totalSupply);
-                if (totalSupply > 0n && ownerBalance > 0n) {
-                  const ownerPct = Number((ownerBalance * 10000n) / totalSupply) / 100;
-                  result.flags.push(`Owner holds ${ownerPct}% of supply`);
-                  if (ownerPct > 50) result.flags.push('⚠️ Owner holds majority supply');
-                  if (ownerPct > 90) result.flags.push('🚨 Owner holds >90% supply — extreme concentration');
-                }
-              } catch { /* balanceOf failed */ }
-            }
-
-            // ── Step 3: Detect proxy pattern (EIP-1967) ──
-            const proxyInfo = await detectProxy(provider, address);
-            result.isProxy = proxyInfo.isProxy;
-            result.proxyType = proxyInfo.proxyType;
-            if (proxyInfo.isProxy) {
-              result.flags.push(`⚠️ Proxy detected: ${proxyInfo.proxyType}`);
-            }
-
-            return result; // Got Arc data, return early
-          } catch { /* metadata fetch failed, continue */ }
-        }
-        return result;
-      }
-    } catch { /* Arc RPC unavailable, continue to Etherscan */ }
+  // ── Try all RPC endpoints until we find the contract ──
+  for (const endpoint of RPC_ENDPOINTS) {
+    const data = await queryRpc(address, endpoint.url, endpoint.name);
+    if (data) return data;
   }
 
-  // ── Step 4: Fallback to Etherscan mainnet ──
+  // ── Etherscan fallback (if API key configured) ──
   const src = await fetchEtherscan(address);
   if (src) {
-    result.chain = 'ethereum-mainnet'; result.isContract = true; result.hasSource = true;
-    result.contractName = src.contractName; result.sourceCode = src.sourceCode;
-    result.tokenName = src.contractName;
-    result.flags.push(`Etherscan verified: ${src.contractName}`);
-
-    // Check Etherscan proxy flag
-    if ((src.sourceCode || '').toLowerCase().includes('proxy') || (src.sourceCode || '').toLowerCase().includes('upgradeable')) {
-      result.isProxy = true;
-      result.proxyType = 'Etherscan-flagged proxy';
-      result.flags.push('⚠️ Proxy/upgradeable pattern in source');
-    }
-
-    // On-chain ERC-20 queries on Ethereum mainnet
-    try {
-      const p2 = new ethers.JsonRpcProvider('https://ethereum-rpc.publicnode.com', undefined, { staticNetwork: true });
-      const erc20 = new ethers.Contract(address, ERC20_ABI, p2);
-      const [ts, dec, own, nameR, symR] = await Promise.allSettled([
-        erc20.totalSupply(), erc20.decimals(), erc20.owner(), erc20.name(), erc20.symbol()
-      ]);
-      if (ts.status === 'fulfilled') result.totalSupply = ts.value.toString();
-      if (dec.status === 'fulfilled') result.decimals = Number(dec.value);
-      if (own.status === 'fulfilled') result.owner = own.value.toLowerCase();
-      if (nameR.status === 'fulfilled' && nameR.value) result.tokenName = nameR.value;
-      if (symR.status === 'fulfilled' && symR.value) result.tokenSymbol = symR.value;
-      if (result.owner) result.flags.push(`Owner: ${result.owner.slice(0, 10)}...`);
-    } catch {}
+    return {
+      ...empty,
+      chain: 'ethereum-mainnet', isContract: true, hasSource: true,
+      contractName: src.contractName, sourceCode: src.sourceCode,
+      tokenName: src.contractName,
+      flags: [`Etherscan verified: ${src.contractName}`],
+    };
   }
 
-  if (!result.isContract) result.flags.push('No contract data found on Arc or Etherscan');
-  return result;
+  return empty;
 }
