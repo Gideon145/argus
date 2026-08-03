@@ -64,6 +64,10 @@ export const KNOWN_TOKENS: Record<string, KnownToken> = {
   '0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320': { address: '0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320', verdict: 'SAFE', note: 'Agent Alpha — Circle-managed SCA wallet' },
   '0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f': { address: '0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f', verdict: 'SAFE', note: 'Agent Beta — Circle-managed SCA wallet' },
   '0x1fa79f59abbada269de477b45ded38c75a6146de': { address: '0x1fa79f59abbada269de477b45ded38c75a6146de', verdict: 'SAFE', note: 'Agent Gamma — Circle-managed SCA wallet' },
+  // ─── User-reported tokens with known issues ───
+  '0xc20059e0317de91738d13af027dfc4a50781b066': { address: '0xc20059e0317de91738d13af027dfc4a50781b066', verdict: 'RISKY', note: 'Flagged: unrestricted mint capability — owner can mint unlimited tokens, proxy-upgradeable' },
+  '0x643c4e15d7d62ad0abec4a9bd4b001aa3ef52d66': { address: '0x643c4e15d7d62ad0abec4a9bd4b001aa3ef52d66', verdict: 'RISKY', note: 'Flagged: EIP-1967 proxy contract — implementation can be upgraded by admin at any time' },
+  '0x44b28991b167582f18ba0259e0173176ca125505': { address: '0x44b28991b167582f18ba0259e0173176ca125505', verdict: 'RISKY', note: 'Flagged: suspicious contract pattern — unverified, potential honeypot characteristics' },
 };
 
 /** Look up a known token. Returns null if not in the database. */
