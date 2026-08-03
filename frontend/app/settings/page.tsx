@@ -170,20 +170,21 @@ export default function SettingsPage() {
         </div>
       </Card>
 
-      {/* Open Source */}
-      <Card title="Open Source" subtitle="Agent prompts and system architecture are fully transparent." padding="sm">
+      {/* Agent Reasoning */}
+      <Card title="How Agents Reason" subtitle="Three independent perspectives. One consensus verdict." padding="sm">
         <div className="space-y-3 text-[14px] text-text-secondary leading-relaxed">
           <p>
-            All three agent system prompts are publicly auditable. See exactly what instructions Agent α (DeepSeek), Agent β (Claude), and Agent γ (Rule Engine) receive before every scan.
+            <strong>Agent Alpha (DeepSeek-V3)</strong> analyzes contract logic: ownership structures, proxy upgrade paths, mint functions, external call risks, honeypot signatures, and access control. Scored 0-100 per category.
           </p>
-          <a
-            href="https://github.com/Gideon145/argus/tree/master/agent/src/agents"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded border border-accent/30 bg-accent/5 text-accent hover:bg-accent/10 transition-colors text-[13px] font-medium"
-          >
-            <Database size={14} /> View Agent Prompts on GitHub →
-          </a>
+          <p>
+            <strong>Agent Beta (Claude Sonnet 4.5)</strong> analyzes tokenomics: holder concentration, whale wallets, liquidity depth, buy/sell taxes, wash trading patterns, and fair launch indicators. Cross-references against known distribution models.
+          </p>
+          <p>
+            <strong>Agent Gamma (Rule Engine)</strong> runs deterministic checks: address entropy, EIP-1967 proxy slot detection, digit-run heuristics, checksum validation, and known scam deployer patterns. Reproducible results -- same address always returns the same verdict.
+          </p>
+          <p>
+            All three vote independently with real USDC stakes. 2/3 carries the verdict. Dissenters pay winners. Every scan is recorded on-chain via ArgusOracle.
+          </p>
         </div>
       </Card>
     </div>
