@@ -391,26 +391,13 @@ function startTelegramBot(logger: any) {
   
   try {
     const TelegramBot = require('node-telegram-bot-api').default || require('node-telegram-bot-api');
-    const bot = new TelegramBot(token);
-    
-    bot.deleteWebhook()
-      .then(() => bot.close())
-      .then(() => new Promise(r => setTimeout(r, 3000)))
-      .then(() => {
-        const freshBot = new TelegramBot(token, { 
-          polling: { interval: 300, params: { timeout: 10 } },
-          filepath: false,
-        });
-        setupHandlers(freshBot);
-        logger.info('🤖 Telegram bot polling started');
-      })
-      .catch(() => {
-        const freshBot = new TelegramBot(token, { 
-          polling: { interval: 300, params: { timeout: 10 } },
-        });
-        setupHandlers(freshBot);
-        logger.info('🤖 Telegram bot polling started (fallback)');
-      });
+    // Start polling directly — no webhook cleanup needed for fresh tokens
+    const bot = new TelegramBot(token, { 
+      polling: { interval: 300, params: { timeout: 10 } },
+      filepath: false,
+    });
+    setupHandlers(bot);
+    logger.info('Telegram bot polling started');
   } catch (e: any) {
     logger.warn('Telegram bot failed to start:', e.message);
     return;

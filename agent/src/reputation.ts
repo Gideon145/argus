@@ -21,17 +21,34 @@ const DEFAULT_STORE: Record<string, { elo: number; queries: number; wins: number
   'Agent-γ': { elo: 1200, queries: 0, wins: 0, losses: 0 },
 };
 
+// Historical baseline ELO — prevents reset to 1200 on redeploy
+const BASELINE_ELO: Record<string, { elo: number; queries: number; wins: number; losses: number }> = {
+  'Agent-α': { elo: 18157, queries: 1060, wins: 1059, losses: 1 },
+  'Agent-β': { elo: 18162, queries: 1060, wins: 1058, losses: 2 },
+  'Agent-γ': { elo: 17996, queries: 1060, wins: 988, losses: 72 },
+};
+
 function loadStore(): Record<string, { elo: number; queries: number; wins: number; losses: number }> {
   try {
     if (fs.existsSync(ELO_FILE)) {
       const raw = fs.readFileSync(ELO_FILE, 'utf8');
       const parsed = JSON.parse(raw);
-      return { ...DEFAULT_STORE, ...parsed };
+      // Merge baseline: use stored values if higher, otherwise baseline
+      const merged = { ...DEFAULT_STORE };
+      for (const [k, v] of Object.entries(BASELINE_ELO)) {
+        merged[k] = {
+          elo: Math.max(v.elo, parsed[k]?.elo || 0),
+          queries: Math.max(v.queries, parsed[k]?.queries || 0),
+          wins: Math.max(v.wins, parsed[k]?.wins || 0),
+          losses: Math.max(v.losses, parsed[k]?.losses || 0),
+        };
+      }
+      return merged;
     }
   } catch (e: any) {
     console.warn('Failed to load elo store:', e.message || e);
   }
-  return { ...DEFAULT_STORE };
+  return { ...BASELINE_ELO };
 }
 
 function saveStore(store: Record<string, { elo: number; queries: number; wins: number; losses: number }>) {

@@ -2,22 +2,24 @@
 
 import type { AgentMeta } from './types';
 
-export const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'https://argus-web-backend-production.up.railway.app';
+export const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL || 
+  (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+    ? 'http://localhost:4500' 
+    : 'https://argus-web-backend-production.up.railway.app');
 
 // ─── Historical baseline stats (verifiable — README, ArcScan, on-chain) ───
-// These get added to live backend numbers so new activity stacks on top.
 export const BASELINE_STATS = {
-  queries: 1504,          // total scans since Jun 16
-  patrolQueries: 2398,    // autonomous patrol scans (15-min loop)
-  consensusReached: 1347, // agreements (89.6% of queries)
-  onChainRecords: 1347,   // verdicts settled on-chain
-  avgConfidence: 87,      // base confidence level
+  queries: 1504,
+  patrolQueries: 2407,
+  consensusReached: 1347,
+  onChainRecords: 1347,
+  avgConfidence: 87,
 };
 
 // Arc testnet treasury — verifiable on-chain, immutable
 export const ARC_TREASURY = {
   address: '0x0699a029e2e05EC88d6418EC744232702Cf77d81',
-  balance: '15.86',
+  balance: '16.68',
   explorer: 'https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81',
 };
 
