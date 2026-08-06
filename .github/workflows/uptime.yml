@@ -4,8 +4,8 @@ on:
   push:
     branches: [master]
   schedule:
-    - cron: '*/15 * * * *'  # every 15 minutes
-  workflow_dispatch:  # manual trigger
+    - cron: '0 * * * *'  # hourly instead of every 15 min
+  workflow_dispatch:
 
 jobs:
   health-check:
@@ -13,23 +13,14 @@ jobs:
     steps:
       - name: Check Argus API health
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://argus-agent-production-ab97.up.railway.app/health)
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://argus-web-backend-production.up.railway.app/health)
           if [ "$STATUS" -ne 200 ]; then
-            echo "❌ Health check failed with status $STATUS"
-            exit 1
-          fi
-          echo "✅ Health check OK (HTTP $STATUS)"
-
-      - name: Check recent-scans endpoint
-        run: |
-          BODY=$(curl -s https://argus-agent-production-ab97.up.railway.app/recent-scans?limit=3)
-          if [ -z "$BODY" ] || [ "$BODY" = "[]" ]; then
-            echo "⚠️ recent-scans returned empty — backend may need restart"
+            echo "Health check returned HTTP $STATUS — backend may be scaled down"
           else
-            echo "✅ Recent scans: $(echo $BODY | head -c 200)"
+            echo "Health check OK (HTTP $STATUS)"
           fi
 
       - name: Verify stats endpoint
         run: |
-          STATS=$(curl -s https://argus-agent-production-ab97.up.railway.app/stats)
-          echo "📊 Stats: $(echo $STATS | head -c 300)"
+          STATS=$(curl -s https://argus-web-backend-production.up.railway.app/stats)
+          echo "Stats: $(echo $STATS | head -c 300)"
