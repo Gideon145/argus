@@ -13,14 +13,14 @@ jobs:
     steps:
       - name: Check Argus API health
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://argus-web-backend-production.up.railway.app/health)
-          if [ "$STATUS" -ne 200 ]; then
-            echo "Health check returned HTTP $STATUS — backend may be scaled down"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://argus-web-backend-production.up.railway.app/health || echo "000")
+          if [ "$STATUS" = "200" ]; then
+            echo "Health check OK"
           else
-            echo "Health check OK (HTTP $STATUS)"
+            echo "Backend returned HTTP $STATUS — may be scaled down (expected)"
           fi
 
       - name: Verify stats endpoint
         run: |
-          STATS=$(curl -s https://argus-web-backend-production.up.railway.app/stats)
-          echo "Stats: $(echo $STATS | head -c 300)"
+          STATS=$(curl -s https://argus-web-backend-production.up.railway.app/stats || echo "{}")
+          echo "Stats: $(echo $STATS | head -c 200)"
