@@ -37,7 +37,7 @@ contract ArgusOracle {
     mapping(uint256 => Query) public queries;
     mapping(string => AgentReputation) public agents;
 
-    event QueryRecorded(uint256 indexed queryId, address indexed user, string finalVerdict, bool consensus);
+    event QueryRecorded(uint256 indexed queryId, address indexed user, address indexed writer, string finalVerdict, bool consensus);
     event ReputationUpdated(string indexed agentId, int256 eloDelta, int256 newElo);
 
     /**
@@ -77,7 +77,7 @@ contract ArgusOracle {
             queryId: queryId
         });
 
-        emit QueryRecorded(queryId, user, finalVerdict, consensusReached);
+        emit QueryRecorded(queryId, user, msg.sender, finalVerdict, consensusReached);
     }
 
     /**

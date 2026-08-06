@@ -2,6 +2,7 @@
  * Data Provider for Argus Agents
  * Fetches contract metadata from Arc testnet + on-chain ERC-20 data.
  * Detects proxies (EIP-1967, UUPS, Transparent, Beacon), mint capability, token metadata.
+ * All user-provided metadata (token name, symbol) is sanitized before reaching agent prompts.
  */
 import { ethers } from 'ethers';
 import axios from 'axios';
@@ -11,16 +12,28 @@ export interface ContractData {
   hasSource: boolean;
   sourceCode: string | null;
   contractName: string | null;
-  tokenName: string | null;       // NEW: on-chain name()
-  tokenSymbol: string | null;     // NEW: on-chain symbol()
+  tokenName: string | null;       // on-chain name(), sanitized
+  tokenSymbol: string | null;     // on-chain symbol(), sanitized
   owner: string | null;
   totalSupply: string | null;
   decimals: number | null;
   isContract: boolean;
-  isProxy: boolean;               // NEW: EIP-1967 or similar proxy detected
-  proxyType: string | null;       // NEW: "EIP-1967", "UUPS", "Transparent", "Beacon", etc.
-  hasMintFunction: boolean;       // NEW: mint() capability detected
+  isProxy: boolean;
+  proxyType: string | null;
+  hasMintFunction: boolean;
   flags: string[];
+}
+
+// ─── Sanitize user-provided metadata before it reaches AI prompts ───
+function sanitizeMetadata(value: string | null): string | null {
+  if (!value) return null;
+  // Strip control characters, null bytes, and limit length
+  let cleaned = value.replace(/[\x00-\x1f\x7f-\x9f]/g, '');
+  // Truncate to 100 chars max
+  if (cleaned.length > 100) cleaned = cleaned.slice(0, 100);
+  // If the result is empty after cleaning, return null
+  if (cleaned.trim().length === 0) return null;
+  return cleaned;
 }
 
 const ARC_RPC = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
@@ -142,8 +155,8 @@ async function queryRpc(address: string, rpcUrl: string, chainName: string): Pro
         Promise.race([erc20.totalSupply(), new Promise<bigint>((_, r2) => setTimeout(() => r2(0n), 3000))]),
         Promise.race([erc20.owner(), new Promise<string>((_, r2) => setTimeout(() => r2(''), 3000))]),
       ]);
-      if (nameR.status === 'fulfilled' && nameR.value) result.tokenName = nameR.value;
-      if (symR.status === 'fulfilled' && symR.value) result.tokenSymbol = symR.value;
+      if (nameR.status === 'fulfilled' && nameR.value) result.tokenName = sanitizeMetadata(nameR.value);
+      if (symR.status === 'fulfilled' && symR.value) result.tokenSymbol = sanitizeMetadata(symR.value);
       if (decR.status === 'fulfilled') result.decimals = Number(decR.value);
       if (tsR.status === 'fulfilled') result.totalSupply = tsR.value.toString();
       if (ownR.status === 'fulfilled' && ownR.value && ownR.value !== '0x0000000000000000000000000000000000000000') {
@@ -206,9 +219,9 @@ export async function fetchContractData(address: string): Promise<ContractData> 
     return {
       ...empty,
       chain: 'ethereum-mainnet', isContract: true, hasSource: true,
-      contractName: src.contractName, sourceCode: src.sourceCode,
-      tokenName: src.contractName,
-      flags: [`Etherscan verified: ${src.contractName}`],
+      contractName: sanitizeMetadata(src.contractName), sourceCode: src.sourceCode,
+      tokenName: sanitizeMetadata(src.contractName),
+      flags: [`Etherscan verified: ${sanitizeMetadata(src.contractName)}`],
     };
   }
 
