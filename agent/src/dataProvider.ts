@@ -208,10 +208,12 @@ export async function fetchContractData(address: string): Promise<ContractData> 
 
   if (process.env.SKIP_RPC === 'true') return empty;
 
-  // ── Try all RPC endpoints until we find the contract ──
-  for (const endpoint of RPC_ENDPOINTS) {
-    const data = await queryRpc(address, endpoint.url, endpoint.name);
-    if (data) return data;
+  // ── Try all RPC endpoints in parallel, first to find the contract wins ──
+  const results = await Promise.allSettled(
+    RPC_ENDPOINTS.map(ep => queryRpc(address, ep.url, ep.name))
+  );
+  for (const r of results) {
+    if (r.status === 'fulfilled' && r.value) return r.value;
   }
 
   // ── Etherscan fallback (if API key configured) ──
