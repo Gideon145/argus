@@ -46,6 +46,7 @@ const RPC_ENDPOINTS: { name: string; url: string; chainId: number }[] = [
   { name: 'Ethereum Mainnet', url: 'https://ethereum-rpc.publicnode.com', chainId: 1 },
   { name: 'Ethereum Fallback', url: 'https://rpc.ankr.com/eth', chainId: 1 },
   { name: 'BSC Mainnet', url: 'https://bsc-dataseed.binance.org', chainId: 56 },
+  { name: 'Polygon Mainnet', url: 'https://polygon-rpc.com', chainId: 137 },
 ];
 
 let lastCall = 0;
