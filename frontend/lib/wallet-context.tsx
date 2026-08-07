@@ -69,13 +69,15 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [address, setAddress] = useState<string | null>(null);
   const [balance, setBalance] = useState('0.00');
   const [isCircle, setIsCircle] = useState(false);
-  const [circleUserId, setCircleUserId] = useState<string | null>(() => {
-    // Initialize from localStorage on mount — prevents new wallet on every visit
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('argus_circle_uid');
-    }
-    return null;
-  });
+  const [circleUserId, setCircleUserId] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Restore persisted wallet on mount (runs after hydration in Next.js)
+  useEffect(() => {
+    const saved = localStorage.getItem('argus_circle_uid');
+    if (saved) setCircleUserId(saved);
+    setHydrated(true);
+  }, []);
   const [faucetStatus, setFaucetStatus] = useState<'idle' | 'funding' | 'funded' | 'skipped'>('idle');
   const [faucetTx, setFaucetTx] = useState<string | null>(null);
 

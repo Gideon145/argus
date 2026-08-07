@@ -122,9 +122,17 @@ export const walletPool = {
     }
   },
 
-  /** Assign an unassigned wallet to a user. Returns the wallet address. */
+  /** Assign a wallet to a user. Returns existing wallet if refId already assigned. */
   async assign(refId: string): Promise<{ address: string; walletId: string } | null> {
     const pool = loadPool();
+    
+    // Return existing wallet if user already has one
+    const existing = pool.find((w) => w.refId === refId && w.assigned);
+    if (existing) {
+      console.log(`[WalletPool] Returning existing wallet ${existing.address.slice(0, 10)}... for user ${refId.slice(0, 8)}...`);
+      return { address: existing.address, walletId: existing.walletId };
+    }
+    
     const entry = pool.find((w) => !w.assigned);
     if (!entry) return null; // No wallets left
 
@@ -165,9 +173,18 @@ export const walletPool = {
   },
 
   /** DEMO MODE: Assign a locally-generated wallet (no Circle API needed).
-   *  Persisted to the same pool file so getByRefId works. */
+   *  Persisted to the same pool file so getByRefId works.
+   *  Returns existing wallet if refId already has one. */
   demoAssign(refId: string): { address: string; walletId: string } {
     const pool = loadPool();
+    
+    // Return existing wallet if user already has one
+    const existing = pool.find((w) => w.refId === refId && w.assigned);
+    if (existing) {
+      console.log(`[WalletPool] DEMO returning existing wallet ${existing.address.slice(0, 10)}... for user ${refId.slice(0, 12)}...`);
+      return { address: existing.address, walletId: existing.walletId };
+    }
+    
     const localAddr = '0x' + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
     const walletId = 'demo-' + Date.now();
     pool.push({
