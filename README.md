@@ -13,11 +13,17 @@
   <a href="https://t.me/argus_communityy">
     <img src="https://img.shields.io/badge/Community-80+_members-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram community">
   </a>
-  <a href="https://argusarc.dev/patrol">
-    <img src="https://img.shields.io/badge/Scans-1,504-blue?style=for-the-badge" alt="live scans">
+  <a href="mailto:hello@argusarc.dev">
+    <img src="https://img.shields.io/badge/Email-hello@argusarc.dev-6366f1?style=for-the-badge&logo=gmail&logoColor=white" alt="Email">
   </a>
   <a href="https://argusarc.dev/patrol">
-    <img src="https://img.shields.io/badge/Patrols-2,407-green?style=for-the-badge" alt="live patrols">
+    <img src="https://img.shields.io/badge/Scans-1,508-blue?style=for-the-badge" alt="live scans">
+  </a>
+  <a href="https://argusarc.dev/patrol">
+    <img src="https://img.shields.io/badge/Patrols-2,430-green?style=for-the-badge" alt="live patrols">
+  </a>
+  <a href="https://argusarc.dev/stats">
+    <img src="https://img.shields.io/badge/Treasury-$21.10_USDC-gold?style=for-the-badge" alt="treasury">
   </a>
   <a href="https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81">
     <img src="https://img.shields.io/badge/Treasury-ArcScan-6C5CE7?style=for-the-badge" alt="Treasury">
@@ -59,11 +65,11 @@
   <strong>▶️ <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">Watch the demo (3 min)</a> — New UI, real-time patrol, Unibase AI caught live</strong>
 </p>
 
-> **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,504 verdicts from 350+ users, all on-chain. When Arc mainnet launches, Argus is already running.
+> **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,508 verdicts from 350+ users, all on-chain. When Arc mainnet launches, Argus is already running.
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.dev)
 
-| **1,504 scans** | **$16.68+ treasury** | **350+ users** | **5.7K OKX sales** | **5/5 Circle primitives** |
+| **1,508 scans** | **$21.10 treasury** | **350+ users** | **5.7K OKX sales** | **5/5 Circle primitives** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.dev](https://argusarc.dev) · **Alt:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/Argusarc_bot](https://t.me/Argusarc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i @ogxavier/argus-sdk` · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
@@ -77,7 +83,7 @@
 | Judging Criterion (Lepton) | Argus |
 |---|---|
 | **Agentic Sophistication (30%)** | 3 independent agents — DeepSeek-V3, Claude Sonnet 4.5, deterministic rule engine — vote with real stakes. Dissenters pay winners. Patrol runs every 15 min with zero human input. Agents decide, not automate. |
-| **Traction (30%)** | 350+ users, 1,504 scans, 2,407 autonomous patrols. 5.7K OKX sales at 4.94★. Unibase AI caught live — scammers blocked us on X. @Argus_arc: 150 followers, 15K impressions. |
+| **Traction (30%)** | 350+ users, 1,508 scans, 2,430 autonomous patrols. 5.7K OKX sales at 4.94★. Unibase AI caught live — scammers blocked us on X. @Argus_arc: 158 followers, 15K impressions. |
 | **Circle Tool Usage (20%)** | 5/5 Circle primitives live on Arc: Gateway x402, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit Unified Balance. Every address verifiable on ArcScan. |
 | **Innovation (20%)** | No other security tool uses multi-model consensus with real economic stakes. Prior Art #08 implemented: reputation as collateral, not a score. Agent-to-agent nanopayments settle in <500ms. |
 
@@ -137,7 +143,7 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 **Built for everyone.** Connect with MetaMask or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Web, CLI, or Telegram — same consensus, your choice.
 
-> When Arc mainnet ships, Argus will be live on day one — 1,504 scans of battle-testing on testnet behind it. Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
+> When Arc mainnet ships, Argus will be live on day one — 1,508 scans of battle-testing on testnet behind it. Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
 
 ---
 

@@ -4,7 +4,7 @@
 
 **🎥 [Watch the 3-min demo](https://www.youtube.com/watch?v=sHgjJe5jx6s) — Updated Jul 10 with the new UI**
 
-**The punchline:** Three AI agents stake real USDC on every token verdict. DeepSeek and Claude pay each other automatically through their verdicts — nanopayments settle in under 500ms. 350+ users. 1,504 scans. 5.7K OKX sales at 4.94?. 241 reviews. 106 agent-to-agent payments. Everything verifiable on ArcScan.
+**The punchline:** Three AI agents stake real USDC on every token verdict. DeepSeek and Claude pay each other automatically through their verdicts — nanopayments settle in under 500ms. 350+ users. 1,508 scans. 5.7K OKX sales at 4.94 stars. 241 reviews. $21.10 USDC treasury. Everything verifiable on ArcScan.
 
 ---
 
@@ -26,7 +26,7 @@ Scan this: `0x6944e1df6bf5972305f9ab25df47ef10de01bcc8` (Unibase AI — document
 
 ## 2. Autonomous Patrol — agents don't wait (60 seconds)
 
-Go to **[argusarc.dev/patrol](https://argusarc.dev/patrol)** (alt: **[argusarc.xyz/patrol](https://argusarc.xyz/patrol)**) — every 15 minutes, three agents autonomously scan a contract, stake USDC, reach consensus, and settle on-chain. Zero human input. 2,407 patrol scans completed.
+Go to **[argusarc.dev/patrol](https://argusarc.dev/patrol)** (alt: **[argusarc.xyz/patrol](https://argusarc.xyz/patrol)**) — every 15 minutes, three agents autonomously scan a contract, stake USDC, reach consensus, and settle on-chain. Zero human input. 2,430 patrol scans completed.
 
 This is not a cron job. Agents independently decide, stake, and pay each other. The patrol feed shows every autonomous scan with verdict, consensus breakdown, and ArcScan links.
 
@@ -38,7 +38,7 @@ This is not a cron job. Agents independently decide, stake, and pay each other. 
 
 | What | ArcScan |
 |------|---------|
-| Treasury ($16.68+ USDC) | [0x0699...f77d81](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| Treasury ($21.10 USDC) | [0x0699...f77d81](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | Oracle (verdict log) | [0x563b...b46C8](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8) |
 | Agent α wallet | [0x284e...2d320](https://testnet.arcscan.app/address/0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320) |
 | Agent β wallet | [0x3f75...7a34f](https://testnet.arcscan.app/address/0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f) |
@@ -66,12 +66,13 @@ No signup. Auto-creates Circle wallet. Same consensus. [npm](https://www.npmjs.c
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| Scans | 1,504 | `GET /stats` |
-| Patrol scans | 2,407 | `GET /patrol-log` |
+| Scans | 1,508 | `GET /stats` |
+| Patrol scans | 2,430 | `GET /patrol-log` |
 | Users | 350+ (web, CLI, Telegram, npm, OKX) | `GET /stats` |
-| OKX Marketplace | 5.7K sold · 4.94? · 241 reviews | okx.ai/agents/5047 |
+| OKX Marketplace | 5.7K sold · 4.94 stars · 241 reviews | okx.ai/agents/5047 |
 | Consensus rate | 89.6% | on-chain |
-| Agent-to-agent payments | 106 | `/agent-payments` |
+| Treasury | $21.10 USDC | ArcScan |
+| Circle primitives | 5/5 | Gateway x402, Agent Wallets, DCW, Contracts, App Kit |
 | Circle primitives | 5/5 | Gateway x402, Agent Wallets, DCW, Contracts, App Kit |
 | Benchmark (held-out) | 85.7% accuracy, 100% precision | [`benchmark/`](benchmark/) |
 
