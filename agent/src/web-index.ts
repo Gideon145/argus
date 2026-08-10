@@ -387,9 +387,10 @@ const X402_PAY_TO = '0x53d724e6acd672ba08133bcd32b0412500bea79d';
 app.post('/okx/scan', async (req, res) => {
   const payAuth = req.headers['x-payment'] || req.headers['x-payment-authorization'] || req.headers['authorization'];
   const paySig = req.headers['payment-signature'] || req.headers['x-payment-signature'];
+  const isMarketplaceBypass = (req.body?.payment?.note && String(req.body.payment.note).includes('OKX marketplace'));
 
-  // No payment → return 402 challenge
-  if (!payAuth && !paySig) {
+  // No payment → return 402 challenge (unless marketplace bypass)
+  if (!payAuth && !paySig && !isMarketplaceBypass) {
     const challenge = {
       x402Version: 2,
       resource: { url: 'https://argus-web-backend-production.up.railway.app/okx/scan', description: 'Multi-Agent Security Oracle — 3-agent consensus contract scanning', mimeType: 'application/json' },
