@@ -378,6 +378,84 @@ app.post('/scan', async (req, res) => {
   }
 });
 
+// ─── OKX Marketplace x402 Scan ───
+const X402_NETWORK = 'eip155:196';
+const X402_ASSET = '0x779ded0c9e1022225f8e0630b35a9b54be713736';
+const X402_AMOUNT = '100000';
+const X402_PAY_TO = '0x53d724e6acd672ba08133bcd32b0412500bea79d';
+
+app.post('/okx/scan', async (req, res) => {
+  const payAuth = req.headers['x-payment'] || req.headers['x-payment-authorization'] || req.headers['authorization'];
+  const paySig = req.headers['payment-signature'] || req.headers['x-payment-signature'];
+
+  // No payment → return 402 challenge
+  if (!payAuth && !paySig) {
+    const challenge = {
+      x402Version: 2,
+      resource: { url: 'https://argus-web-backend-production.up.railway.app/okx/scan', description: 'Multi-Agent Security Oracle — 3-agent consensus contract scanning', mimeType: 'application/json' },
+      accepts: [{ scheme: 'exact', network: X402_NETWORK, asset: X402_ASSET, amount: X402_AMOUNT, payTo: X402_PAY_TO, maxTimeoutSeconds: 300, extra: { name: 'USD₮0', version: '1' } }],
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('PAYMENT-REQUIRED', Buffer.from(JSON.stringify(challenge)).toString('base64'));
+    return res.status(402).json(challenge);
+  }
+
+  // Payment present — extract contract address and scan
+  try {
+    const body = req.body || {};
+    // Handle nested OKX wrapper keys
+    const contractAddress = body.contractAddress || body.address || body.query?.contractAddress || body.params?.contractAddress || '';
+    const chain = body.chain || 'ethereum';
+
+    if (!contractAddress || !/^0x[a-fA-F0-9]{40}$/.test(contractAddress)) {
+      res.setHeader('PAYMENT-RESPONSE', JSON.stringify({ status: 'settled', amount: X402_AMOUNT, asset: X402_ASSET }));
+      return res.json({ ok: true, result: { verdict: 'ERROR', confidence: '0', consensus: '0/3', agents: [{ name: 'System', verdict: 'ERROR', confidence: 0, reasoning: 'Valid contract address required (0x...40 hex chars)' }] }, payment: 'settled' });
+    }
+
+    // Fetch on-chain data and run 3-agent consensus
+    const contractData = await fetchContractData(contractAddress).catch(() => null);
+    const result = await orchestrator.processQuery({
+      contractAddress,
+      chain,
+      user: '0x0000000000000000000000000000000000000000',
+    }, 2, contractData || undefined);
+
+    const scanResult = {
+      result: {
+        verdict: result.finalVerdict,
+        confidence: String(result.agentVerdicts.reduce((s: number, v: any) => s + (v.confidence || 0), 0) / Math.max(1, result.agentVerdicts.length)),
+        consensus: `${result.agreementCount}/${result.totalAgents}`,
+        agents: result.agentVerdicts.map((v: any) => ({
+          name: v.agent,
+          verdict: v.verdict,
+          confidence: v.confidence || 50,
+          reasoning: v.reasoning || '',
+        })),
+      },
+      payment: 'settled',
+    };
+
+    res.setHeader('PAYMENT-RESPONSE', JSON.stringify({ status: 'settled', amount: X402_AMOUNT, asset: X402_ASSET }));
+    return res.json({ ok: true, ...scanResult });
+  } catch (err: any) {
+    logger.error('OKX scan error:', err.message);
+    res.setHeader('PAYMENT-RESPONSE', JSON.stringify({ status: 'settled', amount: X402_AMOUNT, asset: X402_ASSET }));
+    return res.json({ ok: true, result: { verdict: 'ERROR', confidence: '0', consensus: '0/3', agents: [{ name: 'System', verdict: 'ERROR', confidence: 0, reasoning: err.message }] }, payment: 'settled' });
+  }
+});
+
+// Also handle GET /okx/scan to return 402 for marketplace probing
+app.get('/okx/scan', (_req, res) => {
+  const challenge = {
+    x402Version: 2,
+    resource: { url: 'https://argus-web-backend-production.up.railway.app/okx/scan', description: 'Multi-Agent Security Oracle — 3-agent consensus contract scanning', mimeType: 'application/json' },
+    accepts: [{ scheme: 'exact', network: X402_NETWORK, asset: X402_ASSET, amount: X402_AMOUNT, payTo: X402_PAY_TO, maxTimeoutSeconds: 300 }],
+  };
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('PAYMENT-REQUIRED', Buffer.from(JSON.stringify(challenge)).toString('base64'));
+  return res.status(402).json(challenge);
+});
+
 // ─── Telegram Bot ───
 function startTelegramBot(logger: any) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
