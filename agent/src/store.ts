@@ -89,11 +89,11 @@ function read(): StoreData {
 // Seeds the store on first deploy so counts include all Argus history.
 // New activity stacks on top — never overwrites existing data.
 const BASELINE = {
-  queries: 1504,
-  patrolQueries: 2398,
-  consensusReached: 1347,
-  onChainRecords: 1347,
-  avgConfidence: 87,
+  queries: 1508,
+  patrolQueries: 2430,
+  consensusReached: 1351,
+  onChainRecords: 1351,
+  avgConfidence: 74,
   distinctAddresses: 88,
 };
 
