@@ -14,6 +14,7 @@ import { getAgentPaymentStats } from './payments/agentPayments';
 import { getEloFromChain } from './payments/chainElo';
 import { getUnifiedBalance } from './payments/unifiedBalance';
 import { startPatrol, getPatrolStatus } from './patrol';
+import { startTelegramBot } from './telegramBot';
 import { createPublicClient, createWalletClient, http, keccak256, toHex } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 
@@ -897,6 +898,9 @@ Return ONLY valid JSON with these fields: businessName, purpose (one sentence), 
 
   // --- Autonomous Patrol (agents scan on their own, every 15 min) ---
   startPatrol(orchestrator, logger);
+
+  // --- Telegram Bot (polls Telegram, serves /scan /stats /whoami) ---
+  startTelegramBot(logger, STATUS_PORT);
 
   // --- Main loop ---
   logger.info(`Main loop starting (${config.loopIntervalMs}ms interval)`);
