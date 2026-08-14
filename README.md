@@ -1,6 +1,9 @@
 # Argus
 
 <p align="center">
+  <a href="https://partners.circle.com/partner/argus">
+    <img src="https://img.shields.io/badge/Circle_Alliance-Official_Member-0052FF?style=for-the-badge&logo=circle&logoColor=white" alt="Circle Alliance Member">
+  </a>
   <a href="https://argusarc.dev">
     <img src="https://img.shields.io/badge/LIVE-argusarc.dev-3CB878?style=for-the-badge" alt="Live">
   </a>
@@ -17,13 +20,13 @@
     <img src="https://img.shields.io/badge/Email-hello@argusarc.dev-6366f1?style=for-the-badge&logo=gmail&logoColor=white" alt="Email">
   </a>
   <a href="https://argusarc.dev/patrol">
-    <img src="https://img.shields.io/badge/Scans-1,508-blue?style=for-the-badge" alt="live scans">
+    <img src="https://img.shields.io/badge/Scans-1,561-blue?style=for-the-badge" alt="live scans">
   </a>
   <a href="https://argusarc.dev/patrol">
-    <img src="https://img.shields.io/badge/Patrols-2,430-green?style=for-the-badge" alt="live patrols">
+    <img src="https://img.shields.io/badge/Patrols-2,767-green?style=for-the-badge" alt="live patrols">
   </a>
   <a href="https://argusarc.dev/stats">
-    <img src="https://img.shields.io/badge/Treasury-$21.10_USDC-gold?style=for-the-badge" alt="treasury">
+    <img src="https://img.shields.io/badge/Treasury-$21.84_USDC-gold?style=for-the-badge" alt="treasury">
   </a>
   <a href="https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81">
     <img src="https://img.shields.io/badge/Treasury-ArcScan-6C5CE7?style=for-the-badge" alt="Treasury">
@@ -65,7 +68,7 @@
   <strong>▶️ <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">Watch the demo (3 min)</a> — New UI, real-time patrol, Unibase AI caught live</strong>
 </p>
 
-> **Arc's first security layer. Live now.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,508 verdicts from 350+ users, all on-chain. When Arc mainnet launches, Argus is already running.
+> **Arc's first security layer. Live now. An official Circle Alliance member.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,508 verdicts from 350+ users, all on-chain. When Arc mainnet launches, Argus is already running. [Circle Alliance Directory →](https://partners.circle.com/partner/argus)
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.dev)
 
