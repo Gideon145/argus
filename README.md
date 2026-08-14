@@ -276,6 +276,8 @@ Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallet
 
 ## Circle Alliance Program
 
+<img src="docs/circle-alliance-logo.png" alt="Circle Alliance Program" width="220" align="right" style="margin: 0 0 12px 16px;">
+
 **On August 14, 2026, Argus was accepted into the Circle Alliance Program.** Our listing is live in the official directory: [partners.circle.com/partner/argus](https://partners.circle.com/partner/argus).
 
 Circle's Alliance Program is a curated global network of companies building on USDC and Circle infrastructure. Membership is reviewed and approved by the Circle team. It is not a sponsorship. It is recognition that the depth of integration matters: we run all five Circle primitives in production on every single scan.
