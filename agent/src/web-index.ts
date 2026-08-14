@@ -467,6 +467,23 @@ function startTelegramBot(logger: any) {
   
   const API_BASE = `http://localhost:${PORT}`;
   const users: Record<string, any> = {};
+
+  // Fetch stats with timeout + remote fallback so the bot never hangs on local RPC stalls
+  async function fetchTreasury(): Promise<any> {
+    const local = new AbortController();
+    const timer = setTimeout(() => local.abort(), 5000);
+    try {
+      const res = await fetch(`${API_BASE}/treasury`, { signal: local.signal });
+      const data = await res.json();
+      clearTimeout(timer);
+      return data;
+    } catch {
+      clearTimeout(timer);
+      // Fall back to the production API (works when local server is down or RPCs hang)
+      const res = await fetch('https://argus-web-backend-production.up.railway.app/treasury');
+      return res.json();
+    }
+  }
   
   try {
     const TelegramBot = require('node-telegram-bot-api').default || require('node-telegram-bot-api');
@@ -501,7 +518,7 @@ function startTelegramBot(logger: any) {
 
     bot.onText(/\/stats/, async (msg: any) => {
       try {
-        const data = await fetch(`${API_BASE}/treasury`).then(r => r.json());
+        const data = await fetchTreasury();
         const s = data.stats || {};
         bot.sendMessage(msg.chat.id,
           `📊 *Argus Live*\n🔍 Scans: ${s.queries || '?'}\n✅ Consensus: ${s.consensusReached || '?'}\n💰 Treasury: $${data.treasury?.balance || '?'}\n⛓️ On-chain: ${s.onChainRecords || '?'}`,
