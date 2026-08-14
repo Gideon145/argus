@@ -100,6 +100,7 @@
 - [Why Arc](#why-arc)
 - [The Argus Council](#the-argus-council)
 - [Circle/Arc Stack](#circlearc-stack)
+- [Circle Alliance Program (accepted Aug 14)](#circle-alliance-program)
 - [Real-World Catches](#real-world-catches)
 - [Agent-to-Agent Nanopayments](#agent-to-agent-nanopayments-rfb-3)
 - [No MetaMask Required](#no-metamask-required)
@@ -270,6 +271,34 @@ Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallet
 | **Dev-Controlled Wallets** | [`agent/src/wallets/precreate.ts`](agent/src/wallets/precreate.ts) | 300-wallet pool, assigned to new users on arrival — no MetaMask needed |
 | **Contracts** | [`contracts/contracts/ArgusOracle.sol`](contracts/contracts/ArgusOracle.sol) | Immutable on-chain verdict log + ELO reputation scores |
 | **App Kit Unified Balance** | [`frontend/lib/wallet-context.tsx`](frontend/lib/wallet-context.tsx) | Chain-abstracted USDC balance display for Circle + MetaMask users |
+
+---
+
+## Circle Alliance Program
+
+**On August 14, 2026, Argus was accepted into the Circle Alliance Program.** Our listing is live in the official directory: [partners.circle.com/partner/argus](https://partners.circle.com/partner/argus).
+
+Circle's Alliance Program is a curated global network of companies building on USDC and Circle infrastructure. Membership is reviewed and approved by the Circle team. It is not a sponsorship. It is recognition that the depth of integration matters: we run all five Circle primitives in production on every single scan.
+
+**What acceptance validates:**
+- 5/5 Circle primitives live with real transaction volume, not demos
+- Agent Wallets staking real USDC on every verdict since June
+- The x402 nanopayment rail processing thousands of real scans
+- An on-chain oracle contract Circle can inspect on ArcScan
+
+**What it means for Arc Mainnet (Sept 16):**
+- Direct line to Circle engineering through Alliance channels
+- Co-marketing and launch coordination as an approved partner
+- Early awareness of Arc mainnet infrastructure changes
+- A seat in the ecosystem building the agentic economy
+
+**Challenges we cleared to get here:**
+- Built and shipped through the Lepton hackathon, then kept shipping after it ended
+- Caught real scams live (Unibase AI) and took the heat for it
+- Survived redeploys, RPC outages, and three external security findings
+- Went from a hackathon entry to a listed, partnered, revenue-generating product
+
+Argus is not a hackathon project with a deadline. It is infrastructure with a launch date. The goal was never to win a weekend. It is to become the first and most sophisticated security layer on Arc, live on day one of mainnet, already battle-tested by thousands of scans before the chain even opens.
 
 ---
 
