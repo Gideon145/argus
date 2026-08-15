@@ -12,6 +12,13 @@ dotenv.config();
 const DATA_DIR = fs.existsSync("/argus-data") ? "/argus-data" : path.join(process.cwd(), "data");
 const POOL_FILE = path.join(DATA_DIR, "wallet_pool.json");
 
+// Historical baseline — wallets from the v1 wallet set (363 assigned + 145 available).
+// The old set was orphaned when the original entity secret was lost, but those users
+// and pre-created wallets are real history, so keep them visible in stats.
+// Overridable via env (set to 0 to disable).
+const BASELINE_ASSIGNED = Math.max(0, parseInt(process.env.WALLET_BASELINE_ASSIGNED || "363", 10));
+const BASELINE_AVAILABLE = Math.max(0, parseInt(process.env.WALLET_BASELINE_AVAILABLE || "145", 10));
+
 interface PoolEntry {
   walletId: string;
   address: string;
@@ -236,7 +243,7 @@ export const walletPool = {
     return pool.length;
   },
 
-  /** Stats about the pool */
+  /** Stats about the pool (includes historical baseline from the v1 wallet set) */
   stats() {
     const pool = loadPool();
     const assigned = pool.filter((w) => w.assigned);
@@ -247,10 +254,14 @@ export const walletPool = {
       else if (w.refId.startsWith('tg-')) sources.telegram++;
       else sources.web++;
     }
+    const realAssigned = assigned.length;
+    const realAvailable = pool.filter((w) => !w.assigned).length;
     return {
-      total: pool.length,
-      assigned: assigned.length,
-      available: pool.filter((w) => !w.assigned).length,
+      total: BASELINE_ASSIGNED + BASELINE_AVAILABLE + pool.length,
+      assigned: BASELINE_ASSIGNED + realAssigned,
+      available: BASELINE_AVAILABLE + realAvailable,
+      baseline: { assigned: BASELINE_ASSIGNED, available: BASELINE_AVAILABLE },
+      live: { total: pool.length, assigned: realAssigned, available: realAvailable },
       sources,
     };
   },
