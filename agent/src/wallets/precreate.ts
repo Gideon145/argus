@@ -86,11 +86,31 @@ export const walletPool = {
   /** Auto-initialize pool on startup if empty */
   async initIfEmpty(): Promise<void> {
     const pool = loadPool();
+
+    // Self-heal: if pool only contains seeded/demo wallets and a real wallet
+    // set is configured, wipe and recreate with real Circle wallets.
+    const fakeOnly = pool.length > 0 && pool.every(
+      (w) => w.walletId.startsWith('baseline-') || w.walletId.startsWith('demo-')
+    );
+    if (fakeOnly && process.env.WALLET_SET_ID) {
+      console.log('[WalletPool] Pool contains only seeded/demo wallets — wiping and recreating with real wallets');
+      try {
+        fs.rmSync(POOL_FILE, { force: true });
+      } catch {}
+      await this.createFreshPool();
+      return;
+    }
+
     if (pool.length > 0) {
       console.log(`[WalletPool] Loaded ${pool.length} wallets (${pool.filter(w => !w.assigned).length} available)`);
       return;
     }
 
+    await this.createFreshPool();
+  },
+
+  /** Create a fresh pool of real Circle wallets under the configured wallet set */
+  async createFreshPool(): Promise<void> {
     const walletSetId = process.env.WALLET_SET_ID;
     if (!walletSetId) {
       console.warn("[WalletPool] WALLET_SET_ID not set — skipping auto-init");
