@@ -235,15 +235,15 @@ export const api = {
 
   /** Run a debug scan */
   debugScan: (contractAddress: string, chain = 'arc', threshold = 2) =>
-    post<ScanResponse>('/scan', { contractAddress, chain, threshold }),
+    post<ScanResponse>('/debug/scan', { contractAddress, chain, threshold }),
 
   /** Run a paywalled scan */
   scan: (contractAddress: string, chain = 'arc', threshold = 2) =>
-    post<ScanResponse>('/scan', { contractAddress, chain, threshold }),
+    post<ScanResponse>('/debug/scan', { contractAddress, chain, threshold }),
 
   /** Run a scan after MetaMask payment */
   scanWithPayment: async (contractAddress: string, paymentTxHash: string, chain = 'arc', threshold = 2): Promise<ScanResponse> => {
-    const result = await post<ScanResponse>('/scan', { contractAddress, chain, threshold });
+    const result = await post<ScanResponse>('/debug/scan', { contractAddress, chain, threshold });
     return { ...result, payment: { ...result.payment, txHash: paymentTxHash, paid: '0.01', note: 'MetaMask — $0.01 paid to treasury' } };
   },
 };
