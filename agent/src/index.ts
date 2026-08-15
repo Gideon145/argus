@@ -434,6 +434,12 @@ async function main() {
 
       res.json({ address: assigned.address, walletId: assigned.walletId, note: 'Wallet assigned' });
     } catch (err: any) {
+      // Fallback: demo wallet pool (persisted to file, no Circle API needed)
+      if (process.env.DEMO_MODE === 'true' || String(err.message || '').includes('CIRCLE_API_KEY')) {
+        const entry = walletPool.demoAssign((req.body || {}).userId);
+        logger.info(`DEMO wallet assigned: ${entry.address.slice(0, 10)}... for user ${String((req.body || {}).userId).slice(0, 8)}...`);
+        return res.json({ address: entry.address, walletId: entry.walletId, note: 'demo-wallet' });
+      }
       logger.error('Wallet assign error:', err.message);
       res.status(500).json({ error: 'Wallet assignment failed', detail: err.message });
     }
