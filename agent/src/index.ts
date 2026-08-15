@@ -5,6 +5,7 @@ import express from 'express';
 import cors from 'cors';
 import { createGatewayMiddleware } from '@circle-fin/x402-batching/server';
 import { Orchestrator, QueryRequest } from './orchestrator';
+import { fetchContractData } from './dataProvider';
 import { createLogger, Logger } from './logger';
 import { store } from './store';
 import { fundUserIfNeeded, getFundingWalletAddress, getUSDCBalance } from './wallets/funding';
@@ -534,7 +535,10 @@ async function main() {
         user: wallet.address as `0x${string}`,
       };
 
-      const result = await orchestrator.processQuery(queryReq, threshold || 2);
+      // Fetch on-chain contract metadata (token name, decimals, proxy, owner) for richer analysis
+      const contractData = await fetchContractData(contractAddress).catch(() => undefined);
+
+      const result = await orchestrator.processQuery(queryReq, threshold || 2, contractData);
 
       res.json({
         query: { contractAddress, chain: chain || 'arc' },
@@ -625,7 +629,10 @@ async function main() {
         user: '0xDebugTester00000000000000000000000000000000',
       };
 
-      const result = await orchestrator.processQuery(queryReq, threshold || 2);
+      // Fetch on-chain contract metadata (token name, decimals, proxy, owner) for richer analysis
+      const contractData = await fetchContractData(contractAddress).catch(() => undefined);
+
+      const result = await orchestrator.processQuery(queryReq, threshold || 2, contractData);
 
       res.json({
         query: { contractAddress, chain: chain || 'arc' },
@@ -687,7 +694,10 @@ async function main() {
         user: '0xOKXMarketplace000000000000000000000000000000',
       };
 
-      const result = await orchestrator.processQuery(queryReq, threshold || 2);
+      // Fetch on-chain contract metadata (token name, decimals, proxy, owner) for richer analysis
+      const contractData = await fetchContractData(contractAddress).catch(() => undefined);
+
+      const result = await orchestrator.processQuery(queryReq, threshold || 2, contractData);
 
       res.json({
         query: { contractAddress, chain: chain || 'arc' },
@@ -840,7 +850,10 @@ Return ONLY valid JSON with these fields: businessName, purpose (one sentence), 
         user: payment?.payer || '0xunknown',
       };
 
-      const result = await orchestrator.processQuery(queryReq, threshold || 2);
+      // Fetch on-chain contract metadata (token name, decimals, proxy, owner) for richer analysis
+      const contractData = await fetchContractData(contractAddress).catch(() => undefined);
+
+      const result = await orchestrator.processQuery(queryReq, threshold || 2, contractData);
 
       res.json({
         query: { contractAddress, chain: chain || 'arc' },

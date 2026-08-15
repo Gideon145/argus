@@ -247,7 +247,7 @@ export const alphaAgent = {
         `Total: ${riskScore}/100`,
         ``,
         `TECHNICAL FINDINGS:`,
-        `• Token: ${tokenLabel}${cd?.decimals !== null ? ` (${cd!.decimals} decimals)` : ''}${cd?.totalSupply ? ` — Supply: ${cd!.totalSupply}` : ''}`,
+        `• Token: ${tokenLabel}${cd && cd.decimals !== null ? ` (${cd.decimals} decimals)` : ''}${cd?.totalSupply ? ` — Supply: ${cd.totalSupply}` : ''}`,
         `• Contract type: ${isOnChain ? 'On-chain contract confirmed' : 'Unknown'}`,
         `• Proxy status: ${cd?.isProxy ? `⚠️ PROXY (${cd!.proxyType}) — UPGRADEABLE` : 'Likely immutable (no EIP-1967 slot)'}`,
         `• Address entropy: ${uniqueChars} unique hex chars (${uniqueChars <= 6 ? 'LOW — auto-generated pattern' : 'Normal'})`,

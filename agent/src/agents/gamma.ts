@@ -225,7 +225,7 @@ export const gammaAgent = {
         `• Token identity: ${tokenLabel || 'Unknown — no name/symbol returned from chain'}`,
         `• Contract type: ${cd?.isContract ? 'Confirmed on-chain contract' : 'Not verified on-chain'}${cd?.isProxy ? ` — ⚠️ PROXY (${cd!.proxyType})` : ''}`,
         `• Ownership: ${cd?.owner && cd!.owner !== '0x0000000000000000000000000000000000000000' ? `Controlled by ${cd!.owner.slice(0, 12)}...` : cd?.owner === '0x0000000000000000000000000000000000000000' ? 'Renounced — no admin' : 'Unknown'}`,
-        `• Supply: ${cd?.totalSupply ? cd!.totalSupply : 'Unknown'}${cd?.decimals !== null ? ` (${cd!.decimals} decimals)` : ''}`,
+        `• Supply: ${cd?.totalSupply ? cd.totalSupply : 'Unknown'}${cd && cd.decimals !== null ? ` (${cd.decimals} decimals)` : ''}`,
         `• Address checks: ${ADDRESS_CHECKS.filter(c => c.test(addr)).map(c => c.name).join(', ') || 'All passed'}`,
         `• Checksum: ${hasMixedCase ? 'Valid EIP-55' : 'Not checksummed — verify address manually'}`,
         ``,

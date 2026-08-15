@@ -252,7 +252,7 @@ export const betaAgent = {
         else if (s < BigInt('1000000')) { finds.push('Very low supply — illiquid risk'); liquidityScore += 10; }
       } catch {}
     }
-    if (cd?.decimals !== null && cd!.decimals > 18) {
+  if (cd && cd.decimals !== null && cd.decimals > 18) {
       finds.push('Decimals > 18 — unusual tokenomics'); taxScore += 5;
     }
 
@@ -285,7 +285,7 @@ export const betaAgent = {
         `Total: ${riskScore}/100`,
         ``,
         `TECHNICAL FINDINGS:`,
-        `• Token identity: ${tokenLabel}${cd?.decimals !== null ? ` (${cd!.decimals} decimals)` : ''}`,
+        `• Token identity: ${tokenLabel}${cd && cd.decimals !== null ? ` (${cd.decimals} decimals)` : ''}`,
         `• Contract type: ${cd?.isProxy ? `⚠️ PROXY (${cd!.proxyType || 'upgradeable'})` : cd?.isContract ? 'Standard contract' : 'Unknown'}`,
         `• Ownership: ${cd?.owner && cd!.owner !== '0x0000000000000000000000000000000000000000' ? `Controlled by ${cd!.owner.slice(0, 12)}...` : cd?.owner === '0x0000000000000000000000000000000000000000' ? 'Renounced' : 'Unknown'}`,
         `• Supply: ${cd?.totalSupply || 'Unknown'} — ${cd?.totalSupply ? (BigInt(cd!.totalSupply) > BigInt('1000000000000000000000000000000') ? 'Very large (meme-style)' : BigInt(cd!.totalSupply) < BigInt('1000000') ? 'Very small (illiquid risk)' : 'Normal range') : 'Not available'}`,
