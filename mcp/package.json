@@ -1,6 +1,6 @@
 {
-  "name": "@argus-arc/mcp",
-  "version": "0.1.0",
+  "name": "@ogxavier/mcp",
+  "version": "0.1.1",
   "description": "Argus — Multi-Agent Security Oracle for Claude & ChatGPT. 3-agent consensus smart-contract audits over MCP.",
   "type": "module",
   "bin": {

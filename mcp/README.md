@@ -16,7 +16,7 @@
 ## Quick start with npx
 
 ```bash
-npx @argus-arc/mcp
+npx @ogxavier/mcp
 ```
 
 No build, no install — just run it. Point your MCP client at this command.
@@ -30,7 +30,7 @@ Add to `claude_desktop_config.json` (Claude → Settings → Developer → Edit 
   "mcpServers": {
     "argus": {
       "command": "npx",
-      "args": ["-y", "@argus-arc/mcp"]
+      "args": ["-y", "@ogxavier/mcp"]
     }
   }
 }
@@ -47,7 +47,7 @@ Claude will call `scan_contract` and cite the 3-agent consensus verdict.
 
 1. Open ChatGPT → your profile → **Connectors** → **MCP**
 2. Add a connector of type **stdio**
-3. Command: `npx`, Arguments: `-y @argus-arc/mcp`
+3. Command: `npx`, Arguments: `-y @ogxavier/mcp`
 4. Ask: *"Use Argus to scan 0x... and tell me if it's a scam"*
 
 Works the same in **Cursor**, **Windsurf**, and any MCP-compatible client.
@@ -63,7 +63,7 @@ Works the same in **Cursor**, **Windsurf**, and any MCP-compatible client.
   "mcpServers": {
     "argus": {
       "command": "npx",
-      "args": ["-y", "@argus-arc/mcp"],
+      "args": ["-y", "@ogxavier/mcp"],
       "env": { "ARGUS_API_URL": "https://your-backend.example.com" }
     }
   }
