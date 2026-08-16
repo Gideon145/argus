@@ -38,20 +38,6 @@ export const KNOWN_TOKENS: Record<string, KnownToken> = {
 
   // === SCAM: Known exploits and rug pulls ===
   '0x6944e1df6bf5972305f9ab25df47ef10de01bcc8': { address: '0x6944e1df6bf5972305f9ab25df47ef10de01bcc8', verdict: 'SCAM', note: 'Unibase AI — proxy control, 100% sell fee, documented rug' },
-  '0x239b4f1f559cb2bc925b4e5d5a1ba0be0bc7e1f2': { address: '0x239b4f1f559cb2bc925b4e5d5a1ba0be0bc7e1f2', verdict: 'RISKY', note: '$CZ Token — CZ-themed meme, honeypot indicators, unlimited minting, automated deploy' },
-  '0xfcf0c1e5d8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c2': { address: '0xfcf0c1e5d8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c2', verdict: 'SCAM', note: 'Fake USDC clone — impersonation, freeze function backdoor' },
-  '0xf643a2b5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e1': { address: '0xf643a2b5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e1', verdict: 'SCAM', note: 'ArbitrageBot — deposit scam, no trading logic in contract' },
-  '0x8f3c2a1d5e8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c': { address: '0x8f3c2a1d5e8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c', verdict: 'SCAM', note: 'DegenTax — rotating tax wallet, unlocked LP, documented exploit' },
-  '0xb21a7e3f5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e': { address: '0xb21a7e3f5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e', verdict: 'SCAM', note: 'YieldMax — fake 500% APY, hardcoded oracle manipulation' },
-  '0xa33aa078febe7d9fb5c9b834d592bf4c8da58a0a': { address: '0xa33aa078febe7d9fb5c9b834d592bf4c8da58a0a', verdict: 'SCAM', note: 'Squid Game token — 99% sell restriction, known rug pull' },
-  '0x88bb46965e3373c0a4f8e3e7e2c0c5d9a0b3f4c2': { address: '0x88bb46965e3373c0a4f8e3e7e2c0c5d9a0b3f4c2', verdict: 'SCAM', note: 'Fake airdrop contract — approval phishing, drains wallets on interaction' },
-  '0x3a0b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b': { address: '0x3a0b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b', verdict: 'SCAM', note: 'MEV bot scam — fake frontrunning claim, no actual logic deployed' },
-  '0x7beb10c6e8f1d4a7b9c2f5c8e1d4a7b9c2f5c8e1d': { address: '0x7beb10c6e8f1d4a7b9c2f5c8e1d4a7b9c2f5c8e1d', verdict: 'SCAM', note: 'Honeypot token — can buy, cannot sell, transfer restrictions enabled' },
-  '0x0c2e8f1d4a7b9c2f5c8e1d4a7b9c2f5c8e1d4a7b9': { address: '0x0c2e8f1d4a7b9c2f5c8e1d4a7b9c2f5c8e1d4a7b9', verdict: 'SCAM', note: 'Hidden mint function — unlimited token creation by owner' },
-  '0xde30da39c46104798bb5aa3fe8b5a0e1f1d4a7b9': { address: '0xde30da39c46104798bb5aa3fe8b5a0e1f1d4a7b9', verdict: 'SCAM', note: 'Wallet drainer — disguised as airdrop claim, transfers user assets to owner' },
-  '0xabc0000000000000000000000000000000000001': { address: '0xabc0000000000000000000000000000000000001', verdict: 'SCAM', note: 'Address poisoning — mimics known wallet prefix to trick copy-paste transfers' },
-  '0xefbf22f699feb02f1e2f1d4a7b9c2f5c8e1d4a7b': { address: '0xefbf22f699feb02f1e2f1d4a7b9c2f5c8e1d4a7b', verdict: 'SCAM', note: 'Fake staking pool — Ponzi, rewards paid from new deposits, no yield source' },
-  '0x9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8': { address: '0x9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8', verdict: 'SCAM', note: 'Rug pull token — liquidity removed within 48h of launch' },
 
   // === RISKY: Suspicious but not conclusively scams ===
   '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce': { address: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', verdict: 'RISKY', note: 'SHIB — high holder concentration, proxy upgrade pattern, treat with caution' },

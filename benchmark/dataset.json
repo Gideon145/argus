@@ -1,42 +1,137 @@
 [
-  {"address":"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48","label":"SAFE","source":"Circle-issued USDC, audited, billions in circulation"},
-  {"address":"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2","label":"SAFE","source":"Wrapped Ether, most used ERC-20 wrapper"},
-  {"address":"0x6B175474E89094C44Da98b954EedeAC495271d0F","label":"SAFE","source":"MakerDAO DAI, audited stablecoin"},
-  {"address":"0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984","label":"SAFE","source":"Uniswap UNI, governance token, audited"},
-  {"address":"0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0","label":"SAFE","source":"Polygon MATIC, audited bridge token"},
-  {"address":"0x514910771AF9Ca656af840dff83E8264EcF986CA","label":"SAFE","source":"Chainlink LINK, audited oracle token"},
-  {"address":"0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599","label":"SAFE","source":"Wrapped Bitcoin WBTC, audited"},
-  {"address":"0xdAC17F958D2ee523a2206206994597C13D831ec7","label":"SAFE","source":"Tether USDT, audited stablecoin"},
-  {"address":"0xB8c77482e45F1F44dE1745F52C74426C631bDD52","label":"SAFE","source":"Binance BNB, audited"},
-  {"address":"0xa2327a938Febf5FEC13baCFb16Ae10EcBc4cbDCF","label":"SAFE","source":"Curve DAO CRV, audited"},
-  {"address":"0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9","label":"SAFE","source":"Aave AAVE, audited DeFi token"},
-  {"address":"0x0D8775F648430679A709E98d2b0Cb6250d2887EF","label":"SAFE","source":"Basic Attention Token BAT, audited"},
-  {"address":"0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2","label":"SAFE","source":"Maker MKR, audited governance token"},
-  {"address":"0xc00e94Cb662C3520282E6f5717214004A7f26888","label":"SAFE","source":"Compound COMP, audited"},
-  {"address":"0x111111111117dC0aa78b770fA6A738034120C302","label":"SAFE","source":"1inch 1INCH, audited DEX aggregator"},
-  {"address":"0x3845badAde8e6dFF049820680d1F14bD3903a5d0","label":"SAFE","source":"The Sandbox SAND, audited gaming token"},
-  {"address":"0x0F5D2fB29fb7d3CFeE444a200298f468908cC942","label":"SAFE","source":"Decentraland MANA, audited metaverse token"},
-  {"address":"0x4Fabb145d64652a948d72533023f6E7A623C7C53","label":"SAFE","source":"Binance USD BUSD, audited stablecoin"},
-  {"address":"0x8E870D67F660D95d5be530380D0eC0bd388289E1","label":"SAFE","source":"Pax Dollar USDP, audited stablecoin"},
-  {"address":"0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd","label":"SAFE","source":"Gemini Dollar GUSD, audited stablecoin"},
-  {"address":"0x6944e1df6bf5972305f9ab25df47ef10de01bcc8","label":"SCAM","source":"Unibase AI - Case Files: proxy control, 100% sell fee"},
-  {"address":"0xfcf0c1e5d8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c2","label":"SCAM","source":"USD Coin clone - Case Files: impersonation, freeze function"},
-  {"address":"0xF643a2b5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e1","label":"SCAM","source":"ArbitrageBot - Case Files: deposit scam, no trading logic"},
-  {"address":"0x8f3c2a1d5e8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c","label":"SCAM","source":"DegenTax - Case Files: rotating tax wallet, unlocked LP"},
-  {"address":"0xb21a7e3f5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e","label":"SCAM","source":"YieldMax - Case Files: fake 500% APY, hardcoded oracle"},
-  {"address":"0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE","label":"RISKY","source":"SHIB - high holder concentration, proxy pattern"},
-  {"address":"0x87230146E138d3F296a9D162A2Dd8098f322b125","label":"RISKY","source":"SQUID - known honeypot, transfer restrictions"},
-  {"address":"0xa33Aa078FebE7D9Fb5C9B834d592bF4c8dA58a0A","label":"SCAM","source":"Known rug pull - Squid Game token, 99% sell restriction"},
-  {"address":"0x88bB46965E3373c0a4F8e3e7E2c0c5D9A0B3F4C2","label":"SCAM","source":"Fake airdrop contract - approval phishing"},
-  {"address":"0x3a0b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b","label":"SCAM","source":"MEV bot scam - frontrunning claim, no actual logic"},
-  {"address":"0x7beB10c6E8F1D4a7B9c2F5c8e1D4a7B9c2F5c8e1D","label":"SCAM","source":"Honeypot token - can buy, cannot sell"},
-  {"address":"0x0c2E8F1D4a7B9c2F5c8e1D4a7B9c2F5c8e1D4a7B9","label":"SCAM","source":"Hidden mint function, unlimited token creation"},
-  {"address":"0xDe30da39c46104798bB5aA3fe8B5A0e1F1D4a7B9","label":"SCAM","source":"Wallet drainer contract - disguised as airdrop claim"},
-  {"address":"0xABC0000000000000000000000000000000000001","label":"SCAM","source":"Address poisoning scam - similar to known wallet prefix"},
-  {"address":"0x000000000000000000000000000000000000dEaD","label":"SAFE","source":"Ethereum burn address - not a token, but a safe null address"},
-  {"address":"0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f","label":"SAFE","source":"Uniswap V2 Factory - audited, billions in volume"},
-  {"address":"0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D","label":"SAFE","source":"Uniswap V2 Router - audited, billions in volume"},
-  {"address":"0xE592427A0AEce92De3Edee1F18E0157C05861564","label":"SAFE","source":"Uniswap V3 Router - audited, billions in volume"},
-  {"address":"0xefbF22F699Feb02F1E2F1D4a7B9c2F5c8e1D4a7B","label":"SCAM","source":"Fake staking pool - rewards paid from new deposits (Ponzi)"},
-  {"address":"0x9b0C1d2E3F4a5B6c7D8e9F0a1B2c3D4e5F6a7B8","label":"SCAM","source":"Rug pull token - liquidity removed within 48h of launch"}
+  {
+    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "label": "SAFE",
+    "source": "Circle-issued USDC, audited, billions in circulation"
+  },
+  {
+    "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "label": "SAFE",
+    "source": "Wrapped Ether, most used ERC-20 wrapper"
+  },
+  {
+    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "label": "SAFE",
+    "source": "MakerDAO DAI, audited stablecoin"
+  },
+  {
+    "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    "label": "SAFE",
+    "source": "Uniswap UNI, governance token, audited"
+  },
+  {
+    "address": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+    "label": "SAFE",
+    "source": "Polygon MATIC, audited bridge token"
+  },
+  {
+    "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    "label": "SAFE",
+    "source": "Chainlink LINK, audited oracle token"
+  },
+  {
+    "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    "label": "SAFE",
+    "source": "Wrapped Bitcoin WBTC, audited"
+  },
+  {
+    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "label": "SAFE",
+    "source": "Tether USDT, audited stablecoin"
+  },
+  {
+    "address": "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
+    "label": "SAFE",
+    "source": "Binance BNB, audited"
+  },
+  {
+    "address": "0xa2327a938Febf5FEC13baCFb16Ae10EcBc4cbDCF",
+    "label": "SAFE",
+    "source": "Curve DAO CRV, audited"
+  },
+  {
+    "address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+    "label": "SAFE",
+    "source": "Aave AAVE, audited DeFi token"
+  },
+  {
+    "address": "0x0D8775F648430679A709E98d2b0Cb6250d2887EF",
+    "label": "SAFE",
+    "source": "Basic Attention Token BAT, audited"
+  },
+  {
+    "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+    "label": "SAFE",
+    "source": "Maker MKR, audited governance token"
+  },
+  {
+    "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+    "label": "SAFE",
+    "source": "Compound COMP, audited"
+  },
+  {
+    "address": "0x111111111117dC0aa78b770fA6A738034120C302",
+    "label": "SAFE",
+    "source": "1inch 1INCH, audited DEX aggregator"
+  },
+  {
+    "address": "0x3845badAde8e6dFF049820680d1F14bD3903a5d0",
+    "label": "SAFE",
+    "source": "The Sandbox SAND, audited gaming token"
+  },
+  {
+    "address": "0x0F5D2fB29fb7d3CFeE444a200298f468908cC942",
+    "label": "SAFE",
+    "source": "Decentraland MANA, audited metaverse token"
+  },
+  {
+    "address": "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
+    "label": "SAFE",
+    "source": "Binance USD BUSD, audited stablecoin"
+  },
+  {
+    "address": "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
+    "label": "SAFE",
+    "source": "Pax Dollar USDP, audited stablecoin"
+  },
+  {
+    "address": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
+    "label": "SAFE",
+    "source": "Gemini Dollar GUSD, audited stablecoin"
+  },
+  {
+    "address": "0x6944e1df6bf5972305f9ab25df47ef10de01bcc8",
+    "label": "SCAM",
+    "source": "Unibase AI - Case Files: proxy control, 100% sell fee"
+  },
+  {
+    "address": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+    "label": "RISKY",
+    "source": "SHIB - high holder concentration, proxy pattern"
+  },
+  {
+    "address": "0x87230146E138d3F296a9D162A2Dd8098f322b125",
+    "label": "RISKY",
+    "source": "SQUID - known honeypot, transfer restrictions"
+  },
+  {
+    "address": "0x000000000000000000000000000000000000dEaD",
+    "label": "SAFE",
+    "source": "Ethereum burn address - not a token, but a safe null address"
+  },
+  {
+    "address": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+    "label": "SAFE",
+    "source": "Uniswap V2 Factory - audited, billions in volume"
+  },
+  {
+    "address": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+    "label": "SAFE",
+    "source": "Uniswap V2 Router - audited, billions in volume"
+  },
+  {
+    "address": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
+    "label": "SAFE",
+    "source": "Uniswap V3 Router - audited, billions in volume"
+  }
 ]

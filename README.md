@@ -532,17 +532,17 @@ An AI audit doesn't replace a manual one. It's a first pass. But for a 100-line 
 
 ## Accuracy Evaluation
 
-*54 tokens (40 known + 14 held-out). Positive class = SCAM; RISKY on SAFE = incorrect, RISKY on SCAM = correct. [Methodology ?](benchmark)*
+*41 tokens (27 known + 14 held-out). Positive class = SCAM; RISKY on SAFE = incorrect, RISKY on SCAM = correct. [Methodology ?](benchmark)*
 
-**100% precision. Zero false positives. Never flags safe tokens as scams.** On known contracts (Etherscan-verified source code available), Argus catches everything — 16/16 scams, 24/24 safe. On held-out tokens, recall drops to 50% (2/4 scams caught) when no verified source code is available. The 2 missed scams are unverified contracts with zero on-chain metadata — no security tool can analyze contracts it cannot see. Agent β's v0.15 upgrade (real-time balanceOf + holder queries) targets this gap directly.
+**100% precision. Zero false positives. Never flags safe tokens as scams.** On known contracts (Etherscan-verified source code available), Argus catches everything — the documented scam (Unibase AI) is flagged, all 24 safe tokens pass, and the two high-concentration meme tokens (SHIB, SQUID) are correctly flagged RISKY. On held-out tokens, recall drops to 50% (2/4 scams caught) when no verified source code is available. The 2 missed scams are unverified contracts with zero on-chain metadata — no security tool can analyze contracts it cannot see. Agent β's v0.15 upgrade (real-time balanceOf + holder queries) targets this gap directly.
 
 For creators: your legitimate launch is never wrongly flagged. For traders: a SAFE verdict is a SAFE verdict. For the 2 unknown scams missed: on-chain data queries shipping in v0.15.
 
-**v1 55% (blind heuristics) → v5: 100% precision on held-out tokens.** 54 tokens tested (40 known + 14 held-out). [Methodology ?](benchmark)
+**v1 55% (blind heuristics) → v5: 100% precision on held-out tokens.** 41 tokens tested (27 known + 14 held-out). [Methodology ?](benchmark)
 
 | Cohort | Tokens | Accuracy | Precision | Recall | Notes |
 |--------|--------|----------|-----------|--------|-------|
-| Known (database-backed) | 40 | **100%** | 100% | 100% | 16/16 scams caught, 24/24 safe |
+| Known (database-backed) | 27 | **100%** | 100% | 100% | 1/1 scam flagged, 24/24 safe, SHIB + SQUID flagged RISKY |
 | Held-out (no DB entries) | 14 | 85.7% | **100%** | 50%* | 10/10 safe (all correct), 2/4 scam caught |
 
 *The 2 missed scams lack verified Etherscan source code — agents had no contract metadata to analyze. This is a data availability ceiling, not an accuracy ceiling. All 10 legitimate tokens correctly classified. Inter-agent disagreement: 14.3%. Reproduce: `cd benchmark && npx tsx report.ts`.*
