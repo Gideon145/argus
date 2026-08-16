@@ -4,7 +4,7 @@
 
 **🎥 [Watch the 3-min demo](https://www.youtube.com/watch?v=sHgjJe5jx6s) — Updated Jul 10 with the new UI**
 
-**The punchline:** Three AI agents stake real USDC on every token verdict. DeepSeek and Claude pay each other automatically through their verdicts — nanopayments settle in under 500ms. 350+ users. 1,508 scans. 5.7K OKX sales at 4.94 stars. 241 reviews. $21.10 USDC treasury. Everything verifiable on ArcScan.
+**The punchline:** Three AI agents stake real USDC on every token verdict. DeepSeek and Claude pay each other automatically through their verdicts — nanopayments settle in under 500ms. 363+ users. 1,637 scans. 5.7K OKX sales at 4.94 stars. 241 reviews. $24.12 USDC treasury. Everything verifiable on ArcScan.
 
 ---
 
@@ -26,7 +26,7 @@ Scan this: `0x6944e1df6bf5972305f9ab25df47ef10de01bcc8` (Unibase AI — document
 
 ## 2. Autonomous Patrol — agents don't wait (60 seconds)
 
-Go to **[argusarc.dev/patrol](https://argusarc.dev/patrol)** (alt: **[argusarc.xyz/patrol](https://argusarc.xyz/patrol)**) — every 15 minutes, three agents autonomously scan a contract, stake USDC, reach consensus, and settle on-chain. Zero human input. 2,430 patrol scans completed.
+Go to **[argusarc.dev/patrol](https://argusarc.dev/patrol)** (alt: **[argusarc.xyz/patrol](https://argusarc.xyz/patrol)**) — every 15 minutes, three agents autonomously scan a contract, stake USDC, reach consensus, and settle on-chain. Zero human input. 3,078 patrol scans completed.
 
 This is not a cron job. Agents independently decide, stake, and pay each other. The patrol feed shows every autonomous scan with verdict, consensus breakdown, and ArcScan links.
 
