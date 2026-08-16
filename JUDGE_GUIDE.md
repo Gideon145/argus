@@ -38,7 +38,7 @@ This is not a cron job. Agents independently decide, stake, and pay each other. 
 
 | What | ArcScan |
 |------|---------|
-| Treasury ($21.10 USDC) | [0x0699...f77d81](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| Treasury ($24.12 USDC) | [0x0699...f77d81](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | Oracle (verdict log) | [0x563b...b46C8](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8) |
 | Agent α wallet | [0x284e...2d320](https://testnet.arcscan.app/address/0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320) |
 | Agent β wallet | [0x3f75...7a34f](https://testnet.arcscan.app/address/0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f) |
@@ -49,7 +49,7 @@ This is not a cron job. Agents independently decide, stake, and pay each other. 
 
 ---
 
-## 4. CLI + Telegram (30 seconds)
+## 4. CLI + Telegram + MCP (30 seconds)
 
 ```bash
 npx argus-scan@latest 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
@@ -60,18 +60,20 @@ No signup. Auto-creates Circle wallet. Same consensus. [npm](https://www.npmjs.c
 
 **SDK:** `npm i @ogxavier/argus-sdk` → `import { scan } from '@ogxavier/argus-sdk'` → call from any JS/TS codebase.
 
+**MCP:** `npx @ogxavier/mcp` in Claude Desktop / Claude Code — or remote URL `https://argus-mcp-production-8372.up.railway.app/mcp` for claude.ai & ChatGPT. Ask "scan 0x..." and the model calls Argus natively. One-click install: [Smithery](https://smithery.ai/servers/argus-arc/argus).
+
 ---
 
 ## 5. Numbers you can verify
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| Scans | 1,508 | `GET /stats` |
-| Patrol scans | 2,430 | `GET /patrol-log` |
-| Users | 350+ (web, CLI, Telegram, npm, OKX) | `GET /stats` |
+| Scans | 1,637 | `GET /stats` |
+| Patrol scans | 3,078 | `GET /patrol-log` |
+| Users | 363+ (web, CLI, Telegram, MCP, npm, OKX) | `GET /stats` |
 | OKX Marketplace | 5.7K sold · 4.94 stars · 241 reviews | okx.ai/agents/5047 |
 | Consensus rate | 89.6% | on-chain |
-| Treasury | $21.10 USDC | ArcScan |
+| Treasury | $24.12 USDC | ArcScan |
 | Circle primitives | 5/5 | Gateway x402, Agent Wallets, DCW, Contracts, App Kit |
 | Circle primitives | 5/5 | Gateway x402, Agent Wallets, DCW, Contracts, App Kit |
 | Benchmark (held-out) | 85.7% accuracy, 100% precision | [`benchmark/`](benchmark/) |

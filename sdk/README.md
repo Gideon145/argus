@@ -4,6 +4,8 @@ TypeScript SDK for [Argus](https://argusarc.dev) — Arc's multi-agent security 
 
 Three AI agents (DeepSeek-V3, Claude Sonnet 4.5, and a deterministic rules engine) independently audit smart contracts and stake real USDC on every verdict. This SDK lets any TypeScript/JavaScript app call Argus in one line.
 
+> No-code? Argus also ships as an MCP server for Claude & ChatGPT: `npx @ogxavier/mcp` · [Smithery](https://smithery.ai/servers/argus-arc/argus)
+
 ## Install
 
 ```bash

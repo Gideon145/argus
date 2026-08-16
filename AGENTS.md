@@ -42,6 +42,7 @@ bash verify.sh
 | `agent/src/wallets/funding.ts` | Auto-funding wallet — sends $0.10 test USDC on connect |
 | `agent/src/wallets/precreate.ts` | Circle pre-create wallet pool — instant onboarding |
 | `agent/src/gateway.ts` | Gateway x402 payment processing |
+| `mcp/` | MCP server — Argus as a native tool for Claude & ChatGPT (4 tools, stdio + HTTP) |
 | `frontend/app/page.tsx` | Main scan UI |
 | `frontend/app/stats/page.tsx` | Live stats dashboard |
 | `contracts/ArgusOracle.sol` | Immutable verdict log + ELO on Arc testnet |
@@ -66,6 +67,18 @@ curl https://argus-web-backend-production.up.railway.app/agent-payments
 
 # Get live stats
 curl https://argus-web-backend-production.up.railway.app/stats
+```
+
+### Use Argus via MCP (Claude Desktop, ChatGPT, Smithery)
+
+```bash
+# stdio (Claude Desktop / Claude Code)
+claude mcp add argus -- npx -y @ogxavier/mcp
+
+# streamable HTTP (claude.ai, ChatGPT, Smithery)
+curl -X POST https://argus-mcp-production-8372.up.railway.app/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
 ```
 
 ### Add a new agent

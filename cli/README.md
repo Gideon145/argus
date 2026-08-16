@@ -2,6 +2,8 @@
 
 Scan any token address from your terminal. Same 3-agent consensus as the web app.
 
+> Prefer talking to an AI? Argus also ships as an MCP server for Claude & ChatGPT: `npx @ogxavier/mcp` · [Smithery](https://smithery.ai/servers/argus-arc/argus)
+
 ## Install
 
 ```bash
