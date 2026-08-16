@@ -73,7 +73,7 @@ export async function scan(
     throw new Error(`Invalid contract address: ${contractAddress}`);
   }
 
-  return fetchApi<ScanResponse>('/scan', {
+  return fetchApi<ScanResponse>('/debug/scan', {
     method: 'POST',
     body: JSON.stringify({ contractAddress, chain, threshold }),
   });

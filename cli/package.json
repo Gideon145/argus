@@ -1,6 +1,6 @@
 {
   "name": "argus-scan",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "description": "Argus CLI — multi-agent security oracle. Scan any token address from your terminal.",
   "main": "index.js",
   "bin": "./index.js",

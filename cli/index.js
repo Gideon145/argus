@@ -36,9 +36,15 @@ function saveConfig(cfg) {
 async function ensureWallet() {
   let cfg = loadConfig();
 
-  // Already registered
-  if (cfg && cfg.userId && cfg.walletAddress) {
+  // Already registered — skip stale demo wallets from the pre-wipe pool
+  const isStale = cfg && cfg.walletAddress && cfg.walletId && String(cfg.walletId).startsWith('demo-');
+  if (cfg && cfg.userId && cfg.walletAddress && !isStale) {
     return cfg;
+  }
+  if (isStale) {
+    process.stderr.write(`  Old wallet no longer valid (pool refreshed) — creating a fresh one...\n`);
+    try { fs.unlinkSync(CONFIG_FILE); } catch {}
+    cfg = null;
   }
 
   // First time — register a Circle wallet
@@ -225,6 +231,18 @@ async function cmdScan(address, opts = {}) {
   } catch (e) {
     console.error(`${C.red}Error:${C.reset} API unreachable — ${e.message}`);
     process.exit(1);
+  }
+
+  // Self-heal: stale wallet from the pre-wipe pool — re-register once and retry
+  if (result && !result.result && (result.error || result.detail)) {
+    console.error(`${C.dim}  Wallet no longer registered — re-registering and retrying...${C.reset}`);
+    try { fs.unlinkSync(CONFIG_FILE); } catch {}
+    cfg = await ensureWallet();
+    result = await spinner('Agents analyzing...', apiPost('/scan/circle', {
+      userId: cfg.userId,
+      contractAddress: address,
+      chain: 'arc',
+    }));
   }
 
   if (!result || !result.result) {

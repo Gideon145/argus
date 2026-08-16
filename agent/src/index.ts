@@ -492,10 +492,19 @@ async function main() {
         return res.status(400).json({ error: 'userId and contractAddress required' });
       }
 
-      // Look up user's Circle wallet
-      const wallet = walletPool.getByRefId(userId);
+      // Look up user's Circle wallet — self-heal: auto-assign if missing
+      // (stale CLI/SDK configs from before the wallet pool wipe)
+      let wallet: { address: string; walletId: string } | null = walletPool.getByRefId(userId);
       if (!wallet) {
-        return res.status(404).json({ error: 'No wallet found. Get started first.' });
+        logger.info(`No wallet for ${String(userId).slice(0, 12)}... — auto-assigning a fresh one`);
+        wallet = await walletPool.assign(userId);
+        if (!wallet) {
+          await walletPool.topUp(10);
+          wallet = await walletPool.assign(userId);
+        }
+        if (!wallet) {
+          return res.status(503).json({ error: 'No wallets available. Try again shortly.' });
+        }
       }
 
       logger.info(`Circle scan: ${contractAddress} by user ${userId.slice(0, 8)}... (wallet ${wallet.address.slice(0, 10)}...)`);
