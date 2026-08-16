@@ -38,6 +38,7 @@ export const KNOWN_TOKENS: Record<string, KnownToken> = {
 
   // === SCAM: Known exploits and rug pulls ===
   '0x6944e1df6bf5972305f9ab25df47ef10de01bcc8': { address: '0x6944e1df6bf5972305f9ab25df47ef10de01bcc8', verdict: 'SCAM', note: 'Unibase AI — proxy control, 100% sell fee, documented rug' },
+  '0x239b4f1f559cb2bc925b4e5d5a1ba0be0bc7e1f2': { address: '0x239b4f1f559cb2bc925b4e5d5a1ba0be0bc7e1f2', verdict: 'RISKY', note: '$CZ Token — CZ-themed meme, honeypot indicators, unlimited minting, automated deploy' },
   '0xfcf0c1e5d8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c2': { address: '0xfcf0c1e5d8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c2', verdict: 'SCAM', note: 'Fake USDC clone — impersonation, freeze function backdoor' },
   '0xf643a2b5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e1': { address: '0xf643a2b5c8e1d4a7b9c2f5c8e1d4a7b9c2f5c8e1', verdict: 'SCAM', note: 'ArbitrageBot — deposit scam, no trading logic in contract' },
   '0x8f3c2a1d5e8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c': { address: '0x8f3c2a1d5e8b2f1a4c6e9d3b7a2f5c8e1d4a7b9c', verdict: 'SCAM', note: 'DegenTax — rotating tax wallet, unlocked LP, documented exploit' },
