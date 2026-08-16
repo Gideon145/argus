@@ -1,5 +1,6 @@
 // Argus MCP — shared server construction (used by stdio + HTTP transports)
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { ListResourcesRequestSchema, ListPromptsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { scanContract, recentScans, agentElo, poolStats } from "./api.js";
 import { formatScanReport, formatRecentScans, formatElo, formatPoolStats } from "./format.js";
@@ -11,11 +12,16 @@ export function createArgusServer(): McpServer {
       version: "0.1.1",
     },
     {
-      capabilities: { tools: {} },
+      capabilities: { tools: {}, resources: {}, prompts: {} },
       instructions:
         "Argus is a multi-agent smart-contract security oracle. Use scan_contract to audit any EVM contract address. Three independent AI agents analyze it and vote with real stakes — the consensus verdict is the result. Powered by the Argus Arc testnet oracle.",
     }
   );
+
+  // Tools-only server — answer resources/prompts listings with empty sets so
+  // scanners (Smithery etc.) don't log Method-not-found warnings.
+  server.server.setRequestHandler(ListResourcesRequestSchema, async () => ({ resources: [] }));
+  server.server.setRequestHandler(ListPromptsRequestSchema, async () => ({ prompts: [] }));
 
   // ── scan_contract ──────────────────────────────────────────────
   server.registerTool(
