@@ -720,6 +720,19 @@ Agents use [Shadow Float V2](https://testnet.arcscan.app/address/0x20dcA96B0C487
 
 **[t.me/argus_communityy](https://t.me/argus_communityy)** — 80+ members and growing. Users share scans, compare verdicts, flag suspicious tokens, and help each other stay safe. Drop in and see what people are scanning right now.
 
+### Feedback we got — and what we did about it
+
+Real users reach us on X and Telegram. Every report gets a same-day response.
+
+| From | What they said | What we did |
+|------|----------------|-------------|
+| **@trillionaeon** (X DM) | *"Your tool has been really helpful. I degen a lot and Argus has really saved me from some scam tokens. Keep up the good work."* | Thanked them, asked permission to feature the quote, invited them to tag us on flagged tokens. |
+| **CriptoPoeta** (X DM, Argentina) | Reported an invalid SSL certificate on the site, minutes after our Alliance announcement. | Audited both domains within the hour — certs valid (Let's Encrypt, freshly rotated). Walked them through cache refresh; both `argusarc.dev` and `argusarc.xyz` confirmed working. |
+| **Circle Alliance team** (Julie) | Our X announcement used a custom graphic — Circle can only engage with pre-approved assets. | Reposted the announcement using the approved copy and image from the onboarding materials, and shared the new link for Circle to engage with. |
+| **Lepton judge** (Discord) | Couldn't see our CLI activity. | Confirmed submissions are landing via `arc-canteen`, shared the latest metrics for verification. |
+
+Security project keeps itself honest: when someone reports a problem, we verify it before we deny it — and fix it fast when it's real.
+
 ---
 
 ## Team
