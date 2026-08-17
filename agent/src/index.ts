@@ -291,7 +291,10 @@ async function main() {
       for (const agent of agents) {
         results[agent] = await getEloFromChain(agent);
       }
-      res.json({ agents: results, oracle: process.env.ARGUS_ORACLE_ADDRESS });
+      res.json({
+        agents: results,
+        oracle: process.env.ARGUS_ORACLE_ADDRESS || '0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8',
+      });
     } catch (err: any) {
       res.status(500).json({ error: 'Failed to read on-chain ELO', detail: err.message });
     }
