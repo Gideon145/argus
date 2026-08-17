@@ -8,7 +8,7 @@
     <img src="https://img.shields.io/badge/LIVE-argusarc.dev-3CB878?style=for-the-badge" alt="Live">
   </a>
   <a href="https://argusarc.xyz">
-    <img src="https://img.shields.io/badge/ALT-argusarc.xyz-8B5CF6?style=for-the-badge" alt="Alternative URL">
+    <img src="https://img.shields.io/badge/LEGACY-argusarc.xyz-8B5CF6?style=for-the-badge" alt="Legacy URL">
   </a>
   <a href="https://x.com/Argus_arc">
     <img src="https://img.shields.io/badge/X-@Argus__arc-1DA1F2?style=for-the-badge&logo=x&logoColor=white" alt="X">
@@ -81,7 +81,7 @@
 | **1,637 scans** | **$24.12 treasury** | **363+ users** | **5.7K OKX sales** | **5/5 Circle primitives** |
 |---|---|---|---|---|
 
-**Live:** [argusarc.dev](https://argusarc.dev) · **Alt:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/Argusarc_bot](https://t.me/Argusarc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i @ogxavier/argus-sdk` · **MCP:** [@ogxavier/mcp](https://www.npmjs.com/package/@ogxavier/mcp) · **Smithery:** [argus-arc/argus](https://smithery.ai/servers/argus-arc/argus) · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
+**Live:** [argusarc.dev](https://argusarc.dev) (primary) · **Legacy:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/Argusarc_bot](https://t.me/Argusarc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i @ogxavier/argus-sdk` · **MCP:** [@ogxavier/mcp](https://www.npmjs.com/package/@ogxavier/mcp) · **Smithery:** [argus-arc/argus](https://smithery.ai/servers/argus-arc/argus) · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
 
 > **Prior Art #08, live on Arc.** Reputation you post as collateral, not a score you ask to be trusted. Agent-to-agent nanopayments settle in under 500ms — every dissent costs real USDC. [See the agent economy →](#agent-to-agent-nanopayments-rfb-3)
 
@@ -377,7 +377,7 @@ Argus agents do exactly this — in real time, on-chain, per decision. Every dis
 
 The biggest onboarding unlock. Since v0.6:
 
-1. User visits [argusarc.dev](https://argusarc.dev) (alt: [argusarc.xyz](https://argusarc.xyz))
+1. User visits [argusarc.dev](https://argusarc.dev) (primary domain — `argusarc.xyz` was retired Aug 3 after Canteen flagged .xyz spam filtering on US residential IPs)
 2. Clicks **"Get Started"**
 3. Backend assigns a pre-created Circle SCA wallet instantly
 4. Funding wallet sends $0.10 test USDC

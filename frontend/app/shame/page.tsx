@@ -147,6 +147,17 @@ export default function ShameWatchlistPage() {
         </div>
       )}
 
+      {/* Real user feedback */}
+      <div className="rounded-xl border border-border bg-bg-secondary/50 p-6">
+        <p className="text-[11px] uppercase tracking-wide font-mono text-text-muted mb-3">Real users, real outcomes</p>
+        <blockquote className="text-[15px] leading-relaxed text-text-primary italic">
+          &ldquo;Ur tool has been really helpful to me — I degen a lot and Argus has really saved me from some scam tokens. Keep up the good work.&rdquo;
+        </blockquote>
+        <p className="mt-3 text-[13px] text-text-secondary">
+          — <span className="text-accent font-medium">@trillionaeon</span>, X DM · Aug 16, 2026
+        </p>
+      </div>
+
       {/* Bottom CTA */}
       <div className="text-center pt-8 mt-8 border-t border-border space-y-3">
         <p className="text-[14px] text-text-muted">
