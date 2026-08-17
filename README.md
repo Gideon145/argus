@@ -720,6 +720,42 @@ Agents use [Shadow Float V2](https://testnet.arcscan.app/address/0x20dcA96B0C487
 
 **[t.me/argus_communityy](https://t.me/argus_communityy)** — 80+ members and growing. Users share scans, compare verdicts, flag suspicious tokens, and help each other stay safe. Drop in and see what people are scanning right now.
 
+### Real users, real feedback, same-day responses
+
+Most projects ship in a vacuum. Argus ships with an audience watching, reporting, and confirming. Every DM gets a response within hours — and every report gets verified before it's believed. A few of them:
+
+**1. A trader told us Argus saved them from scam tokens — Aug 16, 2026**
+
+<img src="docs/feedback/praise-trillionaeon.png" alt="DM from @trillionaeon" width="420">
+
+> *"ur tool has been really helpful to me i degen a lot and argus has really saved me from some scam tokens. keep up the good work"* — @trillionaeon
+
+This is the entire thesis in one DM: real traders, real degen exposure, and Argus as the check between them and a rug.
+
+**2. A security project gets security-checked — Aug 17, 2026**
+
+<img src="docs/feedback/ssl-report.png" alt="SSL report from CriptoPoeta" width="420">
+
+<img src="docs/feedback/ssl-resolution.png" alt="SSL resolution thread" width="420">
+
+> *"Your website is down due to an invalid SSL certificate. Congrats on joining the Circle Alliance, but this isn't a good look for a security project."* — @CriptoPoeta
+
+We verified both domains within the hour (both valid, Let's Encrypt, freshly rotated) and walked him through the cache fix. Same-day closure — and a new follower who respects the response.
+
+**3. Canteen team flagged our domain — we migrated — Jul 29 → Aug 3, 2026**
+
+<img src="docs/feedback/domain-report.png" alt="Domain report from aadi (Canteen)" width="420">
+
+> *"heads up - argusarc.xyz does not load for me on my US residential IP address... Lots of xyz domains are filtered as spam nowadays"* — aadi, Canteen team
+
+<img src="docs/feedback/domain-resolved.png" alt="Migration to argusarc.dev confirmed" width="420">
+
+We migrated to **argusarc.dev** on Aug 3 and asked aadi to re-test:
+
+> *"works great, thank you!"* — aadi, Canteen team
+
+That's the loop that matters: someone reports, we fix, they confirm. Real-world feedback is rare in a hackathon. We collect it.
+
 ---
 
 ## Team
