@@ -91,10 +91,10 @@
 
 | Judging Criterion (Lepton) | Argus |
 |---|---|
-| **Agentic Sophistication (30%)** | 3 independent agents — DeepSeek-V3, Claude Sonnet 4.5, deterministic rule engine — vote with real stakes. Dissenters pay winners. Patrol runs every 15 min with zero human input. Agents decide, not automate. |
-| **Traction (30%)** | 363+ users, 1,637 scans, 3,078 autonomous patrols. 5.7K OKX sales at 4.94★. Unibase AI caught live — scammers blocked us on X. @Argus_arc: 158 followers, 15K impressions. |
-| **Circle Tool Usage (20%)** | 5/5 Circle primitives live on Arc: Gateway x402, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit Unified Balance. Every address verifiable on ArcScan. |
-| **Innovation (20%)** | No other security tool uses multi-model consensus with real economic stakes. Prior Art #08 implemented: reputation as collateral, not a score. Agent-to-agent nanopayments settle in <500ms. |
+| **Agentic Sophistication (30%)** | 3 independent agents — DeepSeek-V3, Claude Sonnet 4.5, deterministic rule engine — vote with real stakes. Dissenters pay winners. Each agent has its own Circle SCA wallet, on-chain ELO reputation, and a credit line via Shadow Float V2. The patrol loop runs every 15 min with zero human input: agents scan, stake, settle, and record on-chain entirely on their own. Agents decide, not automate. |
+| **Traction (30%)** | 363+ users, 1,637 scans, 3,078 autonomous patrols, $24.12 USDC treasury. 5.7K OKX sales at 4.94★. Unibase AI caught live — the scammers blocked us on X. Real users write back: *"Argus has really saved me from some scam tokens"* (@trillionaeon); Canteen team member aadi flagged our .xyz domain and later confirmed the .dev migration *"works great"*; a security-minded user audited our SSL and we closed it same-day. @Argus_arc: 158 followers, 15K impressions. |
+| **Circle Tool Usage (20%)** | 5/5 Circle primitives live on Arc: Gateway x402, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit Unified Balance. Every address verifiable on ArcScan. Circle Alliance Program member — listed in the official directory at partners.circle.com/partner/argus. |
+| **Innovation (20%)** | Two different AI model families (DeepSeek + Anthropic) plus a deterministic rule engine — genuine cognitive diversity, not three calls to the same API. Multi-model consensus with real economic stakes doesn't exist anywhere else. Prior Art #08 implemented: reputation as collateral, not a score. Agent-to-agent nanopayments settle in <500ms. And we shipped it as an MCP server for Claude & ChatGPT — first in the cohort, others followed. |
 
 ---
 
