@@ -88,7 +88,7 @@ flowchart TB
 |-----------|---------|--------|
 | Gateway x402 | $0.01 USDC nanopayment paywall | Live |
 | Agent Wallets (SCA) | 3 wallets — one per agent. Stake USDC on verdicts | Live |
-| Dev-Controlled Wallets | Pre-created pool of 190 SCA wallets. Assigned on demand | Live |
+| Dev-Controlled Wallets | Pre-created pool of 220 live SCA wallets (728 total counting historical assignments). Assigned on demand, auto-refilled | Live |
 | Entity Secret | Registered Jun 21 for dev-controlled wallet signing | Live |
 | Contracts (ArgusOracle) | On-chain verdict log | Live |
 | App Kit | Unified Balance — chain-abstracted USDC balance API | Live |

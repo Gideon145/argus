@@ -266,7 +266,7 @@ Argus integrates all 5 Circle developer primitives:
 |-----------|--------|-------------------|
 | **Gateway x402** | ✓ Live | $0.01 USDC nanopayment paywall on every scan. Gasless batched settlement. |
 | **Agent Wallets** | ✓ Live | Three autonomous Circle SCAs — one per agent. Each stakes USDC on verdicts independently. |
-| **Dev-Controlled Wallets** | ✓ Live | Pre-created wallet pool. Users get instant SCA wallets — no MetaMask, no extension. 300-wallet pool, auto-refill. |
+| **Dev-Controlled Wallets** | ✓ Live | Pre-created wallet pool. Users get instant SCA wallets — no MetaMask, no extension. 220-wallet live pool (728 total with historical assignments), auto-refill. |
 | **Contracts** | ✓ Live | On-chain ELO reputation via ArgusOracle. Immutable verdict log + ELO scores written to Arc after every scan. |
 | **App Kit** | ✓ Live | Unified Balance (chain-abstracted USDC across all Circle chains). Adapter SDK integrated — Send, Bridge, and Swap activate automatically when Arc joins the Circle chain registry. |
 
@@ -278,7 +278,7 @@ Every scan result is verifiable on-chain. Treasury, funding wallet, agent wallet
 |---|---|---|
 | **Gateway x402** | [`agent/src/gateway.ts`](agent/src/gateway.ts) | $0.01 USDC paywall per scan — gasless batched settlement |
 | **Agent Wallets (SCA)** | [`agent/src/wallets/funding.ts`](agent/src/wallets/funding.ts) | 3 wallets, one per agent — hold and stake USDC independently |
-| **Dev-Controlled Wallets** | [`agent/src/wallets/precreate.ts`](agent/src/wallets/precreate.ts) | 300-wallet pool, assigned to new users on arrival — no MetaMask needed |
+| **Dev-Controlled Wallets** | [`agent/src/wallets/precreate.ts`](agent/src/wallets/precreate.ts) | 220-wallet live pool, assigned to new users on arrival — no MetaMask needed |
 | **Contracts** | [`contracts/contracts/ArgusOracle.sol`](contracts/contracts/ArgusOracle.sol) | Immutable on-chain verdict log + ELO reputation scores |
 | **App Kit Unified Balance** | [`frontend/lib/wallet-context.tsx`](frontend/lib/wallet-context.tsx) | Chain-abstracted USDC balance display for Circle + MetaMask users |
 
