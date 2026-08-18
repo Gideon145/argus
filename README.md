@@ -76,7 +76,7 @@
 
 > **Arc's first security layer. Live now. An official Circle Alliance member.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,637 verdicts from 360+ users, all on-chain. When Arc mainnet launches, Argus is already running. [Circle Alliance Directory →](https://partners.circle.com/partner/argus)
 >
-> **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No SDK. No API key. No MetaMask. Works on mobile. Your community deserves to know what they're buying. [Try it →](https://argusarc.dev)
+> **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No API key. No MetaMask. No setup. Works on mobile. Builders can skip the browser entirely with the SDK (`npm i @ogxavier/argus-sdk`) or the MCP server (`npx @ogxavier/mcp`). Your community deserves to know what they're buying. [Try it →](https://argusarc.dev/)
 
 | **1,637 scans** | **$24.12 treasury** | **363+ users** | **5.7K OKX sales** | **5/5 Circle primitives** |
 |---|---|---|---|---|
