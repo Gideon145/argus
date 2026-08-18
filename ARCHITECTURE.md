@@ -43,7 +43,7 @@ flowchart TB
 
 ### 1. Frontend (`frontend/`)
 - **Framework:** Next.js 15, deployed on Vercel
-- **Domain:** argusarc.dev (primary) + argusarc.xyz (alt), both with SSL
+- **Domain:** argusarc.dev (primary) + argusarc.xyz (legacy), both with SSL
 - **Key features:**
   - Dark-themed premium UI with Framer Motion animations
   - Real-time scan progress with per-agent check indicators
@@ -99,7 +99,7 @@ flowchart TB
 
 ```
 1. USER INPUT
-   User pastes token address at argusarc.xyz
+   User pastes token address at argusarc.dev (legacy: argusarc.xyz)
    │
 2. WALLET RESOLUTION
    ├── Circle user: POST /scan/circle {userId, contractAddress}
