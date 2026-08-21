@@ -23,7 +23,7 @@
     <img src="https://img.shields.io/badge/Scans-1,727-blue?style=for-the-badge" alt="live scans">
   </a>
   <a href="https://argusarc.dev/patrol">
-    <img src="https://img.shields.io/badge/Patrols-3,570-green?style=for-the-badge" alt="live patrols">
+    <img src="https://img.shields.io/badge/Patrols-3,572-green?style=for-the-badge" alt="live patrols">
   </a>
   <a href="https://argusarc.dev/stats">
     <img src="https://img.shields.io/badge/Treasury-$25.65_USDC-gold?style=for-the-badge" alt="treasury">
@@ -96,7 +96,7 @@
 | Judging Criterion (Lepton) | Argus |
 |---|---|
 | **Agentic Sophistication (30%)** | Three independent agents, DeepSeek-V3, Claude Sonnet 4.5, and a deterministic rule engine, each with its own Circle SCA wallet and on-chain ELO. The patrol loop runs every 15 minutes with zero human input: agents scan, stake, settle, and record on-chain entirely on their own. Agents decide, not automate. |
-| **Traction (30%)** | 363+ users, 1,727 scans, 3,570 autonomous patrols, $25.65 USDC in on-chain scan fees. 5.7K OKX sales at 4.94★. On X: 158 followers, 15K impressions, ~500 engagements per post on average. People aren't scrolling past; they're watching, reposting, and scanning the tokens we flag. Circle Alliance member with a live directory listing. Every number verifiable on ArcScan. |
+| **Traction (30%)** | 363+ users, 1,727 scans, 3,572 autonomous patrols, $25.65 USDC in on-chain scan fees. 5.7K OKX sales at 4.94★. On X: 158 followers, 15K impressions, ~500 engagements per post on average. People aren't scrolling past; they're watching, reposting, and scanning the tokens we flag. Circle Alliance member with a live directory listing. Every number verifiable on ArcScan. |
 | **Circle Tool Usage (20%)** | All 5 Circle primitives live in production, doing real work on every scan: Gateway x402 collects the $0.01 fee, Agent Wallets stake USDC on every verdict, Dev-Controlled Wallets onboard users with zero setup, Contracts write verdicts and ELO on-chain via ArgusOracle, and App Kit Unified Balance shows chain-abstracted USDC. Circle Alliance Program member, listed at partners.circle.com/partner/argus. |
 | **Innovation (20%)** | AI agents that bet real money on their own security verdicts. Three independent minds, two AI model families plus a deterministic engine, audit every contract. Each agent stakes USDC on its answer; when it's wrong, it pays the winners. On-chain ELO makes reputation real collateral, Prior Art #08. That is genuine multi-model consensus, not three calls to one API. Nanopayments settle in under 500ms, and Argus shipped as an MCP server for Claude and ChatGPT ahead of the rest of the cohort. |
 
@@ -368,7 +368,7 @@ Total agent economy volume visible at /agent-payments
 
 Argus agents do exactly this — in real time, on-chain, per decision. Every dissent costs 0.0005 USDC. Every wrong verdict drops ELO. No trust required. The stakes are public. The slash is automatic. This is Prior Art #08, live on Arc.
 
-> **Why 20 USDC per agent?** Agents are judges, not banks. Each holds a flat 20 USDC stake — enough to cover 40,000 dissents at 0.0005 USDC each. Their balances stay stable because stakes are tiny by design. The real money flows elsewhere: the **treasury** holds $24.12 USDC from accumulated scan fees. Two pools, two purposes — agents hold collateral for verdicts, the treasury holds revenue from scans. Both verifiable on-chain.
+> **Why 20 USDC per agent?** Agents are judges, not banks. Each holds a flat 20 USDC stake — enough to cover 40,000 dissents at 0.0005 USDC each. Their balances stay stable because stakes are tiny by design. The real money flows elsewhere: the **treasury** holds $25.65 USDC from accumulated scan fees. Two pools, two purposes — agents hold collateral for verdicts, the treasury holds revenue from scans. Both verifiable on-chain.
 >
 > | Pool | Balance | Purpose | ArcScan |
 > |------|---------|---------|---------|
@@ -397,7 +397,7 @@ MetaMask remains available as a secondary option. But the primary path requires 
 # Agent health
 curl https://argus-web-backend-production.up.railway.app/health
 
-# Current stats (1,727 scans, 89.6% consensus)
+# Current stats (1,727 scans, 90.1% consensus)
 curl https://argus-web-backend-production.up.railway.app/stats | jq .
 
 # ELO leaderboard
@@ -555,26 +555,26 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 
 ## Traction
 
-*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 363+ users and 1,637 scans of battle-testing behind them.*
+*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 363+ users and 1,727 scans of battle-testing behind them.*
 
 ### Metrics
 
 | Metric | Value | Proof |
 |--------|-------|-------|
 | **Scans processed** | **1,727** | /stats endpoint — on-chain records |
-| **Consensus reached** | **1,466 (89.6%)** | 3-agent pipeline live since Jun 16 |
+| **Consensus reached** | **1,556 (90.1%)** | 3-agent pipeline live since Jun 16 |
 | **Users** | **363+** | Web · CLI · Telegram · MCP · multi-platform |
 | **Treasury balance** | $25.65 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
-| **Autonomous patrol scans** | **3,078** | 15-min loop, zero human input since launch |
+| **Autonomous patrol scans** | **3,572** | 15-min loop, zero human input since launch |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
-| **ELO leaderboard** | α 20,002 · β 20,045 · γ 19,936 | `/elo` endpoint — on-chain |
+| **ELO leaderboard** | α 20,841 · β 20,875 · γ 20,689 | `/elo` endpoint — on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 — Agent Wallets — Dev-Controlled Wallets — Contracts — App Kit |
 | **OKX AI Marketplace** | Agent #5047 | 5.7K sold · 241 reviews · 4.94★ |
 | **MCP distribution** | Claude · ChatGPT · Smithery | [@ogxavier/mcp](https://www.npmjs.com/package/@ogxavier/mcp) · [Smithery](https://smithery.ai/servers/argus-arc/argus) |
 
 ### How we count
 
-Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 45 tracked contracts across 1,637 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1—2 scans per token). Median scans per user is 1 — most try Argus once or twice; a core group of ~25 power users drives 80% of scan volume. This is early-stage retention typical of a 6-week-old product.
+Team test wallets are excluded from all user-facing counts. The store tracks `distinctTokens`, `medianScansPerUser`, `teamScansExcluded`, and `scansPerDay` — all exposed at `GET /stats`. Team addresses: treasury (`0x0699...`), funding wallet (`0x4Dd5...`), 3 agent SCAs + 3 agent EOAs, and the benchmark user. `teamScansExcluded: 0` confirms no team test activity contaminated real user counts. True distinct token count: 67 tracked contracts across 1,727 scans (popular tokens like USDC, WETH, USDT are re-scanned by many users; the long tail is 1—2 scans per token). Median scans per user is 4 — most try Argus once or twice; a core group of ~25 power users drives 80% of scan volume. This is early-stage retention typical of a 6-week-old product.
 
 ### User Growth
 
