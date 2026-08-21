@@ -9,17 +9,17 @@ export const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL ||
 
 // ─── Historical baseline stats (verifiable — README, ArcScan, on-chain) ───
 export const BASELINE_STATS = {
-  queries: 1504,
-  patrolQueries: 2407,
-  consensusReached: 1347,
-  onChainRecords: 1347,
-  avgConfidence: 87,
+  queries: 1727,
+  patrolQueries: 3572,
+  consensusReached: 1556,
+  onChainRecords: 1556,
+  avgConfidence: 58,
 };
 
 // Arc testnet treasury — verifiable on-chain, immutable
 export const ARC_TREASURY = {
   address: '0x0699a029e2e05EC88d6418EC744232702Cf77d81',
-  balance: '16.68',
+  balance: '25.65',
   explorer: 'https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81',
 };
 
