@@ -20,13 +20,13 @@
     <img src="https://img.shields.io/badge/Email-hello@argusarc.dev-6366f1?style=for-the-badge&logo=gmail&logoColor=white" alt="Email">
   </a>
   <a href="https://argusarc.dev/patrol">
-    <img src="https://img.shields.io/badge/Scans-1,637-blue?style=for-the-badge" alt="live scans">
+    <img src="https://img.shields.io/badge/Scans-1,727-blue?style=for-the-badge" alt="live scans">
   </a>
   <a href="https://argusarc.dev/patrol">
-    <img src="https://img.shields.io/badge/Patrols-3,078-green?style=for-the-badge" alt="live patrols">
+    <img src="https://img.shields.io/badge/Patrols-3,570-green?style=for-the-badge" alt="live patrols">
   </a>
   <a href="https://argusarc.dev/stats">
-    <img src="https://img.shields.io/badge/Treasury-$24.12_USDC-gold?style=for-the-badge" alt="treasury">
+    <img src="https://img.shields.io/badge/Treasury-$25.65_USDC-gold?style=for-the-badge" alt="treasury">
   </a>
   <a href="https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81">
     <img src="https://img.shields.io/badge/Treasury-ArcScan-6C5CE7?style=for-the-badge" alt="Treasury">
@@ -67,6 +67,10 @@
 **Τρεις οφθαλμοί. Μία κρίσις.** — Three eyes. One verdict.
 
 <p align="center">
+  <b><span style="background-color:#8B5CF6;color:#ffffff;padding:6px 16px;border-radius:8px;font-size:15px">Nine weeks, five surfaces, one verdict. When Arc mainnet ships Sept 16, Argus is already running.</span></b>
+</p>
+
+<p align="center">
   <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">
     <img src="https://img.youtube.com/vi/sHgjJe5jx6s/maxresdefault.jpg" alt="Argus Demo Video — Updated Jul 10" width="70%" style="border-radius:8px;border:1px solid #333" />
   </a>
@@ -74,11 +78,11 @@
   <strong>▶️ <a href="https://www.youtube.com/watch?v=sHgjJe5jx6s">Watch the demo (3 min)</a> — New UI, real-time patrol, Unibase AI caught live</strong>
 </p>
 
-> **Arc's first security layer. Live now. An official Circle Alliance member.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,637 verdicts from 360+ users, all on-chain. When Arc mainnet launches, Argus is already running. [Circle Alliance Directory →](https://partners.circle.com/partner/argus)
+> **Arc's first security layer. Live now. An official Circle Alliance member.** Three autonomous agents — two AI models + a deterministic rule engine — stake real USDC on every verdict. They pay each other when they disagree. They patrol every 15 minutes without being asked. 1,727 verdicts from 360+ users, all on-chain. When Arc mainnet launches, Argus is already running. [Circle Alliance Directory →](https://partners.circle.com/partner/argus)
 >
 > **For creators launching tokens on Arc.** Audits cost $5K and take weeks. Argus costs $0.01 and takes 30 seconds. Paste an address → three agents vote → verdict on-chain forever. No API key. No MetaMask. No setup. Works on mobile. Builders can skip the browser entirely with the SDK (`npm i @ogxavier/argus-sdk`) or the MCP server (`npx @ogxavier/mcp`). Your community deserves to know what they're buying. [Try it →](https://argusarc.dev/)
 
-| **1,637 scans** | **$24.12 treasury** | **363+ users** | **5.7K OKX sales** | **5/5 Circle primitives** |
+| **1,727 scans** | **$25.65 treasury** | **363+ users** | **5.7K OKX sales** | **5/5 Circle primitives** |
 |---|---|---|---|---|
 
 **Live:** [argusarc.dev](https://argusarc.dev) (primary) · **Legacy:** [argusarc.xyz](https://argusarc.xyz) · **Telegram:** [t.me/Argusarc_bot](https://t.me/Argusarc_bot) · **CLI:** `npx argus-scan@latest` · **SDK:** `npm i @ogxavier/argus-sdk` · **MCP:** [@ogxavier/mcp](https://www.npmjs.com/package/@ogxavier/mcp) · **Smithery:** [argus-arc/argus](https://smithery.ai/servers/argus-arc/argus) · **X:** [@Argus_arc](https://x.com/Argus_arc) · **Patrol:** [Agents scanning live](https://youtube.com/shorts/2lRu11gZcXk)
@@ -92,7 +96,7 @@
 | Judging Criterion (Lepton) | Argus |
 |---|---|
 | **Agentic Sophistication (30%)** | Three independent agents, DeepSeek-V3, Claude Sonnet 4.5, and a deterministic rule engine, each with its own Circle SCA wallet and on-chain ELO. The patrol loop runs every 15 minutes with zero human input: agents scan, stake, settle, and record on-chain entirely on their own. Agents decide, not automate. |
-| **Traction (30%)** | 363+ users, 1,637 scans, 3,078 autonomous patrols, $24.12 USDC in on-chain scan fees. 5.7K OKX sales at 4.94★. On X: 158 followers, 15K impressions, ~500 engagements per post on average. People aren't scrolling past; they're watching, reposting, and scanning the tokens we flag. Circle Alliance member with a live directory listing. Every number verifiable on ArcScan. |
+| **Traction (30%)** | 363+ users, 1,727 scans, 3,570 autonomous patrols, $25.65 USDC in on-chain scan fees. 5.7K OKX sales at 4.94★. On X: 158 followers, 15K impressions, ~500 engagements per post on average. People aren't scrolling past; they're watching, reposting, and scanning the tokens we flag. Circle Alliance member with a live directory listing. Every number verifiable on ArcScan. |
 | **Circle Tool Usage (20%)** | All 5 Circle primitives live in production, doing real work on every scan: Gateway x402 collects the $0.01 fee, Agent Wallets stake USDC on every verdict, Dev-Controlled Wallets onboard users with zero setup, Contracts write verdicts and ELO on-chain via ArgusOracle, and App Kit Unified Balance shows chain-abstracted USDC. Circle Alliance Program member, listed at partners.circle.com/partner/argus. |
 | **Innovation (20%)** | AI agents that bet real money on their own security verdicts. Three independent minds, two AI model families plus a deterministic engine, audit every contract. Each agent stakes USDC on its answer; when it's wrong, it pays the winners. On-chain ELO makes reputation real collateral, Prior Art #08. That is genuine multi-model consensus, not three calls to one API. Nanopayments settle in under 500ms, and Argus shipped as an MCP server for Claude and ChatGPT ahead of the rest of the cohort. |
 
@@ -155,7 +159,7 @@ Nanopayments change the equation. When a payment can be $0.01, settled in under 
 
 **Built for everyone.** Connect with MetaMask or click "Get Started" on mobile — Circle wallet created instantly. No signup. No email. Web, CLI, Telegram, or MCP — same consensus, your choice.
 
-> When Arc mainnet ships, Argus will be live on day one — 1,637 scans of battle-testing on testnet behind it. Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
+> When Arc mainnet ships, Argus will be live on day one — 1,727 scans of battle-testing on testnet behind it. Three independent agents, staking real USDC on every verdict, paying each other when they disagree. The third eye is the tiebreaker. Always has been.
 
 ---
 
@@ -369,7 +373,7 @@ Argus agents do exactly this — in real time, on-chain, per decision. Every dis
 > | Pool | Balance | Purpose | ArcScan |
 > |------|---------|---------|---------|
 > | Agent wallets (3) | 20 USDC each | Staking collateral | α · β · γ |
-> | Treasury | $24.12 USDC | Scan fee accumulation | [View](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+> | Treasury | $25.65 USDC | Scan fee accumulation | [View](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 
 ---
 
@@ -393,7 +397,7 @@ MetaMask remains available as a secondary option. But the primary path requires 
 # Agent health
 curl https://argus-web-backend-production.up.railway.app/health
 
-# Current stats (1,637 scans, 89.6% consensus)
+# Current stats (1,727 scans, 89.6% consensus)
 curl https://argus-web-backend-production.up.railway.app/stats | jq .
 
 # ELO leaderboard
@@ -557,10 +561,10 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 
 | Metric | Value | Proof |
 |--------|-------|-------|
-| **Scans processed** | **1,637** | /stats endpoint — on-chain records |
+| **Scans processed** | **1,727** | /stats endpoint — on-chain records |
 | **Consensus reached** | **1,466 (89.6%)** | 3-agent pipeline live since Jun 16 |
 | **Users** | **363+** | Web · CLI · Telegram · MCP · multi-platform |
-| **Treasury balance** | $24.12 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
+| **Treasury balance** | $25.65 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Autonomous patrol scans** | **3,078** | 15-min loop, zero human input since launch |
 | **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
 | **ELO leaderboard** | α 20,002 · β 20,045 · γ 19,936 | `/elo` endpoint — on-chain |
@@ -603,7 +607,7 @@ Team test wallets are excluded from all user-facing counts. The store tracks `di
 
 *On X, @Argus_arc grew from 0 to 158 followers over 7 weeks, with 15K total impressions and a 5.7% engagement rate — well above crypto-twitter averages. Growth accelerated this week with new users discovering Argus through the OKX AI Marketplace. People aren't scrolling past; they're reading, reposting, and scanning the tokens we flag.*
 
-**363+ users, 1,637 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.**
+**363+ users, 1,727 scans. Power users run 20+ scans — when Argus clicks, it becomes part of the workflow. They come back when tokens move, when friends shill, when they need to know. Argus grows from first scan into a habit.**
 
 ---
 
