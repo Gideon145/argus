@@ -75,9 +75,8 @@ function savePayments(log: PaymentRecord[]) {
 
 const paymentLog: PaymentRecord[] = loadPayments();
 
-// Lazy Circle client + entity secret ciphertext (needed for SCA transfers)
+// Lazy Circle client (entity secret ciphertext is single-use, generated per transfer)
 let circleClient: any = null;
-let ciphertext: string | null = null;
 
 function getCircle() {
   if (!circleClient) {
@@ -89,19 +88,16 @@ function getCircle() {
   return circleClient;
 }
 
-async function getCiphertext(): Promise<string | null> {
-  if (ciphertext) return ciphertext;
-  const c = getCircle();
-  if (!c) return null;
+async function freshCiphertext(): Promise<string | null> {
+  const apiKey = process.env.CIRCLE_API_KEY;
+  const entitySecret = process.env.CIRCLE_ENTITY_SECRET;
+  if (!apiKey || !entitySecret) return null;
   try {
-    ciphertext = await generateEntitySecretCiphertext({
-      apiKey: process.env.CIRCLE_API_KEY!,
-      entitySecret: process.env.CIRCLE_ENTITY_SECRET!,
-    });
+    return await generateEntitySecretCiphertext({ apiKey, entitySecret });
   } catch (e: any) {
     console.warn('[AgentPay] ciphertext generation failed:', e?.message?.slice(0, 80) || e);
+    return null;
   }
-  return ciphertext;
 }
 
 export async function settleAgentPayments(
@@ -115,13 +111,12 @@ export async function settleAgentPayments(
   if (losingAgents.length === 0 || winningAgents.length === 0) return records;
 
   const c = getCircle();
-  const ct = c ? await getCiphertext() : null;
   const walletsReady =
     !!AGENT_WALLETS['Agent-α'].id &&
     !!AGENT_WALLETS['Agent-β'].id &&
     !!AGENT_WALLETS['Agent-γ'].id;
 
-  if (!c || !ct || !walletsReady) {
+  if (!c || !walletsReady) {
     // No Circle rail configured — log only, no on-chain settlement
     for (const loser of losingAgents) {
       for (const winner of winningAgents) {
@@ -154,6 +149,8 @@ export async function settleAgentPayments(
       const winnerWallet = AGENT_WALLETS[winner];
       if (!winnerWallet?.address) continue;
       try {
+        const ct = await freshCiphertext();
+        if (!ct) throw new Error('ciphertext unavailable');
         const tx = await c.params.client.Transactions.createDeveloperTransactionTransfer({
           idempotencyKey: randomUUID(),
           walletId: loserWallet.id,
@@ -163,17 +160,18 @@ export async function settleAgentPayments(
           feeLevel: 'LOW',
           entitySecretCiphertext: ct,
         });
-        const txId = tx.data?.id;
+        const txId = tx.data?.data?.id;
         let txHash = '';
         for (let i = 0; i < 10 && txId; i++) {
           await new Promise((r) => setTimeout(r, 3000));
           try {
             const detail = await c.params.client.Transactions.getTransaction(txId);
-            if (detail.data?.state === 'COMPLETE') {
-              txHash = detail.data.txHash || '';
+            const t = detail.data?.data?.transaction;
+            if (t?.state === 'COMPLETE') {
+              txHash = t.txHash || '';
               break;
             }
-            if (detail.data?.state === 'FAILED') break;
+            if (t?.state === 'FAILED') break;
           } catch {
             break;
           }
