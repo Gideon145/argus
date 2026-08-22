@@ -102,6 +102,18 @@
 
 ---
 
+## Why Argus Stands Out in the Cohort
+
+| Where peers tend to stop | Argus goes further |
+|---|---|
+| **Fake or inflated traction** | 363+ real users, 1,727 scans, 5.7K OKX sales at 4.94★, 241 reviews — every number on ArcScan. |
+| **One LLM behind three labels** | Two independent AI model families + a deterministic rule engine, each with its own wallet and on-chain ELO. Real multi-model consensus. |
+| **Gateway only** | All 5 Circle primitives live and doing work on every scan — Gateway x402, Agent Wallets, Dev-Controlled Wallets, Contracts, App Kit. |
+| **A wallet that can spend** | Agents stake real USDC on their verdicts and pay the winners when wrong — ELO is on-chain collateral, not a screenshot. |
+| **A demo loop** | A 15-minute autonomous patrol that scans, stakes, settles, and records on-chain with zero human input. |
+
+---
+
 ## Contents
 
 - [Why This Exists](#why-this-exists)
