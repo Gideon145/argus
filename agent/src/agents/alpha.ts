@@ -47,7 +47,40 @@ Rules:
 - SAFE: No red flags found in contract logic. Risk score 0-25.
 - RISKY: Suspicious patterns detected but not conclusive. Risk score 26-55.
 - SCAM: Clear exploit vector or honeypot signature found. Risk score 56-100.
-- Be conservative — flag anything that could harm users.`;
+- Be conservative — flag anything that could harm users.
+- Keep the reasoning field under 200 words.
+- End your response with one final line containing ONLY this JSON: {"verdict":"SAFE|RISKY|SCAM","confidence":0-100}`;
+
+/** Extract the first balanced {...} JSON object from a string, or null */
+function extractJsonObject(text: string): any | null {
+  const start = text.indexOf('{');
+  if (start === -1) return null;
+  let depth = 0;
+  let inStr = false;
+  let esc = false;
+  for (let i = start; i < text.length; i++) {
+    const ch = text[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (ch === '\\') esc = true;
+      else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') inStr = true;
+    else if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) {
+        try {
+          return JSON.parse(text.slice(start, i + 1));
+        } catch {
+          return null;
+        }
+      }
+    }
+  }
+  return null;
+}
 
 /**
  * Agent-α (Alpha) — Contract logic analysis via DeepSeek-V3
@@ -69,7 +102,7 @@ export const alphaAgent = {
         ? `Token: ${contractData.tokenName || contractData.contractName || 'unknown'}${contractData.tokenSymbol ? ` (${contractData.tokenSymbol})` : ''}\nChain: ${contractData.chain}\nOwner: ${contractData.owner || 'unknown'}\nTotal supply: ${contractData.totalSupply || 'unknown'}\nDecimals: ${contractData.decimals ?? 'unknown'}\nProxy: ${contractData.isProxy ? `YES — ${contractData.proxyType || 'upgradeable'} (IMPLEMENTATION CAN CHANGE)` : 'No proxy detected'}\n\n`
         : '';
       const result = await deepseek.chat.completions.create({
-        model: 'deepseek-chat', temperature: 0.3, max_tokens: 512,
+        model: 'deepseek-chat', temperature: 0.3, max_tokens: 900,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           { role: 'user', content: `Analyze this EVM token contract for security vulnerabilities:\n\nContract address: ${req.contractAddress}\n${dataContext}${contractData?.isProxy ? '⚠️ CRITICAL: This is a PROXY CONTRACT. The implementation can be UPGRADED at any time. Past behavior does NOT guarantee future safety.\n\n' : ''}Focus on:\n1.${contractData?.isProxy ? ' PROXY RISK (HIGHEST PRIORITY) — this is upgradeable, what could the admin change?' : ''}\n2. Ownership — is the contract renounced? Who controls it?\n3. Mint/burn functions — can tokens be minted arbitrarily?\n4. External calls — are there unchecked external calls?\n5. Honeypot signatures — can buyers sell? Are there transfer restrictions?\n6. Access control — are admin functions properly gated?` },
@@ -78,17 +111,43 @@ export const alphaAgent = {
 
       const text = result.choices[0]?.message?.content || '';
       const jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      const parsed = JSON.parse(jsonStr);
+
+      let verdict: 'SAFE' | 'RISKY' | 'SCAM' | 'INSUFFICIENT_DATA' = 'SAFE';
+      let confidence = 50;
+      let reasoning = text.trim();
+
+      // Extract the first balanced {...} JSON object anywhere in the response
+      const obj = extractJsonObject(text);
+      if (obj) {
+        verdict = obj.verdict || verdict;
+        confidence = Math.min(100, Math.max(0, obj.confidence || 50));
+        reasoning = obj.reasoning || text.trim();
+      } else {
+        try {
+          const parsed = JSON.parse(jsonStr);
+          verdict = parsed.verdict || verdict;
+          confidence = Math.min(100, Math.max(0, parsed.confidence || 50));
+          reasoning = parsed.reasoning || reasoning;
+        } catch {
+          // Salvage partial JSON: pull verdict/confidence/reasoning fields from raw text
+          const vm = text.match(/"verdict"\s*:\s*"(SAFE|RISKY|SCAM)"/);
+          const cm = text.match(/"confidence"\s*:\s*(\d+)/);
+          const rm = text.match(/"reasoning"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+          if (vm) verdict = vm[1] as 'SAFE' | 'RISKY' | 'SCAM';
+          if (cm) confidence = Math.min(100, Math.max(0, parseInt(cm[1], 10)));
+          if (rm) reasoning = rm[1].replace(/\\n/g, '\n');
+        }
+      }
 
       return {
         agent: 'Agent-α',
-        verdict: parsed.verdict || 'SAFE',
-        confidence: Math.min(100, Math.max(0, parsed.confidence || 50)),
-        reasoning: parsed.reasoning || 'Analysis completed.',
+        verdict: verdict,
+        confidence,
+        reasoning,
         stake: '50000',
       };
     } catch (err: any) {
-      console.warn(`Agent-α DeepSeek error (${err.status || err.code}): falling back to rules`);
+      console.warn(`Agent-α DeepSeek error (${err.status || err.code || err.message?.slice(0, 80)}): falling back to rules`);
       return this.fallbackAnalyze(req);
     }
   },
