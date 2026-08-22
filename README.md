@@ -262,7 +262,7 @@ Three independent agents form the Council — two AI models for deep reasoning, 
 |-------|-------|------|---------------|
 | **Agent α** | DeepSeek-V3 | Contract-level security: ownership, proxies, honeypots, access control, upgradeability, external calls | ~$0.001 |
 | **Agent β** | Claude Sonnet 4.5 | Tokenomics & market structure: holder distribution, whale concentration, LP depth, trading patterns, buy/sell taxes, wash trading. Tokenomics inferred from training data — live holder/LP queries planned for v0.15 | ~$0.002 |
-| **Agent β** | Rule Engine (local) | Deterministic safety net — reproducible, zero-hallucination checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 validation, blacklist matching. Catches what LLMs miss. | $0 (no API) |
+| **Agent γ** | Rule Engine (local) | Deterministic safety net — reproducible, zero-hallucination checks: address entropy, digit-run heuristics, known scam deployer patterns, EIP-55 validation, blacklist matching. Catches what LLMs miss. | $0 (no API) |
 
 Each council member operates independently — no shared state, no prompt leakage between models. Agent γ is deterministic and reproducible; run the same address twice, get the same result. Agents α and β draw from different model families — DeepSeek-V3 and Anthropic Claude Sonnet 4.5 — with β defaulting to Claude and falling back to DeepSeek for reliability. This creates genuine cognitive diversity across the Council.
 
