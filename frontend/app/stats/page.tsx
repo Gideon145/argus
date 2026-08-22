@@ -183,7 +183,10 @@ export default function StatsPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {elo.agents.slice(0, 3).map((agent, i) => {
+            {['Agent-α', 'Agent-β', 'Agent-γ']
+              .map((name) => elo.agents.find((a) => a.name === name))
+              .filter((a): a is EloAgent => !!a)
+              .map((agent, i) => {
               const color = agentColors[i];
               const border = agentBorderColors[i];
               const bg = agentBgColors[i];
@@ -196,7 +199,6 @@ export default function StatsPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <span className={`text-base font-bold tracking-tight ${color}`}>{agent.name}</span>
-                      <span className="block text-[10px] text-text-muted mt-0.5">Staked Node Rank #{i + 1}</span>
                     </div>
                     <Badge label={`${agent.wins}W / ${agent.losses}L`} variant="status" />
                   </div>
