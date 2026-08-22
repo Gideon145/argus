@@ -356,6 +356,10 @@ A token claiming association with CZ Binance started trending. Our agents flagge
 
 The scan reached **1.6K impressions in under 24 hours** and brought in **10+ new followers**. Real traders using real tools to avoid real scams — in real time. [See the thread ?](https://x.com/Argus_arc/status/2073592959363117523)
 
+**See the live case files:** [argusarc.dev/shame](https://argusarc.dev/shame) — every flagged contract with its reason, consensus, and confidence. Real traders, real outcomes:
+
+> *"ur tool has been really helpful to me i degen a lot and argus has really saved me from some scam tokens. keep up the good work"* — @trillionaeon, X DM · Aug 16, 2026
+
 ---
 
 ## Agent-to-Agent Nanopayments (RFB 3)
@@ -744,9 +748,7 @@ Most projects ship in a vacuum. Argus ships with an audience watching, reporting
 
 <img src="docs/feedback/praise-trillionaeon.png" alt="DM from @trillionaeon" width="420">
 
-> *"ur tool has been really helpful to me i degen a lot and argus has really saved me from some scam tokens. keep up the good work"* — @trillionaeon
-
-This is the entire thesis in one DM: real traders, real degen exposure, and Argus as the check between them and a rug.
+This is the entire thesis in one DM: real traders, real degen exposure, and Argus as the check between them and a rug. The quote and the case files behind it live in [Real-World Catches](#real-world-catches).
 
 **2. A security project gets security-checked — Aug 17, 2026**
 

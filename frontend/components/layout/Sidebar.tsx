@@ -9,7 +9,7 @@ const NAV_ITEMS: { label: string; href: string; icon: ReactNode }[] = [
   { label: 'Dashboard',  href: '/',         icon: <LayoutDashboard size={18} /> },
   { label: 'History',    href: '/history',  icon: <Clock size={18} /> },
   { label: 'Stats',      href: '/stats',    icon: <TrendingUp size={18} /> },
-  { label: 'Shame',      href: '/shame',    icon: <ShieldAlert size={18} /> },
+  { label: 'Case Files', href: '/shame',    icon: <ShieldAlert size={18} /> },
   { label: 'Patrol',     href: '/patrol',   icon: <Shield size={18} /> },
   { label: 'Settings',   href: '/settings', icon: <Settings size={18} /> },
 ];
