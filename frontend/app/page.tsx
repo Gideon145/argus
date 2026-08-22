@@ -516,9 +516,9 @@ export default function Dashboard() {
           <Card title="Agent Wallets" subtitle="On-chain identities with real USDC stakes." padding="sm">
             <div className="space-y-2">
               {[
-                { agent: 'Agent α', addr: '0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320', color: 'text-agent-alpha' },
-                { agent: 'Agent β', addr: '0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f', color: 'text-agent-beta' },
-                { agent: 'Agent γ', addr: '0x1fa79f59abbada269de477b45ded38c75a6146de', color: 'text-agent-gamma' },
+                { agent: 'Agent α', addr: '0x07c8a0ceccf7af4f260bdcb02c464753887a8de7', color: 'text-agent-alpha' },
+                { agent: 'Agent β', addr: '0x63d813f592957f12982c69e54a1dcb022982a556', color: 'text-agent-beta' },
+                { agent: 'Agent γ', addr: '0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf', color: 'text-agent-gamma' },
                 { agent: 'Treasury', addr: '0x0699a029e2e05EC88d6418EC744232702Cf77d81', color: 'text-accent' },
               ].map(w => (
                 <a key={w.agent} href={`https://testnet.arcscan.app/address/${w.addr}`} target="_blank" rel="noopener noreferrer"
