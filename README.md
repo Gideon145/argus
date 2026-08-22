@@ -50,13 +50,13 @@
     <img src="https://img.shields.io/badge/ChainGPT-Audited_Jul_2026-6C5CE7?style=for-the-badge" alt="ChainGPT Audited">
   </a>
   <br>
-  <a href="https://testnet.arcscan.app/address/0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320">
+  <a href="https://testnet.arcscan.app/address/0x07c8a0ceccf7af4f260bdcb02c464753887a8de7">
     <img src="https://img.shields.io/badge/Agent_α-ArcScan-7eb8da?style=flat-square" alt="Agent α">
   </a>
-  <a href="https://testnet.arcscan.app/address/0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f">
+  <a href="https://testnet.arcscan.app/address/0x63d813f592957f12982c69e54a1dcb022982a556">
     <img src="https://img.shields.io/badge/Agent_β-ArcScan-D4AF37?style=flat-square" alt="Agent β">
   </a>
-  <a href="https://testnet.arcscan.app/address/0x1fa79f59abbada269de477b45ded38c75a6146de">
+  <a href="https://testnet.arcscan.app/address/0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf">
     <img src="https://img.shields.io/badge/Agent_γ-ArcScan-b57ed8?style=flat-square" alt="Agent γ">
   </a>
   <a href="https://argus-web-backend-production.up.railway.app/health">
@@ -439,9 +439,9 @@ curl https://argus-web-backend-production.up.railway.app/balance/unified/0x0699a
 | Treasury | `0x0699a029e2e05EC88d6418EC744232702Cf77d81` | [View](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | Funding | `0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb` | [View](https://testnet.arcscan.app/address/0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb) |
 | ArgusOracle | `0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8` | [View](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8) |
-| Agent a (SCA) | `0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320` | [View](https://testnet.arcscan.app/address/0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320) |
-| Agent · (SCA) | `0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f` | [View](https://testnet.arcscan.app/address/0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f) |
-| Agent γ (SCA) | `0x1fa79f59abbada269de477b45ded38c75a6146de` | [View](https://testnet.arcscan.app/address/0x1fa79f59abbada269de477b45ded38c75a6146de) |
+| Agent α (SCA) | `0x07c8a0ceccf7af4f260bdcb02c464753887a8de7` | [View](https://testnet.arcscan.app/address/0x07c8a0ceccf7af4f260bdcb02c464753887a8de7) |
+| Agent β (SCA) | `0x63d813f592957f12982c69e54a1dcb022982a556` | [View](https://testnet.arcscan.app/address/0x63d813f592957f12982c69e54a1dcb022982a556) |
+| Agent γ (SCA) | `0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf` | [View](https://testnet.arcscan.app/address/0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf) |
 
 ---
 
@@ -582,7 +582,7 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 | **Users** | **363+** | Web · CLI · Telegram · MCP · multi-platform |
 | **Treasury balance** | $25.65 USDC | [ArcScan](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | **Autonomous patrol scans** | **3,572** | 15-min loop, zero human input since launch |
-| **Agent economy volume** | 100+ payments | Losers pay winners 0.0005 USDC per dissent |
+| **Agent economy volume** | On-chain dissent settlements | Losers pay winners 0.0005 USDC per dissent — every transfer on ArcScan |
 | **ELO leaderboard** | α 20,841 · β 20,875 · γ 20,689 | `/elo` endpoint — on-chain |
 | **Circle primitives** | 5/5 | Gateway x402 — Agent Wallets — Dev-Controlled Wallets — Contracts — App Kit |
 | **OKX AI Marketplace** | Agent #5047 | 5.7K sold · 241 reviews · 4.94★ |

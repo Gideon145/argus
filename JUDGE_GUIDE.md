@@ -34,15 +34,15 @@ This is not a cron job. Agents independently decide, stake, and pay each other. 
 
 ## 3. Verify the agent economy on-chain (60 seconds)
 
-**This is not mock data.** Every dissent costs real USDC. Losers pay winners 0.0005 USDC, scaled by confidence. 100+ payments, all on ArcScan.
+**This is not mock data.** Every dissent costs real USDC. Losers pay winners 0.0005 USDC, scaled by confidence — each transfer verifiable on ArcScan from the agent wallets below.
 
 | What | ArcScan |
 |------|---------|
 | Treasury ($25.65 USDC) | [0x0699...f77d81](https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81) |
 | Oracle (verdict log) | [0x563b...b46C8](https://testnet.arcscan.app/address/0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8) |
-| Agent α wallet | [0x284e...2d320](https://testnet.arcscan.app/address/0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320) |
-| Agent β wallet | [0x3f75...7a34f](https://testnet.arcscan.app/address/0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f) |
-| Agent γ wallet | [0x1fa7...6146de](https://testnet.arcscan.app/address/0x1fa79f59abbada269de477b45ded38c75a6146de) |
+| Agent α wallet | [0x07c8...8de7](https://testnet.arcscan.app/address/0x07c8a0ceccf7af4f260bdcb02c464753887a8de7) |
+| Agent β wallet | [0x63d8...a556](https://testnet.arcscan.app/address/0x63d813f592957f12982c69e54a1dcb022982a556) |
+| Agent γ wallet | [0x9083...3baf](https://testnet.arcscan.app/address/0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf) |
 | Shadow Float V2 (agent credit) | [0x20dc...b12C2](https://testnet.arcscan.app/address/0x20dcA96B0C487D94De885c726c956ffaF38b12C2) |
 
 **Quick check:** Open any agent wallet → see USDC flowing between them on dissent.

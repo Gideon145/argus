@@ -1,26 +1,46 @@
 /**
  * Agent-to-Agent Nanopayments (RFB 3)
  * After each consensus, winning agents split a micro-reward pool.
- * Losing agents pay a tiny stake. Creates an internal agent economy.
- * All settled in native USDC on Arc testnet.
+ * Losing agents pay a tiny stake through their Circle SCA wallets,
+ * settled on-chain in native USDC on Arc testnet.
  */
-import { ethers } from 'ethers';
 import fs from 'fs';
 import path from 'path';
+import { randomUUID } from 'crypto';
+import {
+  initiateDeveloperControlledWalletsClient,
+  generateEntitySecretCiphertext,
+} from '@circle-fin/developer-controlled-wallets';
 
 const DATA_DIR = process.env.DATA_DIR || '/argus-data';
 const PAYMENTS_FILE = path.join(DATA_DIR, 'agent_payments.json');
 
-const AGENT_KEYS: Record<string, string> = {
-  'Agent-α': process.env.AGENT_ALPHA_PRIVATE_KEY || '',
-  'Agent-β': process.env.AGENT_BETA_PRIVATE_KEY || '',
-  'Agent-γ': process.env.AGENT_GAMMA_PRIVATE_KEY || '',
+// Native USDC on Arc testnet (Circle token id, isNative)
+const ARC_USDC_TOKEN_ID =
+  process.env.CIRCLE_USDC_TOKEN_ID || '15dc2b5d-0994-58b0-bf8c-3a0501148ee8';
+
+// Agent SCA wallets — Circle-managed, each holds a flat 20 USDC stake
+const AGENT_WALLETS: Record<string, { id: string; address: string }> = {
+  'Agent-α': {
+    id: process.env.AGENT_ALPHA_WALLET_ID || 'c4aefed1-389e-54ea-b6bb-38badf181a89',
+    address:
+      process.env.AGENT_ALPHA_WALLET_ADDRESS || '0x07c8a0ceccf7af4f260bdcb02c464753887a8de7',
+  },
+  'Agent-β': {
+    id: process.env.AGENT_BETA_WALLET_ID || '679a208b-9852-50b4-b6dd-8bef0e2cb9b0',
+    address:
+      process.env.AGENT_BETA_WALLET_ADDRESS || '0x63d813f592957f12982c69e54a1dcb022982a556',
+  },
+  'Agent-γ': {
+    id: process.env.AGENT_GAMMA_WALLET_ID || 'fa4b5c94-b12c-5801-bb7f-7aaff5cb3b70',
+    address:
+      process.env.AGENT_GAMMA_WALLET_ADDRESS || '0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf',
+  },
 };
 
-// Base micro-stake: 0.0005 USDC in wei (18 decimals on Arc)
-// Scaled by agent confidence: stake = BASE_STAKE * (2 * confidenceRatio)
+// Base micro-stake: 0.0005 USDC, scaled by agent confidence
 // confidence=100 → 0.001 USDC | confidence=50 → 0.0005 USDC
-const BASE_STAKE = ethers.parseUnits('0.0005', 18);
+const BASE_STAKE = 0.0005;
 
 interface PaymentRecord {
   from: string;
@@ -31,44 +51,19 @@ interface PaymentRecord {
   reason: string;
 }
 
-// Load persisted payment log from disk
+// Load persisted payment log — keep only real on-chain settlements
 function loadPayments(): PaymentRecord[] {
   try {
     if (fs.existsSync(PAYMENTS_FILE)) {
       const data = JSON.parse(fs.readFileSync(PAYMENTS_FILE, 'utf8'));
-      if (Array.isArray(data) && data.length > 0) return data;
+      if (Array.isArray(data)) {
+        return data.filter(
+          (p: any) => typeof p.txHash === 'string' && p.txHash.startsWith('0x')
+        );
+      }
     }
   } catch (e) { /* ignore */ }
-  // Seed baseline payment history (matches ~10.4% dissent rate on 1,504 audits)
-  return seedBaselinePayments();
-}
-
-// Seeded baseline payment history — reflects ~156 dissents from 1,504 audits
-function seedBaselinePayments(): PaymentRecord[] {
-  const base: PaymentRecord[] = [];
-  const agents = ['Agent-α', 'Agent-β', 'Agent-γ'];
-  const baseTime = Date.now() - 90 * 24 * 3600 * 1000; // 90 days ago
-  for (let i = 0; i < 52; i++) { // 52 dissents × ~2 payments each ≈ 104 payments
-    const loser = agents[i % 3];
-    const winners = agents.filter(a => a !== loser);
-    for (const winner of winners) {
-      base.push({
-        from: loser,
-        to: winner,
-        amount: '0.0005',
-        txHash: `baseline-payment-${i}-${loser.slice(-1)}-${winner.slice(-1)}`,
-        timestamp: new Date(baseTime + i * 3600000 * 4).toISOString(),
-        reason: `Historical dissent #${i + 1}: ${loser} staked against ${winners.join('+')} consensus`,
-      });
-    }
-  }
-  // Persist so redeploys don't re-seed
-  try {
-    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-    fs.writeFileSync(PAYMENTS_FILE, JSON.stringify(base, null, 2), 'utf8');
-    console.log(`[AgentPay] Seeded ${base.length} baseline payment records`);
-  } catch (e) { /* ignore */ }
-  return base;
+  return [];
 }
 
 function savePayments(log: PaymentRecord[]) {
@@ -80,9 +75,33 @@ function savePayments(log: PaymentRecord[]) {
 
 const paymentLog: PaymentRecord[] = loadPayments();
 
-function getProvider() {
-  const rpc = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com';
-  return new ethers.JsonRpcProvider(rpc);
+// Lazy Circle client + entity secret ciphertext (needed for SCA transfers)
+let circleClient: any = null;
+let ciphertext: string | null = null;
+
+function getCircle() {
+  if (!circleClient) {
+    const apiKey = process.env.CIRCLE_API_KEY;
+    const entitySecret = process.env.CIRCLE_ENTITY_SECRET;
+    if (!apiKey || !entitySecret) return null;
+    circleClient = initiateDeveloperControlledWalletsClient({ apiKey, entitySecret });
+  }
+  return circleClient;
+}
+
+async function getCiphertext(): Promise<string | null> {
+  if (ciphertext) return ciphertext;
+  const c = getCircle();
+  if (!c) return null;
+  try {
+    ciphertext = await generateEntitySecretCiphertext({
+      apiKey: process.env.CIRCLE_API_KEY!,
+      entitySecret: process.env.CIRCLE_ENTITY_SECRET!,
+    });
+  } catch (e: any) {
+    console.warn('[AgentPay] ciphertext generation failed:', e?.message?.slice(0, 80) || e);
+  }
+  return ciphertext;
 }
 
 export async function settleAgentPayments(
@@ -95,18 +114,24 @@ export async function settleAgentPayments(
 
   if (losingAgents.length === 0 || winningAgents.length === 0) return records;
 
-  // ── DEMO MODE: record payments locally without on-chain TX ──
-  if (process.env.DEMO_MODE === 'true' || (!process.env.AGENT_ALPHA_PRIVATE_KEY && !process.env.AGENT_BETA_PRIVATE_KEY)) {
-    console.log(`[AgentPay] DEMO: ${winningAgents.join(',')} beat ${losingAgents.join(',')} on ${queryId}`);
+  const c = getCircle();
+  const ct = c ? await getCiphertext() : null;
+  const walletsReady =
+    !!AGENT_WALLETS['Agent-α'].id &&
+    !!AGENT_WALLETS['Agent-β'].id &&
+    !!AGENT_WALLETS['Agent-γ'].id;
+
+  if (!c || !ct || !walletsReady) {
+    // No Circle rail configured — log only, no on-chain settlement
     for (const loser of losingAgents) {
       for (const winner of winningAgents) {
         const record: PaymentRecord = {
           from: loser,
           to: winner,
           amount: '0.0005',
-          txHash: `demo-${queryId}-${loser.slice(-4)}-${winner.slice(-4)}`,
+          txHash: `local-${queryId}-${loser.slice(-4)}-${winner.slice(-4)}`,
           timestamp: new Date().toISOString(),
-          reason: `Dissent resolved on ${queryId}`,
+          reason: `Dissent recorded on ${queryId}`,
         };
         paymentLog.push(record);
         records.push(record);
@@ -116,60 +141,67 @@ export async function settleAgentPayments(
     return records;
   }
 
-  try {
-    const provider = getProvider();
+  for (const loser of losingAgents) {
+    const loserWallet = AGENT_WALLETS[loser];
+    if (!loserWallet?.id) continue;
 
-    // Confidence-weighted: higher confidence = higher stake at risk
-    for (const loser of losingAgents) {
-      const loserKey = AGENT_KEYS[loser];
-      if (!loserKey) continue;
+    // Confidence-weighted: stake = BASE_STAKE * (2 * confidenceRatio)
+    const loserConf = (agentConfidences?.[loser] ?? 75) / 100;
+    const scaledStake = BASE_STAKE * 2 * loserConf;
+    const sharePerWinner = +(scaledStake / winningAgents.length).toFixed(6);
 
-      const loserWallet = new ethers.Wallet(loserKey, provider);
-
-      // Scale by confidence: stake = BASE_STAKE * (2 * confidenceRatio)
-      const loserConf = (agentConfidences?.[loser] ?? 75) / 100;
-      const scaledStake = (BASE_STAKE * BigInt(Math.round(200 * loserConf))) / 100n;
-      const sharePerWinner = scaledStake / BigInt(winningAgents.length);
-
-      for (const winner of winningAgents) {
-        const winnerKey = AGENT_KEYS[winner];
-        if (!winnerKey) continue;
-
-        const winnerWallet = new ethers.Wallet(winnerKey);
-        const winnerAddr = winnerWallet.address;
-
-        try {
-          const tx = await loserWallet.sendTransaction({
-            to: winnerAddr,
-            value: sharePerWinner,
-          });
-
-          await tx.wait();
-
-          records.push({
-            from: loser,
-            to: winner,
-            amount: ethers.formatUnits(sharePerWinner, 18),
-            txHash: tx.hash,
-            timestamp: new Date().toISOString(),
-            reason: `${loser} paid ${winner} for consensus disagreement on ${queryId}`,
-          });
-
-          console.log(`[AgentPay] ${loser} → ${winner}: ${ethers.formatUnits(sharePerWinner, 6)} USDC (tx: ${tx.hash.slice(0, 10)}...)`);
-        } catch (err: any) {
-          console.warn(`[AgentPay] Failed ${loser}→${winner}: ${err.message?.slice(0, 80)}`);
+    for (const winner of winningAgents) {
+      const winnerWallet = AGENT_WALLETS[winner];
+      if (!winnerWallet?.address) continue;
+      try {
+        const tx = await c.params.client.Transactions.createDeveloperTransactionTransfer({
+          idempotencyKey: randomUUID(),
+          walletId: loserWallet.id,
+          tokenId: ARC_USDC_TOKEN_ID,
+          destinationAddress: winnerWallet.address,
+          amounts: [String(sharePerWinner)],
+          feeLevel: 'LOW',
+          entitySecretCiphertext: ct,
+        });
+        const txId = tx.data?.id;
+        let txHash = '';
+        for (let i = 0; i < 10 && txId; i++) {
+          await new Promise((r) => setTimeout(r, 3000));
+          try {
+            const detail = await c.params.client.Transactions.getTransaction(txId);
+            if (detail.data?.state === 'COMPLETE') {
+              txHash = detail.data.txHash || '';
+              break;
+            }
+            if (detail.data?.state === 'FAILED') break;
+          } catch {
+            break;
+          }
         }
+        const record: PaymentRecord = {
+          from: loser,
+          to: winner,
+          amount: String(sharePerWinner),
+          txHash: txHash || txId,
+          timestamp: new Date().toISOString(),
+          reason: `${loser} paid ${winner} for consensus disagreement on ${queryId}`,
+        };
+        paymentLog.push(record);
+        records.push(record);
+        console.log(
+          `[AgentPay] ${loser} → ${winner}: ${sharePerWinner} USDC (tx: ${(txHash || txId).slice(0, 10)}...)`
+        );
+      } catch (e: any) {
+        console.warn(
+          `[AgentPay] Failed ${loser}→${winner}: ${e?.response?.data?.message || e?.message?.slice(0, 80) || e}`
+        );
       }
     }
-
-    paymentLog.push(...records);
-    // Keep only last 100 records
-    if (paymentLog.length > 100) paymentLog.splice(0, paymentLog.length - 100);
-    savePayments(paymentLog);
-
-  } catch (err: any) {
-    console.warn('[AgentPay] Settlement error:', err.message?.slice(0, 80));
   }
+
+  // Keep only last 100 records
+  if (paymentLog.length > 100) paymentLog.splice(0, paymentLog.length - 100);
+  savePayments(paymentLog);
 
   return records;
 }

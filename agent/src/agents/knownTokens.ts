@@ -48,9 +48,9 @@ export const KNOWN_TOKENS: Record<string, KnownToken> = {
   '0x563b2da572948c2b54b5f1f26ccfebc153cb46c8': { address: '0x563b2da572948c2b54b5f1f26ccfebc153cb46c8', verdict: 'SAFE', note: 'ArgusOracle — immutable verdict log, deployed by Argus team' },
   '0x0699a029e2e05ec88d6418ec744232702cf77d81': { address: '0x0699a029e2e05ec88d6418ec744232702cf77d81', verdict: 'SAFE', note: 'Argus Treasury — public treasury wallet' },
   '0x4dd5e289168ddb28f9b34134eabccaf373eb64cb': { address: '0x4dd5e289168ddb28f9b34134eabccaf373eb64cb', verdict: 'SAFE', note: 'Argus Funding Wallet — user onboarding faucet' },
-  '0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320': { address: '0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320', verdict: 'SAFE', note: 'Agent Alpha — Circle-managed SCA wallet' },
-  '0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f': { address: '0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f', verdict: 'SAFE', note: 'Agent Beta — Circle-managed SCA wallet' },
-  '0x1fa79f59abbada269de477b45ded38c75a6146de': { address: '0x1fa79f59abbada269de477b45ded38c75a6146de', verdict: 'SAFE', note: 'Agent Gamma — Circle-managed SCA wallet' },
+  '0x07c8a0ceccf7af4f260bdcb02c464753887a8de7': { address: '0x07c8a0ceccf7af4f260bdcb02c464753887a8de7', verdict: 'SAFE', note: 'Agent Alpha — Circle-managed SCA wallet' },
+  '0x63d813f592957f12982c69e54a1dcb022982a556': { address: '0x63d813f592957f12982c69e54a1dcb022982a556', verdict: 'SAFE', note: 'Agent Beta — Circle-managed SCA wallet' },
+  '0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf': { address: '0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf', verdict: 'SAFE', note: 'Agent Gamma — Circle-managed SCA wallet' },
   // ─── User-reported tokens with known issues ───
   '0xc20059e0317de91738d13af027dfc4a50781b066': { address: '0xc20059e0317de91738d13af027dfc4a50781b066', verdict: 'RISKY', note: 'Flagged: unrestricted mint capability — owner can mint unlimited tokens, proxy-upgradeable' },
   '0x643c4e15d7d62ad0abec4a9bd4b001aa3ef52d66': { address: '0x643c4e15d7d62ad0abec4a9bd4b001aa3ef52d66', verdict: 'RISKY', note: 'Flagged: EIP-1967 proxy contract — implementation can be upgraded by admin at any time' },

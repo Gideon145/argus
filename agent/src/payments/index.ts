@@ -9,7 +9,7 @@ export const ARC_MAINNET_CHAIN_ID = 5042001;
 export const ARC_RPC = useMainnet ? 'https://rpc.arc.network' : (process.env.ARC_RPC_URL || 'https://rpc.testnet.arc-node.thecanteenapp.com');
 const CHAIN_ID = useMainnet ? ARC_MAINNET_CHAIN_ID : ARC_TESTNET_CHAIN_ID;
 const USDC = useMainnet ? '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' : '0x07865c6E87B9A5e213Ae308bA4F8a9AaDF7E2B0C';
-const WALLETS={alpha:'0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320',beta:'0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f',gamma:'0x1fa79f59abbada269de477b45ded38c75a6146de',treasury:(process.env.TREASURY_ADDRESS||'0x0699a029e2e05EC88d6418EC744232702Cf77d81')};
+const WALLETS={alpha:'0x07c8a0ceccf7af4f260bdcb02c464753887a8de7',beta:'0x63d813f592957f12982c69e54a1dcb022982a556',gamma:'0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf',treasury:(process.env.TREASURY_ADDRESS||'0x0699a029e2e05EC88d6418EC744232702Cf77d81')};
 export function createArgusWallets(){return{treasury:WALLETS.treasury,alpha:WALLETS.alpha,beta:WALLETS.beta,gamma:WALLETS.gamma}}
 export function createQueryPayment(o:any){return{id:'pay-'+Date.now(),payer:o.user,amount:'10000',queryId:o.queryId,signed:false}}
 export function createPaymentIntent(o:any){return{id:'intent-'+Date.now(),amount:'10000',status:'pending'}}

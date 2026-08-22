@@ -13,9 +13,9 @@ const DATA_FILE = path.join(DATA_DIR, 'store.json');
 const TEAM_WALLETS = new Set([
   '0x0699a029e2e05EC88d6418EC744232702Cf77d81', // treasury
   '0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb', // funding wallet
-  '0x284e38e6f139b3b85c746e00f8a3cf46d2b2d320', // Agent α SCA
-  '0x3f752a72d8e2d9d3a4f2011ca9e0407bc5b7a34f', // Agent β SCA
-  '0x1fa79f59abbada269de477b45ded38c75a6146de', // Agent γ SCA
+  '0x07c8a0ceccf7af4f260bdcb02c464753887a8de7', // Agent α SCA
+  '0x63d813f592957f12982c69e54a1dcb022982a556', // Agent β SCA
+  '0x9083c68bf42f5ddf6c93bd45166ffcf9d4563baf', // Agent γ SCA
   '0x5c0b33aBc1C4Df5e8F3A9b6c2D1e4F7a8B9c0D1E', // Agent α EOA
   '0x7D4897Bc2D4e6F8a0B1c3D5e7F9a2B4c6D8e0F1', // Agent β EOA
   '0x43e063C3d5F7a9B1D3f5E7A9C1E3F5a7B9D1F3', // Agent γ EOA
