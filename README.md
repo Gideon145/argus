@@ -571,7 +571,9 @@ For creators: your legitimate launch is never wrongly flagged. For traders: a SA
 
 ## Traction
 
-*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 363+ users and 1,727 scans of battle-testing behind them.*
+*Real usage on Arc testnet. Every number is verifiable on-chain. When Arc mainnet launches, these agents will be live as security infrastructure on the chain — 363+ users and 1,770 scans of battle-testing behind them.*
+
+**Live numbers only.** Every figure on this page comes from the live system — `GET /stats`, `/treasury`, `/elo`, `/agent-payments` — or from ArcScan. Never from this file. If a number ever disagrees with the chain, the chain wins.
 
 ### Metrics
 
