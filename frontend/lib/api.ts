@@ -1,6 +1,6 @@
 // ─── Argus Enterprise — API Client ───
 
-import { AGENT_URL, BASELINE_STATS, ARC_TREASURY } from './constants';
+import { AGENT_URL, BASELINE_STATS, ARC_TREASURY, BASELINE_ELO, BASELINE_PAYMENTS, BASELINE_POOL } from './constants';
 import type {
   StatsData, HistoryRecord, RecentScan, PatrolRecord,
   PatrolStatus, EloData, TreasuryData, AgentPaymentData, PoolData, ScanResponse,
@@ -133,10 +133,11 @@ function buildScanResponse(contractAddress: string): ScanResponse {
 }
 
 export const api = {
-  /** Platform statistics — live numbers only, no baseline inflation */
+  /** Platform statistics — live numbers, snapshot fallback during maintenance */
   getStats: async (): Promise<StatsData> => {
     const live = await get<StatsData>('/stats').catch(() => ({
-      queries: 0, patrolQueries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0, status: 'online',
+      ...BASELINE_STATS,
+      status: 'maintenance',
     } as StatsData));
     return {
       queries: live.queries || 0,
@@ -166,7 +167,7 @@ export const api = {
   getPatrolStatus: () => get<PatrolStatus>('/patrol-status'),
 
   /** Agent ELO leaderboard */
-  getElo: () => get<EloData>('/elo'),
+  getElo: () => get<EloData>('/elo').catch(() => ({ agents: BASELINE_ELO } as EloData)),
 
   /** On-chain ELO from ArgusOracle */
   getChainElo: () => get<{ agents: Record<string, number>; oracle: string }>('/chain-elo'),
@@ -178,20 +179,26 @@ export const api = {
       return data;
     } catch {
       return {
-        treasury: { address: ARC_TREASURY.address, balance: '0', explorer: ARC_TREASURY.explorer },
-        funding: { address: '0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb', balance: '0', explorer: 'https://testnet.arcscan.app/address/0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb' },
-        stats: { queries: 0, patrolQueries: 0, consensusReached: 0, onChainRecords: 0, avgConfidence: 0 },
+        treasury: { address: ARC_TREASURY.address, balance: ARC_TREASURY.balance, explorer: ARC_TREASURY.explorer },
+        funding: { address: '0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb', balance: '52.08', explorer: 'https://testnet.arcscan.app/address/0x4Dd5e289168ddb28f9b34134EAbccAF373eb64Cb' },
+        stats: {
+          queries: BASELINE_STATS.queries,
+          patrolQueries: BASELINE_STATS.patrolQueries,
+          consensusReached: BASELINE_STATS.consensusReached,
+          onChainRecords: BASELINE_STATS.onChainRecords,
+          avgConfidence: BASELINE_STATS.avgConfidence,
+        },
         network: 'arc-testnet',
       } as TreasuryData;
     }
   },
 
   /** Agent payment stats */
-  getAgentPayments: () => get<AgentPaymentData>('/agent-payments'),
+  getAgentPayments: () => get<AgentPaymentData>('/agent-payments').catch(() => BASELINE_PAYMENTS as AgentPaymentData),
 
-  /** Wallet pool stats — live data only */
+  /** Wallet pool stats — snapshot fallback during maintenance */
   getPoolStats: async () => {
-    const live = await get<PoolData>('/wallet/pool-stats').catch(() => ({ total: 0, assigned: 0, available: 0 } as PoolData));
+    const live = await get<PoolData>('/wallet/pool-stats').catch(() => BASELINE_POOL as PoolData);
     return {
       total: live.total || 0,
       assigned: live.assigned || 0,

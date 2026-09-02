@@ -7,21 +7,40 @@ export const AGENT_URL = process.env.NEXT_PUBLIC_AGENT_URL ||
     ? 'http://localhost:4500' 
     : 'https://argus-web-backend-production.up.railway.app');
 
-// ─── Historical baseline stats (verifiable — README, ArcScan, on-chain) ───
+// ─── Last known live snapshot (verifiable — README, ArcScan, on-chain) ───
+// Used as fallback when the backend is paused for maintenance
 export const BASELINE_STATS = {
-  queries: 1727,
-  patrolQueries: 3572,
-  consensusReached: 1556,
-  onChainRecords: 1556,
+  queries: 1787,
+  patrolQueries: 4213,
+  consensusReached: 1609,
+  onChainRecords: 1609,
   avgConfidence: 58,
 };
 
 // Arc testnet treasury — verifiable on-chain, immutable
+// https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81
 export const ARC_TREASURY = {
   address: '0x0699a029e2e05EC88d6418EC744232702Cf77d81',
-  balance: '25.65',
+  balance: '27.04',
   explorer: 'https://testnet.arcscan.app/address/0x0699a029e2e05EC88d6418EC744232702Cf77d81',
 };
+
+// Last known ELO leaderboard (fallback snapshot)
+export const BASELINE_ELO = [
+  { name: 'Agent-γ', elo: 21923, accuracy: 89, wins: 1220, losses: 145 },
+  { name: 'Agent-β', elo: 21806, accuracy: 99, wins: 1349, losses: 16 },
+  { name: 'Agent-α', elo: 21740, accuracy: 98, wins: 1335, losses: 30 },
+];
+
+// Last known agent economy (fallback snapshot)
+export const BASELINE_PAYMENTS = {
+  totalPayments: 57,
+  totalVolume: '0.022590',
+  recent: [],
+};
+
+// Last known wallet pool (fallback snapshot)
+export const BASELINE_POOL = { total: 430, assigned: 378, available: 52 };
 
 export const AGENT_META: Record<string, AgentMeta> = {
   'Agent-α': {

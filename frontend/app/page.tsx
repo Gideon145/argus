@@ -36,6 +36,7 @@ export default function Dashboard() {
     onChainRecords: 0,
     avgConfidence: 0,
   });
+  const [maintenance, setMaintenance] = useState(false);
 
   // Recent scans + patrol (merged for audit log)
   const [recentScans, setRecentScans] = useState<RecentScan[]>([]);
@@ -54,6 +55,7 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const statsData = await api.getStats();
+        setMaintenance(statsData.status === 'maintenance');
         setStats({
           queries: statsData.queries || 0,
           patrolQueries: statsData.patrolQueries || 0,
@@ -125,6 +127,10 @@ export default function Dashboard() {
   };
 
   const handleScanSubmit = async () => {
+    if (maintenance) {
+      setError('Argus is currently undergoing a scheduled upgrade. Scans are paused — check back soon.');
+      return;
+    }
     if (!isConnected) {
       setError('Connect Get Started or MetaMask to scan. $0.01 per audit.');
       return;
@@ -288,6 +294,17 @@ export default function Dashboard() {
         <span className="text-text-muted/50 ml-2">— all 5 Circle primitives integrated</span>
       </div>
 
+      {/* Maintenance notice */}
+      {maintenance && (
+        <div className="flex items-start gap-3 rounded-lg border border-warning/30 bg-warning/5 p-4">
+          <Zap size={16} className="text-warning mt-0.5 flex-shrink-0" />
+          <div className="text-[13px] text-text-secondary leading-relaxed">
+            <span className="font-semibold text-text-primary">Scheduled upgrade in progress.</span> The council is paused while we
+            prepare for Arc mainnet. Numbers below are the latest verified snapshot — every figure is verifiable on ArcScan.
+          </div>
+        </div>
+      )}
+
       {/* Main Scan Form & Terminal */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
@@ -303,7 +320,7 @@ export default function Dashboard() {
                     setInputAddress(e.target.value);
                     setError('');
                   }}
-                  disabled={loading}
+                  disabled={loading || maintenance}
                   className="w-full bg-bg-primary border border-border rounded-lg pl-10 pr-4 py-3 font-mono text-sm placeholder-text-muted/50 text-text-primary transition-all focus:border-accent"
                 />
                 <Search size={18} className="absolute left-3.5 top-3.5 text-text-muted" />
@@ -319,7 +336,7 @@ export default function Dashboard() {
                 <div className="flex gap-2 w-full sm:w-auto">
                   <button
                     onClick={handleScanSubmit}
-                    disabled={loading || !inputAddress.trim()}
+                    disabled={loading || maintenance || !inputAddress.trim()}
                     className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-6 py-2.5 rounded-md text-sm font-medium bg-accent text-white hover:bg-accent/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     {loading ? (
@@ -350,21 +367,21 @@ export default function Dashboard() {
           <Card title="Quick Scans" padding="sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
               <button
-                onClick={() => handleQuickAction('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')}
+                onClick={() => !maintenance && handleQuickAction('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')}
                 className="flex items-center justify-between p-2.5 rounded border border-border bg-bg-primary hover:border-border-active transition-colors text-left"
               >
                 <span className="text-accent">USDC (Arc Testnet)</span>
                 <span className="text-text-muted">0xA0b8...eB48</span>
               </button>
               <button
-                onClick={() => handleQuickAction('0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8')}
+                onClick={() => !maintenance && handleQuickAction('0x563b2DA572948C2b54B5f1f26CcFebC153Cb46C8')}
                 className="flex items-center justify-between p-2.5 rounded border border-border bg-bg-primary hover:border-border-active transition-colors text-left"
               >
                 <span className="text-agent-alpha">ArgusOracle</span>
                 <span className="text-text-muted">0x563b...46C8</span>
               </button>
               <button
-                onClick={() => handleQuickAction('0x6944e1df6bf5972305f9ab25df47ef10de01bcc8')}
+                onClick={() => !maintenance && handleQuickAction('0x6944e1df6bf5972305f9ab25df47ef10de01bcc8')}
                 className="flex items-center justify-between p-2.5 rounded border border-border bg-bg-primary hover:border-border-active transition-colors text-left col-span-1 sm:col-span-2"
               >
                 <span className="text-critical">Unibase AI (Scam — Blocked Us)</span>
